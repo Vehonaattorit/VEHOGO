@@ -1,21 +1,42 @@
 import {StatusBar} from 'expo-status-bar';
-import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import DriverAcceptRefuse from '../VehoKimppa/DriverAcceptRefuse'
+import {StyleSheet} from 'react-native';
+import {Root} from 'native-base';
+import AppLoading from 'expo-app-loading'
+import * as Font from 'expo-font';
+
 
 export default function App() {
+
+  const [fontReady, setFontReady] = useState(false);
+  const loadFonts = async () => {
+    await Font.loadAsync({
+      Roboto: require('native-base/Fonts/Roboto.ttf'),
+      Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+    });
+    setFontReady(true);
+  };
+
+  useEffect(() => {
+    loadFonts();
+  }, []);
+
+  if (!fontReady) {
+    console.log('Waiting for fonts...');
+    return (
+      <AppLoading/>
+    );
+  }
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+    <Root>
+        <DriverAcceptRefuse/>
       <StatusBar style="auto" />
-    </View>
+    </Root>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+
+
 });
