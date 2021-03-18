@@ -5,6 +5,7 @@ import {StyleSheet} from 'react-native';
 import {Root} from 'native-base';
 import AppLoading from 'expo-app-loading'
 import * as Font from 'expo-font';
+import {RidesView} from './views/rides_view';
 
 
 export default function App() {
@@ -30,7 +31,7 @@ export default function App() {
   }
   return (
     <Root>
-        <DriverAcceptRefuse/>
+      <RidesView></RidesView>
       <StatusBar style="auto" />
     </Root>
   );
