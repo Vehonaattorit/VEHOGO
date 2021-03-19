@@ -1,12 +1,58 @@
-import React, {useContext, useState} from 'react'
+import React, {useEffect, useReducer, useContext, useState} from 'react'
 import {View, Text, Button} from 'react-native'
 
 import {AuthContext} from '../contexts/AuthContext'
 import {UserContext} from '../contexts/UserContext'
 
-// 7c89d5a2-62cd-46e2-859a-dc26644c7e1f azure app
+import {AuthManager} from '../auth/AuthManager'
+import AsyncStorage from '@react-native-community/async-storage'
+import OutlookUser from './OutlookUser'
 
 const OutlookCalendar = () => {
+  const [state, dispatch] = useReducer(
+    (prevState, action) => {
+      switch (action.type) {
+        case 'RESTORE_TOKEN':
+          return {
+            ...prevState,
+            userToken: action.token,
+            isLoading: false,
+          }
+        case 'SIGN_IN':
+          return {
+            ...prevState,
+            isSignOut: false,
+            userToken: action.token,
+          }
+        case 'SIGN_OUT':
+          return {
+            ...prevState,
+            isSignOut: true,
+            userToken: null,
+          }
+      }
+    },
+    {
+      isLoading: true,
+      isSignOut: false,
+      userToken: null,
+    }
+  )
+
+  useEffect(() => {
+    const bootstrapAsync = async () => {
+      // let userToken = null
+      const userToken = await AsyncStorage.getItem('userToken')
+
+      console.log('bootstrap async', userToken)
+      dispatch({type: 'RESTORE_TOKEN', token: userToken})
+
+      console.log('RESTORE TOKEN', state.userToken)
+    }
+
+    bootstrapAsync()
+  }, [state.userToken, state.isSignOut, state.isLoading])
+
   const {signIn, signOut} = useContext(AuthContext)
 
   const userContext = useContext(UserContext)
@@ -21,22 +67,56 @@ const OutlookCalendar = () => {
     // userPhoto: require('../images/no-profile-pic.png')
   })
 
+  const authContext = React.useMemo(
+    () => ({
+      signIn: async () => {
+        console.log('Sign in')
+        await AuthManager.signInAsync()
+        const token = await AuthManager.getAccessTokenAsync()
+
+        console.log('authContext token', token)
+        dispatch({type: 'SIGN_IN', token})
+      },
+      signOut: async () => {
+        await AuthManager.signOutAsync()
+        dispatch({type: 'SIGN_OUT'})
+      },
+    }),
+    []
+  )
+
+  const signInAsync = async () => {
+    await authContext.signIn()
+  }
+
+  const signOutAsync = async () => {
+    await authContext.signOut()
+  }
+
   return (
-    <View>
-      <Text> Test 123</Text>
-      <Button
-        title="Sign in"
-        onPress={() => {
-          signIn()
-        }}
-      />
-      <Button
-        title="Sign out"
-        onPress={() => {
-          signOut()
-        }}
-      />
-    </View>
+    <AuthContext.Provider value={authContext}>
+      <View>
+        {state.isLoading ? (
+          <Text>Loading</Text>
+        ) : state.userToken == null ? (
+          <Text>User is not signed in </Text>
+        ) : (
+          <OutlookUser />
+        )}
+        <Button
+          title="Sign in"
+          onPress={() => {
+            signInAsync()
+          }}
+        />
+        <Button
+          title="Sign out"
+          onPress={() => {
+            signOutAsync()
+          }}
+        />
+      </View>
+    </AuthContext.Provider>
   )
 }
 
