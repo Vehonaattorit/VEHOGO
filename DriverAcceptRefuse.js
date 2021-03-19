@@ -14,7 +14,7 @@ const DriverAcceptRefuse = () => {
         </Content>
       </Container>
 
-      <Container style={styles.requestAcceptRefuse}>
+      <Container style={styles.requestAcceptRefuseContent}>
 
         <Content padder >
           <View style={styles.info}>
@@ -25,12 +25,12 @@ const DriverAcceptRefuse = () => {
           <Text style={{margin: 10}}>Adress</Text>
 
           <View style={styles.buttons}>
-            <Button large style={styles.button} ><Text style={styles.txt}>Accept</Text></Button>
-            <Button large style={styles.button} ><Text style={styles.txt}>Refuse</Text></Button>
+            <Button large style={styles.button} ><Text style={styles.btntxt}>Accept</Text></Button>
+            <Button large style={styles.button} ><Text style={styles.btntxt}>Refuse</Text></Button>
           </View>
         </Content>
-
       </Container>
+
     </View>
 
   );
@@ -47,18 +47,18 @@ const styles = StyleSheet.create({
     flex: 2,
     backgroundColor: 'black'
   },
-  requestAcceptRefuse: {
+  requestAcceptRefuseContent: {
     flex: 1,
-    backgroundColor: '#26aae2'
+    backgroundColor: 'white'
   },
   buttons: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: 20,
+    marginTop: 50,
   },
   button: {
-    backgroundColor: '#000000',
+    backgroundColor: '#26aae2',
     borderRadius: 15,
 
   },
@@ -68,11 +68,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     margin: 10
   },
-  txt: {
+  btntxt: {
     color:'white'
   },
-
-
 });
 
 export default DriverAcceptRefuse

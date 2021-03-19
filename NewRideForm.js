@@ -5,7 +5,7 @@ import {Button, Text, Item, Input, View, Icon} from 'native-base'
 const NewRideForm = () => {
 
   return (
-    <View style={{alignSelf: 'stretch'}}>
+    <View style={styles.form}>
       <Item floatingLabel>
       <Icon active name='person-outline' />
             <Input placeholder='Driver Name'/>
@@ -33,6 +33,9 @@ const styles = StyleSheet.create({
   },
   confirmBtn: {
     backgroundColor: '#26aae2'
+  },
+  form: {
+    alignSelf: 'stretch',
   }
 });
 
