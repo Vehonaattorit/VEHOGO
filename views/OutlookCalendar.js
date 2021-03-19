@@ -1,5 +1,5 @@
 import React, {useEffect, useReducer, useContext, useState} from 'react'
-import {View, Text, Button} from 'react-native'
+import {StyleSheet, SafeAreaView, View, Text, Button} from 'react-native'
 
 import {AuthContext} from '../contexts/AuthContext'
 import {UserContext} from '../contexts/UserContext'
@@ -7,6 +7,7 @@ import {UserContext} from '../contexts/UserContext'
 import {AuthManager} from '../auth/AuthManager'
 import AsyncStorage from '@react-native-community/async-storage'
 import OutlookUser from './OutlookUser'
+import NewEventComponent from './NewEventComponent'
 
 const OutlookCalendar = () => {
   const [state, dispatch] = useReducer(
@@ -95,14 +96,7 @@ const OutlookCalendar = () => {
 
   return (
     <AuthContext.Provider value={authContext}>
-      <View>
-        {state.isLoading ? (
-          <Text>Loading</Text>
-        ) : state.userToken == null ? (
-          <Text>User is not signed in </Text>
-        ) : (
-          <OutlookUser />
-        )}
+      <SafeAreaView style={styles.container}>
         <Button
           title="Sign in"
           onPress={() => {
@@ -115,9 +109,28 @@ const OutlookCalendar = () => {
             signOutAsync()
           }}
         />
-      </View>
+        {state.isLoading ? (
+          <Text>Loading</Text>
+        ) : state.userToken == null ? (
+          <Text>User is not signed in </Text>
+        ) : (
+          <>
+            <NewEventComponent />
+
+            {/* <OutlookUser /> */}
+          </>
+        )}
+      </SafeAreaView>
     </AuthContext.Provider>
   )
 }
 
 export default OutlookCalendar
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingHorizontal: 10,
+  },
+})

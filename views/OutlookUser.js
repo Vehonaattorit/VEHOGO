@@ -15,6 +15,8 @@ import moment from 'moment-timezone'
 import {findIana} from 'windows-iana'
 import {FlatList, ScrollView} from 'react-native-gesture-handler'
 
+import {UserContext} from '../contexts/UserContext'
+
 // Azure Microsoft
 // import * as MicrosoftGraph from '@microsoft/microsoft-graph-types'
 
@@ -27,6 +29,8 @@ import {FlatList, ScrollView} from 'react-native-gesture-handler'
 // Calendar END
 
 const OutlookUser = () => {
+  const userContext = useContext(UserContext)
+
   const [state, setState] = useState({
     // TEMPORARY
     userLoading: true,
@@ -145,7 +149,7 @@ const OutlookUser = () => {
   console.log('data', calendarState.events)
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View>
       <Text>Outlook User</Text>
       <Text>------------</Text>
       <Text>{state.userFullName}</Text>
@@ -167,6 +171,7 @@ const OutlookUser = () => {
       {/* <Text>{JSON.stringify(calendarState.events, null, 2)}</Text> */}
       {/* </ScrollView> */}
       <FlatList
+        style={styles.container}
         data={calendarState.events}
         renderItem={({item}) => (
           <View style={styles.eventItem}>
@@ -181,7 +186,7 @@ const OutlookUser = () => {
           </View>
         )}
       />
-    </SafeAreaView>
+    </View>
   )
 }
 
@@ -189,7 +194,7 @@ export default OutlookUser
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 3,
     backgroundColor: '#fff',
     paddingHorizontal: 10,
   },
