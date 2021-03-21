@@ -1,38 +1,26 @@
-import React, {
-  SafeAreaView,
-  useEffect,
-  useState,
-  useContext,
-  useReducer,
-} from 'react'
-import {
-  View,
-  ActivityIndicator,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  Alert,
-} from 'react-native'
+import React, {useEffect} from 'react'
+import {View, Text, TouchableOpacity} from 'react-native'
 import {Agenda} from 'react-native-calendars'
-import {Card, Avatar} from 'react-native-paper'
+import {Card} from 'react-native-paper'
 
-import {GraphManager} from './graph/GraphManager'
 import moment from 'moment-timezone'
-import {findIana} from 'windows-iana'
 
 import {AuthContext} from '../contexts/AuthContext'
-import {AuthManager} from '../auth/AuthManager'
 import calendarHooks from './calendarHooks'
+
+/**
+ *
+ * Currently dispalys events from a 7 day period.
+ *
+ */
 
 export default ReactNativeCalendar = () => {
   const {
-    signInAsync,
     bootstrapAsync,
     authContext,
     loadCalendar,
     loadUser,
     state,
-    userState,
     calendarState,
   } = calendarHooks()
 
@@ -71,14 +59,14 @@ export default ReactNativeCalendar = () => {
 
   useEffect(() => {
     bootstrapAsync()
-  }, [state.userToken, state.isSignOut, state.isLoading])
+  }, [])
 
   useEffect(() => {
     if (!state.userToken) {
       loadUser()
       loadCalendar()
     }
-  }, [])
+  }, [state.isLoading, state.isSignOut, state.userToken])
 
   const renderEmptyData = () => {
     return (

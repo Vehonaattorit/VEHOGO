@@ -1,10 +1,4 @@
-import React, {
-  SafeAreaView,
-  useEffect,
-  useState,
-  useContext,
-  useReducer,
-} from 'react'
+import React, {useState, useReducer} from 'react'
 import moment from 'moment-timezone'
 import {findIana} from 'windows-iana'
 import AsyncStorage from '@react-native-community/async-storage'
@@ -12,16 +6,7 @@ import {GraphManager} from './graph/GraphManager'
 
 import {AuthManager} from '../auth/AuthManager'
 
-import {
-  View,
-  ActivityIndicator,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  Alert,
-} from 'react-native'
-import {Agenda} from 'react-native-calendars'
-import {Card, Avatar} from 'react-native-paper'
+import {Alert} from 'react-native'
 
 const calendarHooks = () => {
   const authContext = React.useMemo(
@@ -96,6 +81,8 @@ const calendarHooks = () => {
     // let userToken = null
     const userToken = await AsyncStorage.getItem('userToken')
 
+    signOutAsync()
+
     dispatch({type: 'RESTORE_TOKEN', token: userToken})
 
     if (!userToken) {
@@ -111,7 +98,7 @@ const calendarHooks = () => {
 
       if (user.error) {
         // If user token has expired, ask user to login again
-        signInAsync()
+        return signInAsync()
       }
 
       setUserState({
@@ -119,19 +106,10 @@ const calendarHooks = () => {
         userFirstName: user.givenName,
         userFullName: user.displayName,
         userEmail: user.userPrincipalName,
-        userTimeZone: user.mailboxSettings.timeZone,
+        userTimeZone: user.mailboxSettings.timeZone || 'UTC',
       })
     } catch (err) {
-      Alert.alert(
-        'Error getting user',
-        JSON.stringify(err),
-        [
-          {
-            text: 'OK',
-          },
-        ],
-        {cancelable: false}
-      )
+      throw new Error(err)
     }
   }
 
@@ -161,6 +139,8 @@ const calendarHooks = () => {
 
       events = events.value
 
+      if (events == undefined) return
+
       let mappedData = events.map((event, index) => {
         return {
           start: moment(event.start.dateTime).format('HH:mm'),
@@ -186,16 +166,7 @@ const calendarHooks = () => {
         events: reduced,
       })
     } catch (err) {
-      Alert.alert(
-        'Error getting calendar',
-        JSON.stringify(err),
-        [
-          {
-            text: 'OK',
-          },
-        ],
-        {cancelable: false}
-      )
+      throw new Error(err)
     }
   }
 

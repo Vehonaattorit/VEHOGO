@@ -36,10 +36,6 @@ export class AuthManager {
     } catch (err) {
       console.log('err', err)
     }
-
-    // const result = await authorize(config)
-
-    // console.log(result.accessToken)
   }
 
   static signOutAsync = async () => {
