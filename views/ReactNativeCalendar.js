@@ -5,7 +5,14 @@ import React, {
   useContext,
   useReducer,
 } from 'react'
-import {View, StyleSheet, Text, TouchableOpacity, Alert} from 'react-native'
+import {
+  View,
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Alert,
+} from 'react-native'
 import {Agenda} from 'react-native-calendars'
 import {Card, Avatar} from 'react-native-paper'
 
@@ -19,21 +26,13 @@ import AsyncStorage from '@react-native-community/async-storage'
 
 // import {AuthContext} from '../contexts/AuthContext'
 
-const timeToString = (time) => {
-  const date = new Date(time)
-  return date.toISOString().split('T')[0]
-}
-
 export default ReactNativeCalendar = () => {
-  const [items, setItems] = useState({})
-
   const [calendarState, setCalendarState] = useState({
     loadingEvents: true,
     events: [],
   })
 
   const [userState, setUserState] = useState({
-    // TEMPORARY
     userLoading: true,
     userFirstName: 'Adele',
     userFullName: 'Adele Vance',
@@ -225,7 +224,7 @@ export default ReactNativeCalendar = () => {
         events = events.value
         console.log('events', events)
 
-        const mappedData = events.map((event, index) => {
+        let mappedData = events.map((event, index) => {
           console.log('date start', event.start.dateTime)
           console.log('date end', event.end.dateTime)
           console.log('id', event.id)
@@ -240,8 +239,6 @@ export default ReactNativeCalendar = () => {
           }
         })
 
-        console.log('mappedData', mappedData)
-
         const reduced = mappedData.reduce((acc, currentItem) => {
           const {date, ...allTheRest} = currentItem
 
@@ -250,12 +247,9 @@ export default ReactNativeCalendar = () => {
           console.log('accu', acc)
           console.log('acc[date]', acc[date])
 
-          // acc[date] = [{...currentItem}]
-          acc[date] = [allTheRest]
-          // allThreRest is an object
-          /** */
-          // acc[date] = {...acc[date], allTheRest}
-          // acc[date].push(allTheRest)
+          acc[date] !== undefined
+            ? acc[date].push(allTheRest)
+            : (acc[date] = [allTheRest])
 
           return acc
         }, {})
@@ -288,13 +282,6 @@ export default ReactNativeCalendar = () => {
     }
   }, [])
 
-  if (!calendarState.loadingEvents) console.log('PERSEUS', calendarState.events)
-
-  // const [testItems, setTestItems] = useState({
-  //   '2020-03-21': [{subject: 'test 1', cookies: false}],
-  //   '2020-03-22': [{subject: 'test 2', cookies: false}],
-  // })
-
   const [testItems, setTestItems] = useState({
     '2021-03-21': [
       {
@@ -306,22 +293,36 @@ export default ReactNativeCalendar = () => {
     ],
   })
 
+  const renderEmptyData = () => {
+    return (
+      <TouchableOpacity style={{marginRight: 10, marginTop: 17}}>
+        <Card>
+          <Card.Content>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Text>Nothing planned.</Text>
+            </View>
+          </Card.Content>
+        </Card>
+      </TouchableOpacity>
+    )
+  }
+
   return (
     <AuthContext.Provider value={authContext}>
       <Agenda
-        items={calendarState.loadingEvents ? testItems : calendarState.events}
-        // items={testItems}
-        // loadItemsForMonth={loadItems}
+        items={calendarState.loadingEvents ? {} : calendarState.events}
         selected={moment(new Date()).format('yyyy-MM-DD')}
         renderItem={renderItem}
+        // Specify what should be rendered instead of ActivityIndicator
+        renderEmptyData={() => {
+          return renderEmptyData()
+        }}
       />
     </AuthContext.Provider>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-})
