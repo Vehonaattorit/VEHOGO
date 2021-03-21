@@ -7,7 +7,7 @@ import AppLoading from 'expo-app-loading'
 import * as Font from 'expo-font';
 import NewRide from './NewRide';
 import DriverStartRide from './DriverStartRide';
-
+import DriverOnRoute from './DriverOnRoute'
 
 export default function App() {
 
@@ -32,7 +32,7 @@ export default function App() {
   }
   return (
     <Root>
-        <DriverStartRide/>
+        <DriverOnRoute/>
       <StatusBar style="auto" />
     </Root>
   );
