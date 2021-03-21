@@ -1,10 +1,10 @@
 import React from 'react';
 import {StyleSheet, Button, Text, View} from 'react-native';
-
+import {color} from '../constants/colors';
 export const WorkingDays = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <Text>Open up WorkingDays.js to start working on your app!</Text>
+      <Text style={{color: color.pText}}>Open up WorkingDays.js to start working on your app!</Text>
       <View style={styles.signUpContainer}>
         <Button
           title="Submit"
@@ -20,7 +20,7 @@ export const WorkingDays = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: color.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },

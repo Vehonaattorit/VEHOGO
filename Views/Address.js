@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, TextInput, Button, Text, View} from 'react-native';
-
+import {color} from '../constants/colors';
 export const Address = ({navigation}) => {
   return (
     <View style={styles.container}>
@@ -27,7 +27,7 @@ export const Address = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: color.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },

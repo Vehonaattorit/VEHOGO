@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, Button, View, TextInput} from 'react-native';
-
+import {color} from '../constants/colors';
 export const LogIn = ({navigation}) => {
   return (
     <View style={styles.container}>
@@ -37,7 +37,7 @@ export const LogIn = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: color.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },

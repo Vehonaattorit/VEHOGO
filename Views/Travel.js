@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, Button, Text, View} from 'react-native';
+import {color} from '../constants/colors';
 
 export const Travel = ({navigation}) => {
   return (
@@ -22,7 +23,7 @@ export const Travel = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: color.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },

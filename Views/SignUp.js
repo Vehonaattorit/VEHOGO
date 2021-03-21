@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-
+import {color} from '../constants/colors';
 export const SignUp = () => {
   return (
     <View style={styles.container}>
@@ -12,7 +12,7 @@ export const SignUp = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: color.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },

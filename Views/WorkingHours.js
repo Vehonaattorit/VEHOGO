@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, Button, View} from 'react-native';
-
+import {color} from '../constants/colors';
 export const WorkingHours = ({navigation}) => {
   return (
     <View style={styles.container}>
@@ -20,7 +20,7 @@ export const WorkingHours = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: color.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
