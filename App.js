@@ -77,7 +77,6 @@ const TestLogin = () => {
         ? AuthSession.makeRedirectUri()
         : AppAuth.OAuthRedirect + '://expo.io/@user-name/slug',
     // redirectUrl: AppAuth.OAuthRedirect + '://expo.io/@user-name/slug',
-    clientSecret: '8ff5d29d-1f07-42f0-a6f6-c0662e330d2b',
     prompt: 'login',
     // serviceConfiguration: {
     //   authorizationEndpoint:
@@ -159,14 +158,6 @@ const TestLogin = () => {
   }
 
   return (
-    // <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-    //   <Button
-    //     title="Login!"
-    //     disabled={!request}
-    //     onPress={() => promptAsync()}
-    //   />
-    //   {result && <Text>{JSON.stringify(result, null, 2)}</Text>}
-    // </View>
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <Button
         title="Login!"
@@ -185,7 +176,8 @@ const TestLogin = () => {
 export default function App() {
   return (
     <SafeAreaView style={styles.container}>
-      <TestLogin />
+      <ReactNativeCalendar />
+      {/* <TestLogin /> */}
     </SafeAreaView>
   )
 }

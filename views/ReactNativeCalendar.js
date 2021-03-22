@@ -63,8 +63,8 @@ export default ReactNativeCalendar = () => {
 
   useEffect(() => {
     if (!state.userToken) {
-      loadUser()
-      loadCalendar()
+      // loadUser()
+      // loadCalendar()
     }
   }, [state.isLoading, state.isSignOut, state.userToken])
 

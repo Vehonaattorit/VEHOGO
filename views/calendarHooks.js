@@ -12,10 +12,17 @@ const calendarHooks = () => {
   const authContext = React.useMemo(
     () => ({
       signIn: async () => {
-        await AuthManager.signInAsync()
-        const token = await AuthManager.getAccessTokenAsync()
+        const response = await AuthManager.signInAsync()
+        // const token = await AuthManager.getAccessTokenAsync()
 
-        dispatch({type: 'SIGN_IN', token})
+        console.log('calendarHooks response', response)
+
+        setCalendarState({
+          loadingEvents: response.loadingEvents,
+          events: response.events,
+        })
+
+        dispatch({type: 'SIGN_IN', token: response.userToken})
       },
       signOut: async () => {
         await AuthManager.signOutAsync()
@@ -79,15 +86,37 @@ const calendarHooks = () => {
 
   const bootstrapAsync = async () => {
     // let userToken = null
+    // signOutAsync()
     const userToken = await AsyncStorage.getItem('userToken')
 
-    signOutAsync()
+    if (userToken) {
+      const response = await AuthManager.callMsGraph(userToken)
+      setCalendarState({
+        loadingEvents: response.loadingEvents,
+        events: response.events,
+      })
 
-    dispatch({type: 'RESTORE_TOKEN', token: userToken})
-
-    if (!userToken) {
+      dispatch({type: 'SIGN_IN', token: response.userToken})
+    } else {
       signInAsync()
     }
+
+    /**
+     *         setCalendarState({
+          loadingEvents: response.loadingEvents,
+          events: response.events,
+        })
+
+        dispatch({type: 'SIGN_IN', token: response.userToken})
+     */
+
+    // console.log('bootstrapAsync userToken', userToken)
+
+    // dispatch({type: 'RESTORE_TOKEN', token: userToken})
+
+    // if (!userToken) {
+    //   signInAsync()
+    // }
   }
 
   const loadUser = async () => {
