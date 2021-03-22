@@ -9,7 +9,8 @@ import * as AppAuth from 'expo-app-auth'
 
 const config = {
   clientId: AuthConfig.appId,
-  redirectUrl: 'graph-tutorial://react-native-auth/',
+  redirectUrl: AppAuth.OAuthRedirect + '://expo.io/@user-name/slug',
+  // redirectUrl: 'graph-tutorial://react-native-auth/',
   scopes: AuthConfig.appScopes,
   additionalParameters: {prompt: 'select_account'},
   serviceConfiguration: {
@@ -27,6 +28,7 @@ export class AuthManager {
       // const result = await authorize(config)
       let result = await AppAuth.authAsync(config)
       console.log(`result ${result ? result : 'no result'}`)
+      console.log(`result`, result)
       console.log('access token', result.accessToken)
 
       // // Store the access token, refresh token, and expiration time in storage
