@@ -1,9 +1,9 @@
 import React from 'react'
-import {StyleSheet} from 'react-native'
-import {Content, Body, Container, Text, View, Icon} from 'native-base'
+import {StyleSheet, Dimensions} from 'react-native'
+import {Content, Body, Container, Text, View, Icon, Button} from 'native-base'
+import MapView from 'react-native-maps'
 
-
-const DriverAcceptRefuse = () => {
+const DriverOnRoute = () => {
   return (
     <View style={styles.view}>
 
@@ -17,18 +17,36 @@ const DriverAcceptRefuse = () => {
 
           <View style={styles.info}>
             <Text>Olen etuovella</Text>
-            <Icon active name='chatbox-ellipses-outline' />
+            <Button small><Icon active name='chatbox-ellipses-outline' /></Button>
           </View>
 
         </Content>
       </Container>
 
-      <Container style={styles.requestMapContent}>
-        <Content padder >
-          <Body>
-          </Body>
-        </Content>
-      </Container>
+      <View style={styles.requestMapContent}>
+        <MapView style={styles.mapStyle} provider={MapView.PROVIDER_GOOGLE}
+          initialRegion={{
+            latitude: 60.169929425303415,
+            longitude: 24.938383101854694,
+            latitudeDelta: 0.1,
+            longitudeDelta: 0.1,
+          }}>
+          <MapView.Marker
+            coordinate={{
+              latitude: 60.169929425303415,
+              longitude: 24.938383101854694,
+            }}
+            title='Random place'
+          />
+          <MapView.Marker
+            coordinate={{
+              latitude: 60.203218047839,
+              longitude: 24.65566529896304,
+            }}
+            title='Michael'
+          />
+        </MapView>
+      </View>
 
     </View>
 
@@ -44,7 +62,7 @@ const styles = StyleSheet.create({
   },
   requestMapContent: {
     flex: 6,
-    backgroundColor: 'black'
+    backgroundColor: 'black',
   },
   requestAcceptRefuseContent: {
     flex: 1,
@@ -58,6 +76,11 @@ const styles = StyleSheet.create({
     margin: 10
   },
 
+  mapStyle: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  },
+
 });
 
-export default DriverAcceptRefuse
+export default DriverOnRoute

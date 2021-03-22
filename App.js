@@ -8,6 +8,7 @@ import * as Font from 'expo-font';
 import NewRide from './NewRide';
 import DriverStartRide from './DriverStartRide';
 import DriverOnRoute from './DriverOnRoute'
+import Chat from './Chat'
 
 export default function App() {
 

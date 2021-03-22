@@ -1,17 +1,28 @@
 import React from 'react'
-import {StyleSheet} from 'react-native'
+import {StyleSheet, Dimensions} from 'react-native'
 import {Content, Body, Container, Text, View, Button} from 'native-base'
-
+import MapView from 'react-native-maps'
 
 const DriverAcceptRefuse = () => {
   return (
     <View style={styles.view}>
 
       <Container style={styles.requestMapContent}>
-        <Content padder >
-          <Body>
-          </Body>
-        </Content>
+      <MapView style={styles.mapStyle} provider={MapView.PROVIDER_GOOGLE}
+          initialRegion={{
+            latitude: 60.169929425303415,
+            longitude: 24.938383101854694,
+            latitudeDelta: 0.1,
+            longitudeDelta: 0.1,
+          }}>
+          <MapView.Marker
+            coordinate={{
+              latitude: 60.169929425303415,
+              longitude: 24.938383101854694,
+            }}
+            title='Random place'
+          />
+        </MapView>
       </Container>
 
       <Container style={styles.requestAcceptRefuseContent}>
@@ -44,7 +55,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   requestMapContent: {
-    flex: 2,
+    flex: 3,
     backgroundColor: 'black'
   },
   requestAcceptRefuseContent: {
@@ -55,7 +66,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: 50,
+    marginTop: 20
   },
   button: {
     backgroundColor: '#26aae2',
@@ -70,6 +81,10 @@ const styles = StyleSheet.create({
   },
   btntxt: {
     color:'white'
+  },
+  mapStyle: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   },
 });
 
