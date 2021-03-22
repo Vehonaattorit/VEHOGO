@@ -1,93 +1,3 @@
-// import AsyncStorage from '@react-native-community/async-storage'
-// import {authorize, refresh, AuthConfiguration} from 'react-native-app-auth'
-// import {Platform} from 'react-native'
-// import moment from 'moment'
-
-// import {AuthConfig} from './AuthConfig'
-
-// import * as AppAuth from 'expo-app-auth'
-
-// const config = {
-//   clientId: AuthConfig.appId,
-//   redirectUrl: AppAuth.OAuthRedirect + '://expo.io/@user-name/slug',
-//   // redirectUrl: 'graph-tutorial://react-native-auth/',
-//   scopes: AuthConfig.appScopes,
-//   additionalParameters: {prompt: 'select_account'},
-//   serviceConfiguration: {
-//     authorizationEndpoint:
-//       'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
-//     tokenEndpoint: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
-//   },
-// }
-
-// export class AuthManager {
-//   static signInAsync = async () => {
-//     // const redirectUrl = AuthSession.getRedirectUrl()
-//     console.log('Sign in Async')
-//     try {
-//       // const result = await authorize(config)
-//       let result = await AppAuth.authAsync(config)
-//       console.log(`result ${result ? result : 'no result'}`)
-//       console.log(`result`, result)
-//       console.log('access token', result.accessToken)
-
-//       // // Store the access token, refresh token, and expiration time in storage
-//       await AsyncStorage.setItem('userToken', result.accessToken)
-//       await AsyncStorage.setItem('refreshToken', result.refreshToken)
-//       await AsyncStorage.setItem('expireTime', result.accessTokenExpirationDate)
-//     } catch (err) {
-//       console.log('err', err)
-//     }
-//   }
-
-//   static signOutAsync = async () => {
-//     // Clear storage
-
-//     console.log('Signing out')
-//     await AsyncStorage.removeItem('userToken')
-//     await AsyncStorage.removeItem('refreshToken')
-//     await AsyncStorage.removeItem('expireTime')
-//   }
-
-//   static getAccessTokenAsync = async () => {
-//     const expireTime = await AsyncStorage.getItem('expireTime')
-
-//     console.log('epxireTime', expireTime)
-//     console.log('Get Access Token Async')
-
-//     if (expireTime !== null) {
-//       // Get expiration time - 5 minutes
-//       // If it's <= 5 minutes before expiration, then refresh
-
-//       const expire = moment(expireTime).subtract(5, 'minutes')
-//       const now = moment()
-
-//       if (now.isSameOrAfter(expire)) {
-//         // Expired, refresh
-//         console.log('Refreshing token')
-//         const refreshToken = await AsyncStorage.getItem('refreshToken')
-//         console.log(`Refresh token: ${refreshToken}`)
-//         // TEMPORARY
-//         // const result = await refresh(config, {refreshToken: refreshToken || ''})
-//         const result = await AppAuth.refreshAsync(config, refreshToken)
-//         console.log('refreshAuth', result)
-
-//         // Store the new access token, refresh token, and expiration time in storage
-//         await AsyncStorage.setItem('userToken', result.accessToken)
-//         await AsyncStorage.setItem('refreshToken', result.refreshToken || '')
-//         await AsyncStorage.setItem(
-//           'expireTime',
-//           result.accessTokenExpirationDate
-//         )
-
-//         return result.accessToken
-//       }
-
-//       return null
-//     }
-//   }
-// }
-
 import AsyncStorage from '@react-native-community/async-storage'
 import {authorize, refresh, AuthConfiguration} from 'react-native-app-auth'
 import {Platform} from 'react-native'
@@ -95,28 +5,11 @@ import moment from 'moment-timezone'
 import * as AuthSession from 'expo-auth-session'
 import * as WebBrowser from 'expo-web-browser'
 
-import {AuthConfig, azureAdAppProps} from './AuthConfig'
-
-import * as AppAuth from 'expo-app-auth'
+import {azureAdAppProps} from './AuthConfig'
 
 import {findIana} from 'windows-iana'
 
 WebBrowser.maybeCompleteAuthSession()
-
-const config = {
-  clientId: AuthConfig.appId,
-  redirectUrl: AppAuth.OAuthRedirect + '://expo.io/@user-name/slug',
-  // redirectUrl: 'graph-tutorial://react-native-auth/',
-  scopes: AuthConfig.appScopes,
-  additionalParameters: {prompt: 'select_account'},
-  serviceConfiguration: {
-    authorizationEndpoint:
-      'https://login.microsoftonline.com/common/oauth2/v2.0/authorize',
-    tokenEndpoint: 'https://login.microsoftonline.com/common/oauth2/v2.0/token',
-  },
-}
-
-console.log('DASDUS', azureAdAppProps.tenantId)
 
 export class AuthManager {
   static signInAsync = async () => {
@@ -127,15 +20,6 @@ export class AuthManager {
     )}&prompt=login&redirect_uri=${encodeURIComponent(
       azureAdAppProps.redirectUri
     )}`
-    // const authUrl = `https://login.microsoftonline.com/${
-    //   azureAdAppProps.tenantId
-    // }/oauth2/v2.0/authorize?client_id=${
-    //   azureAdAppProps.clientId
-    // }&response_type=code&scope=${encodeURIComponent(
-    //   azureAdAppProps.scope
-    // )}&prompt=login&redirect_uri=${encodeURIComponent(
-    //   azureAdAppProps.redirectUri
-    // )}`
 
     const jotainUutta = {
       authUrl: authUrl,
@@ -199,25 +83,6 @@ export class AuthManager {
     return authResponse
   }
 
-  // static signInAsync = async () => {
-  //   // const redirectUrl = AuthSession.getRedirectUrl()
-  //   console.log('Sign in Async')
-  //   try {
-  //     // const result = await authorize(config)
-  //     let result = await AppAuth.authAsync(config)
-  //     console.log(`result ${result ? result : 'no result'}`)
-  //     console.log(`result`, result)
-  //     console.log('access token', result.accessToken)
-
-  //     // // Store the access token, refresh token, and expiration time in storage
-  //     await AsyncStorage.setItem('userToken', result.accessToken)
-  //     await AsyncStorage.setItem('refreshToken', result.refreshToken)
-  //     await AsyncStorage.setItem('expireTime', result.accessTokenExpirationDate)
-  //   } catch (err) {
-  //     console.log('err', err)
-  //   }
-  // }
-
   static signOutAsync = async () => {
     // Clear storage
 
@@ -255,25 +120,7 @@ export class AuthManager {
 
     /* make a POST request using fetch and the body params we just setup */
     let tokenResponse = null
-    // await fetch(
-    //   `https://login.microsoftonline.com/${azureAdAppProps.tenantId}/oauth2/v2.0/token`,
-    //   {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-    //     },
-    //     body: formBody,
-    //   }
-    // )
-    //   .then((response) => response.json())
-    //   .then((response) => {
-    //     tokenResponse = response
 
-    //     console.log('getus tokenus', tokenResponse)
-    //   })
-    //   .catch((error) => {
-    //     console.error(error)
-    //   })
     await fetch(`https://login.microsoftonline.com/common/oauth2/v2.0/token`, {
       method: 'POST',
       headers: {
@@ -297,10 +144,6 @@ export class AuthManager {
       tokenResponse.expires_in.toString()
     )
     return await AuthManager.callMsGraph(tokenResponse.access_token)
-    // BACKUP
-    // return tokenResponse.access_token
-    // END
-    // return await callMsGraph(tokenResponse.access_token)
   } //end getToken()
 
   /*
@@ -373,20 +216,6 @@ export class AuthManager {
         }
       })
 
-      // events = events.value
-
-      // if (events == undefined) return
-
-      // let mappedData = events.map((event, index) => {
-      //   return {
-      //     start: moment(event.start.dateTime).format('HH:mm'),
-      //     end: moment(event.end.dateTime).format('HH:mm'),
-      //     // id: event.id,
-      //     subject: event.subject,
-      //     date: moment(event.start.dateTime).format('yyyy-MM-DD'),
-      //   }
-      // })
-
       const reduced = mappedData.reduce((acc, currentItem) => {
         const {date, ...allTheRest} = currentItem
 
@@ -404,17 +233,9 @@ export class AuthManager {
         loadingEvents: false,
         events: reduced,
       }
-      // setCalendarState({
-      //   loadingEvents: false,
-      //   events: reduced,
-      // })
     } catch (err) {
       throw new Error(err)
     }
-
-    // AuthManager.getCalendarView()
-
-    // return finalResponse
   } //end callMsGraph()
 
   static getCalendarView = async (start, end, timezone) => {
@@ -466,42 +287,4 @@ export class AuthManager {
     }
     return finalResponse
   }
-
-  // static getAccessTokenAsync = async () => {
-  //   const expireTime = await AsyncStorage.getItem('expireTime')
-
-  //   console.log('epxireTime', expireTime)
-  //   console.log('Get Access Token Async')
-
-  //   if (expireTime !== null) {
-  //     // Get expiration time - 5 minutes
-  //     // If it's <= 5 minutes before expiration, then refresh
-
-  //     const expire = moment(expireTime).subtract(5, 'minutes')
-  //     const now = moment()
-
-  //     if (now.isSameOrAfter(expire)) {
-  //       // Expired, refresh
-  //       console.log('Refreshing token')
-  //       const refreshToken = await AsyncStorage.getItem('refreshToken')
-  //       console.log(`Refresh token: ${refreshToken}`)
-  //       // TEMPORARY
-  //       // const result = await refresh(config, {refreshToken: refreshToken || ''})
-  //       const result = await AppAuth.refreshAsync(config, refreshToken)
-  //       console.log('refreshAuth', result)
-
-  //       // Store the new access token, refresh token, and expiration time in storage
-  //       await AsyncStorage.setItem('userToken', result.accessToken)
-  //       await AsyncStorage.setItem('refreshToken', result.refreshToken || '')
-  //       await AsyncStorage.setItem(
-  //         'expireTime',
-  //         result.accessTokenExpirationDate
-  //       )
-
-  //       return result.accessToken
-  //     }
-
-  //     return null
-  //   }
-  // }
 }

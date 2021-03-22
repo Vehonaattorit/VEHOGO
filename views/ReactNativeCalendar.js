@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import {View, Text, TouchableOpacity} from 'react-native'
+import {View, Text, TouchableOpacity, ActivityIndicator} from 'react-native'
 import {Agenda} from 'react-native-calendars'
 import {Card} from 'react-native-paper'
 
@@ -15,14 +15,7 @@ import calendarHooks from './calendarHooks'
  */
 
 export default ReactNativeCalendar = () => {
-  const {
-    bootstrapAsync,
-    authContext,
-    loadCalendar,
-    loadUser,
-    state,
-    calendarState,
-  } = calendarHooks()
+  const {bootstrapAsync, authContext, calendarState} = calendarHooks()
 
   const renderItem = (item) => {
     return (
@@ -36,7 +29,13 @@ export default ReactNativeCalendar = () => {
                 alignItems: 'center',
               }}
             >
-              <Text>
+              <Text
+                style={{
+                  marginTop: 8,
+                  marginBottom: 10,
+                  color: '#404040',
+                }}
+              >
                 {item.start} - {item.end}
               </Text>
             </View>
@@ -49,7 +48,14 @@ export default ReactNativeCalendar = () => {
                 alignItems: 'center',
               }}
             >
-              <Text>{item.subject}</Text>
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: '#202020',
+                }}
+              >
+                {item.subject}
+              </Text>
             </View>
           </Card.Content>
         </Card>
@@ -61,14 +67,15 @@ export default ReactNativeCalendar = () => {
     bootstrapAsync()
   }, [])
 
-  useEffect(() => {
-    if (!state.userToken) {
-      // loadUser()
-      // loadCalendar()
-    }
-  }, [state.isLoading, state.isSignOut, state.userToken])
+  const largeActivityIndicator = () => {
+    return (
+      <View style={{top: 40, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" />
+      </View>
+    )
+  }
 
-  const renderEmptyData = () => {
+  const nothingPlanned = () => {
     return (
       <TouchableOpacity style={{marginRight: 10, marginTop: 17}}>
         <Card>
@@ -95,7 +102,11 @@ export default ReactNativeCalendar = () => {
         renderItem={renderItem}
         // Specify what should be rendered instead of ActivityIndicator
         renderEmptyData={() => {
-          return renderEmptyData()
+          if (!calendarState.loadingEvents) {
+            return nothingPlanned()
+          } else {
+            return largeActivityIndicator()
+          }
         }}
       />
     </AuthContext.Provider>
