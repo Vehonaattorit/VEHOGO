@@ -9,10 +9,12 @@ import NewRide from './NewRide';
 import DriverStartRide from './DriverStartRide';
 import DriverOnRoute from './DriverOnRoute'
 import Chat from './Chat'
-
+import SignUpScreen from './loginScreens/SignUpScreen';
 export default function App() {
 
   const [fontReady, setFontReady] = useState(false);
+
+
   const loadFonts = async () => {
     await Font.loadAsync({
       Roboto: require('native-base/Fonts/Roboto.ttf'),
@@ -33,7 +35,7 @@ export default function App() {
   }
   return (
     <Root>
-      <DriverOnRoute/>
+      <SignUpScreen/>
       <StatusBar style="auto" />
     </Root>
   );
