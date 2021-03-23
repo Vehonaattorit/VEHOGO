@@ -1,24 +1,38 @@
 import React from 'react';
-import {StyleSheet, TextInput, Button, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {color} from '../constants/colors';
+import {Button, Input, Card} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 export const Address = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <View style={styles.emailContainer}>
-          <TextInput style={styles.input} placeholder="Address" />
-        </View>
-        <View style={styles.passwordContainer}>
-          <TextInput style={styles.input} placeholder="City" />
-        </View>
-        <View style={styles.signUpContainer}>
+      <View style={styles.myCard}>
+        <Card elevation={7}>
+          <Input
+            placeholder="Address"
+            leftIcon={<Icon name="" size={24} color={color.grey} />}
+            style={styles}
+            secureTextEntry={true}
+            onChangeText={(value) => this.setState({comment: value})}
+          />
+
+          <Input
+            placeholder="City"
+            leftIcon={<Icon name="" size={24} color={color.grey} />}
+            style={styles}
+            secureTextEntry={true}
+            onChangeText={(value) => this.setState({comment: value})}
+          />
+
           <Button
+            style={styles.btns}
+            type="outline"
             title="Submit"
             onPress={() => {
               navigation.navigate('WorkingDays');
             }}
           />
-        </View>
+        </Card>
       </View>
     </View>
   );
@@ -31,16 +45,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  inputContainer: {
-    marginHorizontal: 20,
-    alignContent: 'space-between',
-  },
-  input: {
-    padding: 10,
-    margin: 5,
-  },
-  signUpContainer: {
-    margin: 5,
-    backgroundColor: 'yellow',
+  myCard: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    marginBottom: 36,
+    width: '100%',
+    borderTopLeftRadius: 2,
+    borderTopRightRadius: 2,
+    color: 'white',
   },
 });

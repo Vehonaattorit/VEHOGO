@@ -1,34 +1,59 @@
 import React from 'react';
-import {StyleSheet, Button, View, TextInput} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {color} from '../constants/colors';
+import {Button, Input, Card} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 export const LogIn = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <View style={styles.btnContainer}>
-        <View style={styles.inputContainer}>
-          <View style={styles.emailContainer}>
-            <TextInput style={styles.input} placeholder="Email" />
+      <View >
+        <Card elevation={7} >
+          <View style={styles.inputContainer}>
+            <View style={styles.input}>
+              <Input
+                placeholder="Email@Address.com"
+                leftIcon={
+                  <Icon name="" size={24} color={color.grey} />
+                }
+                style={styles}
+                secureTextEntry={true}
+                onChangeText={(value) => this.setState({comment: value})}
+              />
+            </View>
+            <View style={styles.input}>
+              <Input
+                placeholder="Password"
+                errorStyle={{color: 'red'}}
+                leftIcon={
+                  <Icon name="lock" size={24} color={color.grey} />
+                }
+                errorMessage="ENTER A VALID ERROR HERE"
+              />
+            </View>
+
+            <View style={styles.btnsContainer}>
+              <Button
+                style={styles.btns}
+                type="outline"
+                title="Log In"
+                onPress={() => {
+                  navigation.navigate('Travel');
+                }}
+              />
+            </View>
+            <View style={styles.btnsContainer}>
+              <Button
+                style={styles.btns}
+                type="outline"
+                title="Sign Up"
+                onPress={() => {
+                  navigation.navigate('SignUp');
+                }}
+              />
+            </View>
           </View>
-          <View style={styles.passwordContainer}>
-            <TextInput style={styles.input} placeholder="Password" />
-          </View>
-        </View>
-        <View style={styles.logInContainer}>
-          <Button
-            title="Log In"
-            onPress={() => {
-              navigation.navigate('Travel');
-            }}
-          />
-        </View>
-        <View style={styles.signUpContainer}>
-          <Button
-            title="Sign Up"
-            onPress={() => {
-              navigation.navigate('SignUp');
-            }}
-          />
-        </View>
+        </Card>
       </View>
     </View>
   );
@@ -37,27 +62,26 @@ export const LogIn = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: color.primary,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: color.primaryLight
+  },
+  myCard: {
+    backgroundColor: 'blue',
+    borderRadius: 10,
+    margin: 10,
   },
   inputContainer: {
-    marginHorizontal: 20,
-    alignContent: 'space-between',
-  },
-  input: {
-    padding: 10,
-    margin: 5,
-  },
-  btnContainer: {
     padding: 20,
   },
-  logInContainer: {
-    margin: 5,
-    backgroundColor: 'brown',
+  input: {
+    width: 230,
   },
-  signUpContainer: {
-    margin: 5,
-    backgroundColor: 'yellow',
+  btns: {
+    padding: 20,
+    color: "black"
+  },
+  btnsContainer: {
+    margin: 3,
   },
 });

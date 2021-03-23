@@ -1,11 +1,51 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Button, Text, View} from 'react-native';
 import {color} from '../constants/colors';
+import DateTimePicker from '@react-native-community/datetimepicker';
+
 export const WorkingDays = ({navigation}) => {
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+
+  const showDatepicker2 = () => {
+    showMode('date');
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={{color: color.pText}}>Open up WorkingDays.js to start working on your app!</Text>
-      <View style={styles.signUpContainer}>
+       <View>
+        <Button onPress={showDatepicker} title="Show date picker!" />
+      </View>
+      <View>
+        <Button onPress={showDatepicker2} title="Show date picker!" />
+      </View>
+      {show && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode={mode}
+          is24Hour={true}
+          display="default"
+          onChange={onChange}
+        />
+      )}
+
         <Button
           title="Submit"
           onPress={() => {
@@ -13,7 +53,6 @@ export const WorkingDays = ({navigation}) => {
           }}
         />
       </View>
-    </View>
   );
 };
 

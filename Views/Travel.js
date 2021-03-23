@@ -1,20 +1,34 @@
 import React from 'react';
-import {StyleSheet, Button, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import {color} from '../constants/colors';
-
+import {Button} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 export const Travel = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <View style={styles.logInContainer}>
+      <View style={styles.btnContainer}>
         <Button
-          title="Share my car"
+          style={styles.btn}
+          title="Share My Car "
+          type="clear"
+          iconRight
           onPress={() => {
             navigation.navigate('Address');
           }}
+          icon={<Icon name="arrow-right" size={15} color="white" />}
+          titleStyle={styles.btnTitle}
         />
-      </View>
-      <View style={styles.signUpContainer}>
-        <Button title="Get a ride" onPress={() => {}} />
+        <Button
+          style={styles.btn}
+          type="clear"
+          title="Get A Ride "
+          onPress={() => {
+            navigation.navigate('Address');
+          }}
+          iconRight
+          icon={<Icon name="arrow-right" size={15} color="white" />}
+          titleStyle={styles.btnTitle}
+        />
       </View>
     </View>
   );
@@ -23,19 +37,24 @@ export const Travel = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: color.primary,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: color.primaryLight,
   },
   btnContainer: {
-    padding: 20,
+    position: 'absolute',
+    bottom: 20,
+    marginBottom: '5%',
+    width: '100%',
   },
-  logInContainer: {
+  btn: {
     margin: 5,
-    backgroundColor: 'brown',
+    alignSelf: 'stretch',
+
   },
-  signUpContainer: {
-    margin: 5,
-    backgroundColor: 'yellow',
-  },
+  btnTitle:{
+    width: '90%',
+    fontSize: 35,
+    color: color.pText
+  }
 });
