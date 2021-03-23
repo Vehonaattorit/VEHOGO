@@ -12,7 +12,7 @@ export const LogIn = ({navigation}) => {
 
   const logIn = async() => {
     try {
-      const result = firebase.auth().signInWithEmailAndPassword(email, password)
+      const result = await firebase.auth().signInWithEmailAndPassword(email, password)
       console.log('Log In success')
       navigation.navigate('Travel');
     }catch(err){
@@ -41,6 +41,7 @@ export const LogIn = ({navigation}) => {
                 errorStyle={{color: 'red'}}
                 value = {password}
                 onChangeText={setPassword}
+                secureTextEntry={true}
                 leftIcon={
                   <Icon name="lock" size={24} color={color.grey} />
                 }
