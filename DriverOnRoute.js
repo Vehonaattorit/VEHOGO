@@ -2,8 +2,13 @@ import React from 'react'
 import {StyleSheet, Dimensions} from 'react-native'
 import {Content, Body, Container, Text, View, Icon, Button} from 'native-base'
 import MapView from 'react-native-maps'
+import MapViewDirections from 'react-native-maps-directions';
 
 const DriverOnRoute = () => {
+
+  const origin = {latitude: 60.169929425303415, longitude: 24.938383101854694};
+  const destination = {latitude: 60.203218047839, longitude: 24.65566529896304};
+  const apikey = 'Your api key here'
   return (
     <View style={styles.view}>
 
@@ -26,25 +31,18 @@ const DriverOnRoute = () => {
       <View style={styles.requestMapContent}>
         <MapView style={styles.mapStyle} provider={MapView.PROVIDER_GOOGLE}
           initialRegion={{
-            latitude: 60.169929425303415,
-            longitude: 24.938383101854694,
+            latitude: origin.latitude,
+            longitude: origin.longitude,
             latitudeDelta: 0.1,
             longitudeDelta: 0.1,
           }}>
-          <MapView.Marker
-            coordinate={{
-              latitude: 60.169929425303415,
-              longitude: 24.938383101854694,
-            }}
-            title='Random place'
+
+          <MapViewDirections
+            origin={origin}
+            destination={destination}
+            apikey={apikey}
           />
-          <MapView.Marker
-            coordinate={{
-              latitude: 60.203218047839,
-              longitude: 24.65566529896304,
-            }}
-            title='Michael'
-          />
+
         </MapView>
       </View>
 

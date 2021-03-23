@@ -33,7 +33,7 @@ export default function App() {
   }
   return (
     <Root>
-        <DriverOnRoute/>
+      <DriverOnRoute/>
       <StatusBar style="auto" />
     </Root>
   );
