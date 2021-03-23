@@ -4,36 +4,6 @@ import AsyncStorage from '@react-native-community/async-storage'
 import {AuthManager} from '../auth/AuthManager'
 
 const calendarHooks = () => {
-  const authContext = React.useMemo(
-    () => ({
-      signIn: async () => {
-        const response = await AuthManager.signInAsync()
-
-        console.log('calendarHooks response', response)
-
-        setCalendarState({
-          loadingEvents: response.loadingEvents,
-          events: response.events,
-        })
-
-        dispatch({type: 'SIGN_IN', token: response.userToken})
-      },
-      signOut: async () => {
-        await AuthManager.signOutAsync()
-        dispatch({type: 'SIGN_OUT'})
-      },
-    }),
-    []
-  )
-
-  const signInAsync = async () => {
-    await authContext.signIn()
-  }
-
-  const signOutAsync = async () => {
-    await authContext.signOut()
-  }
-
   const [calendarState, setCalendarState] = useState({
     loadingEvents: true,
     events: [],
@@ -53,46 +23,60 @@ const calendarHooks = () => {
       switch (action.type) {
         case 'RESTORE_TOKEN':
           return {
-            ...prevState,
             userToken: action.token,
-            isLoading: false,
           }
         case 'SIGN_IN':
           return {
-            ...prevState,
-            isSignOut: false,
             userToken: action.token,
           }
         case 'SIGN_OUT':
           return {
-            ...prevState,
-            isSignOut: true,
             userToken: null,
           }
       }
     },
     {
-      isLoading: true,
-      isSignOut: false,
       userToken: null,
     }
   )
 
+  const signInAsync = async () => {
+    const response = await AuthManager.signInAsync()
+
+    console.log('calendarHooks response', response)
+
+    setCalendarState({
+      loadingEvents: response.loadingEvents,
+      events: response.events,
+    })
+
+    dispatch({type: 'SIGN_IN', token: response.userToken})
+  }
+
+  const signOutAsync = async () => {
+    // Clear storage
+    console.log('Signing out')
+    await AsyncStorage.removeItem('userToken')
+    await AsyncStorage.removeItem('refreshToken')
+    await AsyncStorage.removeItem('expireTime')
+
+    setCalendarState({
+      loadingEvents: true,
+      events: [],
+    })
+
+    dispatch({type: 'SIGN_OUT', token: null})
+  }
+
   const bootstrapAsync = async () => {
-    // let userToken = null
-    const userToken = await AsyncStorage.getItem('userToken')
+    const response = await AuthManager.checkTokenExpiration()
 
-    if (userToken) {
-      const response = await AuthManager.callMsGraph(userToken)
-      setCalendarState({
-        loadingEvents: response.loadingEvents,
-        events: response.events,
-      })
+    setCalendarState({
+      loadingEvents: response.loadingEvents,
+      events: response.events,
+    })
 
-      dispatch({type: 'SIGN_IN', token: response.userToken})
-    } else {
-      signInAsync()
-    }
+    dispatch({type: 'SIGN_IN', token: response.userToken})
   }
 
   return {
@@ -100,9 +84,8 @@ const calendarHooks = () => {
     userState,
     calendarState,
     bootstrapAsync,
-    signInAsync,
     signOutAsync,
-    authContext,
+    signInAsync,
   }
 }
 

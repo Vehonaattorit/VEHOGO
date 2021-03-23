@@ -8,6 +8,7 @@ import * as WebBrowser from 'expo-web-browser'
 import {azureAdAppProps} from './AuthConfig'
 
 import {findIana} from 'windows-iana'
+import * as Localization from 'expo-localization'
 
 WebBrowser.maybeCompleteAuthSession()
 
@@ -21,15 +22,12 @@ export class AuthManager {
       azureAdAppProps.redirectUri
     )}`
 
-    const jotainUutta = {
+    const authUrls = {
       authUrl: authUrl,
-      returnUrl: azureAdAppProps.redirectUrl || AuthSession.makeRedirectUri(),
+      returnUrl: azureAdAppProps.redirectUri || AuthSession.makeRedirectUri(),
     }
-    console.log('authUrl', authUrl)
 
-    console.log('jotainUutta', jotainUutta.returnUrl)
-
-    let authResponse = await AuthSession.startAsync(jotainUutta)
+    let authResponse = await AuthSession.startAsync(authUrls)
       .then((authResponse) => {
         //Conditional if the user proceeds with the authentication process
         if (authResponse.type === 'success') {
@@ -81,15 +79,6 @@ export class AuthManager {
       })
 
     return authResponse
-  }
-
-  static signOutAsync = async () => {
-    // Clear storage
-
-    console.log('Signing out')
-    await AsyncStorage.removeItem('userToken')
-    await AsyncStorage.removeItem('refreshToken')
-    await AsyncStorage.removeItem('expireTime')
   }
 
   static getToken = async (code) => {
@@ -146,6 +135,39 @@ export class AuthManager {
     return await AuthManager.callMsGraph(tokenResponse.access_token)
   } //end getToken()
 
+  static checkTokenExpiration = async () => {
+    const expireTime = await AsyncStorage.getItem('expireTime')
+    const userToken = await AsyncStorage.getItem('userToken')
+
+    let response
+
+    if (expireTime !== null) {
+      // Get expiration time - 1 hour
+      // If it's <= 5 minutes before expiration, then refresh
+
+      const expire = new Date(new Date().getTime() + 3600 * 100)
+
+      const now = moment()
+
+      if (now.isSameOrAfter(expire)) {
+        // Expired refresh
+
+        console.log('now.isSameOrAfter(expire)', response)
+      } else {
+        // Token is not expired - use token to fetch Calendar Events
+        response = await AuthManager.callMsGraph(userToken)
+
+        return response
+      }
+    } else {
+      response = await AuthManager.signInAsync()
+
+      return response
+    }
+
+    return null
+  }
+
   /*
     callMsGraph
       queries the Microsoft Graph API to return user data
@@ -186,17 +208,12 @@ export class AuthManager {
     try {
       // Get the signed in user from Graph
 
-      const tz = finalResponse.userTimeZone || 'UTC'
-
-      const ianaTimeZone = findIana(tz)[4]
+      const tz = Localization.timezone
 
       // Get midnight on the start of the current week in the user's
       // time zone, but in UTC. For example, for PST, the time value
       // could be 07:00:00Z
-      const startOfWeek = moment
-        .tz(ianaTimeZone.valueOf())
-        .startOf('week')
-        .utc()
+      const startOfWeek = moment.tz(tz).startOf('week').utc()
 
       const endOfWeek = moment(startOfWeek).add(7, 'day')
 

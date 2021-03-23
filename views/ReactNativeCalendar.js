@@ -1,5 +1,12 @@
 import React, {useEffect} from 'react'
-import {View, Text, TouchableOpacity, ActivityIndicator} from 'react-native'
+import {
+  View,
+  Button,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native'
+
 import {Agenda} from 'react-native-calendars'
 import {Card} from 'react-native-paper'
 
@@ -15,7 +22,14 @@ import calendarHooks from './calendarHooks'
  */
 
 export default ReactNativeCalendar = () => {
-  const {bootstrapAsync, authContext, calendarState} = calendarHooks()
+  const {
+    state,
+    bootstrapAsync,
+    signOutAsync,
+    signInAsync,
+    authContext,
+    calendarState,
+  } = calendarHooks()
 
   const renderItem = (item) => {
     return (
@@ -96,7 +110,13 @@ export default ReactNativeCalendar = () => {
 
   return (
     <AuthContext.Provider value={authContext}>
+      <Button
+        title={state.userToken ? 'Sign out' : ' Log in'}
+        onPress={state.userToken ? signOutAsync : signInAsync}
+      />
       <Agenda
+        onRefresh={bootstrapAsync}
+        refreshing={calendarState.loadingEvents}
         items={calendarState.loadingEvents ? {} : calendarState.events}
         selected={moment(new Date()).format('yyyy-MM-DD')}
         renderItem={renderItem}
