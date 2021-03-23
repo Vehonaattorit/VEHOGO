@@ -5,14 +5,13 @@ import {Button, Input, Card} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 export const SignUp = ({navigation}) => {
   return (
-    <View style={styles.container}>''
+    <View style={styles.container}>
         <Card elevation={7}>
           <View style={styles.inputContainer}>
           <View style={styles.input}>
               <Input
                 placeholder="Enter your name"
                 leftIcon={<Icon name="" size={24} color={color.grey} />}
-                style={styles}
                 secureTextEntry={true}
                 onChangeText={(value) => this.setState({comment: value})}
               />
@@ -21,7 +20,6 @@ export const SignUp = ({navigation}) => {
               <Input
                 placeholder="Email@Address.com"
                 leftIcon={<Icon name="" size={24} color={color.grey} />}
-                style={styles}
                 secureTextEntry={true}
                 onChangeText={(value) => this.setState({comment: value})}
               />

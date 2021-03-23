@@ -16,7 +16,7 @@ export const LogIn = ({navigation}) => {
                 leftIcon={
                   <Icon name="" size={24} color={color.grey} />
                 }
-                style={styles}
+
                 secureTextEntry={true}
                 onChangeText={(value) => this.setState({comment: value})}
               />
