@@ -1,33 +1,45 @@
 import React from 'react';
+import {useState} from 'react'
 import {StyleSheet, View} from 'react-native';
 import {color} from '../constants/colors';
 import {Button, Input, Card} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import firebase from '../firebase/fire'
+
 export const SignUp = ({navigation}) => {
+
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const register = async() => {
+    try {
+      const result = await firebase.auth().createUserWithEmailAndPassword(email, password)
+      console.log('Register success')
+      navigation.navigate('Travel')
+    }catch(err){
+      console.log('register failed' + err)
+    }
+  }
   return (
     <View style={styles.container}>
         <Card elevation={7}>
           <View style={styles.inputContainer}>
-          <View style={styles.input}>
-              <Input
-                placeholder="Enter your name"
-                leftIcon={<Icon name="" size={24} color={color.grey} />}
-                secureTextEntry={true}
-                onChangeText={(value) => this.setState({comment: value})}
-              />
-            </View>
+
             <View style={styles.input}>
               <Input
                 placeholder="Email@Address.com"
                 leftIcon={<Icon name="" size={24} color={color.grey} />}
-                secureTextEntry={true}
-                onChangeText={(value) => this.setState({comment: value})}
+                value = {email}
+                onChangeText={setEmail}
               />
             </View>
             <View style={styles.input}>
               <Input
                 placeholder="Password"
                 errorStyle={{color: 'red'}}
+                secureTextEntry={true}
+                value = {password}
+                onChangeText={setPassword}
                 leftIcon={<Icon name="lock" size={24} color={color.grey} />}
                 errorMessage="ENTER A VALID ERROR HERE"
               />
@@ -38,7 +50,7 @@ export const SignUp = ({navigation}) => {
                 type="outline"
                 title="Sign Up"
                 onPress={() => {
-                  navigation.navigate('Travel');
+                  register()
                 }}
               />
             </View>
@@ -74,3 +86,4 @@ const styles = StyleSheet.create({
     margin: 3,
   },
 });
+

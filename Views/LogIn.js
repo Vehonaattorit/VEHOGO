@@ -1,10 +1,25 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {color} from '../constants/colors';
-import {Button, Input, Card} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
-
+import React from 'react'
+import {useState} from 'react'
+import {StyleSheet, View} from 'react-native'
+import {color} from '../constants/colors'
+import {Button, Input, Card} from 'react-native-elements'
+import Icon from 'react-native-vector-icons/FontAwesome'
+import firebase from '../firebase/fire'
 export const LogIn = ({navigation}) => {
+
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const logIn = async() => {
+    try {
+      const result = firebase.auth().signInWithEmailAndPassword(email, password)
+      console.log('Log In success')
+      navigation.navigate('Travel');
+    }catch(err){
+      console.log('LogIn failed' + err)
+    }
+  }
+
   return (
     <View style={styles.container}>
       <View >
@@ -16,15 +31,16 @@ export const LogIn = ({navigation}) => {
                 leftIcon={
                   <Icon name="" size={24} color={color.grey} />
                 }
-
-                secureTextEntry={true}
-                onChangeText={(value) => this.setState({comment: value})}
+                value = {email}
+                onChangeText={setEmail}
               />
             </View>
             <View style={styles.input}>
               <Input
                 placeholder="Password"
                 errorStyle={{color: 'red'}}
+                value = {password}
+                onChangeText={setPassword}
                 leftIcon={
                   <Icon name="lock" size={24} color={color.grey} />
                 }
@@ -38,7 +54,7 @@ export const LogIn = ({navigation}) => {
                 type="outline"
                 title="Log In"
                 onPress={() => {
-                  navigation.navigate('Travel');
+                  logIn()
                 }}
               />
             </View>
@@ -48,7 +64,7 @@ export const LogIn = ({navigation}) => {
                 type="outline"
                 title="Sign Up"
                 onPress={() => {
-                  navigation.navigate('SignUp');
+                  navigation.navigate('SignUp')
                 }}
               />
             </View>
@@ -85,3 +101,4 @@ const styles = StyleSheet.create({
     margin: 3,
   },
 });
+
