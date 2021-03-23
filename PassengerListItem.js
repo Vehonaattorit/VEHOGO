@@ -1,30 +1,30 @@
 import React from 'react'
 import {StyleSheet} from 'react-native'
-import {
-  Content, Card, CardItem, Text, Left, Right, Icon
-} from 'native-base'
-
+import {Content, Card, CardItem, Text, Left, Right, Icon} from 'native-base'
 
 const PassengerListItem = ({singleItem}) => {
-
-
   return (
     <Content>
       <Card style={styles.list}>
         <CardItem style={styles.item}>
-          <Left><Icon active name='person-outline' /><Text style={styles.title}>{singleItem.name}</Text></Left>
-          <Right><Text style={styles.title}>{singleItem.distance}km</Text></Right>
-
+          <Left>
+            <Icon active name="person-outline" />
+            <Text style={styles.title}>{singleItem.name}</Text>
+          </Left>
+          <Right>
+            <Text style={styles.title}>{singleItem.distance}km</Text>
+          </Right>
         </CardItem>
         <CardItem style={styles.item}>
-          <Left><Icon active name='location-outline' /><Text style={styles.title}>{singleItem.address}</Text></Left>
-
+          <Left>
+            <Icon active name="location-outline" />
+            <Text style={styles.title}>{singleItem.address}</Text>
+          </Left>
         </CardItem>
-
       </Card>
-    </Content >
-  );
-};
+    </Content>
+  )
+}
 
 const styles = StyleSheet.create({
   title: {
@@ -38,12 +38,11 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginTop: 10,
     backgroundColor: '#26aae2',
-    borderRadius: 20
+    borderRadius: 20,
   },
   item: {
-    backgroundColor: '#26aae2'
+    backgroundColor: '#26aae2',
   },
-});
+})
 
-
-export default PassengerListItem;
+export default PassengerListItem

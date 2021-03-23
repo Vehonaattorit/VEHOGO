@@ -1,6 +1,6 @@
 import {StatusBar} from 'expo-status-bar';
 import React, {useState, useEffect} from 'react';
-import DriverAcceptRefuse from '../VehoKimppa/DriverAcceptRefuse'
+import DriverAcceptRefuse from './DriverAcceptRefuse'
 import {StyleSheet} from 'react-native';
 import {Root} from 'native-base';
 import AppLoading from 'expo-app-loading'

@@ -1,7 +1,7 @@
 import React from 'react'
 import {StyleSheet} from 'react-native'
 import {Content, Card, CardItem, Body, Container, View, Item, Icon, Input} from 'native-base'
-import NewRideForm from '../VehoKimppa/NewRideForm'
+import NewRideForm from './NewRideForm'
 
 
 const Chat = () => {
