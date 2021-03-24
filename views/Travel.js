@@ -1,7 +1,12 @@
 import React from 'react'
 import {StyleSheet, View} from 'react-native'
 import {CustomButton} from '../components/CustomButton'
+import {signOut} from '../controllers/LoginController'
 export const Travel = ({navigation}) => {
+
+  const signOutComplete = () => {
+    navigation.navigate('LogIn')
+  }
   return (
     <View style={styles.container}>
       <View style={styles.btnContainer}>
@@ -18,6 +23,14 @@ export const Travel = ({navigation}) => {
             title="Get A Ride "
             onPress={() => {
               navigation.navigate('Address')
+            }}
+          />
+        </View>
+        <View style={styles.btn}>
+          <CustomButton
+            title="Log Out"
+            onPress={() => {
+              signOut(signOutComplete)
             }}
           />
         </View>

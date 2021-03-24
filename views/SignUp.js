@@ -6,21 +6,17 @@ import {Input} from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import firebase from '../firebase/fire'
 import {CustomButton} from '../components/CustomButton'
+import {register} from '../controllers/LoginController'
 
 export const SignUp = ({navigation}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const register = async () => {
-    try {
-      const result = await firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password)
-      console.log('Register success')
-      navigation.navigate('Travel')
-    } catch (err) {
-      console.log('register failed' + err)
-    }
+  const registerUser = () => {
+    register(email, password, registerComplete)
+  }
+  const registerComplete = () => {
+    navigation.navigate('Travel')
   }
   return (
     <View style={styles.container}>
@@ -50,7 +46,7 @@ export const SignUp = ({navigation}) => {
           <CustomButton
             title="Continue"
             onPress={() => {
-              register()
+              registerUser()
             }}
           />
         </View>
