@@ -4,6 +4,7 @@ import MainStackNavigator from './navigators/Navigator'
 import AppLoading from 'expo-app-loading'
 import * as Font from 'expo-font'
 import ChatRoom from './views/ChatRoom'
+import {OutlookCalendar} from './views/OutlookCalendar'
 
 export default function App() {
   const [fontReady, setFontReady] = useState(false)
@@ -26,7 +27,7 @@ export default function App() {
   }
   return (
     <View style={{flex: 1}}>
-      <ChatRoom />
+      <OutlookCalendar />
     </View>
   )
 }

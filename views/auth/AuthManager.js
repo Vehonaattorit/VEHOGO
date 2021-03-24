@@ -91,10 +91,6 @@ export class AuthManager {
       grant_type: 'authorization_code',
     }
 
-    console.log(
-      'getus tokenus azureAdAppProps.redirectUri',
-      azureAdAppProps.redirectUri
-    )
     /* loop through object and encode each item as URI component before storing in array */
     /* then join each element on & */
     /* request is x-www-form-urlencoded as per docs: https://docs.microsoft.com/en-us/graph/use-the-api */
@@ -129,8 +125,9 @@ export class AuthManager {
     await AsyncStorage.setItem('userToken', tokenResponse.access_token)
     await AsyncStorage.setItem(
       'expireTime',
-      tokenResponse.expires_in.toString()
-    )
+      new Date(new Date().getTime() + tokenResponse.expires_in * 1000).toJSON()
+    ) // await AsyncStorage.setItem(
+
     return await AuthManager.callMsGraph(tokenResponse.access_token)
   } //end getToken()
 
@@ -144,27 +141,25 @@ export class AuthManager {
       // Get expiration time - 1 hour
       // If it's <= 5 minutes before expiration, then refresh
 
-      const expire = new Date(new Date().getTime() + 3600 * 100)
+      const expire = moment(expireTime).subtract(5, 'minutes')
 
       const now = moment()
 
       if (now.isSameOrAfter(expire)) {
         // Expired refresh
-
-        console.log('now.isSameOrAfter(expire)', response)
-      } else {
-        // Token is not expired - use token to fetch Calendar Events
-        response = await AuthManager.callMsGraph(userToken)
+        response = await AuthManager.signInAsync()
 
         return response
       }
-    } else {
-      response = await AuthManager.signInAsync()
+      // Token is not expired - use token to fetch Calendar Events
+      response = await AuthManager.callMsGraph(userToken)
 
       return response
     }
 
-    return null
+    response = await AuthManager.signInAsync()
+
+    return response
   }
 
   /*
@@ -176,7 +171,6 @@ export class AuthManager {
   static callMsGraph = async (token) => {
     /* make a GET request using fetch and querying with the token */
 
-    console.log('make a GET callMsGraph request using fetch')
     let graphResponse = null
     await fetch('https://graph.microsoft.com/v1.0/me', {
       method: 'GET',
@@ -196,13 +190,6 @@ export class AuthManager {
     Spread the results of the graph and add a type property with a value of success to indicate
     that the AzureAD info grabbing was a success
   */
-
-    const finalResponse = {
-      ...graphResponse,
-      type: 'success',
-    }
-
-    console.log('callMsGraph', finalResponse)
 
     try {
       // Get the signed in user from Graph
@@ -242,8 +229,6 @@ export class AuthManager {
         return acc
       }, {})
 
-      console.log('reduced events', reduced)
-
       return {
         userToken: token,
         loadingEvents: false,
@@ -258,13 +243,6 @@ export class AuthManager {
     let graphResponse = null
     let finalResponse = null
 
-    console.log('getCalendarView', start, end, timezone)
-    console.log(
-      'getCalendarView formatted',
-      start.format(),
-      end.format(),
-      timezone
-    )
     try {
       const token = await AsyncStorage.getItem('userToken')
 
@@ -292,15 +270,11 @@ export class AuthManager {
       Spread the results of the graph and add a type property with a value of success to indicate
       that the AzureAD info grabbing was a success
     */
-      finalResponse = {
-        ...graphResponse,
-        type: 'success',
-      }
     } catch (err) {
       graphResponse = err
 
       throw new Error(err)
     }
-    return finalResponse
+    return graphResponse
   }
 }

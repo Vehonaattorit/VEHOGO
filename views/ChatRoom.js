@@ -1,7 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react'
 
-// import {IconButton} from "react-native-paper"
-
 import {GiftedChat, Bubble, Send, SystemMessage} from 'react-native-gifted-chat'
 import {IconButton} from 'react-native-paper'
 import {StyleSheet, View, Text, ActivityIndicator} from 'react-native'

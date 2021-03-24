@@ -46,7 +46,7 @@ const calendarHooks = () => {
     console.log('calendarHooks response', response)
 
     setCalendarState({
-      loadingEvents: response.loadingEvents,
+      loadingEvents: response.loadingEvents || false,
       events: response.events,
     })
 
@@ -70,6 +70,8 @@ const calendarHooks = () => {
 
   const bootstrapAsync = async () => {
     const response = await AuthManager.checkTokenExpiration()
+
+    console.log('response', response)
 
     setCalendarState({
       loadingEvents: response.loadingEvents,
