@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 16,
+    padding: 10,
     textTransform: 'uppercase',
     color: Platform.OS == 'ios' ? color.sText : color.pText,
   },
