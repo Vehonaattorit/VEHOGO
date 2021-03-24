@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {useState} from 'react'
 import {StyleSheet, View} from 'react-native'
 import {color} from '../constants/colors'
@@ -7,22 +7,28 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import firebase from '../firebase/fire'
 import {CustomButton} from '../components/CustomButton'
 import {CustomTitle} from '../components/CustomTitle'
+import {login, subscribeToAuth} from '../controllers/LoginController'
 export const LogIn = ({navigation}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const logIn = async () => {
-    try {
-      const result = await firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password)
-      console.log('Log In success')
-      navigation.navigate('Travel')
-    } catch (err) {
-      console.log('LogIn failed' + err)
-    }
+  const logIn = () => {
+    login(email, password, logInComplete)
+
+  }
+  const logInComplete = () => {
+    navigation.navigate('Travel')
   }
 
+  useEffect(() => {
+    subscribeToAuth(authStateChanged)
+  })
+
+  const authStateChanged = (user) => {
+    if(user !== null) {
+      navigation.navigate('Travel')
+    }
+  }
   return (
     <View style={styles.container}>
       <CustomTitle title="Travel" />
