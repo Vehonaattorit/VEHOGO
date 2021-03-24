@@ -4,7 +4,7 @@ import {Content, Card, CardItem, Body, Container, View} from 'native-base'
 import NewRideForm from './NewRideForm'
 
 
-const NewRide = () => {
+export const NewRide = () => {
   return (
     <View style={styles.view}>
       <Container style={styles.container}>
@@ -27,7 +27,6 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     display: 'flex',
-    marginTop: 30,
     flexDirection: 'column',
   },
   container: {
@@ -41,4 +40,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default NewRide
+

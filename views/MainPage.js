@@ -1,8 +1,8 @@
 import React from 'react'
 import {SafeAreaView, StyleSheet} from 'react-native'
 import {Body, View, Text, Icon, Button} from 'native-base'
-import PassengerList from './PassengerList'
 import {signOut} from '../controllers/LoginController'
+import PendinRequestList from '../components/PendingRequestsList'
 
 export const MainPage = ({navigation}) => {
 
@@ -37,11 +37,14 @@ export const MainPage = ({navigation}) => {
     <SafeAreaView style={styles.view}>
 
       <View style={styles.listView}>
-          <PassengerList dataArray={data}></PassengerList>
+        <PendinRequestList dataArray={data} navigation={navigation}></PendinRequestList>
       </View>
 
       <View style={styles.scheduleView}>
-        <Button style={{alignSelf: 'center'}}  onPress={() => signOut(signedOut)}><Text>LogOut</Text></Button>
+        <Button style={styles.button} onPress={() => navigation.navigate('OutlookCalendar') }><Text>Calender</Text></Button>
+        <Button style={styles.button} onPress={() => signOut(signedOut)}><Text>LogOut</Text></Button>
+        <Button style={styles.button} onPress={() => navigation.navigate('NewRide')}><Text>New Ride</Text></Button>
+        <Button style={styles.button} onPress={() => navigation.navigate('DriverStartRide')}><Text>Start Ride</Text></Button>
       </View>
 
     </SafeAreaView>
@@ -58,8 +61,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  scheduleView:{
+  scheduleView: {
     flex: 1,
+  },
+
+  button: {
+    alignSelf: 'center',
+    margin: 2
   },
 
   titleText: {

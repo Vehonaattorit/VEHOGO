@@ -9,7 +9,7 @@ export const WorkingHours = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <CustomButton title="Submit" />
+      <CustomButton title="Submit" onPress={() => navigation.navigate('MainPage')} />
     </View>
   )
 }

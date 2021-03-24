@@ -13,7 +13,7 @@ export const Address = ({navigation}) => {
           leftIcon={<Icon name="" size={24} color={color.grey} />}
           style={styles}
           secureTextEntry={true}
-          onChangeText={(value) => this.setState({comment: value})}
+          //onChangeText={(value) => this.setState({comment: value})}
         />
 
         <Input
@@ -21,7 +21,7 @@ export const Address = ({navigation}) => {
           leftIcon={<Icon name="" size={24} color={color.grey} />}
           style={styles}
           secureTextEntry={true}
-          onChangeText={(value) => this.setState({comment: value})}
+          //onChangeText={(value) => this.setState({comment: value})}
         />
 
         <CustomButton

@@ -3,7 +3,7 @@ import {StyleSheet, Dimensions} from 'react-native'
 import {Content, Body, Container, Text, View, Button} from 'native-base'
 import MapView from 'react-native-maps'
 
-const DriverAcceptRefuse = () => {
+export const DriverAcceptRefuse = () => {
   return (
     <View style={styles.view}>
 
@@ -52,10 +52,9 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     backgroundColor: '#26aae2',
-    marginTop: 30,
   },
   requestMapContent: {
-    flex: 3,
+    flex: 2.0,
     backgroundColor: 'black'
   },
   requestAcceptRefuseContent: {
@@ -88,4 +87,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DriverAcceptRefuse
