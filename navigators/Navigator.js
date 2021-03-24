@@ -1,13 +1,13 @@
 import * as React from 'react'
 import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
-import {LogIn} from '../Views/LogIn'
-import {SignUp} from '../Views/SignUp'
-import {Travel} from '../Views/Travel'
-import {Address} from '../Views/Address'
-import {WorkingHours} from '../Views/WorkingHours'
-import {WorkingDays} from '../Views/WorkingDays'
-import {SetUpInit} from '../Views/SetUpInit'
+import {LogIn} from '../views/LogIn'
+import {SignUp} from '../views/SignUp'
+import {Travel} from '../views/Travel'
+import {Address} from '../views/Address'
+import {WorkingHours} from '../views/WorkingHours'
+import {WorkingDays} from '../views/WorkingDays'
+import {SetUpInit} from '../views/SetUpInit'
 
 const Stack = createStackNavigator()
 function MainStackNavigator() {
