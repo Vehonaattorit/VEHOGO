@@ -1,8 +1,11 @@
-async function updateUser(user) {
+import firebase from 'firebase/app'
+import {userConverter} from '../models/user'
+import 'firebase/firestore'
+
+const db = firebase.firestore()
+
+export async function updateUser(user) {
   try {
-    if (user.id == undefined) {
-      throw new Error('user id not defined')
-    }
     // Add a new document in collection "users"
     let userRef = db.collection('users').doc(user.id)
 
@@ -12,11 +15,36 @@ async function updateUser(user) {
   }
 }
 
-async function createCar(userId, car) {
+export async function getUser(userId) {
   try {
-    if (userId == undefined) {
-      throw new Error('userId id not defined')
-    }
+    // Add a new document in collection "users"
+    let doc = await db
+      .collection('users')
+      .doc(userId)
+      .withConverter(userConverter)
+      .get()
+
+    return doc.data()
+  } catch (error) {
+    console.error('Error writing document: ', error)
+    return
+  }
+}
+
+export function userStream(userId) {
+  try {
+    // Add a new document in collection "users"
+    let doc = db.collection('users').doc(userId)
+
+    return doc
+  } catch (error) {
+    console.error('Error writing document: ', error)
+    return
+  }
+}
+
+export async function createCar(userId, car) {
+  try {
     // Add a new document in collection "users"
     let userRef = db.collection('users').doc(userId).collection('cars')
 
