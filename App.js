@@ -5,7 +5,8 @@ import MainStackNavigator from './navigators/Navigator'
 export default function App() {
   return (
     <View style={{flex: 1}}>
-      <MainStackNavigator />
+    <MainStackNavigator />
+
     </View>
   )
 }

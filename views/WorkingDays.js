@@ -1,70 +1,55 @@
-import React, {useState} from 'react';
-import {StyleSheet, Button, Text, View} from 'react-native';
-import {color} from '../constants/colors';
-import DateTimePicker from '@react-native-community/datetimepicker';
-
+import React, {useState} from 'react'
+import {StyleSheet, Button, Platform, Text, View} from 'react-native'
+import {color} from '../constants/colors'
+import {CustomButton} from '../components/CustomButton'
+import {RoundButton} from '../components/RoundButton'
+import {CustomTitle} from '../components/CustomTitle'
+import {Ionicons, EvilIcons} from '@expo/vector-icons'
 export const WorkingDays = ({navigation}) => {
-  const [date, setDate] = useState(new Date(1598051730000));
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
-
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setDate(currentDate);
-  };
-
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  const showDatepicker = () => {
-    showMode('date');
-  };
-
-
-  const showDatepicker2 = () => {
-    showMode('date');
-  };
-
   return (
     <View style={styles.container}>
-       <View>
-        <Button onPress={showDatepicker} title="Show date picker!" />
+      <View style={styles.titleText}>
+        <EvilIcons name="calendar" size={300} color={color.secondaryDark} />
+        <CustomTitle title="Days" />
       </View>
       <View>
-        <Button onPress={showDatepicker2} title="Show date picker!" />
-      </View>
-      {show && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={date}
-          mode={mode}
-          is24Hour={true}
-          display="default"
-          onChange={onChange}
-        />
-      )}
-
-        <Button
+        <View style={styles.btnContainer}>
+          <RoundButton title="Mon" onPress={() => {}} />
+          <RoundButton title="Tue" onPress={() => {}} />
+          <RoundButton title="Wed" onPress={() => {}} />
+          <RoundButton title="Thu" onPress={() => {}} />
+          <RoundButton title="Fry" onPress={() => {}} />
+          <RoundButton title="Sat" onPress={() => {}} />
+          <RoundButton title="Sun" onPress={() => {}} />
+        </View>
+        <CustomButton
+          style={styles.submitBtn}
           title="Submit"
           onPress={() => {
-            navigation.navigate('WorkingHours');
+            navigation.navigate('WorkingHours')
           }}
         />
       </View>
-  );
-};
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: color.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  signUpContainer: {
-    margin: 5,
-    backgroundColor: 'yellow',
+  btnContainer: {
+    flexDirection: 'row',
+    marginBottom: 20,
   },
-});
+  titleText: {
+    alignItems: 'center',
+    marginBottom: 100,
+  },
+  submitBtnContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+})
