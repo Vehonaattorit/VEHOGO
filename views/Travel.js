@@ -26,14 +26,7 @@ export const Travel = ({navigation}) => {
             }}
           />
         </View>
-        <View style={styles.btn}>
-          <CustomButton
-            title="Log Out"
-            onPress={() => {
-              signOut(signOutComplete)
-            }}
-          />
-        </View>
+
       </View>
     </View>
   )

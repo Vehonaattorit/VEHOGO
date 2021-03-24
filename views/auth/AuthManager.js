@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage'
-import {authorize, refresh, AuthConfiguration} from 'react-native-app-auth'
+//import {authorize, refresh, AuthConfiguration} from 'react-native-app-auth'
 import {Platform} from 'react-native'
 import moment from 'moment-timezone'
 import * as AuthSession from 'expo-auth-session'
@@ -31,18 +31,18 @@ export class AuthManager {
         //Conditional if the user proceeds with the authentication process
         if (authResponse.type === 'success') {
           /*
-            Only continue with the authentication process if user does not cancel or close 
-            the ongoing authentication window or session. authResponse and the code from 
-            the parameters will be defined if the authorization session continues. 
+            Only continue with the authentication process if user does not cancel or close
+            the ongoing authentication window or session. authResponse and the code from
+            the parameters will be defined if the authorization session continues.
           */
 
           console.log("authResponse.type === 'success') ")
 
           //Do not proceed with acquiring a token if there is an error. Return the error and the response.
           if (authResponse.params['error']) {
-            /* 
-                Return error as an added error property value in the object for easier 
-                catching of the error in the front end 
+            /*
+                Return error as an added error property value in the object for easier
+                catching of the error in the front end
               */
             console.log("authResponse.params['error']")
 
@@ -192,7 +192,7 @@ export class AuthManager {
         graphResponse = error
       })
 
-    /* 
+    /*
     Spread the results of the graph and add a type property with a value of success to indicate
     that the AzureAD info grabbing was a success
   */
@@ -288,7 +288,7 @@ export class AuthManager {
 
       console.log('graphResponse calendar', graphResponse)
 
-      /* 
+      /*
       Spread the results of the graph and add a type property with a value of success to indicate
       that the AzureAD info grabbing was a success
     */

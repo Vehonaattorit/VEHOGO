@@ -21,7 +21,7 @@ import calendarHooks from './calendarHooks'
  *
  */
 
-export default ReactNativeCalendar = () => {
+export const OutlookCalendar = () => {
   const {
     state,
     bootstrapAsync,

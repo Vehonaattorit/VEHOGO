@@ -4,7 +4,7 @@ import {Content, Card, CardItem, Body, Container, View, Item, Icon, Input} from 
 import NewRideForm from './NewRideForm'
 
 
-const Chat = () => {
+export const Chat = () => {
   return (
     <View style={styles.view}>
       <View style={styles.chatContainer}></View>
@@ -24,11 +24,10 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     display: 'flex',
-    marginTop: 30,
     flexDirection: 'column',
   },
   chatContainer: {
-    flex: 8,
+    flex: 6,
     backgroundColor: '#26aae2',
   },
   messageContainer: {
@@ -38,4 +37,3 @@ const styles = StyleSheet.create({
 
 });
 
-export default Chat

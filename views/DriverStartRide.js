@@ -4,7 +4,7 @@ import {Content, Card, CardItem, Body, Container, View, Text, Icon, Button} from
 import PassengerList from './PassengerList'
 
 
-const DriverStartRide = () => {
+export const DriverStartRide = ({navigation}) => {
   let data = [
     {
       key: 1,
@@ -36,7 +36,7 @@ const DriverStartRide = () => {
         <Body style={styles.iconViewBody}>
           <Icon style={styles.icon} active name='car-outline' />
           <Text style={styles.iconText}>Your Next Ride</Text>
-          <Button large style={styles.button} ><Text style={styles.btntxt}>Start Driving</Text></Button>
+          <Button large style={styles.button} onPress={() => navigation.navigate('DriverOnRoute')} ><Text style={styles.btntxt}>Start Driving</Text></Button>
           <Text style={styles.iconText}>Your Passengers</Text>
         </Body>
       </View>
@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     backgroundColor: 'white',
-    marginTop: 30,
   },
 
   iconView: {
@@ -75,7 +74,7 @@ const styles = StyleSheet.create({
   },
 
   listView: {
-    flex: 3,
+    flex: 2.5,
   },
 
 
@@ -93,4 +92,3 @@ const styles = StyleSheet.create({
 
 });
 
-export default DriverStartRide

@@ -1,4 +1,5 @@
 import * as React from 'react'
+import {Button} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import {LogIn} from '../views/LogIn'
@@ -8,9 +9,17 @@ import {Address} from '../views/Address'
 import {WorkingHours} from '../views/WorkingHours'
 import {WorkingDays} from '../views/WorkingDays'
 import {SetUpInit} from '../views/SetUpInit'
-
+import {MainPage} from '../views/MainPage'
+import {OutlookCalendar} from '../views/OutlookCalendar'
+import {DriverAcceptRefuse} from '../views/DriverAcceptRefuse'
+import {NewRide} from '../views/NewRide'
+import {DriverStartRide} from '../views/DriverStartRide'
+import {DriverOnRoute} from '../views/DriverOnRoute'
+import {Chat} from '../views/Chat'
 const Stack = createStackNavigator()
 function MainStackNavigator() {
+
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -49,6 +58,58 @@ function MainStackNavigator() {
           component={SetUpInit}
           options={{title: 'Set Up Init'}}
         />
+        <Stack.Screen
+          name="MainPage"
+          component={MainPage}
+          options={{
+            title: 'Main Page'
+          }}
+        />
+        <Stack.Screen
+          name="OutlookCalendar"
+          component={OutlookCalendar}
+          options={{
+            title: 'OutlookCalendar'
+          }}
+        />
+        <Stack.Screen
+          name="DriverAcceptRefuse"
+          component={DriverAcceptRefuse}
+          options={{
+            title: 'DriverAcceptRefuse'
+          }}
+        />
+        <Stack.Screen
+          name="NewRide"
+          component={NewRide}
+          options={{
+            title: 'NewRide'
+          }}
+        />
+        <Stack.Screen
+          name="DriverStartRide"
+          component={DriverStartRide}
+          options={{
+            title: 'DriverStartRide'
+          }}
+        />
+        <Stack.Screen
+          name="DriverOnRoute"
+          component={DriverOnRoute}
+          options={{
+            title: 'DriverOnRoute'
+          }}
+        />
+        <Stack.Screen
+          name="Chat"
+          component={Chat}
+          options={{
+            title: 'Chat'
+          }}
+        />
+
+
+
       </Stack.Navigator>
     </NavigationContainer>
   )
