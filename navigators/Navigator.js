@@ -1,4 +1,5 @@
 import * as React from 'react'
+import {Button} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import {LogIn} from '../views/LogIn'
@@ -8,9 +9,12 @@ import {Address} from '../views/Address'
 import {WorkingHours} from '../views/WorkingHours'
 import {WorkingDays} from '../views/WorkingDays'
 import {SetUpInit} from '../views/SetUpInit'
+import {MainPage} from '../views/MainPage'
 
 const Stack = createStackNavigator()
 function MainStackNavigator() {
+
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -48,6 +52,12 @@ function MainStackNavigator() {
           name="setUpInit"
           component={SetUpInit}
           options={{title: 'Set Up Init'}}
+        />
+        <Stack.Screen
+          name="MainPage"
+          component={MainPage}
+          options={{
+            title: 'Main Page'}}
         />
       </Stack.Navigator>
     </NavigationContainer>

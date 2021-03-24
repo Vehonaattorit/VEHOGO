@@ -17,7 +17,7 @@ export const LogIn = ({navigation}) => {
 
   }
   const logInComplete = () => {
-    navigation.navigate('Travel')
+    navigation.navigate('MainPage')
   }
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export const LogIn = ({navigation}) => {
 
   const authStateChanged = (user) => {
     if(user !== null) {
-      navigation.navigate('Travel')
+      navigation.navigate('MainPage')
     }
   }
   return (
