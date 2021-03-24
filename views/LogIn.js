@@ -31,7 +31,7 @@ export const LogIn = ({navigation}) => {
   }
   return (
     <View style={styles.container}>
-      <CustomTitle title="Travel" />
+      <CustomTitle title="VEHOGO" />
 
       <View>
         <View style={styles.inputContainer}>
