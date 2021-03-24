@@ -7,13 +7,11 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import firebase from '../firebase/fire'
 import {CustomButton} from '../components/CustomButton'
 import {CustomTitle} from '../components/CustomTitle'
-import {firebaseApiKey} from '../secrets/secrets'
 export const LogIn = ({navigation}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   const logIn = async () => {
-    console.log(firebaseApiKey)
     try {
       const result = await firebase
         .auth()

@@ -1,8 +1,6 @@
 import firebase from 'firebase'
+import {firebaseConfig} from '../secrets/secrets'
 
-const firebaseConfig = {
-//// ADD FIREBASE CONFIG HERE ////////
-}
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig)
