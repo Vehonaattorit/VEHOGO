@@ -1,4 +1,6 @@
 import firebase from '../firebase/fire'
+import {updateUser} from '../controllers/userController'
+import {User} from '../models/user'
 
 export async function login(email, password, loginComplete){
 
@@ -37,6 +39,9 @@ export async function signOut(signedOut) {
 export async function subscribeToAuth(authStateChanged){
   firebase.auth()
   .onAuthStateChanged((user) => {
+    if(user != null){
+      updateUser(new User({id: user.uid}))
+    }
     authStateChanged(user)
   })
 }
