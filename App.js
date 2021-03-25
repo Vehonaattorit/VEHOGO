@@ -5,7 +5,7 @@ import AuthStackNavigator from './navigators/AuthenticationNavigator'
 import SetUpStackNavigator from './navigators/SetUpNavigator'
 import AppLoading from 'expo-app-loading'
 import {UserContext, UserProvider} from './contexts'
-import {userStream} from './controllers/userController'
+import {getUser, userStream} from './controllers/userController'
 import {signOut, subscribeToAuth} from './controllers/LoginController'
 import * as Font from 'expo-font'
 import {useDocumentData} from 'react-firebase-hooks/firestore'
@@ -31,6 +31,23 @@ export default function App() {
   //     },
   //   })
   // )
+
+  useEffect(() => {
+    const fetchChat = async () => {
+      const jotain = await getChat('5DYeiEWumLIpVR7hpYZ3')
+
+      console.log('jotain', jotain)
+    }
+
+    const fetchUser = async () => {
+      const user = await getUser('OzNfqPF8izfpOpmIyPdjsv27LUQ2')
+
+      console.log('userus', user)
+    }
+    // fetchUser()
+
+    fetchChat()
+  }, [])
 
   // addMessage(
   //   new ChatMessage({

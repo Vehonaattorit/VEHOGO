@@ -29,9 +29,11 @@ export const chatConverter = {
     return chatRoomObject
   },
   fromFirestore: function (snapshot, options) {
-    console.log('chatRoom snapshot ', snapshot)
+    console.log('chatRoom snapshot ', snapshot.data())
     console.log('chatRoom  options', options)
     const data = snapshot.data(options)
+
+    console.log('data jotain', data)
     return new ChatRoom({
       driverId: data.driverId,
       passengerId: data.passengerId,
@@ -63,11 +65,17 @@ const latestMessageConverter = {
 
     return LatestMessageObject
   },
-  fromFirestore: function (snapshot, options) {
-    const data = snapshot.data(options)
+  fromFirestore: function (data) {
+    console.log('fromFirestore jotain')
+    // const data = snapshot.data(options)
+
+    console.log('fromFirestore', data)
+
+    console.log('fromFirestore data jotain', data)
+
     return new LatestMessage({
       createdAt: data.createdAt,
-      user: data.user,
+      text: data.text,
     })
   },
 }
