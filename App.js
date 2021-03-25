@@ -9,13 +9,13 @@ import {OutlookCalendar} from './views/OutlookCalendar'
 import {Button} from 'react-native'
 
 import firebase from './firebase/fire'
-
 import {useAuthState} from 'react-firebase-hooks/auth'
 
 import 'firebase/firestore'
 import 'firebase/auth'
 import {LogIn} from './views/LogIn'
 import {SignUp} from './views/SignUp'
+import {signOut} from './controllers/LoginController'
 
 const auth = firebase.auth()
 const firestore = firebase.firestore()
@@ -45,9 +45,10 @@ export default function App() {
   console.log('user', user)
   return (
     <View style={{flex: 1}}>
-      {user ? <ChatRoom /> : <LogIn />}
-      {/* {user ? <ChatRoom /> : <SignIn />} */}
+      {/* <LogIn /> */}
+      {user ? <ChatRoom /> : <SignIn />}
       {/* <ChatRoom /> */}
+      {/* <MainStackNavigator /> */}
     </View>
   )
 }
