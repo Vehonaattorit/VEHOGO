@@ -4,7 +4,7 @@ import {color} from '../constants/colors'
 import {CustomButton} from '../components/CustomButton'
 import {RoundButton} from '../components/RoundButton'
 import {CustomTitle} from '../components/CustomTitle'
-import {Ionicons, EvilIcons} from '@expo/vector-icons'
+import {EvilIcons, MaterialCommunityIcons} from '@expo/vector-icons'
 export const WorkingDays = ({navigation}) => {
   return (
     <View style={styles.container}>

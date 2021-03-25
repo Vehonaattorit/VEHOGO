@@ -14,7 +14,6 @@ export const LogIn = ({navigation}) => {
 
   const logIn = () => {
     login(email, password, logInComplete)
-
   }
   const logInComplete = () => {
     navigation.navigate('Travel')
@@ -24,8 +23,10 @@ export const LogIn = ({navigation}) => {
     subscribeToAuth(authStateChanged)
   })
 
+  //TODO: pass user id to travel
   const authStateChanged = (user) => {
-    if(user !== null) {
+    if (user !== null) {
+
       navigation.navigate('Travel')
     }
   }
@@ -43,6 +44,7 @@ export const LogIn = ({navigation}) => {
               onChangeText={setEmail}
             />
           </View>
+
           <View style={styles.input}>
             <Input
               placeholder="Password"

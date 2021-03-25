@@ -1,14 +1,22 @@
 import React from 'react'
-import {StyleSheet, View} from 'react-native'
+import {StyleSheet, View, Platform} from 'react-native'
 import {CustomButton} from '../components/CustomButton'
 import {signOut} from '../controllers/LoginController'
+import {Ionicons} from '@expo/vector-icons'
+import {color} from '../constants/colors'
+import {CustomTitle} from '../components/CustomTitle'
 export const Travel = ({navigation}) => {
-
   const signOutComplete = () => {
     navigation.navigate('LogIn')
   }
   return (
     <View style={styles.container}>
+      <CustomTitle title="Travel" />
+      {Platform.OS === 'ios' ? (
+        <Ionicons name="ios-car" size={300} color={color.secondaryDark} />
+      ) : (
+        <Ionicons name="md-car" size={300} color="black" />
+      )}
       <View style={styles.btnContainer}>
         <View style={styles.btn}>
           <CustomButton
@@ -26,7 +34,6 @@ export const Travel = ({navigation}) => {
             }}
           />
         </View>
-
       </View>
     </View>
   )
