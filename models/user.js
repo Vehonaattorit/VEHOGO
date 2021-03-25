@@ -68,6 +68,11 @@ export const userConverter = {
   },
   fromFirestore: function (snapshot, options) {
     const data = snapshot.data(options)
+    const parsedWorkDays = []
+    data.workDays.forEach((workDay) => {
+      parsedWorkDays.push(workDayConverter.fromFirestore(workDay))
+    })
+
     return new User({
       id: data.id,
       userName: data.userName,
@@ -75,7 +80,7 @@ export const userConverter = {
       homeLocation: data.homeLocation,
       homeAddress: data.homeAddress,
       displayPhotoURL: data.displayPhotoURL,
-      workDays: workDayConverter.fromFirestore(data.workDays),
+      workDays: parsedWorkDays,
       travelPreference: data.travelPreference,
       schoosedCarID: data.schoosedCarID,
     })

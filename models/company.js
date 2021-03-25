@@ -5,20 +5,27 @@ export class Company {
     this.location = location
     this.address = address
     this.userIDs = userIDs
-    this.workTrips = workTrips
   }
 }
 
 // Firestore data converter
 export const companyConverter = {
-  toFirestore: function (user) {
-    return {
-      displayName: company.displayName,
-      location: company.location,
-      address: company.address,
-      userIDs: company.userIDs,
-      workTrips: company.workTrips,
+  toFirestore: function (company) {
+    let companyObject = {}
+    if (company.displayName != undefined) {
+      companyObject.displayName = company.displayName
     }
+    if (company.location != undefined) {
+      companyObject.location = company.location
+    }
+    if (company.address != undefined) {
+      companyObject.address = company.address
+    }
+    if (company.userIDs != undefined) {
+      companyObject.userIDs = company.userIDs
+    }
+
+    return companyObject
   },
   fromFirestore: function (snapshot, options) {
     const data = snapshot.data(options)
@@ -28,7 +35,6 @@ export const companyConverter = {
       location: data.location,
       address: data.address,
       userIDs: data.userIDs,
-      workTrips: data.workTrips,
     })
   },
 }
