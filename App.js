@@ -27,7 +27,8 @@ export default function App() {
   }
   return (
     <View style={{flex: 1}}>
-      <AuthStackNavigator />
+      <SetUpStackNavigator/>
+      {/* <AuthStackNavigator /> */}
       {/* <MainStackNavigator /> */}
     </View>
   )

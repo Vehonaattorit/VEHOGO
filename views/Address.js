@@ -2,16 +2,23 @@ import React from 'react'
 import {StyleSheet, View, KeyboardAvoidingView} from 'react-native'
 import {color} from '../constants/colors'
 import {Button, Input, Card} from 'react-native-elements'
-import Icon from 'react-native-vector-icons/FontAwesome'
 import {CustomButton} from '../components/CustomButton'
+import {CustomTitle} from '../components/CustomTitle'
+import {AntDesign, FontAwesome} from '@expo/vector-icons'
 export const Address = ({navigation}) => {
   return (
-    <KeyboardAvoidingView  behavior="padding" style={styles.container}>
-
+    <KeyboardAvoidingView behavior="padding" style={styles.container}>
+      <CustomTitle title="Address" />
+      <View style={styles.icon}>
+        {Platform.OS === 'ios' ? (
+          <AntDesign name="home" size={300} color={color.secondaryDark} />
+        ) : (
+          <FontAwesome name="home" size={300} color={color.secondaryDark} />
+        )}
+      </View>
       <View style={styles.inputContainer}>
         <Input
           placeholder="Address"
-          leftIcon={<Icon name="" size={24} color={color.grey} />}
           style={styles}
           secureTextEntry={true}
           //onChangeText={(value) => this.setState({comment: value})}
@@ -19,7 +26,6 @@ export const Address = ({navigation}) => {
 
         <Input
           placeholder="City"
-          leftIcon={<Icon name="" size={24} color={color.grey} />}
           style={styles}
           secureTextEntry={true}
           //onChangeText={(value) => this.setState({comment: value})}
@@ -49,5 +55,8 @@ const styles = StyleSheet.create({
     bottom: 60,
     width: '90%',
     color: 'white',
+  },
+  icon: {
+    marginBottom: 100,
   },
 })

@@ -15,7 +15,7 @@ export const Travel = ({navigation}) => {
       {Platform.OS === 'ios' ? (
         <Ionicons name="ios-car" size={300} color={color.secondaryDark} />
       ) : (
-        <Ionicons name="md-car" size={300} color="black" />
+        <Ionicons name="md-car" size={300} color={color.secondaryDark} />
       )}
       <View style={styles.btnContainer}>
         <View style={styles.btn}>
@@ -52,6 +52,8 @@ const styles = StyleSheet.create({
   },
   btn: {
     marginTop: 5,
+    marginLeft: 20,
+    marginRight: 20,
     alignSelf: 'stretch',
   },
 })

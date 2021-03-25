@@ -9,10 +9,10 @@ export const WorkingDays = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.titleText}>
-        <EvilIcons name="calendar" size={300} color={color.secondaryDark} />
         <CustomTitle title="Days" />
+        <EvilIcons name="calendar" size={300} color={color.secondaryDark} />
       </View>
-      <View>
+
         <View style={styles.btnContainer}>
           <RoundButton title="Mon" onPress={() => {}} />
           <RoundButton title="Tue" onPress={() => {}} />
@@ -22,14 +22,14 @@ export const WorkingDays = ({navigation}) => {
           <RoundButton title="Sat" onPress={() => {}} />
           <RoundButton title="Sun" onPress={() => {}} />
         </View>
-        <CustomButton
-          style={styles.submitBtn}
-          title="Submit"
-          onPress={() => {
-            navigation.navigate('WorkingHours')
-          }}
-        />
-      </View>
+        <View style={styles.submitBtn}>
+          <CustomButton
+            title="Submit"
+            onPress={() => {
+              navigation.navigate('WorkingHours')
+            }}
+          />
+        </View>
     </View>
   )
 }
@@ -46,10 +46,11 @@ const styles = StyleSheet.create({
   },
   titleText: {
     alignItems: 'center',
-    marginBottom: 100,
+    marginBottom: 20,
   },
-  submitBtnContainer: {
-    marginTop: 20,
-    alignItems: 'center',
+  submitBtn: {
+    position: 'absolute',
+    bottom: 50,
+    width: '90%',
   },
 })
