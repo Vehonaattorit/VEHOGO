@@ -34,7 +34,7 @@ export async function getUser(userId) {
 export function userStream(userId) {
   try {
     // Add a new document in collection "users"
-    let doc = db.collection('users').doc(userId)
+    let doc = db.collection('users').doc(userId).withConverter(userConverter)
 
     return doc
   } catch (error) {
