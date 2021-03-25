@@ -13,31 +13,35 @@ export class WorkDay {
 export const workDayConverter = {
   toFirestore: function (workDay) {
     let workDayObject = {}
-    if (workDayNum != undefined) {
+
+    if (workDay.workDayNum != undefined) {
       workDayObject.workDayNum = workDay.workDayNum
     }
-    if (toWorkDrive != undefined) {
+    if (workDay.toWorkDrive != undefined) {
       workDayObject.toWorkDrive = scheduleDriveConverter.toFirestore(
         workDay.toWorkDrive
       )
     }
-    if (toHomeDrive != undefined) {
+    if (workDay.toHomeDrive != undefined) {
       workDayObject.toHomeDrive = scheduleDriveConverter.toFirestore(
         workDay.toHomeDrive
       )
     }
-    if (currentLocation != undefined) {
+    if (workDay.currentLocation != undefined) {
       workDayObject.currentLocation = workDay.currentLocation
     }
     return workDayObject
   },
   fromFirestore: function (snapshot, options) {
-    const data = snapshot.data(options)
-    return new WorkDay({
-      workDayNum: data.workDayNum,
-      toWorkDrive: scheduleDriveConverter.fromFirestore(data.toWorkDrive),
-      toHomeDrive: scheduleDriveConverter.fromFirestore(data.toHomeDrive),
-      currentLocation: data.currentLocation,
-    })
+    // TODO:
+    // Creates snapshot.data() ERROR !
+    // const data = snapshot.data(options)
+    // return new WorkDay({
+    //   workDayNum: data.workDayNum,
+    //   toWorkDrive: scheduleDriveConverter.fromFirestore(data.toWorkDrive),
+    //   toHomeDrive: scheduleDriveConverter.fromFirestore(data.toHomeDrive),
+    //   currentLocation: data.currentLocation,
+    // })
+    // END
   },
 }

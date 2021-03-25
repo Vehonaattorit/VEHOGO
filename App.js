@@ -32,22 +32,22 @@ export default function App() {
   //   })
   // )
 
-  useEffect(() => {
-    const fetchChat = async () => {
-      const jotain = await getChat('5DYeiEWumLIpVR7hpYZ3')
+  // useEffect(() => {
+  //   const fetchChat = async () => {
+  //     const jotain = await getChat('5DYeiEWumLIpVR7hpYZ3')
 
-      console.log('jotain', jotain)
-    }
+  //     console.log('jotain', jotain)
+  //   }
 
-    const fetchUser = async () => {
-      const user = await getUser('OzNfqPF8izfpOpmIyPdjsv27LUQ2')
+  //   const fetchUser = async () => {
+  //     const user = await getUser('OzNfqPF8izfpOpmIyPdjsv27LUQ2')
 
-      console.log('userus', user)
-    }
-    // fetchUser()
+  //     console.log('userus', user)
+  //   }
+  //   // fetchUser()
 
-    fetchChat()
-  }, [])
+  //   fetchChat()
+  // }, [])
 
   // addMessage(
   //   new ChatMessage({

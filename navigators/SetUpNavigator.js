@@ -12,20 +12,25 @@ function SetUpStackNavigator() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
+          name="WorkingDays"
+          component={WorkingDays}
+          options={{title: 'Working Days'}}
+        />
+        {/* <Stack.Screen
           name="Travel"
           component={Travel}
           options={{title: 'Travel'}}
-        />
+        /> */}
         <Stack.Screen
           name="Address"
           component={Address}
           options={{title: 'Address'}}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="WorkingDays"
           component={WorkingDays}
           options={{title: 'Working Days'}}
-        />
+        /> */}
         <Stack.Screen
           name="WorkingHours"
           component={WorkingHours}
