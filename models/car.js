@@ -12,6 +12,9 @@ export class Car {
 export const carConverter = {
   toFirestore: function (car) {
     let carObject = {}
+    if (car.id != undefined) {
+      carObject.id = car.id
+    }
     if (car.driverName != undefined) {
       carObject.driverName = car.driverName
     }

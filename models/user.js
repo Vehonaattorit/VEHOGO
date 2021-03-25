@@ -7,22 +7,26 @@ export class User {
     company,
     homeLocation,
     homeAddress,
+    city,
     displayPhotoURL,
     workDays,
     travelPreference,
     schoosedCarID,
     cars,
+    preferedWorkingHours
   }) {
     this.id = id
     this.userName = userName
     this.company = company
     this.homeLocation = homeLocation
     this.homeAddress = homeAddress
+    this.city = city
     this.displayPhotoURL = displayPhotoURL
     this.workDays = workDays
     this.travelPreference = travelPreference
     this.schoosedCarID = schoosedCarID
     this.cars = cars
+    this.preferedWorkingHours = preferedWorkingHours
   }
 }
 
@@ -45,6 +49,9 @@ export const userConverter = {
     if (user.homeAddress != undefined) {
       userObject.homeAddress = user.homeAddress
     }
+    if (user.city != undefined) {
+      userObject.city = user.city
+    }
     if (user.displayPhotoURL != undefined) {
       userObject.displayPhotoURL = user.displayPhotoURL
     }
@@ -63,6 +70,9 @@ export const userConverter = {
     }
     if (user.cars != undefined) {
       userObject.cars = user.cars
+    }
+    if (user.preferedWorkingHours != undefined) {
+      userObject.preferedWorkingHours = user.preferedWorkingHours
     }
     return userObject
   },
@@ -85,10 +95,12 @@ export const userConverter = {
       company: data.company,
       homeLocation: data.homeLocation,
       homeAddress: data.homeAddress,
+      city: data.city,
       displayPhotoURL: data.displayPhotoURL,
       parsedWorkDays: parsedWorkDays,
       travelPreference: data.travelPreference,
       schoosedCarID: data.schoosedCarID,
+      preferedWorkingHours: data.preferedWorkingHours,
     })
   },
 }
