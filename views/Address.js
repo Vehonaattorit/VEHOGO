@@ -1,12 +1,11 @@
 import React, {createContext, useContext, useState} from 'react'
 import {StyleSheet, View, KeyboardAvoidingView} from 'react-native'
 import {color} from '../constants/colors'
-import {Button, Input, Card} from 'react-native-elements'
+import {Input} from 'react-native-elements'
 import {CustomButton} from '../components/CustomButton'
 import {CustomTitle} from '../components/CustomTitle'
 import {AntDesign, FontAwesome} from '@expo/vector-icons'
 import {updateUser} from '../controllers/userController'
-import {User} from '../models/user'
 import {UserContext} from '../contexts'
 
 export const Address = ({navigation}) => {
@@ -19,8 +18,7 @@ export const Address = ({navigation}) => {
 
   const updateUserLocation = () => {
     user.homeAddress = address
-    user.homeLocation = city
-
+    user.city = city
     updateUser(user)
   }
 
