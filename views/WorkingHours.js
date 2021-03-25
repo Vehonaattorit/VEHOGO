@@ -1,14 +1,38 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import {StyleSheet, Platform, Text, Button, View} from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import {color} from '../constants/colors'
 import {MaterialCommunityIcons} from '@expo/vector-icons'
 import {CustomButton} from '../components/CustomButton'
 import {CustomTitle} from '../components/CustomTitle'
+import {UserContext} from '../contexts'
+import {updateUser} from '../controllers/userController'
+
 export const WorkingHours = ({navigation}) => {
   const [date, setDate] = useState(new Date(1598051730000))
   const [mode, setMode] = useState('time')
   const [show, setShow] = useState(false)
+  const [selectedTime, setSelectedTime] = useState(null)
+  const {user} = useContext(UserContext)
+  console.log(selectedTime)
+
+  const updateWorkHours = () => {
+    const workingHours = user.preferedWorkingHours
+    const preferedWorkDays = []
+    workingHours.forEach(element => {
+      const dayAndHours = {
+        workDayNum: element.workDayNum,
+        workDayStart: new Date(1598051730000),
+        workDayEnd: new Date(1598051730000)
+      }
+      preferedWorkDays.push(dayAndHours)
+      console.log(dayAndHours)
+    });
+
+    user.preferedWorkingHours = preferedWorkDays
+    updateUser(user)
+
+  }
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date
@@ -16,6 +40,7 @@ export const WorkingHours = ({navigation}) => {
     setDate(currentDate)
   }
 
+  console.log(date)
   const showMode = (currentMode) => {
     setShow(true)
     setMode(currentMode)
@@ -57,7 +82,9 @@ export const WorkingHours = ({navigation}) => {
               mode={mode}
               is24Hour={true}
               display="default"
-              onChange={onChange}
+              selected={selectedTime}
+              onChange={() => {time => setSelectedTime(time.timeStamp)}}
+              dateFormat = 'dd/MM/yyyy'
             />
           )}
         </View>
@@ -66,6 +93,7 @@ export const WorkingHours = ({navigation}) => {
           <CustomButton
             title="Submit"
             onPress={() => {
+              updateWorkHours()
               navigation.navigate('SetUpInit')
             }}
           />
