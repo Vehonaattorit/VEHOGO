@@ -3,7 +3,7 @@ import {WorkDay, workDayConverter} from './workDay'
 export class User {
   constructor({
     id,
-    userName: userName,
+    userName,
     company,
     homeLocation,
     homeAddress,
@@ -48,7 +48,7 @@ export const userConverter = {
     if (user.displayPhotoURL != undefined) {
       userObject.displayPhotoURL = user.displayPhotoURL
     }
-    if (user.workDays != undefined && user.workDays.size > 0) {
+    if (user.workDays != undefined) {
       const workDays = []
       user.workDays.forEach((workDay) => {
         workDays.push(workDayConverter.toFirestore(workDay))
@@ -69,9 +69,12 @@ export const userConverter = {
   fromFirestore: function (snapshot, options) {
     const data = snapshot.data(options)
     const parsedWorkDays = []
-    data.workDays.forEach((workDay) => {
-      parsedWorkDays.push(workDayConverter.fromFirestore(workDay))
-    })
+    if (data.workDays != undefined) {
+      console.log('parsing workdays')
+      data.workDays.forEach((workDay) => {
+        parsedWorkDays.push(workDayConverter.fromFirestore(workDay))
+      })
+    }
 
     return new User({
       id: data.id,
@@ -80,7 +83,7 @@ export const userConverter = {
       homeLocation: data.homeLocation,
       homeAddress: data.homeAddress,
       displayPhotoURL: data.displayPhotoURL,
-      workDays: parsedWorkDays,
+      parsedWorkDays: parsedWorkDays,
       travelPreference: data.travelPreference,
       schoosedCarID: data.schoosedCarID,
     })
