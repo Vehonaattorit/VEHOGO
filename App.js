@@ -6,7 +6,7 @@ import SetUpStackNavigator from './navigators/SetUpNavigator'
 import AppLoading from 'expo-app-loading'
 import {UserContext, UserProvider} from './contexts'
 import {userStream} from './controllers/userController'
-import {subscribeToAuth} from './controllers/LoginController'
+import {signOut, subscribeToAuth} from './controllers/LoginController'
 import * as Font from 'expo-font'
 import {useDocumentData} from 'react-firebase-hooks/firestore'
 import {useCardAnimation} from '@react-navigation/stack'
@@ -16,6 +16,7 @@ export default function App() {
   const [fontReady, setFontReady] = useState(false)
   const [userId, setUserId] = useState(null)
 
+  // signOut()
   const loadFonts = async () => {
     await Font.loadAsync({
       Roboto: require('native-base/Fonts/Roboto.ttf'),
@@ -55,9 +56,11 @@ function Navigation({userId}) {
   } else {
     let userRef = userStream(userId)
     const [user] = useDocumentData(userRef)
-    
+
     if (user != undefined) {
       // if setup is not completed
+
+      console.log('if setup is not complteted')
       if (
         user.userName == undefined ||
         user.homeLocation == undefined ||
@@ -65,12 +68,25 @@ function Navigation({userId}) {
         user.workDays == undefined ||
         user.travelPreference == undefined
       ) {
+        console.log(`return (
+          <UserContext.Provider value={{user}}>
+            <SetUpStackNavigator />
+          </UserContext.Provider>
+        )`)
+
+        console.log('user', user)
+
         return (
           <UserContext.Provider value={{user}}>
             <SetUpStackNavigator />
           </UserContext.Provider>
         )
       } else {
+        console.log(`return (
+          <UserContext.Provider value={{user}}>
+            <MainStackNavigator />
+          </UserContext.Provider>
+        )`)
         return (
           <UserContext.Provider value={{user}}>
             <MainStackNavigator />
