@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {Button} from 'react-native';
+import {Button} from 'react-native'
 import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import {LogIn} from '../views/LogIn'
@@ -16,10 +16,9 @@ import {NewRide} from '../views/NewRide'
 import {DriverStartRide} from '../views/DriverStartRide'
 import {DriverOnRoute} from '../views/DriverOnRoute'
 import {Chat} from '../views/Chat'
+import ChatRoom from '../views/ChatRoom'
 const Stack = createStackNavigator()
 function MainStackNavigator() {
-
-
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -62,54 +61,51 @@ function MainStackNavigator() {
           name="MainPage"
           component={MainPage}
           options={{
-            title: 'Main Page'
+            title: 'Main Page',
           }}
         />
         <Stack.Screen
           name="OutlookCalendar"
           component={OutlookCalendar}
           options={{
-            title: 'OutlookCalendar'
+            title: 'OutlookCalendar',
           }}
         />
         <Stack.Screen
           name="DriverAcceptRefuse"
           component={DriverAcceptRefuse}
           options={{
-            title: 'DriverAcceptRefuse'
+            title: 'DriverAcceptRefuse',
           }}
         />
         <Stack.Screen
           name="NewRide"
           component={NewRide}
           options={{
-            title: 'NewRide'
+            title: 'NewRide',
           }}
         />
         <Stack.Screen
           name="DriverStartRide"
           component={DriverStartRide}
           options={{
-            title: 'DriverStartRide'
+            title: 'DriverStartRide',
           }}
         />
         <Stack.Screen
           name="DriverOnRoute"
           component={DriverOnRoute}
           options={{
-            title: 'DriverOnRoute'
+            title: 'DriverOnRoute',
           }}
         />
         <Stack.Screen
-          name="Chat"
-          component={Chat}
+          name="Chat Room"
+          component={ChatRoom}
           options={{
-            title: 'Chat'
+            title: 'ChatRoom',
           }}
         />
-
-
-
       </Stack.Navigator>
     </NavigationContainer>
   )

@@ -2,10 +2,62 @@ import React, {useState, useEffect, useContext} from 'react'
 
 import {GiftedChat, Bubble, Send, SystemMessage} from 'react-native-gifted-chat'
 import {IconButton} from 'react-native-paper'
-import {StyleSheet, View, Text, ActivityIndicator} from 'react-native'
+import {Button, StyleSheet, View, Text, ActivityIndicator} from 'react-native'
+
+import firebase from '../firebase/fire'
+import {useAuthState} from 'react-firebase-hooks/auth'
+import {useCollectionData} from 'react-firebase-hooks/firestore'
+
+import 'firebase/firestore'
+import 'firebase/auth'
+
+const auth = firebase.auth()
+const firestore = firebase.firestore()
 
 export default ChatRoom = ({route}) => {
-  const [currentUser, setCurrentUser] = useState(5)
+  const [user] = useAuthState(auth)
+
+  const messagesRef = firestore.collection('messages')
+
+  useEffect(() => {
+    const query = messagesRef
+      .orderBy('createdAt', 'desc')
+      .limit(25)
+      .onSnapshot((querySnapshot) => {
+        console.log('query', querySnapshot)
+
+        const messages = querySnapshot.docs.map((doc) => {
+          const firebaseData = doc.data()
+
+          console.log('doc', doc)
+          console.log('fireabseData', firebaseData)
+
+          const data = {
+            _id: doc.id,
+            text: '',
+            createdAt: new Date().getTime(),
+            ...firebaseData,
+          }
+
+          if (!firebaseData.system) {
+            data.user = {
+              ...firebaseData.user,
+              name: firebaseData.user.name,
+            }
+          }
+
+          console.log('data', data)
+
+          return data
+        })
+
+        setMessages(messages)
+      })
+
+    return () => query()
+  }, [])
+
+  // const [messages] = useCollectionData(query, {idField: '_id'})
 
   const [messages, setMessages] = useState([
     /**
@@ -31,6 +83,8 @@ export default ChatRoom = ({route}) => {
     },
   ])
 
+  // console.log('messages', messages)
+
   const renderSystemMessage = (props) => {
     return (
       <SystemMessage
@@ -41,21 +95,21 @@ export default ChatRoom = ({route}) => {
     )
   }
 
+  console.log('auth', user)
+
   const handleSend = async (messages) => {
     const text = messages[0].text
-    console.log('text', text)
 
-    const messageObject = {
-      _id: messages.length + 1,
+    const {uid} = user
+
+    await messagesRef.add({
       text,
       createdAt: new Date().getTime(),
       user: {
-        _id: currentUser,
-        name: 'Pekka Puupää',
+        _id: uid,
+        name: user.email,
       },
-    }
-
-    setMessages(messages.concat(messageObject))
+    })
   }
 
   const renderLoading = () => {
@@ -108,7 +162,7 @@ export default ChatRoom = ({route}) => {
     <GiftedChat
       messages={messages}
       onSend={handleSend}
-      user={{_id: currentUser.uid}}
+      user={{_id: user.uid}}
       renderBubble={renderBubble}
       placeholder="Type your message here..."
       showUserAvatar

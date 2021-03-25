@@ -14,21 +14,20 @@ export const LogIn = ({navigation}) => {
 
   const logIn = () => {
     login(email, password, logInComplete)
-
   }
   const logInComplete = () => {
     navigation.navigate('Travel')
   }
 
-  useEffect(() => {
-    subscribeToAuth(authStateChanged)
-  })
+  // useEffect(() => {
+  //   subscribeToAuth(authStateChanged)
+  // })
 
-  const authStateChanged = (user) => {
-    if(user !== null) {
-      navigation.navigate('Travel')
-    }
-  }
+  // const authStateChanged = (user) => {
+  //   if(user !== null) {
+  //     navigation.navigate('Travel')
+  //   }
+  // }
   return (
     <View style={styles.container}>
       <CustomTitle title="VEHOGO" />

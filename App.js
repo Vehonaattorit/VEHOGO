@@ -6,8 +6,24 @@ import * as Font from 'expo-font'
 import ChatRoom from './views/ChatRoom'
 import {OutlookCalendar} from './views/OutlookCalendar'
 
+import {Button} from 'react-native'
+
+import firebase from './firebase/fire'
+
+import {useAuthState} from 'react-firebase-hooks/auth'
+
+import 'firebase/firestore'
+import 'firebase/auth'
+import {LogIn} from './views/LogIn'
+import {SignUp} from './views/SignUp'
+
+const auth = firebase.auth()
+const firestore = firebase.firestore()
+
 export default function App() {
   const [fontReady, setFontReady] = useState(false)
+
+  const [user] = useAuthState(auth)
 
   const loadFonts = async () => {
     await Font.loadAsync({
@@ -25,9 +41,13 @@ export default function App() {
     console.log('Waiting for fonts...')
     return <AppLoading />
   }
+
+  console.log('user', user)
   return (
     <View style={{flex: 1}}>
-      <OutlookCalendar />
+      {user ? <ChatRoom /> : <LogIn />}
+      {/* {user ? <ChatRoom /> : <SignIn />} */}
+      {/* <ChatRoom /> */}
     </View>
   )
 }
