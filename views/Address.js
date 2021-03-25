@@ -7,6 +7,7 @@ import {CustomButton} from '../components/CustomButton'
 export const Address = ({navigation}) => {
   return (
     <KeyboardAvoidingView  behavior="padding" style={styles.container}>
+
       <View style={styles.inputContainer}>
         <Input
           placeholder="Address"

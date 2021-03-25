@@ -23,11 +23,12 @@ export const LogIn = ({navigation}) => {
   //   subscribeToAuth(authStateChanged)
   // })
 
-  // const authStateChanged = (user) => {
-  //   if(user !== null) {
-  //     navigation.navigate('Travel')
-  //   }
-  // }
+  //TODO: pass user id to travel
+  const authStateChanged = (user) => {
+    if (user !== null) {
+      navigation.navigate('Travel')
+    }
+  }
   return (
     <View style={styles.container}>
       <CustomTitle title="VEHOGO" />
@@ -42,6 +43,7 @@ export const LogIn = ({navigation}) => {
               onChangeText={setEmail}
             />
           </View>
+
           <View style={styles.input}>
             <Input
               placeholder="Password"

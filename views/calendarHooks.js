@@ -8,7 +8,7 @@ const calendarHooks = () => {
     loadingEvents: true,
     events: [],
   })
-
+  
   const [userState, setUserState] = useState({
     userLoading: true,
     userFirstName: 'Adele',
