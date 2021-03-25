@@ -11,12 +11,20 @@ export class Car {
 // Firestore data converter
 export const carConverter = {
   toFirestore: function (car) {
-    return {
-      driverName: car.driverName,
-      registerNumber: car.registerNumber,
-      carName: car.carName,
-      availableSeats: car.availableSeats,
+    let carObject = {}
+    if (car.driverName != undefined) {
+      carObject.driverName = car.driverName
     }
+    if (car.registerNumber != undefined) {
+      carObject.registerNumber = car.registerNumber
+    }
+    if (car.carName != undefined) {
+      carObject.carName = car.carName
+    }
+    if (car.availableSeats != undefined) {
+      carObject.availableSeats = car.availableSeats
+    }
+    return carObject
   },
   fromFirestore: function (snapshot, options) {
     const data = snapshot.data(options)
