@@ -5,6 +5,9 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
+  SafeAreaView,
+  StyleSheet,
+  StatusBar,
 } from 'react-native'
 
 import {Agenda} from 'react-native-calendars'
@@ -89,7 +92,7 @@ export const OutlookCalendar = () => {
     )
   }
 
-  const nothingPlanned = () => {
+  const showEvents = () => {
     return (
       <TouchableOpacity style={{marginRight: 10, marginTop: 17}}>
         <Card>
@@ -100,7 +103,11 @@ export const OutlookCalendar = () => {
                 alignItems: 'center',
               }}
             >
-              <Text>Nothing planned.</Text>
+              <Text>
+                {calendarState.events
+                  ? 'Nothing planned.'
+                  : 'Could not fetch events. Have you tried logging in?'}
+              </Text>
             </View>
           </Card.Content>
         </Card>
@@ -108,27 +115,39 @@ export const OutlookCalendar = () => {
     )
   }
 
+  console.log('calendar state events', calendarState.events)
+
   return (
-    <AuthContext.Provider value={authContext}>
-      <Button
-        title={state.userToken ? 'Sign out' : ' Log in'}
-        onPress={state.userToken ? signOutAsync : signInAsync}
-      />
-      <Agenda
-        onRefresh={bootstrapAsync}
-        refreshing={calendarState.loadingEvents}
-        items={calendarState.loadingEvents ? {} : calendarState.events}
-        selected={moment(new Date()).format('yyyy-MM-DD')}
-        renderItem={renderItem}
-        // Specify what should be rendered instead of ActivityIndicator
-        renderEmptyData={() => {
-          if (!calendarState.loadingEvents) {
-            return nothingPlanned()
-          } else {
-            return largeActivityIndicator()
-          }
-        }}
-      />
-    </AuthContext.Provider>
+    <SafeAreaView style={styles.AndroidSafeArea}>
+      <AuthContext.Provider value={authContext}>
+        <Button
+          title={state.userToken ? 'Sign out' : ' Log in'}
+          onPress={state.userToken ? signOutAsync : signInAsync}
+        />
+        <Agenda
+          onRefresh={bootstrapAsync}
+          refreshing={calendarState.loadingEvents}
+          items={calendarState.loadingEvents ? {} : calendarState.events}
+          selected={moment(new Date()).format('yyyy-MM-DD')}
+          renderItem={renderItem}
+          // Specify what should be rendered instead of ActivityIndicator
+          renderEmptyData={() => {
+            if (!calendarState.loadingEvents) {
+              return showEvents()
+            } else {
+              return largeActivityIndicator()
+            }
+          }}
+        />
+      </AuthContext.Provider>
+    </SafeAreaView>
   )
 }
+
+const styles = StyleSheet.create({
+  AndroidSafeArea: {
+    flex: 1,
+    backgroundColor: 'white',
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+  },
+})
