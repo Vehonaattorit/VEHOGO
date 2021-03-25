@@ -67,6 +67,9 @@ export const userConverter = {
     return userObject
   },
   fromFirestore: function (snapshot, options) {
+    console.log('user snapshot', snapshot)
+    console.log('user options', options)
+
     const data = snapshot.data(options)
     const parsedWorkDays = []
     if (data.workDays != undefined) {
