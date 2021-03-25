@@ -1,11 +1,21 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {StyleSheet, View, KeyboardAvoidingView} from 'react-native'
 import {color} from '../constants/colors'
 import {Button, Input, Card} from 'react-native-elements'
 import {CustomButton} from '../components/CustomButton'
 import {CustomTitle} from '../components/CustomTitle'
 import {AntDesign, FontAwesome} from '@expo/vector-icons'
+import {updateUser} from '../controllers/userController'
+import {User} from '../models/user'
+
 export const Address = ({navigation}) => {
+  const [address, setAddress] = useState(undefined)
+  const [city, setCity] = useState(undefined)
+
+  const updateUserLocation = () => {
+    updateUser(new User({homeAddress: address}))
+  }
+
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <CustomTitle title="Address" />
@@ -21,20 +31,23 @@ export const Address = ({navigation}) => {
           placeholder="Address"
           style={styles}
           secureTextEntry={true}
-          //onChangeText={(value) => this.setState({comment: value})}
+          value={address}
+          onChangeText={() => setAddress(value)}
         />
 
         <Input
           placeholder="City"
           style={styles}
           secureTextEntry={true}
-          //onChangeText={(value) => this.setState({comment: value})}
+          value={city}
+          onChangeText={() => setCity(value)}
         />
 
         <CustomButton
           style={styles.btns}
           title="Submit"
           onPress={() => {
+            updateUserLocation()
             navigation.navigate('WorkingDays')
           }}
         />

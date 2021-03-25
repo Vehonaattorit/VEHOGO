@@ -9,6 +9,7 @@ export const Travel = ({navigation}) => {
   const signOutComplete = () => {
     navigation.navigate('LogIn')
   }
+  
   return (
     <View style={styles.container}>
       <CustomTitle title="Travel" />
@@ -26,6 +27,7 @@ export const Travel = ({navigation}) => {
             }}
           />
         </View>
+
         <View style={styles.btn}>
           <CustomButton
             title="Get A Ride "

@@ -54,6 +54,7 @@ function Navigation({userId}) {
   } else {
     let userRef = userStream(userId)
     const [user] = useDocumentData(userRef)
+    
     if (user != undefined) {
       // if setup is not completed
       if (
@@ -65,7 +66,7 @@ function Navigation({userId}) {
       ) {
         return (
           <UserContext.Provider value={{user}}>
-            <MainStackNavigator />
+            <SetUpStackNavigator />
           </UserContext.Provider>
         )
       } else {

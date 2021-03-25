@@ -11,11 +11,6 @@ function SetUpStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-      <Stack.Screen
-          name="WorkingHours"
-          component={WorkingHours}
-          options={{title: 'Working Hours'}}
-        />
         <Stack.Screen
           name="Travel"
           component={Travel}
@@ -31,7 +26,11 @@ function SetUpStackNavigator() {
           component={WorkingDays}
           options={{title: 'Working Days'}}
         />
-
+        <Stack.Screen
+          name="WorkingHours"
+          component={WorkingHours}
+          options={{title: 'Working Hours'}}
+        />
         <Stack.Screen
           name="SetUpInit"
           component={SetUpInit}
