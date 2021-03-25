@@ -33,6 +33,9 @@ export async function signOut(signedOut) {
 }
 
 export async function subscribeToAuth(authStateChanged) {
+  if (!firebase.apps.length) {
+    await firebase.initializeApp(firebaseConfig)
+  }
   firebase.auth().onAuthStateChanged((user) => {
     if (user != null) {
       updateUser(new User({id: user.uid}))

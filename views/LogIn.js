@@ -26,7 +26,6 @@ export const LogIn = ({navigation}) => {
   //TODO: pass user id to travel
   const authStateChanged = (user) => {
     if (user !== null) {
-      navigation.navigate('Travel')
     }
   }
   return (

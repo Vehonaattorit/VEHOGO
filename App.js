@@ -1,13 +1,20 @@
 import React, {useState, useEffect} from 'react'
 import {View} from 'react-native'
 import MainStackNavigator from './navigators/MainNavigator'
-import SetUpStackNavigator from './navigators/SetUpNavigator'
 import AuthStackNavigator from './navigators/AuthenticationNavigator'
+import SetUpStackNavigator from './navigators/SetUpNavigator'
 import AppLoading from 'expo-app-loading'
+import {UserContext, UserProvider} from './contexts'
+import {userStream} from './controllers/userController'
+import {subscribeToAuth} from './controllers/LoginController'
 import * as Font from 'expo-font'
+import {useDocumentData} from 'react-firebase-hooks/firestore'
+import {useCardAnimation} from '@react-navigation/stack'
+import {User, userConverter} from './models/user'
 
 export default function App() {
   const [fontReady, setFontReady] = useState(false)
+  const [userId, setUserId] = useState(null)
 
   const loadFonts = async () => {
     await Font.loadAsync({
@@ -18,19 +25,59 @@ export default function App() {
   }
 
   useEffect(() => {
+    subscribeToAuth(authStateChanged)
     loadFonts()
   }, [])
+
+  const authStateChanged = (user) => {
+    if (user !== null) {
+      setUserId(user.uid)
+    } else {
+      setUserId(null)
+    }
+  }
 
   if (!fontReady) {
     console.log('Waiting for fonts...')
     return <AppLoading />
   }
 
-  console.log('user', user)
   return (
     <View style={{flex: 1}}>
-      <AuthStackNavigator />
-      {/* <MainStackNavigator /> */}
+      <Navigation userId={userId} />
     </View>
   )
+}
+
+function Navigation({userId}) {
+  if (userId == null) {
+    return <AuthStackNavigator />
+  } else {
+    let userRef = userStream(userId)
+    const [user] = useDocumentData(userRef)
+    if (user != undefined) {
+      // if setup is not completed
+      if (
+        user.userName == undefined ||
+        user.homeLocation == undefined ||
+        user.homeAddress == undefined ||
+        user.workDays == undefined ||
+        user.travelPreference == undefined
+      ) {
+        return (
+          <UserContext.Provider value={{user}}>
+            <MainStackNavigator />
+          </UserContext.Provider>
+        )
+      } else {
+        return (
+          <UserContext.Provider value={{user}}>
+            <MainStackNavigator />
+          </UserContext.Provider>
+        )
+      }
+    } else {
+      return <View></View>
+    }
+  }
 }
