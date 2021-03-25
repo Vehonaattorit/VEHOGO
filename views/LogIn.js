@@ -19,15 +19,13 @@ export const LogIn = ({navigation}) => {
     navigation.navigate('Travel')
   }
 
-  useEffect(() => {
-    subscribeToAuth(authStateChanged)
-  })
+  // useEffect(() => {
+  //   subscribeToAuth(authStateChanged)
+  // })
 
   //TODO: pass user id to travel
   const authStateChanged = (user) => {
     if (user !== null) {
-
-
     }
   }
   return (

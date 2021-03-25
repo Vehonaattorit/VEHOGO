@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {createContext, useContext, useState} from 'react'
 import {StyleSheet, View, KeyboardAvoidingView} from 'react-native'
 import {color} from '../constants/colors'
 import {Button, Input, Card} from 'react-native-elements'
@@ -7,13 +7,21 @@ import {CustomTitle} from '../components/CustomTitle'
 import {AntDesign, FontAwesome} from '@expo/vector-icons'
 import {updateUser} from '../controllers/userController'
 import {User} from '../models/user'
+import {UserContext} from '../contexts'
 
 export const Address = ({navigation}) => {
   const [address, setAddress] = useState(undefined)
   const [city, setCity] = useState(undefined)
 
+  const {user} = useContext(UserContext)
+
+  console.log('Addresss user', user)
+
   const updateUserLocation = () => {
-    updateUser(new User({homeAddress: address}))
+    user.homeAddress = address
+    user.homeLocation = city
+
+    updateUser(user)
   }
 
   return (
@@ -29,18 +37,14 @@ export const Address = ({navigation}) => {
       <View style={styles.inputContainer}>
         <Input
           placeholder="Address"
-          style={styles}
-          secureTextEntry={true}
           value={address}
-          onChangeText={() => setAddress(value)}
+          onChangeText={(value) => setAddress(value)}
         />
 
         <Input
           placeholder="City"
-          style={styles}
-          secureTextEntry={true}
           value={city}
-          onChangeText={() => setCity(value)}
+          onChangeText={(value) => setCity(value)}
         />
 
         <CustomButton
