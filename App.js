@@ -25,13 +25,15 @@ export default function App() {
   }
 
   useEffect(() => {
-    loadFonts()
     subscribeToAuth(authStateChanged)
+    loadFonts()
   }, [])
 
   const authStateChanged = (user) => {
     if (user !== null) {
       setUserId(user.uid)
+    } else {
+      setUserId(null)
     }
   }
 
@@ -63,7 +65,7 @@ function Navigation({userId}) {
       ) {
         return (
           <UserContext.Provider value={{user}}>
-            <SetUpStackNavigator />
+            <MainStackNavigator />
           </UserContext.Provider>
         )
       } else {

@@ -8,7 +8,7 @@ import PendinRequestList from '../components/PendingRequestsList'
 export const MainPage = ({navigation}) => {
   const {user} = useContext(UserContext)
   const signedOut = () => {
-    navigation.navigate('LogIn')
+    //executed when signin out
   }
   let data = [
     {
