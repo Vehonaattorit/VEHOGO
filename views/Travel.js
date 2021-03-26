@@ -9,7 +9,6 @@ import {UserContext} from '../contexts'
 import {updateUser} from '../controllers/userController'
 
 export const Travel = ({navigation}) => {
-
   const {user} = useContext(UserContext)
 
   const setTravelPreference = (preference) => {

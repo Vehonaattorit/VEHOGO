@@ -13,7 +13,7 @@ export class User {
     travelPreference,
     schoosedCarID,
     cars,
-    preferedWorkingHours
+    preferedWorkingHours,
   }) {
     this.id = id
     this.userName = userName
@@ -57,6 +57,10 @@ export const userConverter = {
     }
     if (user.workDays != undefined) {
       const workDays = []
+
+      console.log('Parsing work days')
+
+      console.log('user', user.workDays)
       user.workDays.forEach((workDay) => {
         workDays.push(workDayConverter.toFirestore(workDay))
       })
@@ -80,7 +84,6 @@ export const userConverter = {
     const data = snapshot.data(options)
     const parsedWorkDays = []
     if (data.workDays != undefined) {
-      console.log('parsing workdays')
       data.workDays.forEach((workDay) => {
         parsedWorkDays.push(workDayConverter.fromFirestore(workDay))
       })
