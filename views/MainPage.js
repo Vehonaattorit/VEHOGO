@@ -64,6 +64,12 @@ export const MainPage = ({navigation}) => {
         >
           <Text>Start Ride</Text>
         </Button>
+        <Button
+          style={styles.button}
+          onPress={() => navigation.navigate('DriverCarList')}
+        >
+          <Text>DriverCarList</Text>
+        </Button>
       </View>
     </SafeAreaView>
   )
