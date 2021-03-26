@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react'
-import {StyleSheet, Platform, Text, Button, View} from 'react-native'
+import {StyleSheet, Modal, Platform, Text, Button, View} from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import {color} from '../constants/colors'
 import {MaterialCommunityIcons} from '@expo/vector-icons'
@@ -8,50 +8,71 @@ import {CustomTitle} from '../components/CustomTitle'
 import {UserContext} from '../contexts'
 import {updateUser} from '../controllers/userController'
 
+import moment from 'moment-timezone'
+
+import firebase from '@firebase/app'
+import '@firebase/firestore'
+
+const DateTimeInput = (props) => {
+  const [showTimePicker, setShowTimePicker] = useState(Platform.OS === 'ios')
+
+  const formatTime = (dateTime) => {
+    return moment(dateTime).format('h:mm A')
+  }
+
+  return (
+    <View style={Platform.OS === 'android' ? styles.dateTime : null}>
+      {Platform.OS === 'android' && (
+        <Text style={styles.time} onPress={() => setShowTimePicker(true)}>
+          {formatTime(props.value)}
+        </Text>
+      )}
+      {showTimePicker && (
+        <DateTimePicker
+          display={Platform.OS === 'ios' ? 'compact' : 'default'}
+          mode="time"
+          value={props.value || new Date()}
+          onChange={(e, d) => {
+            setShowTimePicker(Platform.OS === 'ios')
+            if (d) props.onChange(e, d)
+          }}
+        />
+      )}
+    </View>
+  )
+}
+
 export const WorkingHours = ({navigation}) => {
-  const [date, setDate] = useState(new Date(1598051730000))
-  const [mode, setMode] = useState('time')
-  const [show, setShow] = useState(false)
-  const [selectedTime, setSelectedTime] = useState(null)
   const {user} = useContext(UserContext)
-  console.log(selectedTime)
+
+  const [newEventState, setNewEventState] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+  })
 
   const updateWorkHours = () => {
-    const workingHours = user.preferedWorkingHours
-    const preferedWorkDays = []
-    workingHours.forEach(element => {
-      const dayAndHours = {
+    const {startDate, endDate} = newEventState
+
+    let preferedWorkingHours = []
+
+    user.workDays.forEach((element) => {
+      preferedWorkingHours.push({
         workDayNum: element.workDayNum,
-        workDayStart: new Date(1598051730000),
-        workDayEnd: new Date(1598051730000)
-      }
-      preferedWorkDays.push(dayAndHours)
-      console.log(dayAndHours)
-    });
+        workDayStart: new Date(startDate),
+        workDayEnd: new Date(endDate),
+      })
+    })
 
-    user.preferedWorkingHours = preferedWorkDays
+    user.preferedWorkingHours = preferedWorkingHours
+
     updateUser(user)
-
   }
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date
-    setShow(Platform.OS === 'ios')
-    setDate(currentDate)
-  }
-
-  console.log(date)
-  const showMode = (currentMode) => {
-    setShow(true)
-    setMode(currentMode)
-  }
-
-  const showStartingDatepicker = () => {
-    showMode('time')
-  }
-
-  const showEnfingTimepicker = () => {
-    showMode('time')
+  const updateValue = (newValue, fieldName) => {
+    setNewEventState({
+      ...newEventState,
+      [fieldName]: newValue,
+    })
   }
 
   return (
@@ -64,40 +85,37 @@ export const WorkingHours = ({navigation}) => {
           color={color.secondaryDark}
         />
       </View>
-      <View style={styles.btns}>
-        <View style={styles.timeContainer}>
-          <View style={styles.btnContainers}>
-            <CustomButton
-              onPress={showStartingDatepicker}
-              title="Starting Time"
-            />
-          </View>
-          <View style={styles.btnContainers}>
-            <CustomButton onPress={showEnfingTimepicker} title="Ending Time" />
-          </View>
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode={mode}
-              is24Hour={true}
-              display="default"
-              selected={selectedTime}
-              onChange={() => {time => setSelectedTime(time.timeStamp)}}
-              dateFormat = 'dd/MM/yyyy'
-            />
-          )}
-        </View>
-
-        <View style={styles.submitBtnContainer}>
-          <CustomButton
-            title="Submit"
-            onPress={() => {
-              updateWorkHours()
-              navigation.navigate('SetUpInit')
-            }}
+      <View
+        style={{
+          flexDirection: 'row',
+          width: 350,
+        }}
+      >
+        <View style={{flex: 1, flexDirection: 'column'}}>
+          {/* <CustomButton onPress={() => {}} title="Starting time" /> */}
+          <Text>Starting time</Text>
+          <DateTimeInput
+            value={newEventState.startDate}
+            onChange={(e, date) => updateValue(date, 'startDate')}
           />
         </View>
+        <View style={{flex: 1}}>
+          <Text>Finishing time</Text>
+
+          <DateTimeInput
+            value={newEventState.endDate}
+            onChange={(e, date) => updateValue(date, 'startDate')}
+          />
+        </View>
+      </View>
+      <View style={styles.submitBtnContainer}>
+        <CustomButton
+          title="Submit"
+          onPress={() => {
+            updateWorkHours()
+            navigation.navigate('SetUpInit')
+          }}
+        />
       </View>
     </View>
   )
@@ -106,8 +124,8 @@ export const WorkingHours = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
   },
   icon: {
     marginBottom: 100,
@@ -127,5 +145,23 @@ const styles = StyleSheet.create({
   submitBtnContainer: {
     margin: 20,
     alignSelf: 'stretch',
+  },
+  time: {
+    padding: 10,
+    backgroundColor: '#e6e6e6',
+    color: '#147efb',
+    marginRight: 10,
+  },
+  date: {
+    padding: 10,
+    backgroundColor: '#e6e6e6',
+    color: '#147efb',
+  },
+  dateTime: {
+    flexDirection: 'row',
+  },
+  formField: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
   },
 })

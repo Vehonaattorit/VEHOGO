@@ -14,8 +14,6 @@ export const Address = ({navigation}) => {
 
   const {user} = useContext(UserContext)
 
-  console.log('Addresss user', user)
-
   const updateUserLocation = () => {
     user.homeAddress = address
     user.city = city

@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import {StyleSheet, Button, Platform, Text, View} from 'react-native'
 import {color} from '../constants/colors'
 import {CustomButton} from '../components/CustomButton'
@@ -16,7 +16,7 @@ export const WorkingDays = ({navigation}) => {
   const updateWorkDays = () => {
     const preferedWorkDays = []
 
-    workDays.map((element) => {
+    workDays.forEach((element) => {
       if (element.isSelected) {
         preferedWorkDays.push({workDayNum: element.id})
       }
@@ -36,6 +36,24 @@ export const WorkingDays = ({navigation}) => {
     {id: 5, weekDay: 'Sat', isSelected: false},
     {id: 6, weekDay: 'Sun', isSelected: false},
   ])
+
+  useEffect(() => {
+    // let setWorkDays = []
+    // if (user.workDays !== undefined) {
+    //   for (let i = 0; i < workDays; i++) {
+    //     for (let j = 0; j < user.workDays; j++) {
+    //       if (workDays[i].id === user.workDays[j].weekDayNum) {
+    //       }
+    //     }
+    //   }
+    // }
+    // if (user.workDays !== undefined) {
+    //   workDays.forEach((item) => {
+    //     if (item.id === )
+    //     setWorkDays.push(item)
+    //   })
+    // }
+  }, [])
 
   const toggleHandler = (selectedItem, isSelected) => {
     const newArr = workDays.map((item) => {

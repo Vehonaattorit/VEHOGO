@@ -83,7 +83,7 @@ export const userConverter = {
       homeAddress: data.homeAddress,
       city: data.city,
       displayPhotoURL: data.displayPhotoURL,
-      parsedWorkDays: data.workDays,
+      workDays: data.workDays,
       travelPreference: data.travelPreference,
       schoosedCarID: data.schoosedCarID,
       preferedWorkingHours: data.preferedWorkingHours,
