@@ -3,9 +3,8 @@ import {ScheduledDrive, scheduleDriveConverter} from './scheduleDrive'
 export class WorkDay {
   constructor({workDayNum, toWorkDrive, toHomeDrive, currentLocation}) {
     this.workDayNum = workDayNum
-    this.toWorkDrive = toWorkDrive
-    this.toHomeDrive = toHomeDrive
-    this.currentLocation = currentLocation
+    this.toWorkRefID = toWorkDrive
+    this.toHomeRefID = toHomeDrive
   }
 }
 
@@ -13,21 +12,14 @@ export class WorkDay {
 export const workDayConverter = {
   toFirestore: function (workDay) {
     let workDayObject = {}
-    if (workDayNum != undefined) {
+    if (workDay.workDayNum != undefined) {
       workDayObject.workDayNum = workDay.workDayNum
     }
-    if (toWorkDrive != undefined) {
-      workDayObject.toWorkDrive = scheduleDriveConverter.toFirestore(
-        workDay.toWorkDrive
-      )
+    if (workDay.toWorkDrive != undefined) {
+      workDayObject.toWorkRefID = workDay.toWorkRefID
     }
-    if (toHomeDrive != undefined) {
-      workDayObject.toHomeDrive = scheduleDriveConverter.toFirestore(
-        workDay.toHomeDrive
-      )
-    }
-    if (currentLocation != undefined) {
-      workDayObject.currentLocation = workDay.currentLocation
+    if (workDay.toHomeDrive != undefined) {
+      workDayObject.toHomeRefID = workDay.toHomeRefID
     }
     return workDayObject
   },
@@ -35,8 +27,8 @@ export const workDayConverter = {
     const data = snapshot.data(options)
     return new WorkDay({
       workDayNum: data.workDayNum,
-      toWorkDrive: scheduleDriveConverter.fromFirestore(data.toWorkDrive),
-      toHomeDrive: scheduleDriveConverter.fromFirestore(data.toHomeDrive),
+      toWorkRefID: data.toWorkRefID,
+      toHomeRefID: data.toHomeRefID,
       currentLocation: data.currentLocation,
     })
   },
