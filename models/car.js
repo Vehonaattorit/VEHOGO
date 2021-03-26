@@ -1,9 +1,9 @@
 export class Car {
-  constructor({id, driverName, registerNumber, carName, availableSeats}) {
+  constructor({id, driverName, registerNumber, vehicleDescription, availableSeats}) {
     this.id = id
     this.driverName = driverName
     this.registerNumber = registerNumber
-    this.carName = carName
+    this.vehicleDescription = vehicleDescription
     this.availableSeats = availableSeats
   }
 }
@@ -21,8 +21,8 @@ export const carConverter = {
     if (car.registerNumber != undefined) {
       carObject.registerNumber = car.registerNumber
     }
-    if (car.carName != undefined) {
-      carObject.carName = car.carName
+    if (car.vehicleDescription != undefined) {
+      carObject.vehicleDescription = car.vehicleDescription
     }
     if (car.availableSeats != undefined) {
       carObject.availableSeats = car.availableSeats
@@ -35,7 +35,7 @@ export const carConverter = {
       id: data.id,
       driverName: data.driverName,
       registerNumber: data.registerNumber,
-      carName: data.carName,
+      vehicleDescription: data.vehicleDescription,
       availableSeats: data.availableSeats,
     })
   },

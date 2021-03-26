@@ -8,6 +8,7 @@ import {NewRide} from '../views/NewRide'
 import {DriverStartRide} from '../views/DriverStartRide'
 import {DriverOnRoute} from '../views/DriverOnRoute'
 import {Chat} from '../views/Chat'
+import {DriverCarList} from '../views/DriverCarList'
 import ChatRoom from '../views/ChatRoom'
 const Stack = createStackNavigator()
 function MainStackNavigator() {
@@ -61,6 +62,13 @@ function MainStackNavigator() {
           component={ChatRoom}
           options={{
             title: 'Chat',
+          }}
+        />
+        <Stack.Screen
+          name="DriverCarList"
+          component={DriverCarList}
+          options={{
+            title: 'DriverCarList',
           }}
         />
       </Stack.Navigator>
