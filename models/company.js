@@ -40,4 +40,13 @@ export const companyConverter = {
       userIDs: data.userIDs,
     })
   },
+  fromData: function (data) {
+    return new Company({
+      id: data.id,
+      displayName: data.displayName,
+      location: data.location,
+      address: data.address,
+      userIDs: data.userIDs,
+    })
+  },
 }

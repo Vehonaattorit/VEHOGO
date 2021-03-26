@@ -39,4 +39,13 @@ export const carConverter = {
       availableSeats: data.availableSeats,
     })
   },
+  fromData: function (data) {
+    return Car({
+      id: data.car.id,
+      driverName: data.car.driverName,
+      registerNumber: data.car.registerNumber,
+      carName: data.car.carName,
+      availableSeats: data.car.availableSeats,
+    })
+  },
 }

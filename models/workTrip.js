@@ -48,12 +48,16 @@ export const workTripConverter = {
   },
   fromFirestore: function (snapshot, options) {
     const data = snapshot.data(options)
-    const parsedWorkDays = []
-    if (data.workDays != undefined) {
-      data.workDays.forEach((workDay) => {
-        parsedWorkDays.push(workDayConverter.fromFirestore(workDay))
-      })
-    }
+    return new ScheduledDrive({
+      id: data.id,
+      driverID: data.driverID,
+      currentLocation: data.currentLocation,
+      workDayNum: data.workDayNum,
+      scheduledDrive: scheduleDriveConverter.fromData(data.scheduledDrive),
+      car: carConverter.fromData(data.car),
+    })
+  },
+  fromData: function (data) {
     return new ScheduledDrive({
       id: data.id,
       driverID: data.driverID,

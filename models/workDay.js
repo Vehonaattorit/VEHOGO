@@ -29,7 +29,6 @@ export const workDayConverter = {
       workDayNum: data.workDayNum,
       toWorkRefID: data.toWorkRefID,
       toHomeRefID: data.toHomeRefID,
-      currentLocation: data.currentLocation,
     })
   },
 }
