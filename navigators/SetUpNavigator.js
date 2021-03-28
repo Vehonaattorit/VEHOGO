@@ -12,16 +12,16 @@ function SetUpStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen
+        <Stack.Screen
           name="Travel"
           component={Travel}
           options={{title: 'Travel'}}
-        /> */}
-        {/* <Stack.Screen
+        />
+        <Stack.Screen
           name="Address"
           component={Address}
           options={{title: 'Address'}}
-        /> */}
+        />
         <Stack.Screen
           name="WorkingDays"
           component={WorkingDays}
