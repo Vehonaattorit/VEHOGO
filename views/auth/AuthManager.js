@@ -1,11 +1,10 @@
 import AsyncStorage from '@react-native-community/async-storage'
-//import {authorize, refresh, AuthConfiguration} from 'react-native-app-auth'
 import {Platform} from 'react-native'
 import moment from 'moment-timezone'
 import * as AuthSession from 'expo-auth-session'
 import * as WebBrowser from 'expo-web-browser'
 
-import {azureAdAppProps} from './AuthConfig'
+import {azureAdAppProps} from '../../secrets/secrets'
 
 import * as Localization from 'expo-localization'
 
