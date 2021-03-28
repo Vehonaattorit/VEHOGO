@@ -1,14 +1,24 @@
 import React, {useState, useContext} from 'react'
-import {StyleSheet, Modal, Platform, Text, Button, View} from 'react-native'
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+  Platform,
+  Text,
+  View,
+} from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import {color} from '../constants/colors'
 import {MaterialCommunityIcons} from '@expo/vector-icons'
 import {CustomButton} from '../components/CustomButton'
 import {CustomTitle} from '../components/CustomTitle'
 import {UserContext} from '../contexts'
 import {updateUser} from '../controllers/userController'
 
+import {color} from '../constants/colors'
+
 import moment from 'moment-timezone'
+
+import {formatTime} from '../utils/utils'
 
 import firebase from '@firebase/app'
 import '@firebase/firestore'
@@ -16,25 +26,19 @@ import '@firebase/firestore'
 const DateTimeInput = (props) => {
   const [showTimePicker, setShowTimePicker] = useState(Platform.OS === 'ios')
 
-  const formatTime = (dateTime) => {
-    return moment(dateTime).format('h:mm A')
-  }
+  console.log('Time is ', props.value)
 
   return (
     <View style={Platform.OS === 'android' ? styles.dateTime : null}>
-      {Platform.OS === 'android' && (
-        <Text style={styles.time} onPress={() => setShowTimePicker(true)}>
-          {formatTime(props.value)}
-        </Text>
-      )}
       {showTimePicker && (
         <DateTimePicker
-          display={Platform.OS === 'ios' ? 'compact' : 'default'}
+          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
           mode="time"
           value={props.value || new Date()}
-          onChange={(e, d) => {
+          onChange={(e, date) => {
+            console.log('event type', e.type)
             setShowTimePicker(Platform.OS === 'ios')
-            if (d) props.onChange(e, d)
+            if (date) props.onChange(e, date)
           }}
         />
       )}
@@ -42,18 +46,98 @@ const DateTimeInput = (props) => {
   )
 }
 
-export const WorkingHours = ({navigation}) => {
-  const {user} = useContext(UserContext)
+const TimeModal = ({
+  isPickerShow,
+  modalVisible,
+  handleModal,
+  onChange,
+  value,
+}) => {
+  if (Platform.OS === 'android') {
+    console.log('isPickerShow', isPickerShow)
+    return (
+      <>
+        {isPickerShow && (
+          <DateTimePicker
+            mode="time"
+            is24Hour={true}
+            onChange={(e, date) => {
+              if (date) onChange(e, date)
+            }}
+            value={value || new Date()}
+          />
+        )}
+      </>
+    )
+  }
 
+  return (
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={modalVisible}
+      onRequestClose={() => {
+        Alert.alert('Modal has been closed.')
+      }}
+    >
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <Text style={{color: color.primary}}>Select time</Text>
+
+          <DateTimeInput onChange={onChange} value={value} />
+
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                handleModal(!modalVisible)
+              }}
+            >
+              <Text style={{color: color.secondary}}>CANCEL</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                handleModal(!modalVisible)
+              }}
+            >
+              <Text style={{color: color.secondary}}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </Modal>
+  )
+}
+
+export const WorkingHours = ({navigation}) => {
   const [newEventState, setNewEventState] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: null,
+    endDate: null,
   })
+
+  const updateValue = (newValue, fieldName) => {
+    setIsPickerShow(false)
+    setNewEventState({
+      ...newEventState,
+      [fieldName]: newValue,
+    })
+  }
+
+  const [modalVisible, setModalVisible] = useState(false)
+
+  const {user} = useContext(UserContext)
 
   const updateWorkHours = () => {
     const {startDate, endDate} = newEventState
 
     let preferedWorkingHours = []
+
+    console.log('startDate', startDate)
+    console.log('endDate', endDate)
 
     user.workDays.forEach((element) => {
       preferedWorkingHours.push({
@@ -68,16 +152,24 @@ export const WorkingHours = ({navigation}) => {
     updateUser(user)
   }
 
-  const updateValue = (newValue, fieldName) => {
-    setNewEventState({
-      ...newEventState,
-      [fieldName]: newValue,
-    })
+  const handleModal = (visibility) => {
+    setModalVisible(visibility)
   }
+
+  const [selectedTime, setSelectedTime] = useState('startDate')
+  const [isPickerShow, setIsPickerShow] = useState(false)
 
   return (
     <View style={styles.container}>
-      <CustomTitle title="Hours" />
+      <TimeModal
+        isPickerShow={isPickerShow}
+        modalVisible={modalVisible}
+        handleModal={handleModal}
+        value={newEventState[selectedTime]}
+        onChange={(e, date) => updateValue(date, selectedTime)}
+      />
+
+      <CustomTitle style={styles.title} title="Hours" />
       <View style={styles.icon}>
         <MaterialCommunityIcons
           name="clock-fast"
@@ -85,30 +177,45 @@ export const WorkingHours = ({navigation}) => {
           color={color.secondaryDark}
         />
       </View>
+      <View>
+        <Text>My work hours</Text>
+      </View>
       <View
         style={{
-          flexDirection: 'row',
-          width: 350,
+          flexDirection: 'column',
+          width: 300,
         }}
       >
-        <View style={{flex: 1, flexDirection: 'column'}}>
-          {/* <CustomButton onPress={() => {}} title="Starting time" /> */}
-          <Text>Starting time</Text>
-          <DateTimeInput
-            value={newEventState.startDate}
-            onChange={(e, date) => updateValue(date, 'startDate')}
+        <View style={styles.btnContainer}>
+          <CustomButton
+            title={
+              newEventState.startDate
+                ? formatTime(newEventState.startDate)
+                : 'Start time'
+            }
+            onPress={() => {
+              setModalVisible(true)
+              setSelectedTime('startDate')
+              setIsPickerShow(true)
+            }}
           />
         </View>
-        <View style={{flex: 1}}>
-          <Text>Finishing time</Text>
-
-          <DateTimeInput
-            value={newEventState.endDate}
-            onChange={(e, date) => updateValue(date, 'startDate')}
+        <View style={styles.btnContainer}>
+          <CustomButton
+            title={
+              newEventState.endDate
+                ? formatTime(newEventState.endDate)
+                : 'End time'
+            }
+            onPress={() => {
+              setModalVisible(true)
+              setSelectedTime('endDate')
+              setIsPickerShow(true)
+            }}
           />
         </View>
       </View>
-      <View style={styles.submitBtnContainer}>
+      <View style={styles.btnContainer}>
         <CustomButton
           title="Submit"
           onPress={() => {
@@ -127,41 +234,30 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  icon: {
-    marginBottom: 100,
-  },
-  btns: {
-    position: 'absolute',
-    bottom: 50,
-    width: '100%',
-  },
-  timeContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-  },
-  btnContainers: {
-    margin: 5,
-  },
-  submitBtnContainer: {
+
+  btnContainer: {
     margin: 20,
     alignSelf: 'stretch',
   },
-  time: {
-    padding: 10,
-    backgroundColor: '#e6e6e6',
-    color: '#147efb',
-    marginRight: 10,
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
   },
-  date: {
-    padding: 10,
-    backgroundColor: '#e6e6e6',
-    color: '#147efb',
-  },
-  dateTime: {
-    flexDirection: 'row',
-  },
-  formField: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    width: '90%',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 })
