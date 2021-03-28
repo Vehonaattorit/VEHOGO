@@ -18,6 +18,7 @@ export async function updateCar(userId, car) {
       .collection('cars')
       .doc(car.id)
     userRef.withConverter(carConverter).set(car, {merge: true})
+    return car.id
   } catch (error) {
     console.error('Error writing document: ', error)
   }
@@ -35,7 +36,7 @@ export async function getCars(userId) {
           id: doc.id,
           driverName: doc.data().driverName,
           registerNumber: doc.data().registerNumber,
-          carName: doc.data().carName,
+          vehicleDescription: doc.data().vehicleDescription,
           availableSeats: doc.data().availableSeats,
         })
       )
