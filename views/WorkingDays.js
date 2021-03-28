@@ -7,7 +7,6 @@ import {CustomTitle} from '../components/CustomTitle'
 import {EvilIcons, MaterialCommunityIcons} from '@expo/vector-icons'
 import {updateUser, userStream} from '../controllers/userController'
 
-import {User} from '../models/user'
 import {UserContext} from '../contexts'
 
 export const WorkingDays = ({navigation}) => {
@@ -38,21 +37,22 @@ export const WorkingDays = ({navigation}) => {
   ])
 
   useEffect(() => {
-    // let setWorkDays = []
-    // if (user.workDays !== undefined) {
-    //   for (let i = 0; i < workDays; i++) {
-    //     for (let j = 0; j < user.workDays; j++) {
-    //       if (workDays[i].id === user.workDays[j].weekDayNum) {
-    //       }
-    //     }
-    //   }
-    // }
-    // if (user.workDays !== undefined) {
-    //   workDays.forEach((item) => {
-    //     if (item.id === )
-    //     setWorkDays.push(item)
-    //   })
-    // }
+    let workDayIds = []
+
+    for (const workDay of workDays) {
+      for (const userWorkDay of user.workDays) {
+        if (workDay.id === userWorkDay.workDayNum) {
+          console.log('workDay.id', workDay.id)
+          workDayIds.push(workDay.id)
+        }
+      }
+    }
+
+    const newArr = workDays.map((item) =>
+      item.id == workDayIds[item.id] ? {...item, isSelected: true} : item
+    )
+
+    setWorkDays(newArr)
   }, [])
 
   const toggleHandler = (selectedItem, isSelected) => {

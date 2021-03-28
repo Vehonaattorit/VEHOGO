@@ -20,7 +20,7 @@ export const SetUpInit = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: color.primary,
+    backgroundColor: color.secondary,
     alignItems: 'center',
     justifyContent: 'center',
   },

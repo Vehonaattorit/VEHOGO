@@ -16,17 +16,10 @@ import {updateUser} from '../controllers/userController'
 
 import {color} from '../constants/colors'
 
-import moment from 'moment-timezone'
-
 import {formatTime} from '../utils/utils'
-
-import firebase from '@firebase/app'
-import '@firebase/firestore'
 
 const DateTimeInput = (props) => {
   const [showTimePicker, setShowTimePicker] = useState(Platform.OS === 'ios')
-
-  console.log('Time is ', props.value)
 
   return (
     <View style={Platform.OS === 'android' ? styles.dateTime : null}>
@@ -36,7 +29,6 @@ const DateTimeInput = (props) => {
           mode="time"
           value={props.value || new Date()}
           onChange={(e, date) => {
-            console.log('event type', e.type)
             setShowTimePicker(Platform.OS === 'ios')
             if (date) props.onChange(e, date)
           }}
@@ -54,7 +46,6 @@ const TimeModal = ({
   value,
 }) => {
   if (Platform.OS === 'android') {
-    console.log('isPickerShow', isPickerShow)
     return (
       <>
         {isPickerShow && (
@@ -135,9 +126,6 @@ export const WorkingHours = ({navigation}) => {
     const {startDate, endDate} = newEventState
 
     let preferedWorkingHours = []
-
-    console.log('startDate', startDate)
-    console.log('endDate', endDate)
 
     user.workDays.forEach((element) => {
       preferedWorkingHours.push({
