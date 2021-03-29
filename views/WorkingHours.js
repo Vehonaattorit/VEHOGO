@@ -114,6 +114,7 @@ const TimeModal = ({
 export const WorkingHours = ({navigation}) => {
   const {user} = useContext(UserContext)
 
+  // If starting and ending time was found in db, set fetched values instead of default
   const [newEventState, setNewEventState] = useState({
     startDate:
       user.preferedWorkingHours === undefined
@@ -143,8 +144,20 @@ export const WorkingHours = ({navigation}) => {
     user.workDays.forEach((element) => {
       tempArr.push({
         workDayNum: element.workDayNum,
-        workDayStart: new Date(startDate),
-        workDayEnd: new Date(endDate),
+        workDayStart: new Date(
+          1970,
+          1,
+          1,
+          startDate.getHours(),
+          startDate.getMinutes()
+        ),
+        workDayEnd: new Date(
+          1970,
+          1,
+          1,
+          endDate.getHours(),
+          endDate.getMinutes()
+        ),
       })
     })
 

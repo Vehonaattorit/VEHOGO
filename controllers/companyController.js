@@ -13,7 +13,7 @@ export async function updateCompany(company) {
     // Add a new document in collection "users"
     let companyRef = db.collection('companys').doc(company.id)
 
-    userRef.withConverter(companyConverter).set(company, {merge: true})
+    companyRef.withConverter(companyConverter).set(company, {merge: true})
   } catch (error) {
     console.error('Error writing document: ', error)
   }

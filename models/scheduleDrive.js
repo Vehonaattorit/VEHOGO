@@ -3,7 +3,6 @@ export class ScheduledDrive {
   constructor({id, start, end, workTrip, takenSeats, stops}) {
     this.start = start
     this.end = end
-    this.workTrip = workTrip
     this.takenSeats = takenSeats
     this.stops = stops
   }
@@ -19,14 +18,14 @@ export const scheduleDriveConverter = {
     if (scheduledDrive.end != undefined) {
       scheduledDriveObject.end = scheduledDrive.end
     }
-    if (scheduledDrive.workTrip != undefined) {
-      scheduledDriveObject.workTrip = scheduledDrive.workTrip
-    }
     if (scheduledDrive.takenSeats != undefined) {
       scheduledDriveObject.takenSeats = scheduledDrive.takenSeats
     }
-    if (scheduledDrive.stops != undefined && scheduledDrive.stops.size > 0) {
+    if (scheduledDrive.stops != undefined && scheduledDrive.stops.length > 0) {
       const stops = []
+
+      console.log('STOPUS', scheduledDrive.stops)
+
       scheduledDrive.stops.forEach((stop) => {
         stops.push(stopConverter.toFirestore(stop))
       })

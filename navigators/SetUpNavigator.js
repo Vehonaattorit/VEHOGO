@@ -15,11 +15,11 @@ function SetUpStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen
+        {/* <Stack.Screen
           name="Company"
           component={Company}
           options={{title: 'Create or join '}}
-        />
+        /> */}
         <Stack.Screen
           name="Travel"
           component={Travel}
