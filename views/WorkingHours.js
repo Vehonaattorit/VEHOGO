@@ -64,6 +64,13 @@ const TimeModal = ({
 
   return (
     <Modal
+      bac
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(0,0,0,0.5)',
+      }}
       animationType="slide"
       transparent={true}
       visible={modalVisible}
@@ -125,19 +132,29 @@ export const WorkingHours = ({navigation}) => {
   const updateWorkHours = () => {
     const {startDate, endDate} = newEventState
 
-    let preferedWorkingHours = []
+    let tempArr = []
 
     user.workDays.forEach((element) => {
-      preferedWorkingHours.push({
+      tempArr.push({
         workDayNum: element.workDayNum,
         workDayStart: new Date(startDate),
         workDayEnd: new Date(endDate),
       })
     })
 
-    user.preferedWorkingHours = preferedWorkingHours
+    // console.log('tempArr', tempArr)
+
+    // return tempArr
+
+    user.preferedWorkingHours = tempArr
+
+    user.setupIsComplete = true
 
     updateUser(user)
+
+    // navigation.navigate('SetUpInit', {
+    //   preferedWorkingHours: tempArr,
+    // })
   }
 
   const handleModal = (visibility) => {
@@ -207,7 +224,7 @@ export const WorkingHours = ({navigation}) => {
         <CustomButton
           title="Submit"
           onPress={() => {
-            updateWorkHours()
+            const tempArr = updateWorkHours()
             navigation.navigate('SetUpInit')
           }}
         />

@@ -39,6 +39,8 @@ export const WorkingDays = ({navigation}) => {
   useEffect(() => {
     let workDayIds = []
 
+    if (!user.workDays) return
+
     for (const workDay of workDays) {
       for (const userWorkDay of user.workDays) {
         if (workDay.id === userWorkDay.workDayNum) {
@@ -47,11 +49,9 @@ export const WorkingDays = ({navigation}) => {
         }
       }
     }
-
     const newArr = workDays.map((item) =>
       item.id == workDayIds[item.id] ? {...item, isSelected: true} : item
     )
-
     setWorkDays(newArr)
   }, [])
 

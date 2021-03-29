@@ -5,6 +5,7 @@ import {Travel} from '../views/Travel'
 import {Address} from '../views/Address'
 import {WorkingHours} from '../views/WorkingHours'
 import {WorkingDays} from '../views/WorkingDays'
+import {Username} from '../views/Username'
 import {SetUpInit} from '../views/SetUpInit'
 const Stack = createStackNavigator()
 
@@ -16,6 +17,11 @@ function SetUpStackNavigator() {
           name="Travel"
           component={Travel}
           options={{title: 'Travel'}}
+        />
+        <Stack.Screen
+          name="Username"
+          component={Username}
+          options={{title: 'Username'}}
         />
         <Stack.Screen
           name="Address"
