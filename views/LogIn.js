@@ -16,9 +16,16 @@ export const LogIn = ({navigation}) => {
   const [error, setError] = useState('')
 
   const logIn = async () => {
-    const errorMessage = await login(email, password)
+    // const errorMessage = await login(email, password)
 
-    setError(errorMessage)
+    // setError(errorMessage)
+    login(email, password)
+      .then((res) => {
+        setError(res)
+      })
+      .catch((err) => {
+        console.log(err.message)
+      })
   }
 
   useEffect(() => {

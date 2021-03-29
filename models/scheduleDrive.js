@@ -24,8 +24,6 @@ export const scheduleDriveConverter = {
     if (scheduledDrive.stops != undefined && scheduledDrive.stops.length > 0) {
       const stops = []
 
-      console.log('STOPUS', scheduledDrive.stops)
-
       scheduledDrive.stops.forEach((stop) => {
         stops.push(stopConverter.toFirestore(stop))
       })

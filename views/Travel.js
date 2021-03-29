@@ -11,10 +11,6 @@ import {updateUser} from '../controllers/userController'
 export const Travel = ({navigation}) => {
   const {user} = useContext(UserContext)
 
-  useEffect(() => {
-    user.setupIsCompleted = false
-  }, [])
-
   const setTravelPreference = (preference) => {
     user.travelPreference = preference
     updateUser(user)

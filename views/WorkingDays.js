@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react'
-import {StyleSheet, Button, Platform, Text, View} from 'react-native'
+import {StyleSheet, Alert, Button, Platform, Text, View} from 'react-native'
 import {color} from '../constants/colors'
 import {CustomButton} from '../components/CustomButton'
 import {RoundButton} from '../components/RoundButton'
@@ -11,21 +11,6 @@ import {UserContext} from '../contexts'
 
 export const WorkingDays = ({navigation}) => {
   const {user} = useContext(UserContext)
-
-  const updateWorkDays = () => {
-    const preferedWorkDays = []
-
-    workDays.forEach((element) => {
-      if (element.isSelected) {
-        preferedWorkDays.push({workDayNum: element.id})
-      }
-    })
-
-    user.workDays = preferedWorkDays
-
-    updateUser(user)
-  }
-
   const [workDays, setWorkDays] = useState([
     {id: 0, weekDay: 'Mon', isSelected: false},
     {id: 1, weekDay: 'Tue', isSelected: false},
@@ -36,6 +21,22 @@ export const WorkingDays = ({navigation}) => {
     {id: 6, weekDay: 'Sun', isSelected: false},
   ])
 
+  const [error, setError] = useState('')
+
+  // const updateWorkDays = () => {
+  //   const preferedWorkDays = []
+
+  //   workDays.forEach((element) => {
+  //     if (element.isSelected) {
+  //       preferedWorkDays.push({workDayNum: element.id})
+  //     }
+  //   })
+
+  //   user.workDays = preferedWorkDays
+
+  //   updateUser(user)
+  // }
+
   useEffect(() => {
     let workDayIds = []
 
@@ -44,7 +45,6 @@ export const WorkingDays = ({navigation}) => {
     for (const workDay of workDays) {
       for (const userWorkDay of user.workDays) {
         if (workDay.id === userWorkDay.workDayNum) {
-          console.log('workDay.id', workDay.id)
           workDayIds.push(workDay.id)
         }
       }
@@ -70,6 +70,41 @@ export const WorkingDays = ({navigation}) => {
     setWorkDays(newArr)
   }
 
+  const submitHandler = () => {
+    const isValid = workDays.some((item) => item.isSelected === true)
+
+    if (!isValid) {
+      Alert.alert('Wrong input!', 'Please select at least one work day.', [
+        {text: 'Okay'},
+      ])
+      setError('Please select at least one work day.')
+
+      return
+    }
+
+    const preferedWorkDays = []
+
+    workDays.forEach((element) => {
+      if (element.isSelected) {
+        preferedWorkDays.push({workDayNum: element.id})
+      }
+    })
+
+    user.workDays = preferedWorkDays
+
+    updateUser(user)
+
+    navigation.navigate('WorkingHours')
+  }
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setError('')
+    }, 5000)
+
+    return () => clearTimeout(timeout)
+  }, [error])
+
   return (
     <View style={styles.container}>
       <View style={styles.titleText}>
@@ -87,14 +122,9 @@ export const WorkingDays = ({navigation}) => {
           />
         ))}
       </View>
+      <Text style={styles.errorText}>{error}</Text>
       <View style={styles.submitBtn}>
-        <CustomButton
-          title="Submit"
-          onPress={() => {
-            updateWorkDays()
-            navigation.navigate('WorkingHours')
-          }}
-        />
+        <CustomButton title="Submit" onPress={submitHandler} />
       </View>
     </View>
   )
@@ -118,5 +148,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 50,
     width: '90%',
+  },
+  errorText: {
+    color: 'red',
   },
 })

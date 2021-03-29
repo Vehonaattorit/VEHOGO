@@ -21,6 +21,8 @@ export default function App() {
 
   LogBox.ignoreLogs(['Setting a timer'])
 
+  // signOut()
+
   const loadFonts = async () => {
     await Font.loadAsync({
       Roboto: require('native-base/Fonts/Roboto.ttf'),
@@ -71,6 +73,7 @@ function Navigation({userId}) {
         user.workDays == undefined ||
         user.travelPreference == undefined ||
         user.preferedWorkingHours == undefined ||
+        user.setupIsCompleted == false ||
         user.setupIsCompleted == undefined
       ) {
         return (

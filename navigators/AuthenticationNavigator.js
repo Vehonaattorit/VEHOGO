@@ -8,7 +8,7 @@ function AuthStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-          <Stack.Screen
+        <Stack.Screen
           name="LogIn"
           component={LogIn}
           options={{title: 'Log In'}}
@@ -16,7 +16,7 @@ function AuthStackNavigator() {
         <Stack.Screen
           name="SignUp"
           component={SignUp}
-          options={{title: 'Log In'}}
+          options={{title: 'Sign Up'}}
         />
       </Stack.Navigator>
     </NavigationContainer>
