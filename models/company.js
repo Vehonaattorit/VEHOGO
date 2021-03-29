@@ -12,6 +12,9 @@ export class Company {
 export const companyConverter = {
   toFirestore: function (company) {
     let companyObject = {}
+    if (company.id != undefined) {
+      companyObject.id = company.id
+    }
     if (company.displayName != undefined) {
       companyObject.displayName = company.displayName
     }
@@ -29,6 +32,15 @@ export const companyConverter = {
   },
   fromFirestore: function (snapshot, options) {
     const data = snapshot.data(options)
+    return new Company({
+      id: data.id,
+      displayName: data.displayName,
+      location: data.location,
+      address: data.address,
+      userIDs: data.userIDs,
+    })
+  },
+  fromData: function (data) {
     return new Company({
       id: data.id,
       displayName: data.displayName,

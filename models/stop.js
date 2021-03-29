@@ -26,4 +26,12 @@ export const stopConverter = {
       userID: data.userID,
     })
   },
+  fromData: function (data) {
+    return Stop({
+      location: data.location,
+      address: data.address,
+      stopName: data.stopName,
+      userID: data.userID,
+    })
+  },
 }

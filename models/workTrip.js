@@ -1,10 +1,20 @@
 import {WorkDay, workDayConverter} from './workDay'
-import {carConverter} from './car'
+import {ScheduledDrive, scheduleDriveConverter} from './scheduleDrive'
+import {carConverter, Car} from './car'
 export class WorkTrip {
-  constructor({id, driverID, workDays, car}) {
+  constructor({
+    id,
+    driverID,
+    workDayNum,
+    car,
+    currentLocation,
+    scheduledDrive,
+  }) {
     this.id = id
     this.driverID = driverID
-    this.workDays = workDays
+    this.currentLocation = currentLocation
+    this.workDayNum = workDayNum
+    this.scheduledDrive = scheduledDrive
     this.car = car
   }
 }
@@ -13,35 +23,48 @@ export class WorkTrip {
 export const workTripConverter = {
   toFirestore: function (workTrip) {
     let workTripObject = {}
+    if (workTrip.id != undefined) {
+      workTripObject.id = workTrip.id
+    }
     if (workTrip.driverID != undefined) {
       workTripObject.driverID = workTrip.driverID
     }
-    if (workTrip.workDays != undefined && workTrip.workDays.size > 0) {
-      const workDays = []
-      workTrip.workDays.forEach((workDay) => {
-        workDays.push(workDayConverter.toFirestore(workDay))
-      })
-      workTripObject.workDays = workDays
+    if (workTrip.currentLocation != undefined) {
+      workTripObject.currentLocation = workTrip.currentLocation
+    }
+    if (workTrip.workDayNum != undefined) {
+      workTripObject.workDayNum = workTrip.workDayNum
+    }
+    if (workTrip.scheduledDrive != undefined) {
+      workTripObject.scheduledDrive = scheduleDriveConverter.toFirestore(
+        workTrip.scheduledDrive
+      )
     }
     if (workTrip.car != undefined) {
-      workTripObject.car = workTrip.car
+      workTripObject.car = carConverter.toFirestore(workTrip.car)
     }
 
     return workTripObject
   },
   fromFirestore: function (snapshot, options) {
     const data = snapshot.data(options)
-    const parsedWorkDays = []
-    if (data.workDays != undefined) {
-      data.workDays.forEach((workDay) => {
-        parsedWorkDays.push(workDayConverter.fromFirestore(workDay))
-      })
-    }
     return new ScheduledDrive({
       id: data.id,
       driverID: data.driverID,
-      workDays: parsedWorkDays,
-      car: carConverter.fromFirestore(data.car),
+      currentLocation: data.currentLocation,
+      workDayNum: data.workDayNum,
+      scheduledDrive: scheduleDriveConverter.fromData(data.scheduledDrive),
+      car: carConverter.fromData(data.car),
+    })
+  },
+  fromData: function (data) {
+    return new ScheduledDrive({
+      id: data.id,
+      driverID: data.driverID,
+      currentLocation: data.currentLocation,
+      workDayNum: data.workDayNum,
+      scheduledDrive: scheduleDriveConverter.fromData(data.scheduledDrive),
+      car: carConverter.fromData(data.car),
     })
   },
 }

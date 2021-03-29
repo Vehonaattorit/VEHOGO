@@ -13,7 +13,7 @@ export class User {
     travelPreference,
     schoosedCarID,
     cars,
-    preferedWorkingHours
+    preferedWorkingHours,
   }) {
     this.id = id
     this.userName = userName
@@ -56,11 +56,7 @@ export const userConverter = {
       userObject.displayPhotoURL = user.displayPhotoURL
     }
     if (user.workDays != undefined) {
-      const workDays = []
-      user.workDays.forEach((workDay) => {
-        workDays.push(workDayConverter.toFirestore(workDay))
-      })
-      userObject.workDays = workDays
+      userObject.workDays = user.workDays
     }
     if (user.travelPreference != undefined) {
       userObject.travelPreference = user.travelPreference
@@ -78,13 +74,6 @@ export const userConverter = {
   },
   fromFirestore: function (snapshot, options) {
     const data = snapshot.data(options)
-    const parsedWorkDays = []
-    if (data.workDays != undefined) {
-      console.log('parsing workdays')
-      data.workDays.forEach((workDay) => {
-        parsedWorkDays.push(workDayConverter.fromFirestore(workDay))
-      })
-    }
 
     return new User({
       id: data.id,
@@ -94,7 +83,7 @@ export const userConverter = {
       homeAddress: data.homeAddress,
       city: data.city,
       displayPhotoURL: data.displayPhotoURL,
-      parsedWorkDays: parsedWorkDays,
+      workDays: data.workDays,
       travelPreference: data.travelPreference,
       schoosedCarID: data.schoosedCarID,
       preferedWorkingHours: data.preferedWorkingHours,

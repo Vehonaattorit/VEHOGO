@@ -5,18 +5,22 @@ import AuthStackNavigator from './navigators/AuthenticationNavigator'
 import SetUpStackNavigator from './navigators/SetUpNavigator'
 import AppLoading from 'expo-app-loading'
 import {UserContext, UserProvider} from './contexts'
-import {userStream} from './controllers/userController'
+import {getUser, userStream} from './controllers/userController'
 import {signOut, subscribeToAuth} from './controllers/LoginController'
 import * as Font from 'expo-font'
 import {useDocumentData} from 'react-firebase-hooks/firestore'
 import {useCardAnimation} from '@react-navigation/stack'
 import {User, userConverter} from './models/user'
+import {addChat, getChat} from './controllers/chatRoomController'
+
+import {LogBox} from 'react-native'
 
 export default function App() {
   const [fontReady, setFontReady] = useState(false)
   const [userId, setUserId] = useState(null)
 
-  // signOut()
+  LogBox.ignoreLogs(['Setting a timer'])
+
   const loadFonts = async () => {
     await Font.loadAsync({
       Roboto: require('native-base/Fonts/Roboto.ttf'),
@@ -60,33 +64,21 @@ function Navigation({userId}) {
     if (user != undefined) {
       // if setup is not completed
 
-      console.log('if setup is not complteted')
+      console.log('User App', user)
+
       if (
-        user.userName == undefined ||
-        user.homeLocation == undefined ||
+        user.city == undefined ||
         user.homeAddress == undefined ||
         user.workDays == undefined ||
-        user.travelPreference == undefined
+        user.travelPreference == undefined ||
+        user.preferedWorkingHours == undefined
       ) {
-        console.log(`return (
-          <UserContext.Provider value={{user}}>
-            <SetUpStackNavigator />
-          </UserContext.Provider>
-        )`)
-
-        console.log('user', user)
-
         return (
           <UserContext.Provider value={{user}}>
             <SetUpStackNavigator />
           </UserContext.Provider>
         )
       } else {
-        console.log(`return (
-          <UserContext.Provider value={{user}}>
-            <MainStackNavigator />
-          </UserContext.Provider>
-        )`)
         return (
           <UserContext.Provider value={{user}}>
             <MainStackNavigator />

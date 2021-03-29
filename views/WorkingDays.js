@@ -1,27 +1,73 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import {StyleSheet, Button, Platform, Text, View} from 'react-native'
 import {color} from '../constants/colors'
 import {CustomButton} from '../components/CustomButton'
 import {RoundButton} from '../components/RoundButton'
 import {CustomTitle} from '../components/CustomTitle'
 import {EvilIcons, MaterialCommunityIcons} from '@expo/vector-icons'
-import {updateUser} from '../controllers/userController'
+import {updateUser, userStream} from '../controllers/userController'
 
-import {User} from '../models/user'
 import {UserContext} from '../contexts'
 
 export const WorkingDays = ({navigation}) => {
-  const [workDays, setWorkDays] = useState([])
-  console.log(workDays)
   const {user} = useContext(UserContext)
 
   const updateWorkDays = () => {
     const preferedWorkDays = []
-    workDays.forEach(element => {
-      preferedWorkDays.push({workDayNum: element})
-    });
-    user.preferedWorkingHours = preferedWorkDays
+
+    workDays.forEach((element) => {
+      if (element.isSelected) {
+        preferedWorkDays.push({workDayNum: element.id})
+      }
+    })
+
+    user.workDays = preferedWorkDays
+
     updateUser(user)
+  }
+
+  const [workDays, setWorkDays] = useState([
+    {id: 0, weekDay: 'Mon', isSelected: false},
+    {id: 1, weekDay: 'Tue', isSelected: false},
+    {id: 2, weekDay: 'Wed', isSelected: false},
+    {id: 3, weekDay: 'Thu', isSelected: false},
+    {id: 4, weekDay: 'Fri', isSelected: false},
+    {id: 5, weekDay: 'Sat', isSelected: false},
+    {id: 6, weekDay: 'Sun', isSelected: false},
+  ])
+
+  useEffect(() => {
+    let workDayIds = []
+
+    for (const workDay of workDays) {
+      for (const userWorkDay of user.workDays) {
+        if (workDay.id === userWorkDay.workDayNum) {
+          console.log('workDay.id', workDay.id)
+          workDayIds.push(workDay.id)
+        }
+      }
+    }
+
+    const newArr = workDays.map((item) =>
+      item.id == workDayIds[item.id] ? {...item, isSelected: true} : item
+    )
+
+    setWorkDays(newArr)
+  }, [])
+
+  const toggleHandler = (selectedItem, isSelected) => {
+    const newArr = workDays.map((item) => {
+      if (item.id == selectedItem.id) {
+        return {
+          ...item,
+          isSelected,
+        }
+      } else {
+        return item
+      }
+    })
+
+    setWorkDays(newArr)
   }
 
   return (
@@ -32,13 +78,14 @@ export const WorkingDays = ({navigation}) => {
       </View>
 
       <View style={styles.btnContainer}>
-        <RoundButton title="Mon" onPress={() => setWorkDays(workDays.concat(0))}/>
-        <RoundButton title="Tue" onPress={() => { setWorkDays(workDays.concat(1))}} />
-        <RoundButton title="Wed" onPress={() => { setWorkDays(workDays.concat(2))}} />
-        <RoundButton title="Thu" onPress={() => { setWorkDays(workDays.concat(3))}} />
-        <RoundButton title="Fri" onPress={() => { setWorkDays(workDays.concat(4))}} />
-        <RoundButton title="Sat" onPress={() => { setWorkDays(workDays.concat(5))}} />
-        <RoundButton title="Sun" onPress={() => { setWorkDays(workDays.concat(6))}} />
+        {workDays.map((item) => (
+          <RoundButton
+            key={item.id}
+            item={item}
+            isSelected={item.isSelected}
+            toggleHandler={toggleHandler}
+          />
+        ))}
       </View>
       <View style={styles.submitBtn}>
         <CustomButton

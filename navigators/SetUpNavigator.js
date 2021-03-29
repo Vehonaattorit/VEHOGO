@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, {useState} from 'react'
 import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import {Travel} from '../views/Travel'
@@ -6,18 +6,18 @@ import {Address} from '../views/Address'
 import {WorkingHours} from '../views/WorkingHours'
 import {WorkingDays} from '../views/WorkingDays'
 import {SetUpInit} from '../views/SetUpInit'
-import {CreateCompany} from '../views/CreateCompany'
+import {Company} from '../views/Company'
 
 const Stack = createStackNavigator()
+
 function SetUpStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-
         <Stack.Screen
-          name="CreateCompany"
-          component={CreateCompany}
-          options={{title: 'Create A Company'}}
+          name="Company"
+          component={Company}
+          options={{title: 'Create or join '}}
         />
         <Stack.Screen
           name="Travel"
