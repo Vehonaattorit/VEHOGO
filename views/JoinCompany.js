@@ -1,10 +1,36 @@
-import React, {useState} from 'react'
-import {StyleSheet, View, KeyboardAvoidingView, Text} from 'react-native'
+import React, {useEffect, useState} from 'react'
+import {StyleSheet, View, Text} from 'react-native'
+import {Button} from 'react-native-paper'
+import {CustomButton} from '../components/CustomButton'
+import {CompanyList} from '../components/CompanyList'
+import {getCompanys} from '../controllers/companyController'
 
-export const JoinCompany = ({navigation}) => {
+export const JoinCompany = ({setShowJoin, setShowBtns}) => {
+
+  const [companyData, setCompanyData] = useState([])
+
+  const getCompanies = async () => {
+
+    const companies = await getCompanys()
+    console.log('companies: '+companies)
+    setCompanyData(companies)
+  }
+
+  useEffect(() => {
+    getCompanies()
+  }, [])
   return (
     <View style={styles.container}>
-      <Text>Join company</Text>
+      <CompanyList companyData={companyData} style={styles.companyList}/>
+      <CustomButton
+        style={styles.button}
+        title="Cancel"
+        onPress={() => {
+          setShowJoin(false)
+          setShowBtns(true)
+        }}
+      />
+
     </View>
   )
 }
@@ -12,7 +38,11 @@ export const JoinCompany = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
+  button: {
+    flex: 1
+  },
+  companyList: {
+    flex: 3
+  }
 })
