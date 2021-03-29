@@ -10,13 +10,13 @@ import {updateCompany} from '../controllers/companyController'
 import {Company} from '../models/company'
 import {UserContext} from '../contexts'
 import firebase from 'firebase/app'
+import {updateUser} from '../controllers/userController'
 
 export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
   const [companyAddress, setAddress] = useState('')
   const [companyName, setName] = useState('')
   const {user} = useContext(UserContext)
-  const [lat, setLat] = useState('')
-  const [lng, setLng] = useState('')
+
 
   const getCompanyGeoLocation = async () => {
     try {
@@ -42,10 +42,26 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
   }
 
   const sendCompanyData = async () => {
-    const point = await getCompanyGeoLocation()
-    updateCompany(new Company({address: companyAddress, displayName: companyName, userIDs: [user.id], location: point}))
-    console.log('updated')
-    navigation.navigate('Travel')
+    if (companyAddress.length > 0 && companyName.length > 0) {
+      const point = await getCompanyGeoLocation()
+      updateCompany(new Company({address: companyAddress, displayName: companyName, userIDs: [user.id], location: point}))
+
+      const companyUserData = [
+        {
+          address: companyAddress,
+          name: companyName,
+          location: point
+        }
+      ]
+      console.log('updating user')
+      user.company = companyUserData
+      updateUser(user)
+
+      console.log('updated')
+      navigation.navigate('Travel')
+    } else {
+      console.log('inputs empty')
+    }
 
   }
 
@@ -64,11 +80,17 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
           placeholder="Company name"
           value={companyName}
           onChangeText={setName}
+          errorMessage={companyName.length < 1 &&
+            'Company name must be at least 1 character long'
+          }
         />
 
         <Input placeholder="Address"
           value={companyAddress}
           onChangeText={setAddress}
+          errorMessage={companyAddress.length < 1 &&
+            'Company address must be at least 1 character long'
+          }
         />
 
         <CustomButton

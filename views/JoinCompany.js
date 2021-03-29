@@ -5,7 +5,7 @@ import {CustomButton} from '../components/CustomButton'
 import {CompanyList} from '../components/CompanyList'
 import {getCompanys} from '../controllers/companyController'
 
-export const JoinCompany = ({setShowJoin, setShowBtns}) => {
+export const JoinCompany = ({navigation, setShowJoin, setShowBtns}) => {
 
   const [companyData, setCompanyData] = useState([])
 
@@ -21,7 +21,7 @@ export const JoinCompany = ({setShowJoin, setShowBtns}) => {
   }, [])
   return (
     <View style={styles.container}>
-      <CompanyList companyData={companyData} style={styles.companyList}/>
+      <CompanyList navigation={navigation} companyData={companyData} style={styles.companyList}/>
       <CustomButton
         style={styles.button}
         title="Cancel"
