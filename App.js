@@ -68,10 +68,12 @@ function Navigation({userId}) {
 
       if (
         user.city == undefined ||
+        user.userName == undefined ||
         user.homeAddress == undefined ||
         user.workDays == undefined ||
         user.travelPreference == undefined ||
-        user.preferedWorkingHours == undefined
+        user.preferedWorkingHours == undefined ||
+        user.setupIsComplete == false
       ) {
         return (
           <UserContext.Provider value={{user}}>

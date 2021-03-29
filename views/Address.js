@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useState} from 'react'
-import {StyleSheet, View, KeyboardAvoidingView} from 'react-native'
+import {StyleSheet, Text, View, KeyboardAvoidingView} from 'react-native'
 import {color} from '../constants/colors'
 import {Input} from 'react-native-elements'
 import {CustomButton} from '../components/CustomButton'
@@ -9,10 +9,13 @@ import {updateUser} from '../controllers/userController'
 import {UserContext} from '../contexts'
 
 export const Address = ({navigation}) => {
-  const [address, setAddress] = useState(undefined)
-  const [city, setCity] = useState(undefined)
-
   const {user} = useContext(UserContext)
+
+  const [address, setAddress] = useState(user.homeAddress || undefined)
+  const [addressError, setAddressErrorMessage] = useState('')
+
+  const [city, setCity] = useState(user.city || undefined)
+  const [cityError, setCityErrorMessage] = useState('')
 
   const updateUserLocation = () => {
     user.homeAddress = address
@@ -36,13 +39,14 @@ export const Address = ({navigation}) => {
           value={address}
           onChangeText={(value) => setAddress(value)}
         />
+        <Text>{addressError}</Text>
 
         <Input
           placeholder="City"
           value={city}
           onChangeText={(value) => setCity(value)}
         />
-
+        <Text>{cityError}</Text>
         <CustomButton
           style={styles.btns}
           title="Submit"

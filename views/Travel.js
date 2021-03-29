@@ -27,20 +27,20 @@ export const Travel = ({navigation}) => {
       <View style={styles.btnContainer}>
         <View style={styles.btn}>
           <CustomButton
-            title="Share My Car "
+            title="Share My Car"
             onPress={() => {
               setTravelPreference('driver')
-              navigation.navigate('Address')
+              navigation.navigate('Username')
             }}
           />
         </View>
 
         <View style={styles.btn}>
           <CustomButton
-            title="Get A Ride "
+            title="Get A Ride"
             onPress={() => {
               setTravelPreference('passenger')
-              navigation.navigate('Address')
+              navigation.navigate('Username')
             }}
           />
         </View>
