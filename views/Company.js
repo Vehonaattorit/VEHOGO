@@ -38,9 +38,9 @@ export const Company = () => {
         </View>
       )}
       {showBtns === false && showJoin === true ? (
-        <JoinCompany setShowJoin={setShowJoin}/>
+        <JoinCompany setShowJoin={setShowJoin} />
       ) : showBtns === false && showCreate === true ? (
-        <CreateCompany setShowCreate={setShowCreate}/>
+        <CreateCompany setShowCreate={setShowCreate} />
       ) : (
         console.log('No money no honey')
       )}
