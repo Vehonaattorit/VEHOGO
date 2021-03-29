@@ -64,8 +64,6 @@ function Navigation({userId}) {
     if (user != undefined) {
       // if setup is not completed
 
-      console.log('User App', user)
-
       if (
         user.city == undefined ||
         user.userName == undefined ||

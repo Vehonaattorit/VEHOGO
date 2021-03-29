@@ -11,12 +11,13 @@ export async function updateWorkTrip(companyId, workTrip) {
       workTrip.id = v4()
     }
     // Add a new document in collection "users"
-    let worDayRef = db
+    let workDayRef = db
       .collection('companys')
       .doc(companyId)
       .collection('workTrips')
+      .doc(workTrip.id)
 
-    worDayRef.withConverter(workTripConverter).set(workTrip, {merge: true})
+    workDayRef.withConverter(workTripConverter).set(workTrip, {merge: true})
     return workTrip.id
   } catch (error) {
     console.error('Error writing document: ', error)

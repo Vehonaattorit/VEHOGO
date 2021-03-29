@@ -8,26 +8,27 @@ import firebase from '../firebase/fire'
 import {CustomButton} from '../components/CustomButton'
 import {CustomTitle} from '../components/CustomTitle'
 import {login, subscribeToAuth} from '../controllers/LoginController'
+
 export const LogIn = ({navigation}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const logIn = () => {
-    login(email, password, logInComplete)
-  }
-  const logInComplete = () => {
-    navigation.navigate('Travel')
+  const [error, setError] = useState('')
+
+  const logIn = async () => {
+    const errorMessage = await login(email, password)
+
+    setError(errorMessage)
   }
 
-  // useEffect(() => {
-  //   subscribeToAuth(authStateChanged)
-  // })
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setError('')
+    }, 5000)
 
-  //TODO: pass user id to travel
-  const authStateChanged = (user) => {
-    if (user !== null) {
-    }
-  }
+    return () => clearTimeout(timeout)
+  }, [error])
+
   return (
     <View style={styles.container}>
       <CustomTitle title="VEHOGO" />
@@ -36,7 +37,8 @@ export const LogIn = ({navigation}) => {
         <View style={styles.inputContainer}>
           <View style={styles.input}>
             <Input
-              placeholder="Email@Address.com"
+              autoCapitalize="none"
+              placeholder="email@address.com"
               leftIcon={<Icon name="" size={24} color={color.grey} />}
               value={email}
               onChangeText={setEmail}
@@ -51,7 +53,7 @@ export const LogIn = ({navigation}) => {
               onChangeText={setPassword}
               secureTextEntry={true}
               leftIcon={<Icon name="" size={24} color={color.grey} />}
-              errorMessage="ENTER A VALID ERROR HERE"
+              errorMessage={error}
             />
           </View>
         </View>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {useState} from 'react'
 import {StyleSheet, View} from 'react-native'
 import {color} from '../constants/colors'
@@ -12,19 +12,28 @@ export const SignUp = ({navigation}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const registerUser = () => {
-    register(email, password, registerComplete)
+  const [error, setError] = useState('')
+
+  const registerUser = async () => {
+    await register(email, password)
   }
-  const registerComplete = () => {
-    navigation.navigate('Travel')
-  }
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setError('')
+    }, 5000)
+
+    return () => clearTimeout(timeout)
+  }, [error])
+
   return (
     <View style={styles.container}>
       <View>
         <View style={styles.inputContainer}>
           <View style={styles.input}>
             <Input
-              placeholder="Email@Address.com"
+              autoCapitalize="none"
+              placeholder="email@address.com"
               leftIcon={<Icon name="" size={24} color={color.grey} />}
               value={email}
               onChangeText={setEmail}
@@ -38,7 +47,7 @@ export const SignUp = ({navigation}) => {
               value={password}
               onChangeText={setPassword}
               leftIcon={<Icon name="" size={24} color={color.grey} />}
-              errorMessage="ENTER A VALID ERROR HERE"
+              errorMessage={error}
             />
           </View>
         </View>
