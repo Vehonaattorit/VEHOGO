@@ -13,9 +13,11 @@ export const SetUpInit = ({route}) => {
   const {user} = useContext(UserContext)
 
   const finishSetup = () => {
-    user.preferedWorkingHours = preferedWorkingHours
-
-    updateUser(user)
+    if (!user.setupIsCompleted) {
+      console.log('Setup is completed')
+      user.setupIsCompleted = true
+      updateUser(user)
+    }
   }
 
   return (

@@ -112,9 +112,11 @@ const TimeModal = ({
 }
 
 export const WorkingHours = ({navigation}) => {
+  const {user} = useContext(UserContext)
+
   const [newEventState, setNewEventState] = useState({
-    startDate: null,
-    endDate: null,
+    startDate: user.preferedWorkingHours[0].workDayStart.toDate(),
+    endDate: user.preferedWorkingHours[0].workDayEnd.toDate(),
   })
 
   const updateValue = (newValue, fieldName) => {
@@ -126,8 +128,6 @@ export const WorkingHours = ({navigation}) => {
   }
 
   const [modalVisible, setModalVisible] = useState(false)
-
-  const {user} = useContext(UserContext)
 
   const updateWorkHours = () => {
     const {startDate, endDate} = newEventState
@@ -142,19 +142,9 @@ export const WorkingHours = ({navigation}) => {
       })
     })
 
-    // console.log('tempArr', tempArr)
-
-    // return tempArr
-
     user.preferedWorkingHours = tempArr
 
-    user.setupIsComplete = true
-
     updateUser(user)
-
-    // navigation.navigate('SetUpInit', {
-    //   preferedWorkingHours: tempArr,
-    // })
   }
 
   const handleModal = (visibility) => {
@@ -224,7 +214,7 @@ export const WorkingHours = ({navigation}) => {
         <CustomButton
           title="Submit"
           onPress={() => {
-            const tempArr = updateWorkHours()
+            updateWorkHours()
             navigation.navigate('SetUpInit')
           }}
         />

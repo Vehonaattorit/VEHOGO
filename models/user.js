@@ -14,6 +14,7 @@ export class User {
     schoosedCarID,
     cars,
     preferedWorkingHours,
+    setupIsCompleted,
   }) {
     this.id = id
     this.userName = userName
@@ -27,6 +28,7 @@ export class User {
     this.schoosedCarID = schoosedCarID
     this.cars = cars
     this.preferedWorkingHours = preferedWorkingHours
+    this.setupIsCompleted = setupIsCompleted
   }
 }
 
@@ -70,6 +72,9 @@ export const userConverter = {
     if (user.preferedWorkingHours != undefined) {
       userObject.preferedWorkingHours = user.preferedWorkingHours
     }
+    if (user.setupIsCompleted != undefined) {
+      userObject.setupIsCompleted = user.setupIsCompleted
+    }
     return userObject
   },
   fromFirestore: function (snapshot, options) {
@@ -87,6 +92,7 @@ export const userConverter = {
       travelPreference: data.travelPreference,
       schoosedCarID: data.schoosedCarID,
       preferedWorkingHours: data.preferedWorkingHours,
+      setupIsCompleted: data.setupIsCompleted,
     })
   },
 }

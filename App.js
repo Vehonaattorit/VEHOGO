@@ -73,7 +73,7 @@ function Navigation({userId}) {
         user.workDays == undefined ||
         user.travelPreference == undefined ||
         user.preferedWorkingHours == undefined ||
-        user.setupIsComplete == false
+        user.setupIsCompleted == undefined
       ) {
         return (
           <UserContext.Provider value={{user}}>
