@@ -38,7 +38,7 @@ export const Company = ({navigation}) => {
         </View>
       )}
       {showBtns === false && showJoin === true ? (
-        <JoinCompany setShowJoin={setShowJoin} setShowBtns={setShowBtns}/>
+        <JoinCompany navigation={navigation} setShowJoin={setShowJoin} setShowBtns={setShowBtns}/>
       ) : showBtns === false && showCreate === true ? (
         <CreateCompany setShowCreate={setShowCreate} setShowBtns={setShowBtns} navigation={navigation}/>
       ) : (
@@ -51,7 +51,8 @@ export const Company = ({navigation}) => {
 const styles = StyleSheet.create({
   view: {
     flex: 1,
-    backgroundColor: '#26aae2',
+    backgroundColor: 'white',
+    justifyContent: 'center'
   },
 
   button: {
