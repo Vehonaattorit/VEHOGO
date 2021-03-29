@@ -6,11 +6,19 @@ import {Address} from '../views/Address'
 import {WorkingHours} from '../views/WorkingHours'
 import {WorkingDays} from '../views/WorkingDays'
 import {SetUpInit} from '../views/SetUpInit'
+import {CreateCompany} from '../views/CreateCompany'
+
 const Stack = createStackNavigator()
 function SetUpStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+
+        <Stack.Screen
+          name="CreateCompany"
+          component={CreateCompany}
+          options={{title: 'Create A Company'}}
+        />
         <Stack.Screen
           name="Travel"
           component={Travel}
@@ -31,6 +39,7 @@ function SetUpStackNavigator() {
           component={WorkingHours}
           options={{title: 'Working Hours'}}
         />
+
         <Stack.Screen
           name="SetUpInit"
           component={SetUpInit}
