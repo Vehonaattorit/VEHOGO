@@ -64,12 +64,14 @@ function Navigation({userId}) {
     if (user != undefined) {
       // if setup is not completed
 
+      console.log('User App', user)
+
       if (
-        user.userName == undefined ||
-        user.homeLocation == undefined ||
+        user.city == undefined ||
         user.homeAddress == undefined ||
         user.workDays == undefined ||
-        user.travelPreference == undefined
+        user.travelPreference == undefined ||
+        user.preferedWorkingHours == undefined
       ) {
         return (
           <UserContext.Provider value={{user}}>
