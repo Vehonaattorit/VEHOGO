@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React, {useContext, useEffect} from 'react'
 import {StyleSheet, View, Platform} from 'react-native'
 import {CustomButton} from '../components/CustomButton'
 import {signOut} from '../controllers/LoginController'
@@ -10,6 +10,10 @@ import {updateUser} from '../controllers/userController'
 
 export const Travel = ({navigation}) => {
   const {user} = useContext(UserContext)
+
+  useEffect(() => {
+    user.setupIsCompleted = false
+  }, [])
 
   const setTravelPreference = (preference) => {
     user.travelPreference = preference
