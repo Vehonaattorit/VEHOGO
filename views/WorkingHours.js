@@ -115,8 +115,14 @@ export const WorkingHours = ({navigation}) => {
   const {user} = useContext(UserContext)
 
   const [newEventState, setNewEventState] = useState({
-    startDate: user.preferedWorkingHours[0].workDayStart.toDate(),
-    endDate: user.preferedWorkingHours[0].workDayEnd.toDate(),
+    startDate:
+      user.preferedWorkingHours === undefined
+        ? null
+        : user.preferedWorkingHours[0].workDayStart.toDate(),
+    endDate:
+      user.preferedWorkingHours === undefined
+        ? null
+        : user.preferedWorkingHours[0].workDayEnd.toDate(),
   })
 
   const updateValue = (newValue, fieldName) => {
