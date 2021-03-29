@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react'
+import React, {useEffect, useState, useContext} from 'react'
 import {
   StyleSheet,
   TouchableOpacity,
@@ -136,8 +136,14 @@ export const WorkingHours = ({navigation}) => {
 
   const [modalVisible, setModalVisible] = useState(false)
 
+  const [error, setError] = useState(false)
+
   const updateWorkHours = () => {
     const {startDate, endDate} = newEventState
+
+    if (!startDate || !endDate) {
+      return setError('Please set your working hours.')
+    }
 
     let tempArr = []
 
@@ -164,6 +170,8 @@ export const WorkingHours = ({navigation}) => {
     user.preferedWorkingHours = tempArr
 
     updateUser(user)
+
+    navigation.navigate('SetUpInit')
   }
 
   const handleModal = (visibility) => {
@@ -172,6 +180,14 @@ export const WorkingHours = ({navigation}) => {
 
   const [selectedTime, setSelectedTime] = useState('startDate')
   const [isPickerShow, setIsPickerShow] = useState(false)
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setError('')
+    }, 5000)
+
+    return () => clearTimeout(timeout)
+  }, [error])
 
   return (
     <View style={styles.container}>
@@ -228,13 +244,21 @@ export const WorkingHours = ({navigation}) => {
             }}
           />
         </View>
+        <View>
+          <Text
+            style={{
+              color: 'red',
+            }}
+          >
+            {error}
+          </Text>
+        </View>
       </View>
       <View style={styles.btnContainer}>
         <CustomButton
           title="Submit"
           onPress={() => {
             updateWorkHours()
-            navigation.navigate('SetUpInit')
           }}
         />
       </View>

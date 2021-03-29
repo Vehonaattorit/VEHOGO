@@ -2,21 +2,21 @@ import firebase from '../firebase/fire'
 import {updateUser} from '../controllers/userController'
 import {User} from '../models/user'
 
-export async function login(email, password, loginComplete) {
+export async function login(email, password) {
   try {
     await firebase.auth().signInWithEmailAndPassword(email, password)
     console.log('Log In success')
-    loginComplete()
   } catch (e) {
-    console.log('Login failed' + e)
+    console.log('Login failed' + e.message)
+
+    return e.message
   }
 }
 
-export async function register(email, password, registerComplete) {
+export async function register(email, password) {
   try {
     await firebase.auth().createUserWithEmailAndPassword(email, password)
     console.log('Register success')
-    registerComplete()
   } catch (e) {
     console.log('Register failed' + e)
   }
