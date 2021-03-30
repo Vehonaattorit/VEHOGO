@@ -34,7 +34,9 @@ const CustomInput = (props) => {
   const {onInputChange, id} = props
 
   useEffect(() => {
-    onInputChange(id, inputState.value, inputState.isValid)
+    if (inputState.touched) {
+      onInputChange(id, inputState.value, inputState.isValid)
+    }
   }, [inputState, onInputChange, id])
 
   const textChangeHandler = (text) => {
@@ -71,14 +73,16 @@ const CustomInput = (props) => {
         style={styles.input}
         value={inputState.value}
         onChangeText={textChangeHandler}
+        // is={lostFocusHandler}
         onBlur={lostFocusHandler}
       />
-      {!inputState.isValid && (
+      {!inputState.isValid && inputState.touched && (
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{props.errorText}</Text>
         </View>
       )}
     </>
+    // </View>
   )
 }
 

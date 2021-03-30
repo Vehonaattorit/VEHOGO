@@ -1,4 +1,10 @@
-import React, {useReducer, useCallback, useContext, useState} from 'react'
+import React, {
+  useEffect,
+  useReducer,
+  useCallback,
+  useContext,
+  useState,
+} from 'react'
 import {StyleSheet, Alert, View, KeyboardAvoidingView} from 'react-native'
 import {color} from '../constants/colors'
 import {Input} from 'react-native-elements'
@@ -51,20 +57,24 @@ export const Username = ({navigation}) => {
     user.userName = userName
 
     updateUser(user)
+
+    navigation.navigate('Address')
   }
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
-      userName: user ? user.userName : '',
+      userName: user.userName ? user.userName : '',
     },
     inputValidities: {
-      userName: user ? true : false,
+      userName: user.userName ? true : false,
     },
-    formIsValid: user ? true : false,
+    formIsValid: user.userName ? true : false,
   })
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
+      console.log('inputIdentifier', inputValue)
+
       dispatchFormState({
         type: FORM_INPUT_UPDATE,
         value: inputValue,
@@ -74,6 +84,20 @@ export const Username = ({navigation}) => {
     },
     [dispatchFormState, user]
   )
+
+  // const inputChangeHandler = useCallback(
+  //   (inputIdentifier, inputValue, inputValidity) => {
+  //     console.log('inputIdentifier', inputValue)
+
+  //     dispatchFormState({
+  //       type: FORM_INPUT_UPDATE,
+  //       value: inputValue,
+  //       isValid: inputValidity,
+  //       input: inputIdentifier,
+  //     })
+  //   },
+  //   [dispatchFormState]
+  // )
 
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -88,7 +112,7 @@ export const Username = ({navigation}) => {
       <View style={styles.inputContainer}>
         <CustomInput
           placeholder="Username"
-          initialValue={user.userName}
+          initialValue={formState.inputValues.userName}
           keyboardType="default"
           autoCapitalize="sentences"
           // returnKeyType="next"
@@ -111,7 +135,6 @@ export const Username = ({navigation}) => {
           title="Submit"
           onPress={() => {
             submitHandler()
-            navigation.navigate('Address')
           }}
         />
       </View>

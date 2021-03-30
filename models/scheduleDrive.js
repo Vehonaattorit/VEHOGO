@@ -49,16 +49,18 @@ export const scheduleDriveConverter = {
   },
   fromData: function (data) {
     const parsedStops = []
-    if (data.scheduledDrive.stops != undefined) {
-      data.scheduledDrive.stops.forEach((stop) => {
+    console.log('datUS perkulus', data)
+
+    if (data.stops != undefined) {
+      data.stops.forEach((stop) => {
         parsedStops.push(stopConverter.fromData(stop))
       })
     }
     return ScheduledDrive({
-      start: data.scheduledDrive.start,
-      end: data.scheduledDrive.end,
-      workTrip: data.scheduledDrive.workTrip,
-      takenSeats: data.scheduledDrive.takenSeats,
+      start: data.start,
+      end: data.end,
+      workTrip: data.workTrip,
+      takenSeats: data.takenSeats,
       stops: parsedStops,
     })
   },

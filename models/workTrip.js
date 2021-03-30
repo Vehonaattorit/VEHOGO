@@ -48,7 +48,10 @@ export const workTripConverter = {
   },
   fromFirestore: function (snapshot, options) {
     const data = snapshot.data(options)
-    return new ScheduledDrive({
+
+    console.log('workTrip fromFirestore', data)
+
+    return new WorkTrip({
       id: data.id,
       driverID: data.driverID,
       currentLocation: data.currentLocation,
@@ -58,7 +61,9 @@ export const workTripConverter = {
     })
   },
   fromData: function (data) {
-    return new ScheduledDrive({
+    console.log('data workTrip', data.id)
+
+    return new WorkTrip({
       id: data.id,
       driverID: data.driverID,
       currentLocation: data.currentLocation,
