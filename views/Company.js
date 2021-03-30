@@ -31,7 +31,7 @@ export const Company = ({navigation}) => {
       {showBtns && (
         <>
           <View style={styles.btnContainer}>
-            <View style={styles.btn}>npm
+            <View style={styles.btn}>
               <CustomButton
                 title="Create A Company"
                 onPress={() => {
