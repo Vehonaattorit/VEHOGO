@@ -41,7 +41,7 @@ export const companyConverter = {
       location: data.location,
       address: data.address,
       userIDs: data.userIDs,
-      city: data.city
+      city: data.city,
     })
   },
   fromData: function (data) {
@@ -51,7 +51,7 @@ export const companyConverter = {
       location: data.location,
       address: data.address,
       userIDs: data.userIDs,
-      city: data.city
+      city: data.city,
     })
   },
 }

@@ -14,6 +14,8 @@ export async function updateCompany(company) {
     let companyRef = db.collection('companys').doc(company.id)
 
     companyRef.withConverter(companyConverter).set(company, {merge: true})
+
+    return company.id
   } catch (error) {
     console.error('Error writing document: ', error)
   }
@@ -94,7 +96,7 @@ export async function companyQuery(field, condition, value) {
           location: doc.data().location,
           address: doc.data().address,
           userIDs: doc.data().userIDs,
-          city: doc.data().city
+          city: doc.data().city,
         })
       )
     })

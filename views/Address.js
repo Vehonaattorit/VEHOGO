@@ -14,6 +14,9 @@ import {AntDesign, FontAwesome} from '@expo/vector-icons'
 import {updateUser} from '../controllers/userController'
 import {UserContext} from '../contexts'
 import CustomInput from '../components/CustomInput'
+import GooglePlacesInput from '../components/GooglePlaceInput'
+import {googleMapsApiKey} from '../secrets/secrets'
+import firebase from 'firebase/app'
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE'
 
@@ -43,6 +46,12 @@ const formReducer = (state, action) => {
 export const Address = ({navigation}) => {
   const {user} = useContext(UserContext)
 
+  console.log('user Address', user)
+
+  const [address, setAddress] = useState(user.homeAddress || '')
+
+  console.log('address', address)
+
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       address: user ? user.homeAddress : '',
@@ -67,11 +76,10 @@ export const Address = ({navigation}) => {
     [dispatchFormState]
   )
 
-  const submitHandler = useCallback(() => {
+  const submitHandler = useCallback(async () => {
     if (
       !formState.formIsValid &&
-      formState.inputValues.address === '' &&
-      formState.inputValues.city === ''
+      (address.length > 0 || formState.inputValues.city === '')
     ) {
       Alert.alert(
         'Wrong input!',
@@ -80,16 +88,56 @@ export const Address = ({navigation}) => {
       )
       return
     }
-    const {address, city} = formState.inputValues
 
-    console.log('formState.inputValues', formState.inputValues)
+    const data = await getAddressGeoLocation()
+
+    console.log('data 2', data)
+
+    const {city} = formState.inputValues
 
     user.homeAddress = address
     user.city = city
+    user.latLng = data.point
+
     updateUser(user)
 
     navigation.navigate('WorkingDays')
   }, [formState])
+
+  const getAddressGeoLocation = async () => {
+    try {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${googleMapsApiKey}`,
+        {
+          method: 'GET',
+          //Request Type
+        }
+      )
+      const responseJson = await response.json()
+
+      const locationPoint = new firebase.firestore.GeoPoint(
+        responseJson.results[0].geometry.location.lat,
+        responseJson.results[0].geometry.location.lng
+      )
+      console.log(locationPoint)
+      var city = ''
+      responseJson.results[0].address_components.forEach((element) => {
+        if (element.types[0] === 'locality') {
+          city = element.long_name
+        }
+      })
+
+      const data = {
+        point: locationPoint,
+        city: city,
+      }
+      console.log(data)
+
+      return data
+    } catch (e) {
+      console.error(e)
+    }
+  }
 
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -102,7 +150,7 @@ export const Address = ({navigation}) => {
         )}
       </View>
       <View style={styles.inputContainer}>
-        <CustomInput
+        {/* <CustomInput
           placeholder="Address"
           initialValue={user.homeAddress}
           keyboardType="default"
@@ -114,7 +162,14 @@ export const Address = ({navigation}) => {
           errorText="Please enter a valid address."
           minLength={1}
           required
+        /> */}
+
+        <GooglePlacesInput
+          defaultValue={user.homeAddress}
+          style={{alignSelf: 'stretch'}}
+          setAddress={setAddress}
         />
+
         <CustomInput
           placeholder="City"
           initialValue={user.city}

@@ -8,15 +8,84 @@ import {CustomButton} from '../components/CustomButton'
 import {CustomTitle} from '../components/CustomTitle'
 import {AntDesign, FontAwesome} from '@expo/vector-icons'
 import {updateUser} from '../controllers/userController'
+import {WorkTrip} from '../models/workTrip'
+import {ScheduledDrive} from '../models/scheduleDrive'
+import {Car} from '../models/car'
+import {Stop} from '../models/stop'
+import {updateWorkTrip} from '../controllers/workTripController'
 
 export const SetUpInit = ({route}) => {
   const {user} = useContext(UserContext)
+
+  console.log('user company id', user.company[0].id)
+  console.log('user SetUpInit', user)
+
+  const setupWorkTripDocs = () => {
+    const workTripDocuments = user.preferedWorkingHours.reduce(
+      (res, current, index, array) => {
+        return res.concat([current, current])
+      },
+      []
+    )
+
+    // console.log('workTripDocuments', workTripDocuments)
+
+    workTripDocuments.forEach((item, i) => {
+      let index = i + 1
+
+      console.log('WHOLE ITEM', item)
+      console.log('item workDayStart', item.workDayStart)
+      console.log('item workDayEnd', item.workDayEnd)
+
+      const start =
+        index % 2 === 0 ? item.workDayEnd : new Date(2021, 3, 29, 8, 30)
+
+      const end =
+        index % 2 === 0 ? new Date(2021, 3, 29, 17, 30) : item.workDayStart
+
+      const goingTo = index % 2 === 0 ? 'home' : 'work'
+
+      updateWorkTrip(
+        user.company[0].id, // Looks for company ID that user has joined
+        new WorkTrip({
+          goingTo: goingTo,
+          currentLocation: user.homeAddress,
+          workDayNum: item.workDayNum,
+          scheduledDrive: new ScheduledDrive({
+            start: start,
+            end: end,
+            takenSeats: 3,
+            stops: [
+              new Stop({
+                location: user.city,
+                address: user.homeAddress,
+                stopName: 'Home',
+                userID: user.id,
+                latLng: user.latLng,
+              }),
+            ],
+          }),
+          car: new Car({
+            id: 'dashfihasi',
+            driverName: user.userName,
+            registerNumber: 'KIR-180',
+            vehicleDescription: 'Musta sedan',
+            availableSeats: 3,
+          }),
+        })
+      )
+    })
+  }
 
   const finishSetup = () => {
     if (!user.setupIsCompleted) {
       console.log('Setup is completed')
       user.setupIsCompleted = true
       updateUser(user)
+
+      console.log('user.travelPreference', user.travelPreference)
+
+      if (user.travelPreference === 'driver') setupWorkTripDocs()
     }
   }
 

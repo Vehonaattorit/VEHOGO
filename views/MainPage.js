@@ -1,6 +1,17 @@
 import React, {useEffect, useContext, useState} from 'react'
 import {StyleSheet} from 'react-native'
-import {Body, View, Text, Icon, Button} from 'native-base'
+import {
+  Body,
+  View,
+  Header,
+  Left,
+  Text,
+  Icon,
+  Button,
+  Container,
+  Title,
+  Right,
+} from 'native-base'
 import {UserContext} from '../contexts'
 import {signOut} from '../controllers/LoginController'
 import PendinRequestList from '../components/PendingRequestsList'
@@ -24,64 +35,6 @@ import PassengerList from './PassengerList'
 
 export const MainPage = ({navigation}) => {
   const {user} = useContext(UserContext)
-
-  // YOU NEED THIS !
-  const createAsManyWorkTripDocuments = () => {
-    const workTripDocuments = user.preferedWorkingHours.reduce(
-      (res, current, index, array) => {
-        return res.concat([current, current])
-      },
-      []
-    )
-
-    console.log('workTripDocuments', workTripDocuments)
-
-    workTripDocuments.forEach((item, i) => {
-      let index = i + 1
-
-      const start =
-        index % 2 === 0
-          ? item.workDayEnd.toDate()
-          : new Date(2021, 3, 29, 8, 30)
-
-      const end =
-        index % 2 === 0
-          ? new Date(2021, 3, 29, 17, 30)
-          : item.workDayStart.toDate()
-      console.log('INDEKSUS', index)
-
-      updateWorkTrip(
-        '515bb500-84b0-424f-8017-e0060f953562',
-        new WorkTrip({
-          car: 'Jotain',
-          currentLocation: 'Jotain',
-          scheduledDrive: 'dajioasjodi',
-          workDayNum: item.workDayNum,
-          scheduledDrive: new ScheduledDrive({
-            start: start,
-            end: end,
-            takenSeats: 3,
-            stops: [
-              new Stop({
-                location: user.city,
-                address: user.homeAddress,
-                stopName: 'Home',
-                userID: user.id,
-              }),
-            ],
-          }),
-          car: new Car({
-            id: 'dashfihasi',
-            driverName: 'Mental Mickey',
-            registerNumber: 'KIR-180',
-            vehicleDescription: 'Musta sedan',
-            availableSeats: 3,
-          }),
-        })
-      )
-    })
-  }
-  // END
 
   const signedOut = () => {
     //executed when signin out
@@ -110,8 +63,14 @@ export const MainPage = ({navigation}) => {
     },
   ]
 
+  // useEffect(() => {
+  //   navigation.setOptions({
+  //     headerTitle: 'none',
+  //   })
+  // }, [navigation])
+
   useEffect(() => {
-    // checkTravelPreference()
+    checkTravelPreference()
     // createAsManyWorkTripDocuments()
   }, [travelPreference])
 
@@ -124,19 +83,47 @@ export const MainPage = ({navigation}) => {
 
     console.log('travelPreference', travelPreference)
 
-    const result = await getWorkTrips('515bb500-84b0-424f-8017-e0060f953562')
+    const result = await getWorkTrips(user.company[0].id)
 
     setPassengerList(result)
     console.log('result', result)
   }
 
+  const displayPassengerList = () => {
+    if (travelPreference === 'passenger') {
+      return (
+        <Container>
+          <Header>
+            <Left>
+              <Button transparent>
+                <Icon name="arrow-back" />
+              </Button>
+            </Left>
+            <Body>
+              <Title>Header</Title>
+            </Body>
+            <Right>
+              <Button
+                onPress={() => {
+                  console.log('Sort & ORder')
+                }}
+                transparent
+              >
+                <Icon name="menu" />
+              </Button>
+            </Right>
+          </Header>
+          <View style={styles.listView}>
+            <PassengerList navigation={navigation} dataArray={passengerList} />
+          </View>
+        </Container>
+      )
+    }
+  }
+
   return (
     <View style={styles.view}>
-      {travelPreference === 'passenger' && (
-        <View style={styles.listView}>
-          <PassengerList navigation={navigation} dataArray={passengerList} />
-        </View>
-      )}
+      {displayPassengerList()}
 
       <View style={styles.scheduleView}>
         <Button

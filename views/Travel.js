@@ -13,6 +13,7 @@ export const Travel = ({navigation}) => {
 
   const setTravelPreference = (preference) => {
     user.travelPreference = preference
+
     updateUser(user)
   }
 

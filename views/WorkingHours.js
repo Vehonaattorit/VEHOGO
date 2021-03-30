@@ -123,11 +123,15 @@ export const WorkingHours = ({navigation}) => {
     startDate:
       user.preferedWorkingHours === undefined
         ? null
-        : user.preferedWorkingHours[0].workDayStart.toDate(),
+        : user.preferedWorkingHours[0].workDayStart.toDate()
+        ? user.preferedWorkingHours[0].workDayStart.toDate()
+        : user.preferedWorkingHours[0].workDayStart,
     endDate:
       user.preferedWorkingHours === undefined
         ? null
-        : user.preferedWorkingHours[0].workDayEnd.toDate(),
+        : user.preferedWorkingHours[0].workDayEnd.toDate()
+        ? user.preferedWorkingHours[0].workDayEnd.toDate()
+        : user.preferedWorkingHours[0].workDayEnd,
   })
 
   const updateValue = (newValue, fieldName) => {
