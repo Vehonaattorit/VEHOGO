@@ -83,16 +83,7 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
             'Company name must be at least 1 character long'
           }
         />
-        {/* <Input
-          placeholder="Address"
-          value={companyAddress}
-          onChangeText={setAddress}
-          errorMessage={
-            companyAddress.length < 1 &&
-            'Company address must be at least 1 character long'
-          }
-        />  */}
-        <GooglePlacesInput />
+        <GooglePlacesInput setAddress={setAddress} />
       </View>
       <View style={styles.btnContainer}>
         <CustomButton
