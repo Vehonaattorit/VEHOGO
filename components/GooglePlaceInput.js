@@ -13,7 +13,7 @@ const GooglePlacesInput = ({setAddress}) => {
   return (
     <GooglePlacesAutocomplete
 
-      placeholder="Search"
+      placeholder="Search address"
       onPress={(data, details = null) => {
         // 'details' is provided when fetchDetails = true
         setAddress(data.description)

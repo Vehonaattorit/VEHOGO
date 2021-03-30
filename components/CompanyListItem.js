@@ -24,7 +24,6 @@ export const CompanyListItem = ({singleItem, navigation}) => {
           location: singleItem.location
         }
       ]
-      console.log(companyUserData)
       console.log('updating user')
       user.company = companyUserData
       updateUser(user)
@@ -50,6 +49,11 @@ export const CompanyListItem = ({singleItem, navigation}) => {
           <Left>
             <Icon active name="location-outline" />
             <Text style={styles.title}>{singleItem.address}</Text>
+          </Left>
+        </CardItem>
+        <CardItem style={styles.item}>
+          <Left>
+            <Text style={styles.title}>City: {singleItem.city}</Text>
           </Left>
         </CardItem>
       </Card>

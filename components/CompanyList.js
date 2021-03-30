@@ -1,12 +1,10 @@
 import React from 'react';
 import {FlatList} from 'react-native';
 import {StyleSheet} from 'react-native'
-import {View, Input} from 'native-base';
 import {CompanyListItem} from '../components/CompanyListItem'
 
 export const CompanyList = ({navigation, companyData}) => {
   return (
-
 
       <FlatList
         data={companyData}
@@ -15,7 +13,6 @@ export const CompanyList = ({navigation, companyData}) => {
           <CompanyListItem singleItem={item} navigation={navigation} />
         }
       />
-
   );
 };
 

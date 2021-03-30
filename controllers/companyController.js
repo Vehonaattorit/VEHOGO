@@ -94,6 +94,7 @@ export async function companyQuery(field, condition, value) {
           location: doc.data().location,
           address: doc.data().address,
           userIDs: doc.data().userIDs,
+          city: doc.data().city
         })
       )
     })
