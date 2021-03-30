@@ -2,27 +2,41 @@ import React from 'react'
 import {StyleSheet} from 'react-native'
 import {Content, Card, CardItem, Text, Left, Right, Icon} from 'native-base'
 
-const PassengerListItem = ({singleItem}) => {
+import {TouchableOpacity} from 'react-native'
+
+const PassengerListItem = ({navigation, singleItem}) => {
+  const {car} = singleItem
+
   return (
-    <Content>
-      <Card style={styles.list}>
-        <CardItem style={styles.item}>
-          <Left>
-            <Icon active name="person-outline" />
-            <Text style={styles.title}>{singleItem.name}</Text>
-          </Left>
-          <Right>
-            <Text style={styles.title}>{singleItem.distance}km</Text>
-          </Right>
-        </CardItem>
-        <CardItem style={styles.item}>
-          <Left>
-            <Icon active name="location-outline" />
-            <Text style={styles.title}>{singleItem.address}</Text>
-          </Left>
-        </CardItem>
-      </Card>
-    </Content>
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate('RequestRide', {
+          singleItem,
+        })
+      }
+    >
+      <Content>
+        <Card style={styles.list}>
+          <CardItem style={styles.item}>
+            <Left>
+              <Icon active name="person-outline" />
+              <Text style={styles.title}>{car.driverName}</Text>
+            </Left>
+            <Right>
+              <Text style={styles.title}>{singleItem.distance}20 km</Text>
+            </Right>
+          </CardItem>
+          <CardItem style={styles.item}>
+            <Left>
+              <Icon active name="location-outline" />
+              <Text style={styles.title}>
+                {/* {singleItem.address}Espoon keskus */}
+              </Text>
+            </Left>
+          </CardItem>
+        </Card>
+      </Content>
+    </TouchableOpacity>
   )
 }
 

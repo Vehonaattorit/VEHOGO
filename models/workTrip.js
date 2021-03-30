@@ -9,13 +9,14 @@ export class WorkTrip {
     car,
     currentLocation,
     scheduledDrive,
+    pendingRideRequests,
   }) {
     this.id = id
     this.driverID = driverID
     this.currentLocation = currentLocation
     this.workDayNum = workDayNum
     this.scheduledDrive = scheduledDrive
-    this.car = car
+    ;(this.car = car), (this.pendingRideRequests = pendingRideRequests)
   }
 }
 
@@ -44,27 +45,34 @@ export const workTripConverter = {
       workTripObject.car = carConverter.toFirestore(workTrip.car)
     }
 
+    if (workTrip.pendingRideRequests != undefined) {
+      workTripObject.pendingRideRequests = workTrip.pendingRideRequests
+    }
+
     return workTripObject
   },
   fromFirestore: function (snapshot, options) {
     const data = snapshot.data(options)
-    return new ScheduledDrive({
+
+    return new WorkTrip({
       id: data.id,
       driverID: data.driverID,
       currentLocation: data.currentLocation,
       workDayNum: data.workDayNum,
-      scheduledDrive: scheduleDriveConverter.fromData(data.scheduledDrive),
-      car: carConverter.fromData(data.car),
+      scheduledDrive: data.scheduledDrive,
+      pendingRideRequests: data.pendingRideRequests,
+      car: data.car,
     })
   },
   fromData: function (data) {
-    return new ScheduledDrive({
+    return new WorkTrip({
       id: data.id,
       driverID: data.driverID,
       currentLocation: data.currentLocation,
       workDayNum: data.workDayNum,
-      scheduledDrive: scheduleDriveConverter.fromData(data.scheduledDrive),
-      car: carConverter.fromData(data.car),
+      scheduledDrive: data.scheduledDrive,
+      pendingRideRequests: data.pendingRideRequests,
+      car: data.car,
     })
   },
 }

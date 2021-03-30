@@ -1,4 +1,5 @@
-import {stopConverter} from './stop'
+import {stopConverter, Stop} from './stop'
+
 export class ScheduledDrive {
   constructor({id, start, end, workTrip, takenSeats, stops}) {
     this.start = start
@@ -23,8 +24,6 @@ export const scheduleDriveConverter = {
     }
     if (scheduledDrive.stops != undefined && scheduledDrive.stops.length > 0) {
       const stops = []
-
-      console.log('STOPUS', scheduledDrive.stops)
 
       scheduledDrive.stops.forEach((stop) => {
         stops.push(stopConverter.toFirestore(stop))
@@ -51,17 +50,29 @@ export const scheduleDriveConverter = {
   },
   fromData: function (data) {
     const parsedStops = []
-    if (data.scheduledDrive.stops != undefined) {
-      data.scheduledDrive.stops.forEach((stop) => {
-        parsedStops.push(stopConverter.fromData(stop))
+
+    if (data != undefined) {
+      if (data.stops != undefined) {
+        data.stops.forEach((stop) => {
+          parsedStops.push(
+            Stop({
+              location: stop.location,
+              address: stop.address,
+              stopName: stop.stopName,
+              userID: stop.userID,
+            })
+          )
+        })
+      }
+      return ScheduledDrive({
+        start: data.start,
+        end: data.end,
+        workTrip: data.workTrip,
+        takenSeats: data.takenSeats,
+        stops: parsedStops,
       })
     }
-    return ScheduledDrive({
-      start: data.scheduledDrive.start,
-      end: data.scheduledDrive.end,
-      workTrip: data.scheduledDrive.workTrip,
-      takenSeats: data.scheduledDrive.takenSeats,
-      stops: parsedStops,
-    })
+
+    return undefined
   },
 }

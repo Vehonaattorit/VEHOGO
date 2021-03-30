@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useRef, useEffect} from 'react'
 import {useState} from 'react'
 import {StyleSheet, View} from 'react-native'
 import {color} from '../constants/colors'
@@ -14,9 +14,28 @@ export const SignUp = ({navigation}) => {
 
   const [error, setError] = useState('')
 
-  const registerUser = async () => {
-    await register(email, password)
+  const mountedRef = useRef(true)
+
+  const registerUser = () => {
+    register(email, password)
+      .then((res) => {
+        if (!mountedRef.current) return null
+
+        setError(res)
+      })
+      .catch((err) => {
+        if (!mountedRef.current) return null
+        setError(err)
+
+        throw err
+      })
   }
+
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false
+    }
+  }, [])
 
   useEffect(() => {
     const timeout = setTimeout(() => {

@@ -53,7 +53,12 @@ export async function getWorkTrips(companyId) {
       .get()
     const workTripList = []
     snapShot.forEach((doc) => {
+      console.log('docus', doc)
+
       const data = doc.data()
+
+      console.log('datassss', data)
+
       workTripList.push(workTripConverter.fromData(data))
     })
     return workTripList

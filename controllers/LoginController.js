@@ -4,8 +4,9 @@ import {User} from '../models/user'
 
 export async function login(email, password) {
   try {
-    await firebase.auth().signInWithEmailAndPassword(email, password)
     console.log('Log In success')
+
+    await firebase.auth().signInWithEmailAndPassword(email, password)
   } catch (e) {
     console.log('Login failed' + e.message)
 
@@ -15,10 +16,12 @@ export async function login(email, password) {
 
 export async function register(email, password) {
   try {
-    await firebase.auth().createUserWithEmailAndPassword(email, password)
     console.log('Register success')
+
+    await firebase.auth().createUserWithEmailAndPassword(email, password)
   } catch (e) {
-    console.log('Register failed' + e)
+    console.log('Register failed' + e.message)
+    return e.message
   }
 }
 

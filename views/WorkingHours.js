@@ -6,6 +6,7 @@ import {
   Platform,
   Text,
   View,
+  Alert,
 } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import {MaterialCommunityIcons} from '@expo/vector-icons'
@@ -20,6 +21,10 @@ import {formatTime} from '../utils/utils'
 
 const DateTimeInput = (props) => {
   const [showTimePicker, setShowTimePicker] = useState(Platform.OS === 'ios')
+
+  useEffect(() => {
+    props.onChange('', new Date())
+  }, [])
 
   return (
     <View style={Platform.OS === 'android' ? styles.dateTime : null}>
@@ -64,7 +69,6 @@ const TimeModal = ({
 
   return (
     <Modal
-      bac
       style={{
         flex: 1,
         alignItems: 'center',
@@ -138,11 +142,16 @@ export const WorkingHours = ({navigation}) => {
 
   const [error, setError] = useState(false)
 
-  const updateWorkHours = () => {
+  const submitHandler = () => {
     const {startDate, endDate} = newEventState
 
     if (!startDate || !endDate) {
-      return setError('Please set your working hours.')
+      Alert.alert('Wrong input!', 'Please check the errors in the form.', [
+        {text: 'Okay'},
+      ])
+      setError('Please set your working hours.')
+
+      return
     }
 
     let tempArr = []
@@ -245,22 +254,11 @@ export const WorkingHours = ({navigation}) => {
           />
         </View>
         <View>
-          <Text
-            style={{
-              color: 'red',
-            }}
-          >
-            {error}
-          </Text>
+          <Text style={styles.errorText}>{error}</Text>
         </View>
       </View>
       <View style={styles.btnContainer}>
-        <CustomButton
-          title="Submit"
-          onPress={() => {
-            updateWorkHours()
-          }}
-        />
+        <CustomButton title="Submit" onPress={submitHandler} />
       </View>
     </View>
   )
@@ -297,5 +295,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  errorText: {
+    color: 'red',
   },
 })
