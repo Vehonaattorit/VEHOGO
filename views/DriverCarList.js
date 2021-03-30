@@ -1,15 +1,24 @@
 import React, {useEffect, useContext, useState} from 'react'
 import {SafeAreaView, StyleSheet, FlatList} from 'react-native'
-import {Content, Card, CardItem, Body, Container, View, Text, Icon, Button, Title} from 'native-base'
+import {
+  Content,
+  Card,
+  CardItem,
+  Body,
+  Container,
+  View,
+  Text,
+  Icon,
+  Button,
+  Title,
+} from 'native-base'
 import PassengerList from './PassengerList'
 import {getCars} from '../controllers/carController'
 import DriverCarListItem from '../components/DriverCarListItem'
 import {UserContext} from '../contexts'
 import NewRideForm from './NewRideForm'
 
-
 export const DriverCarList = ({navigation}) => {
-
   const {user} = useContext(UserContext)
   const [carList, setCarList] = useState([])
   const [showList, setListVisibility] = useState(true)
@@ -25,28 +34,41 @@ export const DriverCarList = ({navigation}) => {
   }, [])
 
   return (
-    <SafeAreaView style={styles.view}>
-
+    <View style={styles.view}>
       {showList ? (
         <>
-          <Button block style={styles.button} onPress={() => {setListVisibility(false)}} ><Text>create Car</Text></Button>
+          <Button
+            block
+            style={styles.button}
+            onPress={() => {
+              setListVisibility(false)
+            }}
+          >
+            <Text>create Car</Text>
+          </Button>
           <View style={styles.listView}>
             <FlatList
               data={carList}
               keyExtractor={(item, index) => index.toString()}
-              renderItem={({item}) =>
-                <DriverCarListItem singleItem={item} navigation={navigation} loadCars={loadCars} />
-              }
+              renderItem={({item}) => (
+                <DriverCarListItem
+                  singleItem={item}
+                  navigation={navigation}
+                  loadCars={loadCars}
+                />
+              )}
             />
           </View>
         </>
       ) : (
-        <NewRideForm setListVisibility={setListVisibility} modify={false} loadCars={loadCars}></NewRideForm>
-      )
-      }
-    </SafeAreaView>
-
-  );
+        <NewRideForm
+          setListVisibility={setListVisibility}
+          modify={false}
+          loadCars={loadCars}
+        ></NewRideForm>
+      )}
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -60,7 +82,6 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    marginTop: 10
-  }
-
-});
+    marginTop: 10,
+  },
+})

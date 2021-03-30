@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {View, Text} from 'react-native'
+import {View, SafeAreaView, Text} from 'react-native'
 import MainStackNavigator from './navigators/MainNavigator'
 import AuthStackNavigator from './navigators/AuthenticationNavigator'
 import SetUpStackNavigator from './navigators/SetUpNavigator'
@@ -50,9 +50,9 @@ export default function App() {
   }
 
   return (
-    <View style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1}}>
       <Navigation userId={userId} />
-    </View>
+    </SafeAreaView>
   )
 }
 

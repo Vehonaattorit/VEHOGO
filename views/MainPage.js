@@ -1,5 +1,5 @@
 import React, {useEffect, useContext, useState} from 'react'
-import {SafeAreaView, StyleSheet} from 'react-native'
+import {StyleSheet} from 'react-native'
 import {Body, View, Text, Icon, Button} from 'native-base'
 import {UserContext} from '../contexts'
 import {signOut} from '../controllers/LoginController'
@@ -131,7 +131,7 @@ export const MainPage = ({navigation}) => {
   }
 
   return (
-    <SafeAreaView style={styles.view}>
+    <View style={styles.view}>
       {travelPreference === 'passenger' && (
         <View style={styles.listView}>
           <PassengerList navigation={navigation} dataArray={passengerList} />
@@ -162,7 +162,7 @@ export const MainPage = ({navigation}) => {
           <Text>DriverCarList</Text>
         </Button>
       </View>
-    </SafeAreaView>
+    </View>
   )
 }
 
