@@ -1,6 +1,6 @@
 import React, {useEffect, useContext, useState} from 'react'
 import {SafeAreaView, StyleSheet} from 'react-native'
-import {Body, View, Text, Icon, Button} from 'native-base'
+import {Body, View, Text, Icon, Button, Picker} from 'native-base'
 import {UserContext} from '../contexts'
 import {signOut} from '../controllers/LoginController'
 import PendinRequestList from '../components/PendingRequestsList'
@@ -51,11 +51,10 @@ export const MainPage = ({navigation}) => {
       console.log('INDEKSUS', index)
 
       updateWorkTrip(
-        '515bb500-84b0-424f-8017-e0060f953562',
+        'd4d45748-4024-4ec0-baa3-720f89c004d1',
         new WorkTrip({
           car: 'Jotain',
-          currentLocation: 'Jotain',
-          scheduledDrive: 'dajioasjodi',
+          currentLocation: 'Vantaa',
           workDayNum: item.workDayNum,
           scheduledDrive: new ScheduledDrive({
             start: start,
@@ -71,8 +70,8 @@ export const MainPage = ({navigation}) => {
             ],
           }),
           car: new Car({
-            id: 'dashfihasi',
-            driverName: 'Mental Mickey',
+            id: '9034895y7hiu4t489023q',
+            driverName: 'Michael Lock',
             registerNumber: 'KIR-180',
             vehicleDescription: 'Musta sedan',
             availableSeats: 3,
@@ -111,7 +110,7 @@ export const MainPage = ({navigation}) => {
   ]
 
   useEffect(() => {
-    // checkTravelPreference()
+    checkTravelPreference()
     // createAsManyWorkTripDocuments()
   }, [travelPreference])
 
@@ -124,11 +123,13 @@ export const MainPage = ({navigation}) => {
 
     console.log('travelPreference', travelPreference)
 
-    const result = await getWorkTrips('515bb500-84b0-424f-8017-e0060f953562')
+    const result = await getWorkTrips('d4d45748-4024-4ec0-baa3-720f89c004d1')
 
     setPassengerList(result)
     console.log('result', result)
   }
+
+  const [language, setLanguage] = useState('Java')
 
   return (
     <SafeAreaView style={styles.view}>
@@ -139,6 +140,14 @@ export const MainPage = ({navigation}) => {
       )}
 
       <View style={styles.scheduleView}>
+        <Picker
+          selectedValue={language}
+          style={{height: 50, width: 100}}
+          onValueChange={(itemValue, itemIndex) => setLanguage(itemValue)}
+        >
+          <Picker.Item label="Java" value="java" />
+          <Picker.Item label="JavaScript" value="js" />
+        </Picker>
         <Button
           style={styles.button}
           onPress={() => navigation.navigate('OutlookCalendar')}
