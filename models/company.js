@@ -1,10 +1,11 @@
 export class Company {
-  constructor({id, displayName, location, address, userIDs, workTrips}) {
+  constructor({id, displayName, location, address, userIDs, city, workTrips}) {
     this.id = id
     this.displayName = displayName
     this.location = location
     this.address = address
     this.userIDs = userIDs
+    this.city = city
   }
 }
 
@@ -27,6 +28,9 @@ export const companyConverter = {
     if (company.userIDs != undefined) {
       companyObject.userIDs = company.userIDs
     }
+    if (company.city != undefined) {
+      companyObject.city = company.city
+    }
     return companyObject
   },
   fromFirestore: function (snapshot, options) {
@@ -37,6 +41,7 @@ export const companyConverter = {
       location: data.location,
       address: data.address,
       userIDs: data.userIDs,
+      city: data.city
     })
   },
   fromData: function (data) {
@@ -46,6 +51,7 @@ export const companyConverter = {
       location: data.location,
       address: data.address,
       userIDs: data.userIDs,
+      city: data.city
     })
   },
 }

@@ -1,13 +1,22 @@
-import React from 'react'
+import React, {useEffect, useRef} from 'react'
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete'
 import {googleMapsApiKey} from '../secrets/secrets'
-const GooglePlacesInput = () => {
+const GooglePlacesInput = ({setAddress}) => {
+
+  const ref = useRef();
+
+  useEffect(() => {
+    ref.current?.setAddressText('Some Text')
+    console.log(ref.current?.getAddressText())
+  }, []);
+
   return (
     <GooglePlacesAutocomplete
-      placeholder="Search"
+
+      placeholder="Search address"
       onPress={(data, details = null) => {
         // 'details' is provided when fetchDetails = true
-        console.log(data, details)
+        setAddress(data.description)
       }}
       query={{
         key: googleMapsApiKey,

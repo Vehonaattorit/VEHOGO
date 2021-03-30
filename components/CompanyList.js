@@ -1,11 +1,11 @@
 import React from 'react';
 import {FlatList} from 'react-native';
-import {View} from 'native-base';
+import {StyleSheet} from 'react-native'
 import {CompanyListItem} from '../components/CompanyListItem'
 
 export const CompanyList = ({navigation, companyData}) => {
   return (
-    <View>
+
       <FlatList
         data={companyData}
         keyExtractor={(item, index) => index.toString()}
@@ -13,8 +13,12 @@ export const CompanyList = ({navigation, companyData}) => {
           <CompanyListItem singleItem={item} navigation={navigation} />
         }
       />
-    </View>
   );
 };
 
+const styles = StyleSheet.create({
+
+
+
+})
 export default CompanyList;

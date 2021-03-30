@@ -1,5 +1,6 @@
 import React, {useState, useContext} from 'react'
 import {StyleSheet, View, KeyboardAvoidingView} from 'react-native'
+import {Button, Item, Text} from 'native-base'
 import {color} from '../constants/colors'
 import {Input} from 'react-native-elements'
 import {CustomButton} from '../components/CustomButton'
@@ -12,6 +13,8 @@ import {UserContext} from '../contexts'
 import firebase from 'firebase/app'
 import {updateUser} from '../controllers/userController'
 import GooglePlacesInput from '../components/GooglePlaceInput'
+import {updateCompanyCity} from '../controllers/companyCitiesController'
+
 
 export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
   const [companyAddress, setAddress] = useState('')
@@ -28,27 +31,42 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
         }
       )
       const responseJson = await response.json()
-      console.log('fetched')
-      console.log(responseJson)
-      const point = new firebase.firestore.GeoPoint(
+
+      const locationPoint = new firebase.firestore.GeoPoint(
         responseJson.results[0].geometry.location.lat,
         responseJson.results[0].geometry.location.lng
       )
-      return point
+      console.log(locationPoint)
+      var city = ''
+      responseJson.results[0].address_components.forEach(element => {
+        if (element.types[0] === 'locality') {
+          city = element.long_name
+        }
+      });
+
+      const data = {
+        point: locationPoint,
+        city: city
+      }
+      console.log(data)
+
+      return data
     } catch (e) {
       console.error(e)
     }
   }
-
   const sendCompanyData = async () => {
     if (companyAddress.length > 0 && companyName.length > 0) {
-      const point = await getCompanyGeoLocation()
+      const data = await getCompanyGeoLocation()
+
+      updateCompanyCity(data.city)
       updateCompany(
         new Company({
           address: companyAddress,
           displayName: companyName,
           userIDs: [user.id],
-          location: point,
+          location: data.point,
+          city: data.city
         })
       )
 
@@ -56,10 +74,9 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
         {
           address: companyAddress,
           name: companyName,
-          location: point,
+          location: data.point,
         },
       ]
-      console.log('updating user')
       user.company = companyUserData
       updateUser(user)
 
@@ -74,42 +91,33 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
     <View style={styles.container}>
       <CustomTitle title="Company" />
       <View style={styles.inputContainer}>
-        <Input
-          placeholder="Company name"
-          value={companyName}
-          onChangeText={setName}
-          errorMessage={
-            companyName.length < 1 &&
-            'Company name must be at least 1 character long'
-          }
-        />
-        {/* <Input
-          placeholder="Address"
-          value={companyAddress}
-          onChangeText={setAddress}
-          errorMessage={
-            companyAddress.length < 1 &&
-            'Company address must be at least 1 character long'
-          }
-        />  */}
-        <GooglePlacesInput />
+        <Item>
+          <Input
+            placeholder="Company name"
+            value={companyName}
+            onChangeText={setName}
+            errorMessage={
+              companyName.length < 1 &&
+              'Company name must be at least 1 character long'
+            }
+          />
+        </Item>
+        <Item>
+          <GooglePlacesInput style={{alignSelf: 'stretch'}} setAddress={setAddress} />
+        </Item>
       </View>
       <View style={styles.btnContainer}>
-        <CustomButton
-          style={styles.btns}
-          title="Continue"
-          r
+        <Button block style={styles.btns}
           onPress={() => {
             sendCompanyData()
           }}
-        />
-        <CustomButton
-          title="Cancel"
+        ><Text>Continue</Text></Button>
+        <Button block style={styles.btns}
           onPress={() => {
             setShowCreate(false)
             setShowBtns(true)
           }}
-        />
+        ><Text>Cancel</Text></Button>
       </View>
     </View>
   )
@@ -118,13 +126,13 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
   },
   inputContainer: {
-    flex: 2,
+    alignSelf: 'stretch'
   },
-  btnContainer: {
-    flex: 1,
-  },
+  btns: {
+    margin: 5
+  }
+
 })

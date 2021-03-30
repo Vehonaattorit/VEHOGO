@@ -83,6 +83,7 @@ export async function companyQuery(field, condition, value) {
       .collection('companys')
       .withConverter(companyConverter)
       .where(field, condition, value)
+      .get()
 
     const companyList = []
     querySnapshot.forEach((doc) => {
@@ -93,6 +94,7 @@ export async function companyQuery(field, condition, value) {
           location: doc.data().location,
           address: doc.data().address,
           userIDs: doc.data().userIDs,
+          city: doc.data().city
         })
       )
     })
