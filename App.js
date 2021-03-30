@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {View} from 'react-native'
+import {View, Text} from 'react-native'
 import MainStackNavigator from './navigators/MainNavigator'
 import AuthStackNavigator from './navigators/AuthenticationNavigator'
 import SetUpStackNavigator from './navigators/SetUpNavigator'
