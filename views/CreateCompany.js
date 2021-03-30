@@ -11,12 +11,12 @@ import {Company} from '../models/company'
 import {UserContext} from '../contexts'
 import firebase from 'firebase/app'
 import {updateUser} from '../controllers/userController'
+import GooglePlacesInput from '../components/GooglePlaceInput'
 
 export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
   const [companyAddress, setAddress] = useState('')
   const [companyName, setName] = useState('')
   const {user} = useContext(UserContext)
-
 
   const getCompanyGeoLocation = async () => {
     try {
@@ -34,7 +34,6 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
         responseJson.results[0].geometry.location.lat,
         responseJson.results[0].geometry.location.lng
       )
-
       return point
     } catch (e) {
       console.error(e)
@@ -44,14 +43,21 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
   const sendCompanyData = async () => {
     if (companyAddress.length > 0 && companyName.length > 0) {
       const point = await getCompanyGeoLocation()
-      updateCompany(new Company({address: companyAddress, displayName: companyName, userIDs: [user.id], location: point}))
+      updateCompany(
+        new Company({
+          address: companyAddress,
+          displayName: companyName,
+          userIDs: [user.id],
+          location: point,
+        })
+      )
 
       const companyUserData = [
         {
           address: companyAddress,
           name: companyName,
-          location: point
-        }
+          location: point,
+        },
       ]
       console.log('updating user')
       user.company = companyUserData
@@ -62,40 +68,37 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
     } else {
       console.log('inputs empty')
     }
-
   }
 
   return (
-    <KeyboardAvoidingView behavior="padding" style={styles.container}>
+    <View style={styles.container}>
       <CustomTitle title="Company" />
-      <View style={styles.icon}>
-        <MaterialCommunityIcons
-          name="home-account"
-          size={300}
-          color={color.secondaryDark}
-        />
-      </View>
       <View style={styles.inputContainer}>
         <Input
           placeholder="Company name"
           value={companyName}
           onChangeText={setName}
-          errorMessage={companyName.length < 1 &&
+          errorMessage={
+            companyName.length < 1 &&
             'Company name must be at least 1 character long'
           }
         />
-
-        <Input placeholder="Address"
+        {/* <Input
+          placeholder="Address"
           value={companyAddress}
           onChangeText={setAddress}
-          errorMessage={companyAddress.length < 1 &&
+          errorMessage={
+            companyAddress.length < 1 &&
             'Company address must be at least 1 character long'
           }
-        />
-
+        />  */}
+        <GooglePlacesInput />
+      </View>
+      <View style={styles.btnContainer}>
         <CustomButton
           style={styles.btns}
           title="Continue"
+          r
           onPress={() => {
             sendCompanyData()
           }}
@@ -108,8 +111,7 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
           }}
         />
       </View>
-
-    </KeyboardAvoidingView>
+    </View>
   )
 }
 
@@ -120,13 +122,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   inputContainer: {
-    position: 'absolute',
-    justifyContent: 'flex-end',
-    bottom: 60,
-    width: '90%',
-    color: 'white',
+    flex: 2,
   },
-  icon: {
-    marginBottom: 100,
+  btnContainer: {
+    flex: 1,
   },
 })

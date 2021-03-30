@@ -27,7 +27,6 @@ export const companyConverter = {
     if (company.userIDs != undefined) {
       companyObject.userIDs = company.userIDs
     }
-
     return companyObject
   },
   fromFirestore: function (snapshot, options) {
