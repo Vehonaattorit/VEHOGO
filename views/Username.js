@@ -87,20 +87,6 @@ export const Username = ({navigation}) => {
     [dispatchFormState, user]
   )
 
-  // const inputChangeHandler = useCallback(
-  //   (inputIdentifier, inputValue, inputValidity) => {
-  //     console.log('inputIdentifier', inputValue)
-
-  //     dispatchFormState({
-  //       type: FORM_INPUT_UPDATE,
-  //       value: inputValue,
-  //       isValid: inputValidity,
-  //       input: inputIdentifier,
-  //     })
-  //   },
-  //   [dispatchFormState]
-  // )
-
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <CustomTitle title="Select username" />
@@ -124,12 +110,6 @@ export const Username = ({navigation}) => {
           minLength={1}
           required
         />
-        {/* <Input
-          placeholder="Username"
-          value={username}
-          onChangeText={(value) => setUsername(value)}
-        />
-        <Text>{usernameError}</Text> */}
 
         <CustomButton
           style={styles.btns}
