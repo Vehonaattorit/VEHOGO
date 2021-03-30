@@ -69,7 +69,8 @@ export const Address = ({navigation}) => {
 
   const submitHandler = useCallback(() => {
     if (
-      (!formState.formIsValid && formState.inputValues.address === '') ||
+      !formState.formIsValid &&
+      formState.inputValues.address === '' &&
       formState.inputValues.city === ''
     ) {
       Alert.alert(
@@ -80,6 +81,8 @@ export const Address = ({navigation}) => {
       return
     }
     const {address, city} = formState.inputValues
+
+    console.log('formState.inputValues', formState.inputValues)
 
     user.homeAddress = address
     user.city = city
