@@ -73,7 +73,6 @@ const CustomInput = (props) => {
         </View>
       )}
     </>
-    // </View>
   )
 }
 
