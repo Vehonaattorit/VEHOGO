@@ -71,6 +71,13 @@ function MainStackNavigator() {
             title: 'DriverCarList',
           }}
         />
+        <Stack.Screen
+          name="RequestRide"
+          component={DriverAcceptRefuse}
+          options={{
+            title: 'Request Ride',
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   )

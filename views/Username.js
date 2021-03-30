@@ -45,10 +45,12 @@ export const Username = ({navigation}) => {
   const {user} = useContext(UserContext)
 
   const submitHandler = () => {
-    if (!formState.formIsValid) {
-      Alert.alert('Wrong input!', 'Please check the errors in the form.', [
-        {text: 'Okay'},
-      ])
+    if (!formState.formIsValid && formState.inputValues.userName === '') {
+      Alert.alert(
+        'Wrong input!',
+        'Please create a username that has at least 1 letter.',
+        [{text: 'Okay'}]
+      )
       return
     }
 
@@ -115,7 +117,6 @@ export const Username = ({navigation}) => {
           initialValue={formState.inputValues.userName}
           keyboardType="default"
           autoCapitalize="sentences"
-          // returnKeyType="next"
           id="userName"
           autoCorrect={false}
           onInputChange={inputChangeHandler}

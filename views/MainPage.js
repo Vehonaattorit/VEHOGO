@@ -14,7 +14,6 @@ import {useDocumentData} from 'react-firebase-hooks/firestore'
 import 'firebase/firestore'
 import {getWorkTrips, updateWorkTrip} from '../controllers/workTripController'
 
-import {Company} from '../models/company'
 import {WorkTrip} from '../models/workTrip'
 import {ScheduledDrive} from '../models/scheduleDrive'
 import {Stop} from '../models/stop'
@@ -111,33 +110,14 @@ export const MainPage = ({navigation}) => {
     },
   ]
 
-  const passengerList = [
-    {
-      id: 0,
-      name: 'Michael',
-      distance: '20',
-      address: 'Junatie 12, Helsinki',
-    },
-    {
-      id: 1,
-      name: 'Timo',
-      distance: '30',
-      address: 'Junatie 12, Helsinki',
-    },
-    {
-      id: 2,
-      name: 'Pekka',
-      distance: '50',
-      address: 'Junatie 12, Helsinki',
-    },
-  ]
-
   useEffect(() => {
-    checkTravelPreference()
+    // checkTravelPreference()
     // createAsManyWorkTripDocuments()
   }, [travelPreference])
 
   const [travelPreference, setTravelPreference] = useState('')
+
+  const [passengerList, setPassengerList] = useState([])
 
   const checkTravelPreference = async () => {
     setTravelPreference(user.travelPreference)
@@ -146,6 +126,7 @@ export const MainPage = ({navigation}) => {
 
     const result = await getWorkTrips('515bb500-84b0-424f-8017-e0060f953562')
 
+    setPassengerList(result)
     console.log('result', result)
   }
 
@@ -153,17 +134,10 @@ export const MainPage = ({navigation}) => {
     <SafeAreaView style={styles.view}>
       {travelPreference === 'passenger' && (
         <View style={styles.listView}>
-          <PassengerList dataArray={passengerList} />
+          <PassengerList navigation={navigation} dataArray={passengerList} />
         </View>
       )}
 
-      {/* <View style={styles.listView}>
-        <PendinRequestList
-          dataArray={data}
-          navigation={navigation}
-        ></PendinRequestList>
-      </View>
-      <Text>{user.id}</Text> */}
       <View style={styles.scheduleView}>
         <Button
           style={styles.button}

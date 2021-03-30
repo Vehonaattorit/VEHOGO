@@ -18,10 +18,6 @@ import CustomInput from '../components/CustomInput'
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE'
 
 const formReducer = (state, action) => {
-  console.log('action.input', action.input)
-  console.log('action.value', action.value)
-  console.log('action.isValid', action.isValid)
-
   if (action.type === FORM_INPUT_UPDATE) {
     const updatedValues = {
       ...state.inputValues,
@@ -72,10 +68,16 @@ export const Address = ({navigation}) => {
   )
 
   const submitHandler = useCallback(() => {
-    if (!formState.formIsValid) {
-      Alert.alert('Wrong input!', 'Please check the errors in the form.', [
-        {text: 'Okay'},
-      ])
+    if (
+      !formState.formIsValid &&
+      formState.inputValues.address === '' &&
+      formState.inputValues.city === ''
+    ) {
+      Alert.alert(
+        'Wrong input!',
+        'Please write an address and city which have at least 1 letter.',
+        [{text: 'Okay'}]
+      )
       return
     }
     const {address, city} = formState.inputValues

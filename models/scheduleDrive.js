@@ -1,4 +1,5 @@
-import {stopConverter} from './stop'
+import {stopConverter, Stop} from './stop'
+
 export class ScheduledDrive {
   constructor({id, start, end, workTrip, takenSeats, stops}) {
     this.start = start
@@ -49,19 +50,29 @@ export const scheduleDriveConverter = {
   },
   fromData: function (data) {
     const parsedStops = []
-    console.log('datUS perkulus', data)
 
-    if (data.stops != undefined) {
-      data.stops.forEach((stop) => {
-        parsedStops.push(stopConverter.fromData(stop))
+    if (data != undefined) {
+      if (data.stops != undefined) {
+        data.stops.forEach((stop) => {
+          parsedStops.push(
+            Stop({
+              location: stop.location,
+              address: stop.address,
+              stopName: stop.stopName,
+              userID: stop.userID,
+            })
+          )
+        })
+      }
+      return ScheduledDrive({
+        start: data.start,
+        end: data.end,
+        workTrip: data.workTrip,
+        takenSeats: data.takenSeats,
+        stops: parsedStops,
       })
     }
-    return ScheduledDrive({
-      start: data.start,
-      end: data.end,
-      workTrip: data.workTrip,
-      takenSeats: data.takenSeats,
-      stops: parsedStops,
-    })
+
+    return undefined
   },
 }
