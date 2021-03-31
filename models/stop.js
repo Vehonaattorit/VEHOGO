@@ -1,9 +1,10 @@
 export class Stop {
-  constructor({location, address, stopName, userID}) {
+  constructor({location, address, stopName, userID, latLng}) {
     this.location = location
     this.address = address
     this.stopName = stopName
     this.userID = userID
+    this.latLng = latLng
   }
 }
 
@@ -15,6 +16,7 @@ export const stopConverter = {
       address: stop.address,
       stopName: stop.stopName,
       userID: stop.userID,
+      latLng: stop.latLng,
     }
   },
   fromFirestore: function (snapshot, options) {
@@ -24,14 +26,16 @@ export const stopConverter = {
       address: data.address,
       stopName: data.stopName,
       userID: data.userID,
+      latLng: data.latLng,
     })
   },
   fromData: function (data) {
-    return Stop({
+    return new Stop({
       location: data.location,
       address: data.address,
       stopName: data.stopName,
       userID: data.userID,
+      latLng: data.latLng,
     })
   },
 }

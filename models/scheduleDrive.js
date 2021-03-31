@@ -50,29 +50,29 @@ export const scheduleDriveConverter = {
   },
   fromData: function (data) {
     const parsedStops = []
-
+    let startTime = new Date
+    let endTime = new Date
     if (data != undefined) {
       if (data.stops != undefined) {
         data.stops.forEach((stop) => {
-          parsedStops.push(
-            Stop({
-              location: stop.location,
-              address: stop.address,
-              stopName: stop.stopName,
-              userID: stop.userID,
-            })
-          )
+          parsedStops.push(stopConverter.fromData(stop))
         })
       }
-      return ScheduledDrive({
-        start: data.start,
-        end: data.end,
+      try {
+        if (data.start != undefined && data.end != undefined) {
+          startTime= data.start.toDate()
+          endTime= data.end.toDate()
+        }
+      } catch (error) {
+        console.log(error)
+      }
+      return new ScheduledDrive({
+        start: startTime,
+        end: endTime,
         workTrip: data.workTrip,
         takenSeats: data.takenSeats,
         stops: parsedStops,
       })
-    }
-
-    return undefined
+    } else return undefined
   },
 }

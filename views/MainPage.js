@@ -1,6 +1,17 @@
 import React, {useEffect, useContext, useState} from 'react'
-import {SafeAreaView, StyleSheet} from 'react-native'
-import {Body, View, Text, Icon, Button} from 'native-base'
+import {StyleSheet} from 'react-native'
+import {
+  Body,
+  View,
+  Header,
+  Left,
+  Text,
+  Icon,
+  Button,
+  Container,
+  Title,
+  Right,
+} from 'native-base'
 import {UserContext} from '../contexts'
 import {signOut} from '../controllers/LoginController'
 import PendinRequestList from '../components/PendingRequestsList'
@@ -12,7 +23,11 @@ import {
 import {useDocumentData} from 'react-firebase-hooks/firestore'
 
 import 'firebase/firestore'
-import {getWorkTrips, updateWorkTrip} from '../controllers/workTripController'
+import {
+  getWorkTrips,
+  updateWorkTrip,
+  workTripQuery,
+} from '../controllers/workTripController'
 
 import {WorkTrip} from '../models/workTrip'
 import {ScheduledDrive} from '../models/scheduleDrive'
@@ -24,64 +39,6 @@ import PassengerList from './PassengerList'
 
 export const MainPage = ({navigation}) => {
   const {user} = useContext(UserContext)
-
-  // YOU NEED THIS !
-  const createAsManyWorkTripDocuments = () => {
-    const workTripDocuments = user.preferedWorkingHours.reduce(
-      (res, current, index, array) => {
-        return res.concat([current, current])
-      },
-      []
-    )
-
-    console.log('workTripDocuments', workTripDocuments)
-
-    workTripDocuments.forEach((item, i) => {
-      let index = i + 1
-
-      const start =
-        index % 2 === 0
-          ? item.workDayEnd.toDate()
-          : new Date(2021, 3, 29, 8, 30)
-
-      const end =
-        index % 2 === 0
-          ? new Date(2021, 3, 29, 17, 30)
-          : item.workDayStart.toDate()
-      console.log('INDEKSUS', index)
-
-      updateWorkTrip(
-        '515bb500-84b0-424f-8017-e0060f953562',
-        new WorkTrip({
-          car: 'Jotain',
-          currentLocation: 'Jotain',
-          scheduledDrive: 'dajioasjodi',
-          workDayNum: item.workDayNum,
-          scheduledDrive: new ScheduledDrive({
-            start: start,
-            end: end,
-            takenSeats: 3,
-            stops: [
-              new Stop({
-                location: user.city,
-                address: user.homeAddress,
-                stopName: 'Home',
-                userID: user.id,
-              }),
-            ],
-          }),
-          car: new Car({
-            id: 'dashfihasi',
-            driverName: 'Mental Mickey',
-            registerNumber: 'KIR-180',
-            vehicleDescription: 'Musta sedan',
-            availableSeats: 3,
-          }),
-        })
-      )
-    })
-  }
-  // END
 
   const signedOut = () => {
     //executed when signin out
@@ -110,33 +67,108 @@ export const MainPage = ({navigation}) => {
     },
   ]
 
+  // useEffect(() => {
+  //   navigation.setOptions({
+  //     headerTitle: 'none',
+  //   })
+  // }, [navigation])
+
   useEffect(() => {
-    // checkTravelPreference()
+    checkTravelPreference()
     // createAsManyWorkTripDocuments()
+    fetchNextDay()
   }, [travelPreference])
 
   const [travelPreference, setTravelPreference] = useState('')
 
   const [passengerList, setPassengerList] = useState([])
 
+  const fetchNextDay = async () => {
+    console.log('travelPreference', travelPreference)
+
+    const result = await getWorkTrips(user.company[0].id)
+
+    const currentDay = new Date().getDay()
+
+    // const query = await workTripQuery(
+    //   user.company[0].id,
+    //   'scheduledDrive.start',
+    //   '<',
+    //   new Date(1970, 0, 1, 9, 0)
+    // )
+    const query = await workTripQuery(
+      user.company[0].id,
+      'workDayNum',
+      '==',
+      currentDay
+    )
+
+    console.log('query', query)
+
+    setPassengerList(query)
+  }
+
   const checkTravelPreference = async () => {
     setTravelPreference(user.travelPreference)
 
-    console.log('travelPreference', travelPreference)
+    // console.log('travelPreference', travelPreference)
 
-    const result = await getWorkTrips('515bb500-84b0-424f-8017-e0060f953562')
+    // const result = await getWorkTrips(user.company[0].id)
 
-    setPassengerList(result)
-    console.log('result', result)
+    // const currentDay = new Date().getDay()
+
+    // // const query = await workTripQuery(
+    // //   user.company[0].id,
+    // //   'scheduledDrive.start',
+    // //   '<',
+    // //   new Date(1970, 0, 1, 9, 0)
+    // // )
+    // const query = await workTripQuery(
+    //   user.company[0].id,
+    //   'workDayNum',
+    //   '==',
+    //   currentDay
+    // )
+
+    // console.log('query', query)
+
+    // setPassengerList(query)
   }
 
-  return (
-    <SafeAreaView style={styles.view}>
-      {travelPreference === 'passenger' && (
+  const displayPassengerList = () => {
+    if (travelPreference === 'passenger') {
+      return (
+        // <Container>
+        //   <Header>
+        //     <Left>
+        //       <Button transparent>
+        //         <Icon name="arrow-back" />
+        //       </Button>
+        //     </Left>
+        //     <Body>
+        //       <Title>Header</Title>
+        //     </Body>
+        //     <Right>
+        //       <Button
+        //         onPress={() => {
+        //           console.log('Sort & Order')
+        //         }}
+        //         transparent
+        //       >
+        //         <Icon name="menu" />
+        //       </Button>
+        //     </Right>
+        //   </Header>
         <View style={styles.listView}>
           <PassengerList navigation={navigation} dataArray={passengerList} />
         </View>
-      )}
+      )
+    }
+  }
+
+  return (
+    <View style={styles.view}>
+      {displayPassengerList()}
 
       <View style={styles.scheduleView}>
         <Button
@@ -162,7 +194,7 @@ export const MainPage = ({navigation}) => {
           <Text>DriverCarList</Text>
         </Button>
       </View>
-    </SafeAreaView>
+    </View>
   )
 }
 
@@ -171,9 +203,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  listView: {
-    flex: 1,
-  },
+  listView: {},
 
   scheduleView: {
     flex: 1,
