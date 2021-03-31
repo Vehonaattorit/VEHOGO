@@ -8,8 +8,6 @@ import moment from 'moment'
 const PassengerListItem = ({navigation, singleItem}) => {
   const {car, scheduledDrive, goingTo} = singleItem
 
-  console.log('single passengerItem', singleItem)
-
   return (
     <TouchableOpacity
       onPress={() =>

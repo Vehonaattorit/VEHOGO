@@ -23,7 +23,11 @@ import {
 import {useDocumentData} from 'react-firebase-hooks/firestore'
 
 import 'firebase/firestore'
-import {getWorkTrips, updateWorkTrip} from '../controllers/workTripController'
+import {
+  getWorkTrips,
+  updateWorkTrip,
+  workTripQuery,
+} from '../controllers/workTripController'
 
 import {WorkTrip} from '../models/workTrip'
 import {ScheduledDrive} from '../models/scheduleDrive'
@@ -85,6 +89,15 @@ export const MainPage = ({navigation}) => {
 
     const result = await getWorkTrips(user.company[0].id)
 
+    const query = await workTripQuery(
+      user.company[0].id,
+      'scheduledDrive.start',
+      '==',
+      new Date(1970, 1, 1, 9, 0)
+    )
+
+    console.log('query', query)
+
     setPassengerList(result)
     console.log('result', result)
   }
@@ -105,7 +118,7 @@ export const MainPage = ({navigation}) => {
             <Right>
               <Button
                 onPress={() => {
-                  console.log('Sort & ORder')
+                  console.log('Sort & Order')
                 }}
                 transparent
               >
