@@ -48,6 +48,7 @@ export const SetUpInit = ({route}) => {
       updateWorkTrip(
         user.company[0].id, // Looks for company ID that user has joined
         new WorkTrip({
+          driverID: user.id,
           goingTo: goingTo,
           currentLocation: user.homeAddress,
           workDayNum: item.workDayNum,

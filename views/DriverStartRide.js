@@ -11,32 +11,12 @@ import {
   Icon,
   Button,
 } from 'native-base'
-import PassengerList from './PassengerList'
+import {StopList} from '../components/StopList'
 
-export const DriverStartRide = ({navigation}) => {
-  let data = [
-    {
-      key: 1,
-      name: 'Tommi',
-      address: 'kaarimäki 3',
-      city: 'Vantaa',
-      distance: 2,
-    },
-    {
-      key: 2,
-      name: 'Michael',
-      address: 'Siltakuja 2',
-      city: 'Espoo',
-      distance: 3,
-    },
-    {
-      key: 3,
-      name: 'Maija',
-      address: 'esimerkkikuja 6',
-      city: 'Espoo',
-      distance: 4,
-    },
-  ]
+export const DriverStartRide = ({navigation, route}) => {
+  let data = route.params
+  console.log(data.startingRide.scheduledDrive.stops)
+
   return (
     <View style={styles.view}>
       <View style={styles.iconView}>
@@ -55,7 +35,7 @@ export const DriverStartRide = ({navigation}) => {
       </View>
 
       <View style={styles.listView}>
-        <PassengerList dataArray={data}></PassengerList>
+        <StopList dataArray={data.startingRide.scheduledDrive.stops}></StopList>
       </View>
     </View>
   )

@@ -35,6 +35,8 @@ import {Stop} from '../models/stop'
 import {Car} from '../models/car'
 import PassengerListItem from './PassengerListItem'
 import PassengerList from './PassengerList'
+import {RideStartBar} from '../components/RideStartBar'
+import DriverTripList from '../components/DriverTripList'
 // import {User} from '../models/user'
 
 export const MainPage = ({navigation}) => {
@@ -76,12 +78,15 @@ export const MainPage = ({navigation}) => {
   useEffect(() => {
     checkTravelPreference()
     // createAsManyWorkTripDocuments()
+    fetchDriverTrips()
     fetchNextDay()
+
   }, [travelPreference])
 
   const [travelPreference, setTravelPreference] = useState('')
 
   const [passengerList, setPassengerList] = useState([])
+  const [driverTrips, setDriverTrips] = useState([])
 
   const fetchNextDay = async () => {
     console.log('travelPreference', travelPreference)
@@ -103,14 +108,27 @@ export const MainPage = ({navigation}) => {
       currentDay
     )
 
-    console.log('query', query)
+    //console.log('query', query)
 
     setPassengerList(query)
   }
 
+  const fetchDriverTrips = async () => {
+    console.log(user.id)
+    const result = await workTripQuery(
+      user.company[0].id,
+      'driverID',
+      '==',
+      user.id
+    )
+    console.log(result)
+    setDriverTrips(result)
+  }
+
+
   const checkTravelPreference = async () => {
     setTravelPreference(user.travelPreference)
-
+    console.log('travelPreference: '+ user.travelPreference)
     // console.log('travelPreference', travelPreference)
 
     // const result = await getWorkTrips(user.company[0].id)
@@ -166,9 +184,26 @@ export const MainPage = ({navigation}) => {
     }
   }
 
+  const displayDriverTripList = () => {
+    return (
+    <View style={styles.driverTripList}>
+      <RideStartBar driverTrips={driverTrips} navigation={navigation}/>
+      <DriverTripList driverTrips={driverTrips} navigation={navigation}></DriverTripList>
+    </View>
+    )
+  }
+
   return (
     <View style={styles.view}>
-      {displayPassengerList()}
+
+
+      {travelPreference === 'driver' ? (
+        displayDriverTripList()
+
+      ) : (
+        displayPassengerList()
+      )
+      }
 
       <View style={styles.scheduleView}>
         <Button
@@ -217,4 +252,8 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 24,
   },
+
+  driverTripList: {
+    flex: 1
+  }
 })
