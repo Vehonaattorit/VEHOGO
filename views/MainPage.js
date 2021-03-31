@@ -40,38 +40,9 @@ import PassengerList from './PassengerList'
 export const MainPage = ({navigation}) => {
   const {user} = useContext(UserContext)
 
-  const signedOut = () => {
-    //executed when signin out
-  }
-  let data = [
-    {
-      key: 1,
-      name: 'Tommi',
-      address: 'kaarimäki 3',
-      city: 'Vantaa',
-      distance: 2,
-    },
-    {
-      key: 2,
-      name: 'Michael',
-      address: 'Siltakuja 2',
-      city: 'Espoo',
-      distance: 3,
-    },
-    {
-      key: 3,
-      name: 'Maija',
-      address: 'esimerkkikuja 6',
-      city: 'Espoo',
-      distance: 4,
-    },
-  ]
+ 
 
-  // useEffect(() => {
-  //   navigation.setOptions({
-  //     headerTitle: 'none',
-  //   })
-  // }, [navigation])
+
 
   useEffect(() => {
     checkTravelPreference()
@@ -96,9 +67,19 @@ export const MainPage = ({navigation}) => {
     //   '<',
     //   new Date(1970, 0, 1, 9, 0)
     // )
+    const now = new Date().now()
+
+    const u
+
+    const workOrHome = 
+
+
     const query = await workTripQuery(
       user.company[0].id,
       'workDayNum',
+      '==',
+      currentDay,
+      'goingTo',
       '==',
       currentDay
     )

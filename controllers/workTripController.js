@@ -90,6 +90,7 @@ export async function workTripQuery(companyId, field, condition, value, curr) {
       .collection('workTrips')
       .withConverter(workTripConverter)
       .where(field, condition, value)
+      .where(field2, condition2, value2)
       .orderBy('scheduledDrive.start')
       .limit(3)
       .get()
