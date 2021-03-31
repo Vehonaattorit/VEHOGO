@@ -94,10 +94,11 @@ export async function workTripQuery(companyId, field, condition, value) {
       .collection('workTrips')
       .withConverter(workTripConverter)
       .where(field, condition, value)
+      .get()
 
     const workTripList = []
     querySnapshot.forEach((doc) => {
-      workTripList.push(workTripConverter.fromData(doc))
+      workTripList.push(workTripConverter.fromData(doc.data()))
     })
     return workTripList
   } catch (error) {
