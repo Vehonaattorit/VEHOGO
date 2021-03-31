@@ -6,32 +6,24 @@ import {TouchableOpacity} from 'react-native'
 import moment from 'moment'
 
 const PassengerListItem = ({navigation, singleItem}) => {
-  const {car, scheduledDrive, goingTo, workDayNum} = singleItem
+  const {car, scheduledDrive, goingTo, workDayNum, extraDay} = singleItem
 
   const checkWhatDayItIs = (dayNum) => {
-    switch (dayNum) {
-      case 1:
+    switch (String(dayNum)) {
+      case '1':
         return 'Monday'
-
-      case 2:
+      case '2':
         return 'Tuesday'
-
-      case 3:
+      case '3':
         return 'Wednesday'
-      case 4:
+      case '4':
         return 'Thursday'
-
-        break
-      case 5:
+      case '5':
         return 'Friday'
-
-        break
-      case 6:
+      case '6':
         return 'Saturday'
-
-      case 7:
+      case '7':
         return 'Sunday'
-
       default:
         return 'Monday'
     }
@@ -52,7 +44,9 @@ const PassengerListItem = ({navigation, singleItem}) => {
               <Icon active name="person-outline" />
               <Text style={styles.title}>
                 {car.driverName} to {goingTo} place{' '}
-                {checkWhatDayItIs(workDayNum)}
+                {checkWhatDayItIs(
+                  extraDay ? Number(workDayNum) + Number(extraDay) : workDayNum
+                )}
               </Text>
             </Left>
             <Right>

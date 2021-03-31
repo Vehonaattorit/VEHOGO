@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@microsoft/microsoft-graph-client": "^2.2.1",
+    "@ptomasroos/react-native-multi-slider": "^2.2.2",
     "@react-native-community/async-storage": "~1.12.0",
     "@react-native-community/datetimepicker": "3.0.4",
     "@react-native-community/masked-view": "^0.1.10",
@@ -35,7 +36,6 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-firebase-hooks": "^3.0.3",
-    "react-geocode": "^0.2.3",
     "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",
     "react-native-calendars": "^1.1254.0",
     "react-native-elements": "^3.3.2",
@@ -48,6 +48,7 @@
     "react-native-reanimated": "^1.13.2",
     "react-native-safe-area-context": "3.1.9",
     "react-native-screens": "^2.15.2",
+    "react-native-side-drawer": "^1.2.8",
     "react-native-vector-icons": "^7.1.0",
     "react-native-web": "^0.15.3",
     "uuid": "^3.4.0"
