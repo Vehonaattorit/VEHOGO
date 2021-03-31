@@ -7,6 +7,9 @@ const PassengerList = ({navigation, dataArray}) => {
   return (
     <View>
       <FlatList
+        contentContainerStyle={{
+          flexGrow: 1,
+        }}
         data={dataArray}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => (
