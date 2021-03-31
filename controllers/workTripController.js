@@ -81,26 +81,24 @@ export function workTripStream(companyId, workTripId) {
   }
 }
 
-export async function workTripQuery(companyId, field, condition, value, curr) {
+export async function workTripOrderByQuery(companyId, querys, currentTime) {
   try {
     // Add a new document in collection "users"
-    let ref = await db
+    let queryRef = await db
       .collection('companys')
       .doc(companyId)
       .collection('workTrips')
       .withConverter(workTripConverter)
-      .where(field, condition, value)
-      .where(field2, condition2, value2)
-      .orderBy('scheduledDrive.start')
-      .limit(3)
-      .get()
 
+    querys.forEach((query) => {
+      queryRef = queryRef.where(query.field, query.condition, query.value)
+    })
+    let query = await queryRef.orderBy('scheduledDrive.start').limit(3).get()
     const workTripList = []
-    if (true) {
-      querySnapshot.forEach((doc) => {
-        workTripList.push(workTripConverter.fromData(doc.data()))
-      })
-    }
+    query.forEach((doc) => {
+      workTripList.push(workTripConverter.fromData(doc.data()))
+    })
+
     return workTripList
   } catch (error) {
     console.error('Error getting document: ', error)
