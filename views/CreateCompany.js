@@ -15,7 +15,6 @@ import {updateUser} from '../controllers/userController'
 import GooglePlacesInput from '../components/GooglePlaceInput'
 import {updateCompanyCity} from '../controllers/companyCitiesController'
 
-
 export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
   const [companyAddress, setAddress] = useState('')
   const [companyName, setName] = useState('')
@@ -38,15 +37,15 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
       )
       console.log(locationPoint)
       var city = ''
-      responseJson.results[0].address_components.forEach(element => {
+      responseJson.results[0].address_components.forEach((element) => {
         if (element.types[0] === 'locality') {
           city = element.long_name
         }
-      });
+      })
 
       const data = {
         point: locationPoint,
-        city: city
+        city: city,
       }
       console.log(data)
 
@@ -60,13 +59,13 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
       const data = await getCompanyGeoLocation()
 
       updateCompanyCity(data.city)
-      updateCompany(
+      const companyId = await updateCompany(
         new Company({
           address: companyAddress,
           displayName: companyName,
           userIDs: [user.id],
           location: data.point,
-          city: data.city
+          city: data.city,
         })
       )
 
@@ -75,10 +74,14 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
           address: companyAddress,
           name: companyName,
           location: data.point,
+          id: companyId,
         },
       ]
       user.company = companyUserData
+
       updateUser(user)
+
+      console.log('data id', data)
 
       console.log('updated')
       navigation.navigate('Travel')
@@ -103,21 +106,32 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
           />
         </Item>
         <Item>
-          <GooglePlacesInput style={{alignSelf: 'stretch'}} setAddress={setAddress} />
+          <GooglePlacesInput
+            style={{alignSelf: 'stretch'}}
+            setAddress={setAddress}
+          />
         </Item>
       </View>
       <View style={styles.btnContainer}>
-        <Button block style={styles.btns}
+        <Button
+          block
+          style={styles.btns}
           onPress={() => {
             sendCompanyData()
           }}
-        ><Text>Continue</Text></Button>
-        <Button block style={styles.btns}
+        >
+          <Text>Continue</Text>
+        </Button>
+        <Button
+          block
+          style={styles.btns}
           onPress={() => {
             setShowCreate(false)
             setShowBtns(true)
           }}
-        ><Text>Cancel</Text></Button>
+        >
+          <Text>Cancel</Text>
+        </Button>
       </View>
     </View>
   )
@@ -129,10 +143,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   inputContainer: {
-    alignSelf: 'stretch'
+    alignSelf: 'stretch',
   },
   btns: {
-    margin: 5
-  }
-
+    margin: 5,
+  },
 })

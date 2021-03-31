@@ -53,11 +53,7 @@ export async function getWorkTrips(companyId) {
       .get()
     const workTripList = []
     snapShot.forEach((doc) => {
-      console.log('docus', doc)
-
       const data = doc.data()
-
-      console.log('datassss', data)
 
       workTripList.push(workTripConverter.fromData(data))
     })
@@ -95,6 +91,29 @@ export async function workTripQuery(companyId, field, condition, value) {
       .withConverter(workTripConverter)
       .where(field, condition, value)
       .get()
+
+    const workTripList = []
+    if (true) {
+      querySnapshot.forEach((doc) => {
+        workTripList.push(workTripConverter.fromData(doc.data()))
+      })
+    }
+    return workTripList
+  } catch (error) {
+    console.error('Error getting document: ', error)
+    return
+  }
+}
+
+export async function workTripOrder(companyId) {
+  try {
+    // Add a new document in collection "users"
+    let querySnapshot = await db
+      .collection('companys')
+      .doc(companyId)
+      .collection('workTrips')
+      .withConverter(workTripConverter)
+      .orderBy('start')
 
     const workTripList = []
     querySnapshot.forEach((doc) => {

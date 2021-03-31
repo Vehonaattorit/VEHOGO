@@ -45,7 +45,6 @@ function SetUpStackNavigator() {
           component={WorkingHours}
           options={{title: 'Working Hours'}}
         />
-
         <Stack.Screen
           name="SetUpInit"
           component={SetUpInit}
