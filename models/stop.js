@@ -30,7 +30,7 @@ export const stopConverter = {
     })
   },
   fromData: function (data) {
-    return Stop({
+    return new Stop({
       location: data.location,
       address: data.address,
       stopName: data.stopName,

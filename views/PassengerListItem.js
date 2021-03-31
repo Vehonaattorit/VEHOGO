@@ -36,9 +36,9 @@ const PassengerListItem = ({navigation, singleItem}) => {
                 {scheduledDrive.stops[0].location}
               </Text>
               <Text>
-                {moment(scheduledDrive.start.toDate()).format('HH:mm') +
+                {moment(scheduledDrive.start).format('HH:mm') +
                   ' - ' +
-                  moment(scheduledDrive.end.toDate()).format('HH:mm')}
+                  moment(scheduledDrive.end).format('HH:mm')}
               </Text>
             </Left>
           </CardItem>

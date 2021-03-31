@@ -78,7 +78,7 @@ export const workTripConverter = {
       driverID: data.driverID,
       currentLocation: data.currentLocation,
       workDayNum: data.workDayNum,
-      scheduledDrive: data.scheduledDrive,
+      scheduledDrive: scheduleDriveConverter.fromData(data.scheduledDrive),
       pendingRideRequests: data.pendingRideRequests,
       goingTo: data.goingTo,
       car: data.car,

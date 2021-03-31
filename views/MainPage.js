@@ -92,14 +92,14 @@ export const MainPage = ({navigation}) => {
     const query = await workTripQuery(
       user.company[0].id,
       'scheduledDrive.start',
-      '==',
-      new Date(1970, 1, 1, 9, 0)
+      '>',
+      new Date('1970-01-02')
     )
 
     console.log('query', query)
 
     setPassengerList(result)
-    console.log('result', result)
+
   }
 
   const displayPassengerList = () => {
