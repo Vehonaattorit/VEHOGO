@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   },
   roundButton: {
     width: 50,
-    height: 100,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 2,
