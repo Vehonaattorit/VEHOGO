@@ -96,7 +96,7 @@ export async function workTripQuery(companyId, field, condition, value, curr) {
 
     const workTripList = []
     if (true) {
-      querySnapshot.forEach((doc) => {
+      ref.forEach((doc) => {
         workTripList.push(workTripConverter.fromData(doc.data()))
       })
     }
