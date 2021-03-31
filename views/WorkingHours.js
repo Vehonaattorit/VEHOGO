@@ -165,14 +165,14 @@ export const WorkingHours = ({navigation}) => {
         workDayNum: element.workDayNum,
         workDayStart: new Date(
           1970,
-          1,
+          0,
           1,
           startDate.getHours(),
           startDate.getMinutes()
         ),
         workDayEnd: new Date(
           1970,
-          1,
+          0,
           1,
           endDate.getHours(),
           endDate.getMinutes()
