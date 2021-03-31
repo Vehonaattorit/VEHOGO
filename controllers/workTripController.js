@@ -81,20 +81,18 @@ export function workTripStream(companyId, workTripId) {
   }
 }
 
-export async function workTripQuery(companyId, field, condition, value) {
+export async function workTripQuery(companyId, field, condition, value, curr) {
   try {
     // Add a new document in collection "users"
     let ref = await db
       .collection('companys')
       .doc(companyId)
       .collection('workTrips')
-
-    let query = ref.withConverter(workTripConverter)
-    for (let i = 0; i < 1; i++) {
-      query = query.where(field, condition, value)
-    }
-
-    let querySnapshot = await query.get()
+      .withConverter(workTripConverter)
+      .where(field, condition, value)
+      .orderBy('scheduledDrive.start')
+      .limit(3)
+      .get()
 
     const workTripList = []
     if (true) {
