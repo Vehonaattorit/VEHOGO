@@ -37,7 +37,6 @@ const useWorkTripHooks = (user) => {
   }
 
   const multiSliderValuesChange = (values) => {
-    console.log('values', values)
     setMultiSliderValue(values)
 
     slideTime()
@@ -60,8 +59,6 @@ const useWorkTripHooks = (user) => {
       {field: 'goingTo', condition: '==', value: goingTo},
     ])
 
-    console.log('WAZZZUUUUp', query)
-
     setPassengerList(query)
 
     setOpen(!open)
@@ -76,8 +73,6 @@ const useWorkTripHooks = (user) => {
       {field: 'workDayNum', condition: '==', value: currentWeekDay},
       {field: 'goingTo', condition: '==', value: goingTo},
     ])
-
-    console.log('SOJUZ', query)
 
     setPassengerList(query)
   }
@@ -107,7 +102,6 @@ const useWorkTripHooks = (user) => {
       minutes = '0' + minutes
     }
 
-    // return hours + ':' + minutes + ' ' + time
     return {hours, minutes}
   }
 

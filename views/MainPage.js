@@ -47,8 +47,6 @@ export const MainPage = ({navigation}) => {
     extraDay,
   } = useWorkTripHooks(user)
 
-  console.log('passengerList', passengerList)
-
   useEffect(() => {
     checkTravelPreference()
     // createAsManyWorkTripDocuments()
@@ -56,42 +54,6 @@ export const MainPage = ({navigation}) => {
   }, [travelPreference])
 
   const [travelPreference, setTravelPreference] = useState('')
-
-  // const [passengerList, setPassengerList] = useState(null)
-
-  // const [extraDay, setExtraDay] = useState([])
-
-  const fetchHomeOrWorkTrips = () => {
-    const now = new Date(1970, 0, 1, 19, 0)
-
-    const workDayEnd = user.preferedWorkingHours[0].workDayEnd.toDate()
-
-    let goingTo
-    if (moment(now).isBetween(new Date(1970, 0, 1, 0, 0), workDayEnd)) {
-      goingTo = 'work'
-    } else if (moment(now).isBetween(workDayEnd, new Date(1970, 0, 1, 19, 0))) {
-      goingTo = 'home'
-    } else {
-      goingTo = 'work'
-
-      setExtraDay('1')
-    }
-
-    return goingTo
-  }
-
-  // const fetchTodayRides = async () => {
-  //   const currentWeekDay = new Date().getDay()
-
-  //   const goingTo = fetchHomeOrWorkTrips()
-
-  //   const query = await workTripOrderByQuery(user.company[0].id, [
-  //     {field: 'workDayNum', condition: '==', value: currentWeekDay},
-  //     {field: 'goingTo', condition: '==', value: goingTo},
-  //   ])
-
-  //   setPassengerList(query)
-  // }
 
   const checkTravelPreference = async () => {
     setTravelPreference(user.travelPreference)
@@ -105,7 +67,6 @@ export const MainPage = ({navigation}) => {
             <Right>
               <Button
                 onPress={() => {
-                  console.log('Open it')
                   setOpen(!open)
                 }}
                 transparent
