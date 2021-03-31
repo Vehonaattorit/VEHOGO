@@ -9,6 +9,7 @@ import {NewRide} from '../views/NewRide'
 import {DriverStartRide} from '../views/DriverStartRide'
 import {DriverOnRoute} from '../views/DriverOnRoute'
 import {Chat} from '../views/Chat'
+import {DriverRideRequestList} from '../views/DriverRideRequestList'
 import {DriverCarList} from '../views/DriverCarList'
 import ChatRoom from '../views/ChatRoom'
 import {UserContext} from '../contexts'
@@ -53,6 +54,13 @@ function MainStackNavigator() {
           component={DriverStartRide}
           options={{
             title: 'DriverStartRide',
+          }}
+        />
+        <Stack.Screen
+          name="DriverRideRequestList"
+          component={DriverRideRequestList}
+          options={{
+            title: 'DriverRideRequestList',
           }}
         />
         <Stack.Screen

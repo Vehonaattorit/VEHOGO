@@ -1,14 +1,45 @@
-import React from 'react'
+import React, {useState, useEffect, useRef, useContext} from 'react'
+import {UserContext} from '../contexts'
 import {StyleSheet, Dimensions} from 'react-native'
 import {Content, Body, Container, Text, View, Button} from 'native-base'
 import MapView from 'react-native-maps'
 import {updateWorkTrip} from '../controllers/workTripController'
+import PassengerRideRequestButton from './passengerRideRequestButton'
 
 export const DriverAcceptRefuse = ({navigation, route}) => {
   const {singleItem} = route.params
+  const {user} = useContext(UserContext)
 
   console.log('singleItem', singleItem)
-  console.log('singleItem', singleItem.pendingRideRequests)
+  const [mapRef, setMapRef] = useState(null)
+  const [markers, setMarkers] = useState([
+    singleItem.scheduledDrive.stops.map((stop) => (
+      <MapView.Marker
+        key={stop.address}
+        coordinate={{
+          latitude: stop.latLng.latitude,
+          longitude: stop.latLng.longitude,
+        }}
+        title="Random place"
+      />
+    )),
+  ])
+
+  useEffect(() => {
+    console.log('user', user)
+    setTimeout(() => {
+      console.log('now timer ending')
+      if (mapRef != undefined && mapRef != null) {
+        console.log(
+          'fit markers',
+          singleItem.scheduledDrive.stops.map((stop) => stop.address)
+        )
+        mapRef.fitToSuppliedMarkers(
+          singleItem.scheduledDrive.stops.map((stop) => stop.address)
+        )
+      }
+    }, 3000)
+  }, [mapRef])
 
   const acceptHandler = () => {
     console.log('Accept handler.')
@@ -41,22 +72,19 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
     <View style={styles.view}>
       <Container style={styles.requestMapContent}>
         <MapView
+          ref={(ref) => {
+            setMapRef(ref)
+          }}
           style={styles.mapStyle}
           provider={MapView.PROVIDER_GOOGLE}
           initialRegion={{
-            latitude: 60.169929425303415,
-            longitude: 24.938383101854694,
-            latitudeDelta: 0.1,
-            longitudeDelta: 0.1,
+            latitude: singleItem.scheduledDrive.stops[0].latLng.latitude,
+            longitude: singleItem.scheduledDrive.stops[0].latLng.longitude,
+            latitudeDelta: 1,
+            longitudeDelta: 1,
           }}
         >
-          <MapView.Marker
-            coordinate={{
-              latitude: 60.169929425303415,
-              longitude: 24.938383101854694,
-            }}
-            title="Random place"
-          />
+          {markers}
         </MapView>
       </Container>
 
@@ -68,15 +96,18 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
           </View>
 
           <Text style={{margin: 10}}>Adress</Text>
-
-          <View style={styles.buttons}>
-            <Button onPress={acceptHandler} large style={styles.button}>
-              <Text style={styles.btntxt}>Accept</Text>
-            </Button>
-            <Button large style={{...styles.button, backgroundColor: 'red'}}>
-              <Text style={styles.btntxt}>Refuse</Text>
-            </Button>
-          </View>
+          {user.travelPreference == 'passenger' ? (
+            <PassengerRideRequestButton user={user} workTrip={singleItem}/>
+          ) : (
+            <View style={styles.buttons}>
+              <Button onPress={acceptHandler} large style={styles.button}>
+                <Text style={styles.btntxt}>Accept</Text>
+              </Button>
+              <Button large style={{...styles.button, backgroundColor: 'red'}}>
+                <Text style={styles.btntxt}>Refuse</Text>
+              </Button>
+            </View>
+          )}
         </Content>
       </Container>
     </View>
