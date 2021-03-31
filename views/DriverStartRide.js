@@ -1,53 +1,44 @@
 import React from 'react'
 import {SafeAreaView, StyleSheet} from 'react-native'
-import {Content, Card, CardItem, Body, Container, View, Text, Icon, Button} from 'native-base'
-import PassengerList from './PassengerList'
+import {
+  Content,
+  Card,
+  CardItem,
+  Body,
+  Container,
+  View,
+  Text,
+  Icon,
+  Button,
+} from 'native-base'
+import {StopList} from '../components/StopList'
 
+export const DriverStartRide = ({navigation, route}) => {
+  let data = route.params
+  console.log(data.startingRide.scheduledDrive.stops)
 
-export const DriverStartRide = ({navigation}) => {
-  let data = [
-    {
-      key: 1,
-      name: 'Tommi',
-      address: 'kaarimäki 3',
-      city: 'Vantaa',
-      distance: 2
-    },
-    {
-      key: 2,
-      name: 'Michael',
-      address: 'Siltakuja 2',
-      city: 'Espoo',
-      distance: 3
-    },
-    {
-      key: 3,
-      name: 'Maija',
-      address: 'esimerkkikuja 6',
-      city: 'Espoo',
-      distance: 4
-    }
-
-  ];
   return (
-    <SafeAreaView style={styles.view}>
-
+    <View style={styles.view}>
       <View style={styles.iconView}>
         <Body style={styles.iconViewBody}>
-          <Icon style={styles.icon} active name='car-outline' />
+          <Icon style={styles.icon} active name="car-outline" />
           <Text style={styles.iconText}>Your Next Ride</Text>
-          <Button large style={styles.button} onPress={() => navigation.navigate('DriverOnRoute')} ><Text style={styles.btntxt}>Start Driving</Text></Button>
+          <Button
+            large
+            style={styles.button}
+            onPress={() => navigation.navigate('DriverOnRoute')}
+          >
+            <Text style={styles.btntxt}>Start Driving</Text>
+          </Button>
           <Text style={styles.iconText}>Your Passengers</Text>
         </Body>
       </View>
 
       <View style={styles.listView}>
-          <PassengerList dataArray={data}></PassengerList>
+        <StopList dataArray={data.startingRide.scheduledDrive.stops}></StopList>
       </View>
-
-    </SafeAreaView>
-
-  );
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -58,10 +49,10 @@ const styles = StyleSheet.create({
 
   iconView: {
     flex: 2.5,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   iconViewBody: {
-    flex: 1
+    flex: 1,
   },
   icon: {
     fontSize: 200,
@@ -77,18 +68,13 @@ const styles = StyleSheet.create({
     flex: 2.5,
   },
 
-
   button: {
     backgroundColor: '#26aae2',
     borderRadius: 15,
     alignSelf: 'center',
-    flex: 0.5
-
+    flex: 0.5,
   },
   btntxt: {
-    color: 'white'
+    color: 'white',
   },
-
-
-});
-
+})

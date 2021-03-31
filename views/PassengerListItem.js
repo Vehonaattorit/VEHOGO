@@ -3,9 +3,31 @@ import {StyleSheet} from 'react-native'
 import {Content, Card, CardItem, Text, Left, Right, Icon} from 'native-base'
 
 import {TouchableOpacity} from 'react-native'
+import moment from 'moment'
 
 const PassengerListItem = ({navigation, singleItem}) => {
-  const {car} = singleItem
+  const {car, scheduledDrive, goingTo, workDayNum, extraDay} = singleItem
+
+  const checkWhatDayItIs = (dayNum) => {
+    switch (String(dayNum)) {
+      case '1':
+        return 'Monday'
+      case '2':
+        return 'Tuesday'
+      case '3':
+        return 'Wednesday'
+      case '4':
+        return 'Thursday'
+      case '5':
+        return 'Friday'
+      case '6':
+        return 'Saturday'
+      case '7':
+        return 'Sunday'
+      default:
+        return 'Monday'
+    }
+  }
 
   return (
     <TouchableOpacity
@@ -20,7 +42,12 @@ const PassengerListItem = ({navigation, singleItem}) => {
           <CardItem style={styles.item}>
             <Left>
               <Icon active name="person-outline" />
-              <Text style={styles.title}>{car.driverName}</Text>
+              <Text style={styles.title}>
+                {car.driverName} to {goingTo} place{' '}
+                {checkWhatDayItIs(
+                  extraDay ? Number(workDayNum) + Number(extraDay) : workDayNum
+                )}
+              </Text>
             </Left>
             <Right>
               <Text style={styles.title}>{singleItem.distance}20 km</Text>
@@ -30,7 +57,12 @@ const PassengerListItem = ({navigation, singleItem}) => {
             <Left>
               <Icon active name="location-outline" />
               <Text style={styles.title}>
-                {/* {singleItem.address}Espoon keskus */}
+                {scheduledDrive.stops[0].location}
+              </Text>
+              <Text>
+                {moment(scheduledDrive.start).format('HH:mm') +
+                  ' - ' +
+                  moment(scheduledDrive.end).format('HH:mm')}
               </Text>
             </Left>
           </CardItem>

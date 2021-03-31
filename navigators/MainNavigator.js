@@ -1,6 +1,7 @@
-import * as React from 'react'
+import React, {useContext} from 'react'
 import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
+import {crea} from '@react-navigation/drawer'
 import {MainPage} from '../views/MainPage'
 import {OutlookCalendar} from '../views/OutlookCalendar'
 import {DriverAcceptRefuse} from '../views/DriverAcceptRefuse'
@@ -8,10 +9,15 @@ import {NewRide} from '../views/NewRide'
 import {DriverStartRide} from '../views/DriverStartRide'
 import {DriverOnRoute} from '../views/DriverOnRoute'
 import {Chat} from '../views/Chat'
+import {DriverRideRequestList} from '../views/DriverRideRequestList'
 import {DriverCarList} from '../views/DriverCarList'
 import ChatRoom from '../views/ChatRoom'
+import {UserContext} from '../contexts'
 const Stack = createStackNavigator()
+const Drawer = createStackNavigator()
 function MainStackNavigator() {
+  const {user} = useContext(UserContext)
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -48,6 +54,13 @@ function MainStackNavigator() {
           component={DriverStartRide}
           options={{
             title: 'DriverStartRide',
+          }}
+        />
+        <Stack.Screen
+          name="DriverRideRequestList"
+          component={DriverRideRequestList}
+          options={{
+            title: 'DriverRideRequestList',
           }}
         />
         <Stack.Screen

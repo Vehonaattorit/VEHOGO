@@ -1,38 +1,40 @@
 import firebase from 'firebase/app'
 import {v4} from 'uuid/v4'
-import {workTripConverter, WorkTrip} from '../models/workTrip'
+import {rideRequestConverter, RideRequest} from '../models/rideRequest'
 import 'firebase/firestore'
 
 const db = firebase.firestore()
 
-export async function updateWorkTrip(companyId, workTrip) {
+export async function updateRideRequest(companyId, rideRequest) {
   try {
-    if (workTrip.id == undefined) {
-      workTrip.id = v4()
+    if (rideRequest.id == undefined) {
+      rideRequest.id = v4()
     }
     // Add a new document in collection "users"
-    let workDayRef = db
+    let rideRequestRef = db
       .collection('companys')
       .doc(companyId)
-      .collection('workTrips')
-      .doc(workTrip.id)
+      .collection('requests')
+      .doc(rideRequest.id)
 
-    workDayRef.withConverter(workTripConverter).set(workTrip, {merge: true})
-    return workTrip.id
+    rideRequestRef
+      .withConverter(rideRequestConverter)
+      .set(rideRequest, {merge: true})
+    return rideRequest.id
   } catch (error) {
     console.error('Error writing document: ', error)
   }
 }
 
-export async function getWorkTrip(companyId, workTripId) {
+export async function getRideRequest(companyId, rideRequestId) {
   try {
     // Add a new document in collection "users"
     let doc = await db
       .collection('companys')
       .doc(companyId)
-      .collection('workTrips')
-      .doc(workTripId)
-      .withConverter(workTripConverter)
+      .collection('requests')
+      .doc(rideRequestId)
+      .withConverter(rideRequestConverter)
       .get()
 
     return doc.data()
@@ -42,63 +44,45 @@ export async function getWorkTrip(companyId, workTripId) {
   }
 }
 
-export async function getWorkTrips(companyId) {
+export async function getRideRequests(companyId) {
   try {
     // Add a new document in collection "users"
     let snapShot = await db
       .collection('companys')
       .doc(companyId)
-      .collection('workTrips')
-      .withConverter(workTripConverter)
+      .collection('requests')
+      .withConverter(rideRequestConverter)
       .get()
-    const workTripList = []
+    const rideRequestList = []
     snapShot.forEach((doc) => {
       const data = doc.data()
 
-      workTripList.push(workTripConverter.fromData(data))
+      rideRequestList.push(rideRequestConverter.fromData(data))
     })
-    return workTripList
+    return rideRequestList
   } catch (error) {
     console.error('Error getting document: ', error)
     return
   }
 }
 
-export function workTripStream(companyId, workTripId) {
+export async function rideRequestQuery(companyId, field, condition, value) {
   try {
     // Add a new document in collection "users"
-    let ref = db
+    let ref = await db
       .collection('companys')
       .doc(companyId)
-      .collection('workTrips')
-      .doc(workTripId)
-      .withConverter(workTripConverter)
+      .collection('requests')
+      .withConverter(rideRequestConverter)
+      .where(field, condition, value)
+      .get()
 
-    return ref
-  } catch (error) {
-    console.error('Error getting document stream: ', error)
-    return
-  }
-}
-
-export async function workTripOrderByQuery(companyId, querys, currentTime) {
-  try {
-    // Add a new document in collection "users"
-    let queryRef = await db
-      .collection('companys')
-      .doc(companyId)
-      .collection('workTrips')
-      .withConverter(workTripConverter)
-
-    querys.forEach((query) => {
-      queryRef = queryRef.where(query.field, query.condition, query.value)
-    })
-    let query = await queryRef.orderBy('scheduledDrive.start').limit(3).get()
     const workTripList = []
-    query.forEach((doc) => {
-      workTripList.push(workTripConverter.fromData(doc.data()))
-    })
-
+    if (true) {
+      ref.forEach((doc) => {
+        workTripList.push(rideRequestConverter.fromData(doc.data()))
+      })
+    }
     return workTripList
   } catch (error) {
     console.error('Error getting document: ', error)
@@ -106,14 +90,14 @@ export async function workTripOrderByQuery(companyId, querys, currentTime) {
   }
 }
 
-export async function workTripMultiQuery(companyId, querys) {
+export async function rideRequestMultiQuery(companyId, querys) {
   try {
     // Add a new document in collection "users"
     let queryRef = db
       .collection('companys')
       .doc(companyId)
       .collection('workTrips')
-      .withConverter(workTripConverter)
+      .withConverter(rideRequestConverter)
 
     querys.forEach((query) => {
       queryRef = queryRef.where(query.field, query.condition, query.value)
@@ -121,7 +105,7 @@ export async function workTripMultiQuery(companyId, querys) {
     let query = await queryRef.get()
     const workTripList = []
     query.forEach((doc) => {
-      workTripList.push(workTripConverter.fromData(doc.data()))
+      workTripList.push(rideRequestConverter.fromData(doc.data()))
     })
     return workTripList
   } catch (error) {
@@ -130,7 +114,7 @@ export async function workTripMultiQuery(companyId, querys) {
   }
 }
 
-export async function workTripOrder(companyId) {
+export async function rideRequestOrder(companyId) {
   try {
     // Add a new document in collection "users"
     let querySnapshot = await db
@@ -142,7 +126,7 @@ export async function workTripOrder(companyId) {
 
     const workTripList = []
     querySnapshot.forEach((doc) => {
-      workTripList.push(workTripConverter.fromData(doc.data()))
+      workTripList.push(workTripConverter.fromData(doc))
     })
     return workTripList
   } catch (error) {

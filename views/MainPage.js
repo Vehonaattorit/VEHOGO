@@ -1,179 +1,183 @@
 import React, {useEffect, useContext, useState} from 'react'
-import {SafeAreaView, StyleSheet} from 'react-native'
-import {Body, View, Text, Icon, Button} from 'native-base'
+import {StyleSheet} from 'react-native'
+import {
+  Body,
+  View,
+  Header,
+  Left,
+  Text,
+  Icon,
+  Button,
+  Container,
+  Title,
+  Right,
+} from 'native-base'
 import {UserContext} from '../contexts'
 import {signOut} from '../controllers/LoginController'
-import PendinRequestList from '../components/PendingRequestsList'
-import {
-  companyStream,
-  updateCompany,
-  getCompanys,
-} from '../controllers/companyController'
-import {useDocumentData} from 'react-firebase-hooks/firestore'
-
 import 'firebase/firestore'
-import {getWorkTrips, updateWorkTrip} from '../controllers/workTripController'
 
-import {WorkTrip} from '../models/workTrip'
-import {ScheduledDrive} from '../models/scheduleDrive'
-import {Stop} from '../models/stop'
-import {Car} from '../models/car'
-import PassengerListItem from './PassengerListItem'
 import PassengerList from './PassengerList'
-// import {User} from '../models/user'
+import MenuDrawer from 'react-native-side-drawer'
+import {color} from '../constants/colors'
+
+import MultiSlider from '@ptomasroos/react-native-multi-slider'
+import {useWorkTripHooks} from '../hooks/useHooks'
 
 export const MainPage = ({navigation}) => {
   const {user} = useContext(UserContext)
 
-  // YOU NEED THIS !
-  const createAsManyWorkTripDocuments = () => {
-    const workTripDocuments = user.preferedWorkingHours.reduce(
-      (res, current, index, array) => {
-        return res.concat([current, current])
-      },
-      []
-    )
-
-    console.log('workTripDocuments', workTripDocuments)
-
-    workTripDocuments.forEach((item, i) => {
-      let index = i + 1
-
-      const start =
-        index % 2 === 0
-          ? item.workDayEnd.toDate()
-          : new Date(2021, 3, 29, 8, 30)
-
-      const end =
-        index % 2 === 0
-          ? new Date(2021, 3, 29, 17, 30)
-          : item.workDayStart.toDate()
-      console.log('INDEKSUS', index)
-
-      updateWorkTrip(
-        '515bb500-84b0-424f-8017-e0060f953562',
-        new WorkTrip({
-          car: 'Jotain',
-          currentLocation: 'Jotain',
-          scheduledDrive: 'dajioasjodi',
-          workDayNum: item.workDayNum,
-          scheduledDrive: new ScheduledDrive({
-            start: start,
-            end: end,
-            takenSeats: 3,
-            stops: [
-              new Stop({
-                location: user.city,
-                address: user.homeAddress,
-                stopName: 'Home',
-                userID: user.id,
-              }),
-            ],
-          }),
-          car: new Car({
-            id: 'dashfihasi',
-            driverName: 'Mental Mickey',
-            registerNumber: 'KIR-180',
-            vehicleDescription: 'Musta sedan',
-            availableSeats: 3,
-          }),
-        })
-      )
-    })
-  }
-  // END
-
-  const signedOut = () => {
-    //executed when signin out
-  }
-  let data = [
-    {
-      key: 1,
-      name: 'Tommi',
-      address: 'kaarimäki 3',
-      city: 'Vantaa',
-      distance: 2,
-    },
-    {
-      key: 2,
-      name: 'Michael',
-      address: 'Siltakuja 2',
-      city: 'Espoo',
-      distance: 3,
-    },
-    {
-      key: 3,
-      name: 'Maija',
-      address: 'esimerkkikuja 6',
-      city: 'Espoo',
-      distance: 4,
-    },
-  ]
+  const {
+    multiSliderValue,
+    multiSliderValuesChange,
+    queryWithTime,
+    fetchTodayRides,
+    timeValues,
+    open,
+    setOpen,
+    passengerList,
+    extraDay,
+  } = useWorkTripHooks(user)
 
   useEffect(() => {
-    // checkTravelPreference()
+    checkTravelPreference()
     // createAsManyWorkTripDocuments()
+    fetchTodayRides()
   }, [travelPreference])
 
   const [travelPreference, setTravelPreference] = useState('')
 
-  const [passengerList, setPassengerList] = useState([])
-
   const checkTravelPreference = async () => {
     setTravelPreference(user.travelPreference)
+  }
 
-    console.log('travelPreference', travelPreference)
+  const displayPassengerList = () => {
+    if (travelPreference === 'passenger') {
+      return (
+        <Container>
+          <Header>
+            <Right>
+              <Button
+                onPress={() => {
+                  setOpen(!open)
+                }}
+                transparent
+              >
+                <Icon name="filter" />
+              </Button>
+            </Right>
+          </Header>
+          <View style={styles.listView}>
+            <PassengerList
+              extraDay={extraDay}
+              navigation={navigation}
+              dataArray={passengerList}
+            />
+          </View>
+        </Container>
+      )
+    }
+  }
 
-    const result = await getWorkTrips('515bb500-84b0-424f-8017-e0060f953562')
+  const drawerContent = () => {
+    return (
+      <View style={styles.animatedBox}>
+        <Text>Start time </Text>
+        <Text>Min - Max </Text>
+        <MultiSlider
+          values={[multiSliderValue[0], multiSliderValue[1]]}
+          sliderLength={250}
+          onValuesChange={multiSliderValuesChange}
+          min={0}
+          max={2879}
+          step={1}
+          allowOverlap
+          snapped
+        />
+        {/* <Text>{`${slideTime().startTime} - ${slideTime().endTime}`}</Text> */}
+        <Text>{`${timeValues[0].hours}:${timeValues[0].minutes} - ${timeValues[1].hours}:${timeValues[1].minutes}`}</Text>
 
-    setPassengerList(result)
-    console.log('result', result)
+        <View style={{flexDirection: 'row'}}>
+          <View style={{marginVertical: 10, marginRight: 10}}>
+            <Button onPress={queryWithTime}>
+              <Text>Submit</Text>
+            </Button>
+          </View>
+          <View style={{marginVertical: 10, marginRight: 10}}>
+            <Button
+              style={{backgroundColor: 'firebrick'}}
+              onPress={() => {
+                setOpen(!open)
+              }}
+            >
+              <Text>Cancel</Text>
+            </Button>
+          </View>
+        </View>
+      </View>
+    )
   }
 
   return (
-    <SafeAreaView style={styles.view}>
-      {travelPreference === 'passenger' && (
-        <View style={styles.listView}>
-          <PassengerList navigation={navigation} dataArray={passengerList} />
-        </View>
-      )}
+    <>
+      <View style={styles.view}>
+        <MenuDrawer
+          open={open}
+          drawerContent={drawerContent()}
+          drawerPercentage={60}
+          animationTime={250}
+          overlay={true}
+          opacity={1}
+          position="right"
+        >
+          {displayPassengerList()}
+          <View style={styles.scheduleView}>
+            <Button
+              style={styles.button}
+              onPress={() => navigation.navigate('OutlookCalendar')}
+            >
+              <Text>Calender</Text>
+            </Button>
+            <Button style={styles.button} onPress={() => signOut(signedOut)}>
+              <Text>LogOut</Text>
+            </Button>
 
-      <View style={styles.scheduleView}>
-        <Button
-          style={styles.button}
-          onPress={() => navigation.navigate('OutlookCalendar')}
-        >
-          <Text>Calender</Text>
-        </Button>
-        <Button style={styles.button} onPress={() => signOut(signedOut)}>
-          <Text>LogOut</Text>
-        </Button>
-
-        <Button
-          style={styles.button}
-          onPress={() => navigation.navigate('DriverStartRide')}
-        >
-          <Text>Start Ride</Text>
-        </Button>
-        <Button
-          style={styles.button}
-          onPress={() => navigation.navigate('DriverCarList')}
-        >
-          <Text>DriverCarList</Text>
-        </Button>
+            <Button
+              style={styles.button}
+              onPress={() => navigation.navigate('DriverStartRide')}
+            >
+              <Text>Start Ride</Text>
+            </Button>
+            <Button
+              style={styles.button}
+              onPress={() => navigation.navigate('DriverCarList')}
+            >
+              <Text>DriverCarList</Text>
+            </Button>
+          </View>
+        </MenuDrawer>
       </View>
-    </SafeAreaView>
+    </>
   )
 }
 
 const styles = StyleSheet.create({
+  animatedBox: {
+    flex: 1,
+    backgroundColor: color.secondary,
+    zIndex: 999,
+    padding: 10,
+  },
+  body: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F04812',
+  },
   view: {
     flex: 1,
   },
 
-  listView: {
-    flex: 1,
-  },
+  listView: {},
 
   scheduleView: {
     flex: 1,
@@ -186,5 +190,9 @@ const styles = StyleSheet.create({
 
   titleText: {
     fontSize: 24,
+  },
+
+  driverTripList: {
+    flex: 1,
   },
 })

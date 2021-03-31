@@ -1,9 +1,9 @@
 import React from 'react'
 import {FlatList} from 'react-native'
 import {View} from 'native-base'
-import PassengerListItem from './PassengerListItem'
+import StopListItem from '../components/StopListItem'
 
-const PassengerList = ({extraDay, navigation, dataArray}) => {
+export const StopList = ({navigation, dataArray}) => {
   return (
     <View>
       <FlatList
@@ -13,14 +13,13 @@ const PassengerList = ({extraDay, navigation, dataArray}) => {
         data={dataArray}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item}) => (
-          <PassengerListItem
-            navigation={navigation}
-            singleItem={{...item, extraDay}}
-          />
+          <StopListItem navigation={navigation} singleItem={item} />
         )}
       />
     </View>
   )
 }
 
-export default PassengerList
+export default StopList
+
+

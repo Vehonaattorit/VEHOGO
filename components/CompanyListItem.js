@@ -1,6 +1,15 @@
 import React, {useContext} from 'react'
 import {StyleSheet} from 'react-native'
-import {Content, Card, CardItem, Text, Left, Right, Icon, Button} from 'native-base'
+import {
+  Content,
+  Card,
+  CardItem,
+  Text,
+  Left,
+  Right,
+  Icon,
+  Button,
+} from 'native-base'
 import {updateCompany} from '../controllers/companyController'
 import {UserContext} from '../contexts'
 import {Company} from '../models/company'
@@ -9,21 +18,27 @@ import {updateUser} from '../controllers/userController'
 export const CompanyListItem = ({singleItem, navigation}) => {
   const {user} = useContext(UserContext)
 
-  const joinCompany = () => {
+  const joinCompany = async () => {
     if (!singleItem.userIDs.includes(user.id)) {
       const users = singleItem.userIDs
       users.push(user.id)
       console.log(users)
-      updateCompany(new Company({id: singleItem.id, userIDs: users}))
+      const companyId = await updateCompany(
+        new Company({id: singleItem.id, userIDs: users})
+      )
       console.log('joined company')
 
       const companyUserData = [
         {
           address: singleItem.address,
           name: singleItem.displayName,
-          location: singleItem.location
-        }
+          location: singleItem.location,
+          id: companyId,
+        },
       ]
+
+      console.log('data id', companyId)
+
       console.log('updating user')
       user.company = companyUserData
       updateUser(user)
@@ -35,14 +50,16 @@ export const CompanyListItem = ({singleItem, navigation}) => {
 
   return (
     <Content>
-      <Card style={styles.list} >
+      <Card style={styles.list}>
         <CardItem style={styles.item}>
           <Left>
             <Icon active name="home-outline" />
             <Text style={styles.title}>Company: {singleItem.displayName}</Text>
           </Left>
           <Right>
-            <Button onPress={() => joinCompany()}><Text>Join</Text></Button>
+            <Button onPress={() => joinCompany()}>
+              <Text>Join</Text>
+            </Button>
           </Right>
         </CardItem>
         <CardItem style={styles.item}>

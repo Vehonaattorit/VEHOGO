@@ -118,7 +118,7 @@ export const OutlookCalendar = () => {
   console.log('calendar state events', calendarState.events)
 
   return (
-    <SafeAreaView style={styles.AndroidSafeArea}>
+    <View style={styles.AndroidSafeArea}>
       <AuthContext.Provider value={authContext}>
         <Button
           title={state.userToken ? 'Sign out' : ' Log in'}
@@ -140,7 +140,7 @@ export const OutlookCalendar = () => {
           }}
         />
       </AuthContext.Provider>
-    </SafeAreaView>
+    </View>
   )
 }
 
