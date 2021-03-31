@@ -19,7 +19,7 @@ function MainStackNavigator() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator headerMode="none">
+      <Stack.Navigator>
         <Stack.Screen
           name="MainPage"
           component={MainPage}

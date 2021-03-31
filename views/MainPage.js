@@ -76,60 +76,92 @@ export const MainPage = ({navigation}) => {
   useEffect(() => {
     checkTravelPreference()
     // createAsManyWorkTripDocuments()
+    fetchNextDay()
   }, [travelPreference])
 
   const [travelPreference, setTravelPreference] = useState('')
 
   const [passengerList, setPassengerList] = useState([])
 
-  const checkTravelPreference = async () => {
-    setTravelPreference(user.travelPreference)
-
+  const fetchNextDay = async () => {
     console.log('travelPreference', travelPreference)
 
     const result = await getWorkTrips(user.company[0].id)
 
+    const currentDay = new Date().getDay()
+
+    // const query = await workTripQuery(
+    //   user.company[0].id,
+    //   'scheduledDrive.start',
+    //   '<',
+    //   new Date(1970, 0, 1, 9, 0)
+    // )
     const query = await workTripQuery(
       user.company[0].id,
-      'scheduledDrive.start',
-      '>',
-      new Date('1970-01-02')
+      'workDayNum',
+      '==',
+      currentDay
     )
 
     console.log('query', query)
 
-    setPassengerList(result)
+    setPassengerList(query)
+  }
 
+  const checkTravelPreference = async () => {
+    setTravelPreference(user.travelPreference)
+
+    // console.log('travelPreference', travelPreference)
+
+    // const result = await getWorkTrips(user.company[0].id)
+
+    // const currentDay = new Date().getDay()
+
+    // // const query = await workTripQuery(
+    // //   user.company[0].id,
+    // //   'scheduledDrive.start',
+    // //   '<',
+    // //   new Date(1970, 0, 1, 9, 0)
+    // // )
+    // const query = await workTripQuery(
+    //   user.company[0].id,
+    //   'workDayNum',
+    //   '==',
+    //   currentDay
+    // )
+
+    // console.log('query', query)
+
+    // setPassengerList(query)
   }
 
   const displayPassengerList = () => {
     if (travelPreference === 'passenger') {
       return (
-        <Container>
-          <Header>
-            <Left>
-              <Button transparent>
-                <Icon name="arrow-back" />
-              </Button>
-            </Left>
-            <Body>
-              <Title>Header</Title>
-            </Body>
-            <Right>
-              <Button
-                onPress={() => {
-                  console.log('Sort & Order')
-                }}
-                transparent
-              >
-                <Icon name="menu" />
-              </Button>
-            </Right>
-          </Header>
-          <View style={styles.listView}>
-            <PassengerList navigation={navigation} dataArray={passengerList} />
-          </View>
-        </Container>
+        // <Container>
+        //   <Header>
+        //     <Left>
+        //       <Button transparent>
+        //         <Icon name="arrow-back" />
+        //       </Button>
+        //     </Left>
+        //     <Body>
+        //       <Title>Header</Title>
+        //     </Body>
+        //     <Right>
+        //       <Button
+        //         onPress={() => {
+        //           console.log('Sort & Order')
+        //         }}
+        //         transparent
+        //       >
+        //         <Icon name="menu" />
+        //       </Button>
+        //     </Right>
+        //   </Header>
+        <View style={styles.listView}>
+          <PassengerList navigation={navigation} dataArray={passengerList} />
+        </View>
       )
     }
   }
@@ -171,9 +203,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  listView: {
-    flex: 1,
-  },
+  listView: {},
 
   scheduleView: {
     flex: 1,
