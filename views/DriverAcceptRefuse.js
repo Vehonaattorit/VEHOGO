@@ -1,11 +1,14 @@
-import React, {useState, useEffect, useRef} from 'react'
+import React, {useState, useEffect, useRef, useContext} from 'react'
+import {UserContext} from '../contexts'
 import {StyleSheet, Dimensions} from 'react-native'
 import {Content, Body, Container, Text, View, Button} from 'native-base'
 import MapView from 'react-native-maps'
 import {updateWorkTrip} from '../controllers/workTripController'
+import PassengerRideRequestButton from './passengerRideRequestButton'
 
 export const DriverAcceptRefuse = ({navigation, route}) => {
   const {singleItem} = route.params
+  const {user} = useContext(UserContext)
 
   console.log('singleItem', singleItem)
   const [mapRef, setMapRef] = useState(null)
@@ -23,15 +26,16 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
   ])
 
   useEffect(() => {
+    console.log('user', user)
     setTimeout(() => {
       console.log('now timer ending')
       if (mapRef != undefined && mapRef != null) {
         console.log(
           'fit markers',
-          singleItem.scheduledDrive.stops.map((stop) => stop.latLng)
+          singleItem.scheduledDrive.stops.map((stop) => stop.address)
         )
-        mapRef.fitToCoordinates(
-          singleItem.scheduledDrive.stops.map((stop) => stop.latLng)
+        mapRef.fitToSuppliedMarkers(
+          singleItem.scheduledDrive.stops.map((stop) => stop.address)
         )
       }
     }, 3000)
@@ -92,15 +96,18 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
           </View>
 
           <Text style={{margin: 10}}>Adress</Text>
-
-          <View style={styles.buttons}>
-            <Button onPress={acceptHandler} large style={styles.button}>
-              <Text style={styles.btntxt}>Accept</Text>
-            </Button>
-            <Button large style={{...styles.button, backgroundColor: 'red'}}>
-              <Text style={styles.btntxt}>Refuse</Text>
-            </Button>
-          </View>
+          {user.travelPreference == 'passenger' ? (
+            <PassengerRideRequestButton user={user} workTrip={singleItem}/>
+          ) : (
+            <View style={styles.buttons}>
+              <Button onPress={acceptHandler} large style={styles.button}>
+                <Text style={styles.btntxt}>Accept</Text>
+              </Button>
+              <Button large style={{...styles.button, backgroundColor: 'red'}}>
+                <Text style={styles.btntxt}>Refuse</Text>
+              </Button>
+            </View>
+          )}
         </Content>
       </Container>
     </View>
