@@ -4,7 +4,6 @@ import {StyleSheet, View} from 'react-native'
 import {color} from '../constants/colors'
 import {Input} from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import firebase from '../firebase/fire'
 import {CustomButton} from '../components/CustomButton'
 import {register} from '../controllers/LoginController'
 
