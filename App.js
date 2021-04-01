@@ -13,6 +13,8 @@ import {useCardAnimation} from '@react-navigation/stack'
 import {User, userConverter} from './models/user'
 import {addChat, getChat} from './controllers/chatRoomController'
 
+import {Permissions, Notifications} from 'expo'
+
 import {LogBox} from 'react-native'
 
 export default function App() {
@@ -20,8 +22,6 @@ export default function App() {
   const [userId, setUserId] = useState(null)
 
   LogBox.ignoreLogs(['Setting a timer'])
-
-  // signOut()
 
   const loadFonts = async () => {
     await Font.loadAsync({

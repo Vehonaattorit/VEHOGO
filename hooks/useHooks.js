@@ -6,8 +6,6 @@ import {
   workTripOrderByQuery,
 } from '../controllers/workTripController'
 
-import firebase from 'firebase'
-
 const useWorkTripHooks = (user) => {
   const [multiSliderValue, setMultiSliderValue] = useState([540, 1020])
   const [extraDay, setExtraDay] = useState([])
