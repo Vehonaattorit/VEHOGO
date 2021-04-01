@@ -22,6 +22,7 @@ const PassengerAcceptRefuseButton = (props) => {
         userID: rideRequest.userID,
       })
     )
+    workTripToUpdate.scheduledDrive.takenSeats += 1
     updateWorkTrip(user.company.id, workTripToUpdate)
   }
 
