@@ -34,7 +34,7 @@ export async function getWorkTrip(companyId, workTripId) {
       .doc(workTripId)
       .withConverter(workTripConverter)
       .get()
-
+    console.log(doc.data())
     return doc.data()
   } catch (error) {
     console.error('Error getting document: ', error)

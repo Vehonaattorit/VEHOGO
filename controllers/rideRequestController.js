@@ -44,6 +44,23 @@ export async function getRideRequest(companyId, rideRequestId) {
   }
 }
 
+export async function deleteRideRequest(companyId, rideRequestId) {
+  try {
+    // Add a new document in collection "users"
+    let doc = await db
+      .collection('companys')
+      .doc(companyId)
+      .collection('requests')
+      .doc(rideRequestId)
+      .delete()
+
+    return
+  } catch (error) {
+    console.error('Error getting document: ', error)
+    return
+  }
+}
+
 export async function getRideRequests(companyId) {
   try {
     // Add a new document in collection "users"

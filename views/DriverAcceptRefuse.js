@@ -5,24 +5,33 @@ import {Content, Body, Container, Text, View, Button} from 'native-base'
 import MapView from 'react-native-maps'
 import {updateWorkTrip} from '../controllers/workTripController'
 import PassengerRideRequestButton from './passengerRideRequestButton'
+import PassengerAcceptRefuseButton from './passengerAcceptRefuseButton'
 
 export const DriverAcceptRefuse = ({navigation, route}) => {
-  const {singleItem} = route.params
+  const {singleItem, rideRequest} = route.params
   const {user} = useContext(UserContext)
 
-  console.log('singleItem', singleItem)
   const [mapRef, setMapRef] = useState(null)
   const [markers, setMarkers] = useState([
     singleItem.scheduledDrive.stops.map((stop) => (
       <MapView.Marker
         key={stop.address}
         coordinate={{
-          latitude: stop.latLng.latitude,
-          longitude: stop.latLng.longitude,
+          latitude: stop.location.latitude,
+          longitude: stop.location.longitude,
         }}
         title="Random place"
       />
     )),
+    rideRequest != undefined && (
+      <MapView.Marker
+        key={rideRequest.address}
+        coordinate={{
+          latitude: rideRequest.homeLocation.latitude,
+          longitude: rideRequest.homeLocation.longitude,
+        }}
+      />
+    ),
   ])
 
   useEffect(() => {
@@ -78,8 +87,8 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
           style={styles.mapStyle}
           provider={MapView.PROVIDER_GOOGLE}
           initialRegion={{
-            latitude: singleItem.scheduledDrive.stops[0].latLng.latitude,
-            longitude: singleItem.scheduledDrive.stops[0].latLng.longitude,
+            latitude: singleItem.scheduledDrive.stops[0].location.latitude,
+            longitude: singleItem.scheduledDrive.stops[0].location.longitude,
             latitudeDelta: 1,
             longitudeDelta: 1,
           }}
@@ -91,22 +100,25 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
       <Container style={styles.requestAcceptRefuseContent}>
         <Content padder>
           <View style={styles.info}>
-            <Text>{singleItem.car.driverName}</Text>
+            <Text>
+              {rideRequest == undefined
+                ? singleItem.car.driverName
+                : rideRequest.userName}
+            </Text>
             <Text>2km</Text>
           </View>
 
-          <Text style={{margin: 10}}>Adress</Text>
+          <Text style={{margin: 10}}>
+            Adress{rideRequest == undefined ? '' : rideRequest.homeAddress}
+          </Text>
           {user.travelPreference == 'passenger' ? (
-            <PassengerRideRequestButton user={user} workTrip={singleItem}/>
+            <PassengerRideRequestButton user={user} workTrip={singleItem} />
           ) : (
-            <View style={styles.buttons}>
-              <Button onPress={acceptHandler} large style={styles.button}>
-                <Text style={styles.btntxt}>Accept</Text>
-              </Button>
-              <Button large style={{...styles.button, backgroundColor: 'red'}}>
-                <Text style={styles.btntxt}>Refuse</Text>
-              </Button>
-            </View>
+            <PassengerAcceptRefuseButton
+              user={user}
+              workTrip={singleItem}
+              rideRequest={rideRequest}
+            />
           )}
         </Content>
       </Container>

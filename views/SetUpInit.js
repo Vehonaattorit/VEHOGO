@@ -69,7 +69,7 @@ export const SetUpInit = ({route}) => {
                 address: user.homeAddress,
                 stopName: 'Home',
                 userID: user.id,
-                latLng: user.latLng,
+                location: user.homeLocation,
               }),
             ],
           }),
