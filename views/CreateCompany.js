@@ -102,14 +102,13 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
         })
       )
 
-      const companyUserData = [
-        {
+      const companyUserData = {
           address: data.address,
           name: companyName,
           location: data.point,
-          id: companyId,
-        },
-      ]
+          id: companyId
+      }
+
       user.company = companyUserData
 
       updateUser(user)
