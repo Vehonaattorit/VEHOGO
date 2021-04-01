@@ -1,5 +1,5 @@
 import React, {useEffect, useContext, useState} from 'react'
-import {StyleSheet} from 'react-native'
+import {Alert, StyleSheet} from 'react-native'
 import {
   Body,
   View,
@@ -23,6 +23,8 @@ import {color} from '../constants/colors'
 import MultiSlider from '@ptomasroos/react-native-multi-slider'
 import {useWorkTripHooks} from '../hooks/useHooks'
 
+import * as Permissions from 'expo-permissions'
+
 export const MainPage = ({navigation}) => {
   const {user} = useContext(UserContext)
 
@@ -41,41 +43,36 @@ export const MainPage = ({navigation}) => {
   useEffect(() => {
     checkTravelPreference()
     // createAsManyWorkTripDocuments()
-    fetchTodayRides()
+    if (travelPreference === 'passenger') fetchTodayRides()
 
-    // registerForPushNotificationAsync(user.)
+    registerForPushNotificationAsync(user.id)
   }, [travelPreference])
 
-  const registerForPushNotificationAsync = async (currentUser) => {
-    const {existingStatus} = await Permissions.getAsync(
-      Permissions.Notifications
-    )
-    let finalStatus = existingStatus
+  const registerForPushNotificationAsync = async () => {
+    const expoToken = user.expoToken
 
-    // only ask if permissions have not already been determined, because
-    // iOS won't necessarily prompt the user a second time.
+    if (!expoToken) {
+      Permissions.askAsync(Permissions.NOTIFICATIONS)
 
-    if (existingStatus != 'granted') {
-      // Android remote notification permissions are granted during the app
-      // install, so this will only ask on iOS
+      if (status !== 'granted') {
+        Alert.alert('Wrong input!', 'No notification permissions!', [
+          {text: 'Okay'},
+        ])
+        return
+      }
 
-      const {status} = await Permissions.askAsync(Permissions.Notifications)
-      finalStatus = status
+      let token = await Notifications.getExpoPushTokenAsync()
+
+      // Only update the profile with the expoToken if it not exists yet
+      if (token !== '') {
+        const inputParams = {
+          id: user,
+          expoToken: token,
+        }
+
+        console.log('Input Params', inputParams)
+      }
     }
-
-    // Stop here if the user did not grant permissions
-    if (finalStatus !== 'granted') return
-
-    // Get the token that uniquely identifies this device
-    let token = await Notifications.getExpoPushTokenAsync()
-
-    // POST the token to our backend so we can use it to send pushes from there
-    let updates = {}
-    updates['/expotoken'] = token
-
-    console.log('updates', updates)
-
-    // await firebase.firestor
   }
 
   const [travelPreference, setTravelPreference] = useState('')

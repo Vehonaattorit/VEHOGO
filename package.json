@@ -52,7 +52,8 @@
     "react-native-vector-icons": "^7.1.0",
     "react-native-web": "^0.15.3",
     "uuid": "^3.4.0",
-    "expo-clipboard": "~1.0.1"
+    "expo-clipboard": "~1.0.1",
+    "expo-permissions": "~10.0.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
