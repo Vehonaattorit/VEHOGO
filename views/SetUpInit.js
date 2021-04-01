@@ -52,6 +52,22 @@ export const SetUpInit = ({route}) => {
           : new Date(1970, 0, 1, item.workDayStart.toDate().getHours() + 1, 30)
 
       const goingTo = index % 2 === 0 ? 'home' : 'work'
+      let initialStops = [
+        new Stop({
+          location: user.city,
+          address: user.homeAddress,
+          stopName: 'Home',
+          userID: user.id,
+          location: user.homeLocation,
+        }),
+        new Stop({
+          location: user.company.location,
+          address: user.company.address,
+          stopName: user.company.name,
+          userID: user.id,
+          location: user.homeLocation,
+        }),
+      ]
       updateWorkTrip(
         user.company[0].id, // Looks for company ID that user has joined
         new WorkTrip({
@@ -62,16 +78,8 @@ export const SetUpInit = ({route}) => {
           scheduledDrive: new ScheduledDrive({
             start: new firebase.firestore.Timestamp.fromDate(start),
             end: new firebase.firestore.Timestamp.fromDate(end),
-            takenSeats: 3,
-            stops: [
-              new Stop({
-                location: user.city,
-                address: user.homeAddress,
-                stopName: 'Home',
-                userID: user.id,
-                location: user.homeLocation,
-              }),
-            ],
+            takenSeats: 0,
+            stops: goingTo == 'work' ? initialStops : initialStops.reverse(),
           }),
           car: new Car({
             id: 'dashfihasi',
