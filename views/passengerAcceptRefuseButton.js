@@ -13,7 +13,7 @@ const PassengerAcceptRefuseButton = (props) => {
 
   const acceptPassenger = async () => {
     console.log(`Accepting passenger : ${rideRequest.userID}`)
-    deleteRideRequest(user.company[0].id, rideRequest.id)
+    deleteRideRequest(user.company.id, rideRequest.id)
     let workTripToUpdate = workTrip.scheduledDrive.stops.push(
       new Stop({
         location: rideRequest.homeLocation,
@@ -22,12 +22,12 @@ const PassengerAcceptRefuseButton = (props) => {
         userID: rideRequest.userID,
       })
     )
-    updateWorkTrip(user.company[0].id, workTripToUpdate)
+    updateWorkTrip(user.company.id, workTripToUpdate)
   }
 
   const refusePassenger = async () => {
     console.log(`Refusing passenger : ${rideRequest.userID}`)
-    deleteRideRequest(user.company[0].id, rideRequest.id)
+    deleteRideRequest(user.company.id, rideRequest.id)
   }
 
   return (

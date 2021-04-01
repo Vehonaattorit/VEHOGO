@@ -13,7 +13,7 @@ export const DriverRideRequestList = ({navigation, dataArray}) => {
 
   const getRideRequests = async () => {
     let requests = await rideRequestQuery(
-      user.company[0].id,
+      user.company.id,
       'driverID',
       '==',
       user.id
@@ -26,9 +26,9 @@ export const DriverRideRequestList = ({navigation, dataArray}) => {
   }, [])
 
   const viewRequest = async (rideRequest) => {
-    console.log(user.company[0].id,rideRequest.workTripRefID)
+    console.log(user.company.id,rideRequest.workTripRefID)
     let singleItem = await getWorkTrip(
-      user.company[0].id,
+      user.company.id,
       rideRequest.workTripRefID
     )
     console.log('driverRideRequest single item',singleItem)

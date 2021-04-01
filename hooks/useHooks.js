@@ -47,7 +47,7 @@ const useWorkTripHooks = (user) => {
 
     const goingTo = fetchHomeOrWorkTrips()
 
-    const query = await workTripMultiQuery(user.company[0].id, [
+    const query = await workTripMultiQuery(user.company.id, [
       {
         field: 'scheduledDrive.start',
         condition: '>=',
@@ -72,7 +72,7 @@ const useWorkTripHooks = (user) => {
 
     const goingTo = fetchHomeOrWorkTrips()
 
-    const query = await workTripOrderByQuery(user.company[0].id, [
+    const query = await workTripOrderByQuery(user.company.id, [
       {field: 'workDayNum', condition: '==', value: currentWeekDay},
       {field: 'goingTo', condition: '==', value: goingTo},
     ])

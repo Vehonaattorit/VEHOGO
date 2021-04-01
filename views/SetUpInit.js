@@ -19,7 +19,7 @@ import firebase from 'firebase'
 export const SetUpInit = ({route}) => {
   const {user} = useContext(UserContext)
 
-  console.log('user company id', user.company[0].id)
+  console.log('user company id', user.company.id)
   console.log('user SetUpInit', user)
 
   const setupWorkTripDocs = () => {
@@ -69,7 +69,7 @@ export const SetUpInit = ({route}) => {
         }),
       ]
       updateWorkTrip(
-        user.company[0].id, // Looks for company ID that user has joined
+        user.company.id, // Looks for company ID that user has joined
         new WorkTrip({
           driverID: user.id,
           goingTo: goingTo,

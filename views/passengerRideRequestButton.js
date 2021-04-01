@@ -15,11 +15,11 @@ const PassengerRideRequestButton = ({user, workTrip}) => {
 
   const requestRide = async () => {
     console.log(
-      `Requesting ride from company: ${user.company[0].id} worktrip ${myWorkTrip.id} with user ${user.userName}`
+      `Requesting ride from company: ${user.company.id} worktrip ${myWorkTrip.id} with user ${user.userName}`
     )
     console.log('starting update')
     await updateRideRequest(
-      user.company[0].id,
+      user.company.id,
       new RideRequest({
         homeLocation: user.homeLocation,
         homeAddress: user.homeAddress,
