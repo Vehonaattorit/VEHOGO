@@ -12,9 +12,11 @@ const PassengerAcceptRefuseButton = (props) => {
   useEffect(() => {})
 
   const acceptPassenger = async () => {
+    console.log('workTrip object',workTrip)
     console.log(`Accepting passenger : ${rideRequest.userID}`)
-    deleteRideRequest(user.company.id, rideRequest.id)
-    let workTripToUpdate = workTrip.scheduledDrive.stops.push(
+    await deleteRideRequest(user.company.id, rideRequest.id)
+    let workTripToUpdate = workTrip
+    workTripToUpdate.scheduledDrive.stops.push(
       new Stop({
         location: rideRequest.homeLocation,
         address: rideRequest.homeAddress,
@@ -22,8 +24,10 @@ const PassengerAcceptRefuseButton = (props) => {
         userID: rideRequest.userID,
       })
     )
+    console.log('is this the number',workTripToUpdate)
     workTripToUpdate.scheduledDrive.takenSeats += 1
-    updateWorkTrip(user.company.id, workTripToUpdate)
+    console.log(workTripToUpdate)
+    await updateWorkTrip(user.company.id, workTripToUpdate)
   }
 
   const refusePassenger = async () => {
