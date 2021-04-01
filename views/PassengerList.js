@@ -2,6 +2,7 @@ import React from 'react'
 import {FlatList} from 'react-native'
 import {View} from 'native-base'
 import PassengerListItem from './PassengerListItem'
+import moment from 'moment'
 
 const PassengerList = ({extraDay, navigation, dataArray}) => {
   return (
@@ -15,7 +16,10 @@ const PassengerList = ({extraDay, navigation, dataArray}) => {
         renderItem={({item}) => (
           <PassengerListItem
             navigation={navigation}
-            singleItem={{...item, extraDay}}
+            singleItem={{
+              ...item,
+              extraDay,
+            }}
           />
         )}
       />

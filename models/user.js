@@ -81,8 +81,6 @@ export const userConverter = {
   fromFirestore: function (snapshot, options) {
     const data = snapshot.data(options)
 
-    console.log('user data company', data)
-
     return new User({
       id: data.id,
       userName: data.userName,

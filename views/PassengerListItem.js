@@ -5,8 +5,10 @@ import {Content, Card, CardItem, Text, Left, Right, Icon} from 'native-base'
 import {TouchableOpacity} from 'react-native'
 import moment from 'moment'
 
+import firebase from 'firebase/app'
+
 const PassengerListItem = ({navigation, singleItem}) => {
-  const {car, scheduledDrive, goingTo, workDayNum, extraDay} = singleItem
+  const {car, goingTo, scheduledDrive, workDayNum, extraDay} = singleItem
 
   const checkWhatDayItIs = (dayNum) => {
     switch (String(dayNum)) {
@@ -60,9 +62,9 @@ const PassengerListItem = ({navigation, singleItem}) => {
                 {scheduledDrive.stops[0].location}
               </Text>
               <Text>
-                {moment(scheduledDrive.start).format('HH:mm') +
+                {moment(scheduledDrive.start.toDate()).format('HH:mm') +
                   ' - ' +
-                  moment(scheduledDrive.end).format('HH:mm')}
+                  moment(scheduledDrive.end.toDate()).format('HH:mm')}
               </Text>
             </Left>
           </CardItem>

@@ -19,6 +19,8 @@ import {color} from '../constants/colors'
 
 import {formatTime} from '../utils/utils'
 
+import firebase from 'firebase'
+
 const DateTimeInput = (props) => {
   const [showTimePicker, setShowTimePicker] = useState(Platform.OS === 'ios')
 
@@ -157,26 +159,23 @@ export const WorkingHours = ({navigation}) => {
 
       return
     }
-
     let tempArr = []
+
+    const start = new Date(
+      1970,
+      0,
+      1,
+      startDate.getHours(),
+      startDate.getMinutes()
+    )
+
+    const end = new Date(1970, 0, 1, endDate.getHours(), endDate.getMinutes())
 
     user.workDays.forEach((element) => {
       tempArr.push({
         workDayNum: element.workDayNum,
-        workDayStart: new Date(
-          1970,
-          0,
-          1,
-          startDate.getHours(),
-          startDate.getMinutes()
-        ),
-        workDayEnd: new Date(
-          1970,
-          0,
-          1,
-          endDate.getHours(),
-          endDate.getMinutes()
-        ),
+        workDayStart: new firebase.firestore.Timestamp.fromDate(start),
+        workDayEnd: new firebase.firestore.Timestamp.fromDate(end),
       })
     })
 
