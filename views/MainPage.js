@@ -137,7 +137,7 @@ export const MainPage = ({navigation}) => {
             >
               <Text>Calender</Text>
             </Button>
-            <Button style={styles.button} onPress={() => signOut(signedOut)}>
+            <Button style={styles.button} onPress={() => signOut()}>
               <Text>LogOut</Text>
             </Button>
 

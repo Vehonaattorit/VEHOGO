@@ -14,11 +14,23 @@ import firebase from 'firebase/app'
 import {updateUser} from '../controllers/userController'
 import GooglePlacesInput from '../components/GooglePlaceInput'
 import {updateCompanyCity} from '../controllers/companyCitiesController'
+import {CompanyCode} from './CompanyCode'
 
 export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
   const [companyAddress, setAddress] = useState('')
   const [companyName, setName] = useState('')
   const {user} = useContext(UserContext)
+  const [showCode, setShowCode] = useState(false)
+  const [companyCode, setCompanyCode] = useState('')
+
+  function getRandomString(length) {
+    var randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var result = '';
+    for (var i = 0; i < length; i++) {
+      result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
+    }
+    return result;
+  }
 
   const getCompanyGeoLocation = async () => {
     try {
@@ -37,15 +49,31 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
       )
       console.log(locationPoint)
       var city = ''
+      var route = ''
+      var streetNumber = ''
+      var postalCode = ''
       responseJson.results[0].address_components.forEach((element) => {
         if (element.types[0] === 'locality') {
           city = element.long_name
         }
+        if (element.types[0] === 'route'){
+          route = element.long_name
+        }
+        if (element.types[0] === 'street_number'){
+          streetNumber = element.long_name
+        }
+        if (element.types[0] === 'postal_code'){
+          postalCode = element.long_name
+        }
       })
+
+      const address = route + ' ' + streetNumber
 
       const data = {
         point: locationPoint,
         city: city,
+        address: address,
+        postalCode: postalCode
       }
       console.log(data)
 
@@ -56,16 +84,21 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
   }
   const sendCompanyData = async () => {
     if (companyAddress.length > 0 && companyName.length > 0) {
+
+      const cCode = getRandomString(6)
+
       const data = await getCompanyGeoLocation()
 
       updateCompanyCity(data.city)
       const companyId = await updateCompany(
         new Company({
-          address: companyAddress,
+          address: data.address,
           displayName: companyName,
           userIDs: [user.id],
           location: data.point,
           city: data.city,
+          companyCode: cCode,
+          postalCode: data.postalCode
         })
       )
 
@@ -84,7 +117,8 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
       console.log('data id', data)
 
       console.log('updated')
-      navigation.navigate('Travel')
+      setCompanyCode(cCode)
+      setShowCode(true)
     } else {
       console.log('inputs empty')
     }
@@ -92,47 +126,55 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
 
   return (
     <View style={styles.container}>
-      <CustomTitle title="Company" />
-      <View style={styles.inputContainer}>
-        <Item>
-          <Input
-            placeholder="Company name"
-            value={companyName}
-            onChangeText={setName}
-            errorMessage={
-              companyName.length < 1 &&
-              'Company name must be at least 1 character long'
-            }
-          />
-        </Item>
-        <Item>
-          <GooglePlacesInput
-            style={{alignSelf: 'stretch'}}
-            setAddress={setAddress}
-          />
-        </Item>
-      </View>
-      <View style={styles.btnContainer}>
-        <Button
-          block
-          style={styles.btns}
-          onPress={() => {
-            sendCompanyData()
-          }}
-        >
-          <Text>Continue</Text>
-        </Button>
-        <Button
-          block
-          style={styles.btns}
-          onPress={() => {
-            setShowCreate(false)
-            setShowBtns(true)
-          }}
-        >
-          <Text>Cancel</Text>
-        </Button>
-      </View>
+
+      {!showCode ? (
+        <>
+          <CustomTitle title="Company" />
+          <View style={styles.inputContainer}>
+            <Item>
+              <Input
+                placeholder="Company name"
+                value={companyName}
+                onChangeText={setName}
+                errorMessage={
+                  companyName.length < 1 &&
+                  'Company name must be at least 1 character long'
+                }
+              />
+            </Item>
+            <Item>
+              <GooglePlacesInput
+                style={{alignSelf: 'stretch'}}
+                setAddress={setAddress}
+              />
+            </Item>
+          </View>
+          <View style={styles.btnContainer}>
+            <Button
+              block
+              style={styles.btns}
+              onPress={() => {
+                sendCompanyData()
+              }}
+            >
+              <Text>Continue</Text>
+            </Button>
+            <Button
+              block
+              style={styles.btns}
+              onPress={() => {
+                setShowCreate(false)
+                setShowBtns(true)
+              }}
+            >
+              <Text>Cancel</Text>
+            </Button>
+          </View>
+        </>
+      ) : (
+        <CompanyCode navigation={navigation} companyCode={companyCode}></CompanyCode>
+    )}
+
     </View>
   )
 }

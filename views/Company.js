@@ -1,38 +1,39 @@
-import React, {useContext, useState, useEffect} from 'react'
-import {SafeAreaView, StyleSheet, FlatList} from 'react-native'
+import React, {useState} from 'react'
+import {StyleSheet} from 'react-native'
 import {
-  Content,
-  Card,
-  CardItem,
   Text,
-  Left,
-  Right,
   Icon,
   Button,
 } from 'native-base'
-import {View} from 'native-base'
-import {UserContext} from '../contexts'
+import {View, Item, Input} from 'native-base'
 import {JoinCompany} from './JoinCompany'
 import {CustomButton} from '../components/CustomButton'
 import {CreateCompany} from './CreateCompany'
-import {getCompanyCities} from '../controllers/companyCitiesController'
-import {CompanyCitiesListItem} from '../components/CompanyCitiesListItem'
+import {companyQuery} from '../controllers/companyController'
 
 export const Company = ({navigation}) => {
-  const {user} = useContext(UserContext)
   const [showBtns, setShowBtns] = useState(true)
   const [showJoin, setShowJoin] = useState(false)
   const [showCreate, setShowCreate] = useState(false)
-  const [companyCities, setCities] = useState([])
-  const [cityFilter, setCityFilter] = useState('')
+  const [companyCode, setCompanyCode] = useState('')
+  const [companyData, setCompanyData] = useState([])
+  const [error, setError] = useState(false)
 
-  const fetchCities = async () => {
-    const result = await getCompanyCities()
-    setCities(result)
+  const getCompanies = async () => {
+    const companies = await companyQuery('companyCode', '==', companyCode)
+
+    if (companies.length === 0) {
+      console.log('did not found companies with code')
+      setError(true)
+    } else {
+      console.log('found companies with code')
+      setCompanyData(companies)
+      setShowJoin(true)
+      setShowBtns(false)
+      setError(false)
+    }
+
   }
-  useEffect(() => {
-    fetchCities()
-  }, [])
 
   return (
     <View style={styles.view}>
@@ -49,24 +50,34 @@ export const Company = ({navigation}) => {
               />
             </View>
             <Text style={{alignSelf: 'center', margin: 5}}>
-              or find your company by choosing the city{' '}
+              or if you are invited to company insert code
             </Text>
           </View>
 
-          <View style={styles.companyCities}>
-            <FlatList
-              data={companyCities}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({item}) => (
-                <CompanyCitiesListItem
-                  city={item}
-                  setShowJoin={setShowJoin}
-                  setShowBtns={setShowBtns}
-                  setCityFilter={setCityFilter}
-                />
-              )}
-            />
+          <View style={styles.inputContainer}>
+            <Item>
+              <Input
+                placeholder="Company Invitation Code"
+                value={companyCode}
+                onChangeText={setCompanyCode}
+                errorMessage={
+                  companyCode.length < 1 &&
+                  'Company name must be at least 1 character long'
+                }
+              />
+              <Button onPress={() => {
+                getCompanies()
+              }
+              }>
+                <Icon active name='checkmark-circle-outline' />
+              </Button>
+            </Item>
+            {error &&
+              <Text style={styles.errorText}>Code is not valid</Text>
+            }
+
           </View>
+
         </>
       )}
       {showBtns === false && showJoin === true ? (
@@ -74,7 +85,7 @@ export const Company = ({navigation}) => {
           navigation={navigation}
           setShowJoin={setShowJoin}
           setShowBtns={setShowBtns}
-          cityFilter={cityFilter}
+          companyData={companyData}
         />
       ) : (
         showBtns === false &&
@@ -94,9 +105,14 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     backgroundColor: 'white',
+    justifyContent: 'center',
   },
   button: {
     marginTop: 10,
   },
-  companyCities: {},
+  errorText: {
+    color: 'red',
+    alignSelf:'center'
+  }
+
 })

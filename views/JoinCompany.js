@@ -5,25 +5,16 @@ import {Button} from 'react-native-paper'
 import {CustomButton} from '../components/CustomButton'
 import {CompanyList} from '../components/CompanyList'
 import {companyQuery} from '../controllers/companyController'
-export const JoinCompany = ({navigation, setShowJoin, setShowBtns, cityFilter}) => {
+export const JoinCompany = ({navigation, setShowJoin, setShowBtns, companyData}) => {
 
-  const [companyData, setCompanyData] = useState([])
   const [filteredCompanyData, setFilteredCompanyData] = useState([])
   const [filter, setFilter] = useState('')
-  const getCompanies = async () => {
-
-    const companies = await companyQuery('city', '==', cityFilter)
-    setCompanyData(companies)
-  }
 
   const getCompaniesWithFilter = async () => {
     const filteredData = companyData.filter(company => company.displayName.includes(filter))
     setFilteredCompanyData(filteredData)
   }
 
-  useEffect(() => {
-    getCompanies()
-  }, [])
   return (
     <View style={styles.container}>
       <CustomButton
