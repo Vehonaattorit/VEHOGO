@@ -14,6 +14,8 @@ import {Car} from '../models/car'
 import {Stop} from '../models/stop'
 import {updateWorkTrip} from '../controllers/workTripController'
 
+import firebase from 'firebase'
+
 export const SetUpInit = ({route}) => {
   const {user} = useContext(UserContext)
 
@@ -34,17 +36,22 @@ export const SetUpInit = ({route}) => {
       let index = i + 1
 
       console.log('WHOLE ITEM', item)
-      console.log('item workDayStart', item.workDayStart)
-      console.log('item workDayEnd', item.workDayEnd)
+      console.log('item workDayStart', item.workDayStart.toDate())
+      console.log('item workDayEnd', item.workDayEnd.toDate())
 
       const start =
-        index % 2 === 0 ? item.workDayEnd : new Date(2021, 3, 29, 8, 30)
+        index % 2 === 0 ? item.workDayEnd.toDate() : item.workDayStart.toDate()
+
+      // TODO:
+      // Implement how long it takes driver to back home instead of
+      //  "item.workDayEnd.toDate().getHours() + 1, 30)" placeholders
 
       const end =
-        index % 2 === 0 ? new Date(2021, 3, 29, 17, 30) : item.workDayStart
+        index % 2 === 0
+          ? new Date(1970, 0, 1, item.workDayEnd.toDate().getHours() + 1, 30)
+          : new Date(1970, 0, 1, item.workDayStart.toDate().getHours() + 1, 30)
 
       const goingTo = index % 2 === 0 ? 'home' : 'work'
-
       updateWorkTrip(
         user.company[0].id, // Looks for company ID that user has joined
         new WorkTrip({
@@ -53,8 +60,8 @@ export const SetUpInit = ({route}) => {
           currentLocation: user.homeAddress,
           workDayNum: item.workDayNum,
           scheduledDrive: new ScheduledDrive({
-            start: start,
-            end: end,
+            start: new firebase.firestore.Timestamp.fromDate(start),
+            end: new firebase.firestore.Timestamp.fromDate(end),
             takenSeats: 3,
             stops: [
               new Stop({
@@ -62,7 +69,7 @@ export const SetUpInit = ({route}) => {
                 address: user.homeAddress,
                 stopName: 'Home',
                 userID: user.id,
-                latLng: user.latLng,
+                location: user.homeLocation,
               }),
             ],
           }),

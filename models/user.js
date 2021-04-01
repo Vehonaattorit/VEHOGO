@@ -7,7 +7,6 @@ export class User {
     company,
     homeLocation,
     homeAddress,
-    latLng,
     city,
     displayPhotoURL,
     workDays,
@@ -22,7 +21,6 @@ export class User {
     this.company = company
     this.homeLocation = homeLocation
     this.homeAddress = homeAddress
-    this.latLng = latLng
     this.city = city
     this.displayPhotoURL = displayPhotoURL
     this.workDays = workDays
@@ -54,10 +52,6 @@ export const userConverter = {
       userObject.homeAddress = user.homeAddress
     }
 
-    if (user.latLng != undefined) {
-      userObject.latLng = user.latLng
-    }
-
     if (user.city != undefined) {
       userObject.city = user.city
     }
@@ -87,15 +81,12 @@ export const userConverter = {
   fromFirestore: function (snapshot, options) {
     const data = snapshot.data(options)
 
-    console.log('user data company', data)
-
     return new User({
       id: data.id,
       userName: data.userName,
       company: data.company,
       homeLocation: data.homeLocation,
       homeAddress: data.homeAddress,
-      latLng: data.latLng,
       city: data.city,
       displayPhotoURL: data.displayPhotoURL,
       workDays: data.workDays,

@@ -42,7 +42,41 @@ export const MainPage = ({navigation}) => {
     checkTravelPreference()
     // createAsManyWorkTripDocuments()
     fetchTodayRides()
+
+    // registerForPushNotificationAsync(user.)
   }, [travelPreference])
+
+  const registerForPushNotificationAsync = async (currentUser) => {
+    const {existingStatus} = await Permissions.getAsync(
+      Permissions.Notifications
+    )
+    let finalStatus = existingStatus
+
+    // only ask if permissions have not already been determined, because
+    // iOS won't necessarily prompt the user a second time.
+
+    if (existingStatus != 'granted') {
+      // Android remote notification permissions are granted during the app
+      // install, so this will only ask on iOS
+
+      const {status} = await Permissions.askAsync(Permissions.Notifications)
+      finalStatus = status
+    }
+
+    // Stop here if the user did not grant permissions
+    if (finalStatus !== 'granted') return
+
+    // Get the token that uniquely identifies this device
+    let token = await Notifications.getExpoPushTokenAsync()
+
+    // POST the token to our backend so we can use it to send pushes from there
+    let updates = {}
+    updates['/expotoken'] = token
+
+    console.log('updates', updates)
+
+    // await firebase.firestor
+  }
 
   const [travelPreference, setTravelPreference] = useState('')
 
@@ -137,10 +171,15 @@ export const MainPage = ({navigation}) => {
             >
               <Text>Calender</Text>
             </Button>
-            <Button style={styles.button} onPress={() => signOut()}>
+            <Button style={styles.button} onPress={signOut}>
               <Text>LogOut</Text>
             </Button>
-
+            <Button
+              style={styles.button}
+              onPress={() => navigation.navigate('DriverRideRequestList')}
+            >
+              <Text>Ride requests</Text>
+            </Button>
             <Button
               style={styles.button}
               onPress={() => navigation.navigate('DriverStartRide')}

@@ -18,7 +18,7 @@ const useWorkTripHooks = (user) => {
   ])
 
   const fetchHomeOrWorkTrips = () => {
-    const now = new Date(1970, 0, 1, 19, 0)
+    const now = new Date().getDay()
 
     const workDayEnd = user.preferedWorkingHours[0].workDayEnd.toDate()
 
@@ -43,6 +43,8 @@ const useWorkTripHooks = (user) => {
   }
 
   const queryWithTime = async () => {
+    const currentWeekDay = new Date().getDay()
+
     const goingTo = fetchHomeOrWorkTrips()
 
     const query = await workTripMultiQuery(user.company[0].id, [
@@ -56,6 +58,7 @@ const useWorkTripHooks = (user) => {
         condition: '<=',
         value: new Date(1970, 0, 1, timeValues[1].hours, timeValues[1].minutes),
       },
+      // {field: 'workDayNum', condition: '==', value: currentWeekDay},
       {field: 'goingTo', condition: '==', value: goingTo},
     ])
 
@@ -76,6 +79,8 @@ const useWorkTripHooks = (user) => {
 
     setPassengerList(query)
   }
+
+  // const perkele = jotain
 
   const slideTime = () => {
     let val0 = multiSliderValue[0]
