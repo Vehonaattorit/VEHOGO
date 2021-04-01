@@ -97,7 +97,7 @@ export const Address = ({navigation}) => {
 
     user.homeAddress = address
     user.city = city
-    user.latLng = data.point
+    user.homeLocation = data.point
 
     updateUser(user)
 
