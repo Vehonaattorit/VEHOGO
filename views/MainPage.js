@@ -140,7 +140,12 @@ export const MainPage = ({navigation}) => {
             <Button style={styles.button} onPress={() => signOut(signedOut)}>
               <Text>LogOut</Text>
             </Button>
-
+            <Button
+              style={styles.button}
+              onPress={() => navigation.navigate('DriverRideRequestList')}
+            >
+              <Text>Ride requests</Text>
+            </Button>
             <Button
               style={styles.button}
               onPress={() => navigation.navigate('DriverStartRide')}
