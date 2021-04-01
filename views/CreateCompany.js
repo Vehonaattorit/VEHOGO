@@ -104,7 +104,7 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
 
       const companyUserData = [
         {
-          address: companyAddress,
+          address: data.address,
           name: companyName,
           location: data.point,
           id: companyId,
