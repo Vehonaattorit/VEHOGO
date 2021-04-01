@@ -3,6 +3,7 @@ import {WorkDay, workDayConverter} from './workDay'
 export class User {
   constructor({
     id,
+    ownerPushToken,
     userName,
     company,
     homeLocation,
@@ -17,6 +18,7 @@ export class User {
     setupIsCompleted,
   }) {
     this.id = id
+    this.ownerPushToken = ownerPushToken
     this.userName = userName
     this.company = company
     this.homeLocation = homeLocation
@@ -39,6 +41,9 @@ export const userConverter = {
     if (user.id != undefined) {
       userObject.id = user.id
     }
+    if (user.ownerPushToken != undefined) {
+      userObject.ownerPushToken = user.ownerPushToken
+    }
     if (user.userName != undefined) {
       userObject.userName = user.userName
     }
@@ -51,7 +56,6 @@ export const userConverter = {
     if (user.homeAddress != undefined) {
       userObject.homeAddress = user.homeAddress
     }
-
     if (user.city != undefined) {
       userObject.city = user.city
     }
@@ -83,6 +87,7 @@ export const userConverter = {
 
     return new User({
       id: data.id,
+      ownerPushToken: data.ownerPushToken,
       userName: data.userName,
       company: data.company,
       homeLocation: data.homeLocation,

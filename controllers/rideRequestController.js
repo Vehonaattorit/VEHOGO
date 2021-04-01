@@ -113,18 +113,19 @@ export async function rideRequestMultiQuery(companyId, querys) {
     let queryRef = db
       .collection('companys')
       .doc(companyId)
-      .collection('workTrips')
+      .collection('requests')
       .withConverter(rideRequestConverter)
 
     querys.forEach((query) => {
       queryRef = queryRef.where(query.field, query.condition, query.value)
     })
     let query = await queryRef.get()
-    const workTripList = []
+    const requestList = []
     query.forEach((doc) => {
-      workTripList.push(rideRequestConverter.fromData(doc.data()))
+      requestList.push(rideRequestConverter.fromData(doc.data()))
     })
-    return workTripList
+
+    return requestList && !requestList.length ? null : []
   } catch (error) {
     console.error('Error getting document: ', error)
     return

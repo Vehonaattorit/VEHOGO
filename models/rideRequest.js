@@ -7,20 +7,24 @@ export class RideRequest {
     homeAddress,
     city,
     userName,
-    userID,
+    senderId,
     workTripRefID,
     driverID,
     workDayNum,
+    pushToken,
+    rideRequestPushToken,
   }) {
     this.id = id
     this.homeLocation = homeLocation
     this.homeAddress = homeAddress
     this.city = city
     this.userName = userName
-    this.userID = userID
+    this.senderId = senderId
     this.workTripRefID = workTripRefID
     this.driverID = driverID
     this.workDayNum = workDayNum
+    this.pushToken = pushToken
+    this.rideRequestPushToken = rideRequestPushToken
   }
 }
 
@@ -43,8 +47,8 @@ export const rideRequestConverter = {
     if (rideRequest.userName != undefined) {
       rideRequestObject.userName = rideRequest.userName
     }
-    if (rideRequest.userID != undefined) {
-      rideRequestObject.userID = rideRequest.userID
+    if (rideRequest.senderId != undefined) {
+      rideRequestObject.senderId = rideRequest.senderId
     }
     if (rideRequest.workTripRefID != undefined) {
       rideRequestObject.workTripRefID = rideRequest.workTripRefID
@@ -54,6 +58,12 @@ export const rideRequestConverter = {
     }
     if (rideRequest.workDayNum != undefined) {
       rideRequestObject.workDayNum = rideRequest.workDayNum
+    }
+    if (rideRequest.pushToken != undefined) {
+      rideRequestObject.pushToken = rideRequest.pushToken
+    }
+    if (rideRequest.rideRequestPushToken != undefined) {
+      rideRequestObject.rideRequestPushToken = rideRequest.rideRequestPushToken
     }
     return rideRequestObject
   },
@@ -65,10 +75,12 @@ export const rideRequestConverter = {
       homeAddress: data.homeAddress,
       city: data.city,
       userName: data.userName,
-      userID: data.userID,
+      senderId: data.senderId,
       workTripRefID: data.workTripRefID,
       driverID: data.driverID,
       workDayNum: data.workDayNum,
+      pushToken: data.pushToken,
+      rideRequestPushToken: data.rideRequestPushToken,
     })
   },
   fromData: function (data) {
@@ -79,10 +91,12 @@ export const rideRequestConverter = {
       homeAddress: data.homeAddress,
       city: data.city,
       userName: data.userName,
-      userID: data.userID,
+      senderId: data.senderId,
       workTripRefID: data.workTripRefID,
       driverID: data.driverID,
       workDayNum: data.workDayNum,
+      pushToken: data.pushToken,
+      rideRequestPushToken: data.rideRequestPushToken,
     })
   },
 }
