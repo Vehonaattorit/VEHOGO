@@ -83,7 +83,7 @@ export const Address = ({navigation}) => {
     ) {
       Alert.alert(
         'Wrong input!',
-        'Please write an address and city which have at least 1 letter.',
+        'Please write an address and city which has at least 1 letter.',
         [{text: 'Okay'}]
       )
       return

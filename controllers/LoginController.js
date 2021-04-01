@@ -25,11 +25,10 @@ export async function register(email, password) {
   }
 }
 
-export async function signOut(signedOut) {
+export async function signOut() {
   try {
     await firebase.auth().signOut()
     console.log('Logout success')
-    signedOut()
   } catch (e) {
     console.log('Logout failed ' + e)
   }

@@ -50,8 +50,8 @@ export const scheduleDriveConverter = {
   },
   fromData: function (data) {
     const parsedStops = []
-    let startTime = new Date
-    let endTime = new Date
+    let startTime = new Date()
+    let endTime = new Date()
     if (data != undefined) {
       if (data.stops != undefined) {
         data.stops.forEach((stop) => {
@@ -60,8 +60,8 @@ export const scheduleDriveConverter = {
       }
       try {
         if (data.start != undefined && data.end != undefined) {
-          startTime= data.start.toDate()
-          endTime= data.end.toDate()
+          startTime = data.start
+          endTime = data.end
         }
       } catch (error) {
         console.log(error)
