@@ -28,14 +28,13 @@ export const CompanyListItem = ({singleItem, navigation}) => {
       )
       console.log('joined company')
 
-      const companyUserData = [
-        {
+      const companyUserData = {
           address: singleItem.address,
           name: singleItem.displayName,
           location: singleItem.location,
           id: companyId,
-        },
-      ]
+        }
+
 
       console.log('data id', companyId)
 

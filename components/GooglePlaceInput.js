@@ -19,6 +19,7 @@ const GooglePlacesInput = ({setAddress, defaultValue}) => {
       query={{
         key: googleMapsApiKey,
         language: 'en',
+        types: 'address'
       }}
     />
   )
