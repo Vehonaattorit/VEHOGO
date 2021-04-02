@@ -122,7 +122,7 @@ const useWorkTripHooks = (user) => {
     console.log(user.id)
     console.log(user.company.id)
     const query = await workTripMultiQuery(user.company.id, [
-      {
+      /*{
         field: 'scheduledDrive.start',
         condition: '>=',
         value: new Date(1970, 0, 1, timeValues[0].hours, timeValues[0].minutes),
@@ -131,7 +131,7 @@ const useWorkTripHooks = (user) => {
         field: 'scheduledDrive.start',
         condition: '<=',
         value: new Date(1970, 0, 1, timeValues[1].hours, timeValues[1].minutes),
-      },
+      },*/
 
       {
         field: 'driverID',
@@ -139,11 +139,11 @@ const useWorkTripHooks = (user) => {
         value: user.id
       },
       // {field: 'workDayNum', condition: '==', value: currentWeekDay},
-      {
+      /*{
         field: 'goingTo',
         condition: '==',
         value: goingTo
-      },
+      },*/
     ])
 
     console.log(query)
@@ -161,7 +161,7 @@ const useWorkTripHooks = (user) => {
     console.log(user.company.id)
     const query = await workTripOrderByQuery(user.company.id, [
       {field: 'workDayNum', condition: '==', value: currentWeekDay},
-      {field: 'goingTo', condition: '==', value: goingTo},
+      //{field: 'goingTo', condition: '==', value: goingTo},
       {field: 'driverID', condition: '==', value: user.id}
     ])
 

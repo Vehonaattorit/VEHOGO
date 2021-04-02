@@ -12,13 +12,13 @@ import {UserContext} from '../contexts'
 export const WorkingDays = ({navigation}) => {
   const {user} = useContext(UserContext)
   const [workDays, setWorkDays] = useState([
-    {id: 0, weekDay: 'Mon', isSelected: false},
-    {id: 1, weekDay: 'Tue', isSelected: false},
-    {id: 2, weekDay: 'Wed', isSelected: false},
-    {id: 3, weekDay: 'Thu', isSelected: false},
-    {id: 4, weekDay: 'Fri', isSelected: false},
-    {id: 5, weekDay: 'Sat', isSelected: false},
-    {id: 6, weekDay: 'Sun', isSelected: false},
+    {id: 1, weekDay: 'Mon', isSelected: false},
+    {id: 2, weekDay: 'Tue', isSelected: false},
+    {id: 3, weekDay: 'Wed', isSelected: false},
+    {id: 4, weekDay: 'Thu', isSelected: false},
+    {id: 5, weekDay: 'Fri', isSelected: false},
+    {id: 6, weekDay: 'Sat', isSelected: false},
+    {id: 7, weekDay: 'Sun', isSelected: false},
   ])
 
   const [error, setError] = useState('')

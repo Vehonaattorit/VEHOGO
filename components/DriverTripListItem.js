@@ -3,6 +3,8 @@ import {StyleSheet} from 'react-native'
 import {Content, Card, CardItem, Text, Left, Right, Icon, Button} from 'native-base'
 import moment from 'moment'
 
+import {checkWhatDayItIs} from '../utils/utils'
+
 const DriverTripListItem = ({singleTrip, navigation}) => {
   return (
     <Content>
@@ -18,11 +20,19 @@ const DriverTripListItem = ({singleTrip, navigation}) => {
         </CardItem>
         <CardItem style={styles.item}>
           <Left>
-          <Icon active name="time-outline" />
+            <Icon active name="time-outline" />
             <Text style={styles.title}>
-            {moment(singleTrip.scheduledDrive.start).format('HH:mm') +
-                  ' - ' +
-                  moment(singleTrip.scheduledDrive.end).format('HH:mm')}
+              {moment(singleTrip.scheduledDrive.start.toDate()).format('HH:mm') +
+                ' - ' +
+                moment(singleTrip.scheduledDrive.end.toDate()).format('HH:mm')}
+            </Text>
+          </Left>
+        </CardItem>
+        <CardItem style={styles.item}>
+          <Left>
+            <Icon active name="time-outline" />
+            <Text style={styles.title}>
+            {checkWhatDayItIs(singleTrip.workDayNum)}
             </Text>
           </Left>
         </CardItem>

@@ -30,6 +30,7 @@ import {updateUser} from '../controllers/userController'
 import RideStartBar from '../components/RideStartBar'
 import DriverTripList from '../components/DriverTripList'
 
+
 export const MainPage = ({navigation}) => {
   const {user} = useContext(UserContext)
   const [travelPreference, setTravelPreference] = useState('')
@@ -114,19 +115,12 @@ export const MainPage = ({navigation}) => {
   const displayDriverList = () => {
     if (travelPreference === 'driver') {
       return (
+
         <Container>
-          <Header>
-            <Right>
-              <Button
-                onPress={() => {
-                  setOpen(!open)
-                }}
-                transparent
-              >
-                <Icon name="filter" />
-              </Button>
-            </Right>
-          </Header>
+          {driverTripList &&
+            <RideStartBar user={user} navigation={navigation}></RideStartBar>
+          }
+
           <View style={styles.listView}>
             <DriverTripList
               extraDay={extraDay}
