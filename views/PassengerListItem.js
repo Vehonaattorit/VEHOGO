@@ -59,7 +59,7 @@ const PassengerListItem = ({navigation, singleItem}) => {
             <Left>
               <Icon active name="location-outline" />
               <Text style={styles.title}>
-                {scheduledDrive.stops[0].location}
+                {scheduledDrive.stops[0].address}
               </Text>
               <Text>
                 {moment(scheduledDrive.start.toDate()).format('HH:mm') +
