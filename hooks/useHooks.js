@@ -7,13 +7,17 @@ import {
 } from '../controllers/workTripController'
 
 const useWorkTripHooks = (user) => {
+  //PASSENGER
   const [multiSliderValue, setMultiSliderValue] = useState([540, 1020])
   const [extraDay, setExtraDay] = useState([])
   const [passengerList, setPassengerList] = useState(null)
   const [open, setOpen] = useState(false)
 
+  //DRIVER
+  const [driverTripList, setDriverTripList] = useState(null)
+
   const [timeValues, setTimeValues] = useState([
-    {hours: '7', minutes: '00'},
+    {hours: '8', minutes: '00'},
     {hours: '17', minutes: '00'},
   ])
 
@@ -110,16 +114,80 @@ const useWorkTripHooks = (user) => {
     return {hours, minutes}
   }
 
+  //DRIVER SPECIFIC FUNCTIONS STARTS HERE
+
+  const queryWithTimeAndDriverId = async () => {
+
+    const goingTo = fetchHomeOrWorkTrips()
+    console.log(user.id)
+    console.log(user.company.id)
+    const query = await workTripMultiQuery(user.company.id, [
+      {
+        field: 'scheduledDrive.start',
+        condition: '>=',
+        value: new Date(1970, 0, 1, timeValues[0].hours, timeValues[0].minutes),
+      },
+      {
+        field: 'scheduledDrive.start',
+        condition: '<=',
+        value: new Date(1970, 0, 1, timeValues[1].hours, timeValues[1].minutes),
+      },
+
+      {
+        field: 'driverID',
+        condition: '==',
+        value: user.id
+      },
+      // {field: 'workDayNum', condition: '==', value: currentWeekDay},
+      {
+        field: 'goingTo',
+        condition: '==',
+        value: goingTo
+      },
+    ])
+
+    console.log(query)
+
+    setDriverTripList(query)
+
+    setOpen(!open)
+  }
+
+  const fetchTodayDriverRides = async () => {
+    const currentWeekDay = new Date().getDay()
+
+    const goingTo = fetchHomeOrWorkTrips()
+    console.log(user.id)
+    console.log(user.company.id)
+    const query = await workTripOrderByQuery(user.company.id, [
+      {field: 'workDayNum', condition: '==', value: currentWeekDay},
+      {field: 'goingTo', condition: '==', value: goingTo},
+      {field: 'driverID', condition: '==', value: user.id}
+    ])
+
+    console.log(query)
+
+    setDriverTripList(query)
+  }
+
   return {
     multiSliderValuesChange,
-    queryWithTime,
-    fetchTodayRides,
     multiSliderValue,
     timeValues,
     open,
     setOpen,
-    passengerList,
     extraDay,
+
+    //Passenger
+    queryWithTime,
+    fetchTodayRides,
+    passengerList,
+
+    //Driver
+    queryWithTimeAndDriverId,
+    fetchTodayDriverRides,
+    driverTripList,
+
   }
 }
 
