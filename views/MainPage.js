@@ -65,6 +65,8 @@ export const MainPage = ({navigation}) => {
 
     user.ownerPushToken = pushToken
 
+    console.log('Main Page', pushToken)
+
     updateUser(user)
   }
 

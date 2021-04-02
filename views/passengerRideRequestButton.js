@@ -13,6 +13,8 @@ const PassengerRideRequestButton = ({user, workTrip}) => {
   const [ownerPushToken, setOwnerPushToken] = useState(null)
   const [isRequested, setIsRequested] = useState(null)
 
+  console.log('ownerPushToken', ownerPushToken)
+
   useEffect(() => {
     const getOwnerPushtoken = async () => {
       const userDriver = await getUser(workTrip.driverID)
@@ -23,7 +25,7 @@ const PassengerRideRequestButton = ({user, workTrip}) => {
     const getDriverWorkTrips = async () => {
       const isRequested = await rideRequestMultiQuery(user.company.id, [
         {
-          field: 'senderId',
+          field: 'senderID',
           condition: '==',
           value: user.id,
         },
@@ -53,9 +55,8 @@ const PassengerRideRequestButton = ({user, workTrip}) => {
         new RideRequest({
           homeLocation: user.homeLocation,
           homeAddress: user.homeAddress,
-          senderId: user.id,
+          senderID: user.id,
           city: user.city,
-          pushToken: user.ownerPushToken,
           userName: user.userName,
           workTripRefID: workTrip.id,
           driverID: workTrip.driverID,

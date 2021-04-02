@@ -7,24 +7,20 @@ export class RideRequest {
     homeAddress,
     city,
     userName,
-    senderId,
+    senderID,
     workTripRefID,
     driverID,
     workDayNum,
-    pushToken,
-    rideRequestPushToken,
   }) {
     this.id = id
     this.homeLocation = homeLocation
     this.homeAddress = homeAddress
     this.city = city
     this.userName = userName
-    this.senderId = senderId
+    this.senderID = senderID
     this.workTripRefID = workTripRefID
     this.driverID = driverID
     this.workDayNum = workDayNum
-    this.pushToken = pushToken
-    this.rideRequestPushToken = rideRequestPushToken
   }
 }
 
@@ -47,8 +43,8 @@ export const rideRequestConverter = {
     if (rideRequest.userName != undefined) {
       rideRequestObject.userName = rideRequest.userName
     }
-    if (rideRequest.senderId != undefined) {
-      rideRequestObject.senderId = rideRequest.senderId
+    if (rideRequest.senderID != undefined) {
+      rideRequestObject.senderID = rideRequest.senderID
     }
     if (rideRequest.workTripRefID != undefined) {
       rideRequestObject.workTripRefID = rideRequest.workTripRefID
@@ -59,12 +55,7 @@ export const rideRequestConverter = {
     if (rideRequest.workDayNum != undefined) {
       rideRequestObject.workDayNum = rideRequest.workDayNum
     }
-    if (rideRequest.pushToken != undefined) {
-      rideRequestObject.pushToken = rideRequest.pushToken
-    }
-    if (rideRequest.rideRequestPushToken != undefined) {
-      rideRequestObject.rideRequestPushToken = rideRequest.rideRequestPushToken
-    }
+
     return rideRequestObject
   },
   fromFirestore: function (snapshot, options) {
@@ -75,12 +66,10 @@ export const rideRequestConverter = {
       homeAddress: data.homeAddress,
       city: data.city,
       userName: data.userName,
-      senderId: data.senderId,
+      senderID: data.senderID,
       workTripRefID: data.workTripRefID,
       driverID: data.driverID,
       workDayNum: data.workDayNum,
-      pushToken: data.pushToken,
-      rideRequestPushToken: data.rideRequestPushToken,
     })
   },
   fromData: function (data) {
@@ -91,12 +80,10 @@ export const rideRequestConverter = {
       homeAddress: data.homeAddress,
       city: data.city,
       userName: data.userName,
-      senderId: data.senderId,
+      senderID: data.senderID,
       workTripRefID: data.workTripRefID,
       driverID: data.driverID,
       workDayNum: data.workDayNum,
-      pushToken: data.pushToken,
-      rideRequestPushToken: data.rideRequestPushToken,
     })
   },
 }

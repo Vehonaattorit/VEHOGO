@@ -49,23 +49,6 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
     }, 3000)
   }, [mapRef])
 
-  // TODO:
-  // Driver should accept received request
-  //
-  // const acceptHandler = () => {
-  //   console.log('Accept handler.')
-  //   // 515bb500-84b0-424f-8017-e0060f953562
-  //   updateWorkTrip('515bb500-84b0-424f-8017-e0060f953562', {
-  //     ...singleItem,
-  //     currentLocation: 'OLEN dasdas',
-  //     pendingRequests: singleItem.pendingRideRequests.push({
-  //       userID: 'fashfiash',
-  //       isAccepted: false,
-  //       waitingForAcceptance: true,
-  //     }),
-  //   })
-  // }
-
   return (
     <View style={styles.view}>
       <Container style={styles.requestMapContent}>
