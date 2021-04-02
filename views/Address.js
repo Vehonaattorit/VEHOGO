@@ -46,11 +46,7 @@ const formReducer = (state, action) => {
 export const Address = ({navigation}) => {
   const {user} = useContext(UserContext)
 
-  console.log('user Address', user)
-
   const [address, setAddress] = useState(user.homeAddress || '')
-
-  console.log('address', address)
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
@@ -90,8 +86,6 @@ export const Address = ({navigation}) => {
     }
 
     const data = await getAddressGeoLocation()
-
-    console.log('data 2', data)
 
     const {city} = formState.inputValues
 

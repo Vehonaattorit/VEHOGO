@@ -99,8 +99,6 @@ export const SetUpInit = ({route}) => {
       user.setupIsCompleted = true
       updateUser(user)
 
-      console.log('user.travelPreference', user.travelPreference)
-
       if (user.travelPreference === 'driver') setupWorkTripDocs()
     }
   }

@@ -7,7 +7,7 @@ export class RideRequest {
     homeAddress,
     city,
     userName,
-    userID,
+    senderID,
     workTripRefID,
     driverID,
     workDayNum,
@@ -17,7 +17,7 @@ export class RideRequest {
     this.homeAddress = homeAddress
     this.city = city
     this.userName = userName
-    this.userID = userID
+    this.senderID = senderID
     this.workTripRefID = workTripRefID
     this.driverID = driverID
     this.workDayNum = workDayNum
@@ -43,8 +43,8 @@ export const rideRequestConverter = {
     if (rideRequest.userName != undefined) {
       rideRequestObject.userName = rideRequest.userName
     }
-    if (rideRequest.userID != undefined) {
-      rideRequestObject.userID = rideRequest.userID
+    if (rideRequest.senderID != undefined) {
+      rideRequestObject.senderID = rideRequest.senderID
     }
     if (rideRequest.workTripRefID != undefined) {
       rideRequestObject.workTripRefID = rideRequest.workTripRefID
@@ -55,6 +55,7 @@ export const rideRequestConverter = {
     if (rideRequest.workDayNum != undefined) {
       rideRequestObject.workDayNum = rideRequest.workDayNum
     }
+
     return rideRequestObject
   },
   fromFirestore: function (snapshot, options) {
@@ -65,7 +66,7 @@ export const rideRequestConverter = {
       homeAddress: data.homeAddress,
       city: data.city,
       userName: data.userName,
-      userID: data.userID,
+      senderID: data.senderID,
       workTripRefID: data.workTripRefID,
       driverID: data.driverID,
       workDayNum: data.workDayNum,
@@ -79,7 +80,7 @@ export const rideRequestConverter = {
       homeAddress: data.homeAddress,
       city: data.city,
       userName: data.userName,
-      userID: data.userID,
+      senderID: data.senderID,
       workTripRefID: data.workTripRefID,
       driverID: data.driverID,
       workDayNum: data.workDayNum,

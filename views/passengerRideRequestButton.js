@@ -1,37 +1,92 @@
-import React, {useEffect} from 'react'
-import {StyleSheet} from 'react-native'
+import React, {useEffect, useState} from 'react'
+import {StyleSheet, Alert} from 'react-native'
 import {Text, View, Button} from 'native-base'
-import {updateRideRequest} from '../controllers/rideRequestController'
+import {
+  rideRequestMultiQuery,
+  updateRideRequest,
+} from '../controllers/rideRequestController'
 import {RideRequest} from '../models/rideRequest'
+import {getUser} from '../controllers/userController'
+import {getWorkTrip, getWorkTrips} from '../controllers/workTripController'
 
 const PassengerRideRequestButton = ({user, workTrip}) => {
-  const myUser = user
-  const myWorkTrip = workTrip
+  const [ownerPushToken, setOwnerPushToken] = useState(null)
+  const [isRequested, setIsRequested] = useState(null)
+
+  console.log('ownerPushToken', ownerPushToken)
 
   useEffect(() => {
-    console.log('workTrip', myWorkTrip)
-    console.log('user', myUser)
-  })
+    const getOwnerPushtoken = async () => {
+      const userDriver = await getUser(workTrip.driverID)
+
+      setOwnerPushToken(userDriver.ownerPushToken)
+    }
+
+    const getDriverWorkTrips = async () => {
+      const isRequested = await rideRequestMultiQuery(user.company.id, [
+        {
+          field: 'senderID',
+          condition: '==',
+          value: user.id,
+        },
+        {
+          field: 'workTripRefID',
+          condition: '==',
+          value: workTrip.id,
+        },
+      ])
+
+      setIsRequested(isRequested)
+    }
+
+    getOwnerPushtoken()
+    getDriverWorkTrips()
+  }, [])
 
   const requestRide = async () => {
-    console.log(
-      `Requesting ride from company: ${user.company.id} worktrip ${myWorkTrip.id} with user ${user.userName}`
-    )
-    console.log('starting update')
-    await updateRideRequest(
-      user.company.id,
-      new RideRequest({
-        homeLocation: user.homeLocation,
-        homeAddress: user.homeAddress,
-        userID: user.id,
-        city: user.city,
-        userName: user.userName,
-        workTripRefID: myWorkTrip.id,
-        driverID: myWorkTrip.driverID,
-        workDayNum: myWorkTrip.workDayNum,
+    if (!isRequested) {
+      console.log(
+        `Requesting ride from company: ${user.company.id} worktrip ${workTrip.id} with user ${user.userName}`
+      )
+      console.log('starting update')
+
+      await updateRideRequest(
+        user.company.id,
+        new RideRequest({
+          homeLocation: user.homeLocation,
+          homeAddress: user.homeAddress,
+          senderID: user.id,
+          city: user.city,
+          userName: user.userName,
+          workTripRefID: workTrip.id,
+          driverID: workTrip.driverID,
+          workDayNum: workTrip.workDayNum,
+        })
+      )
+
+      fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Accept-Encoding': 'gzip, deflate',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          to: ownerPushToken,
+          title: 'Request was sent',
+          body: `Request sent from ${user.userName}`,
+        }),
       })
-    )
-    console.log('finished update')
+      console.log('finished update')
+
+      setIsRequested(true)
+    } else {
+      Alert.alert(
+        'Request already sent!',
+        'Please wait for your request approval.',
+        [{text: 'Okay'}]
+      )
+    }
   }
 
   return (

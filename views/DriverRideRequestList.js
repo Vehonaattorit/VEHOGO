@@ -26,13 +26,13 @@ export const DriverRideRequestList = ({navigation, dataArray}) => {
   }, [])
 
   const viewRequest = async (rideRequest) => {
-    console.log(user.company.id,rideRequest.workTripRefID)
+    console.log(user.company.id, rideRequest.workTripRefID)
     let singleItem = await getWorkTrip(
       user.company.id,
       rideRequest.workTripRefID
     )
-    console.log('driverRideRequest single item',singleItem)
-    if(singleItem == undefined) return
+    console.log('driverRideRequest single item', singleItem)
+    if (singleItem == undefined) return
     navigation.navigate('RequestRide', {
       singleItem: singleItem,
       rideRequest: rideRequest,
@@ -41,6 +41,8 @@ export const DriverRideRequestList = ({navigation, dataArray}) => {
   return (
     <View>
       {rideRequests.map((rideRequest) => {
+        console.log('rideRequest', rideRequest)
+
         return (
           <View key={rideRequest.id}>
             <Text>{rideRequest.userName}</Text>

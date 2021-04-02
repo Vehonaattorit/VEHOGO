@@ -24,9 +24,12 @@ import MultiSlider from '@ptomasroos/react-native-multi-slider'
 import {useWorkTripHooks} from '../hooks/useHooks'
 
 import * as Permissions from 'expo-permissions'
+import * as Notifications from 'expo-notifications'
+import {updateUser} from '../controllers/userController'
 
 export const MainPage = ({navigation}) => {
   const {user} = useContext(UserContext)
+  const [travelPreference, setTravelPreference] = useState('')
 
   const {
     multiSliderValue,
@@ -42,40 +45,30 @@ export const MainPage = ({navigation}) => {
 
   useEffect(() => {
     checkTravelPreference()
+    checkNotificationsPermissions()
     // createAsManyWorkTripDocuments()
     if (travelPreference === 'passenger') fetchTodayRides()
-
-    registerForPushNotificationAsync(user.id)
   }, [travelPreference])
 
-  const registerForPushNotificationAsync = async () => {
-    const expoToken = user.expoToken
+  const checkNotificationsPermissions = async () => {
+    let pushToken
 
-    if (!expoToken) {
-      Permissions.askAsync(Permissions.NOTIFICATIONS)
-
-      if (status !== 'granted') {
-        Alert.alert('Wrong input!', 'No notification permissions!', [
-          {text: 'Okay'},
-        ])
-        return
-      }
-
-      let token = await Notifications.getExpoPushTokenAsync()
-
-      // Only update the profile with the expoToken if it not exists yet
-      if (token !== '') {
-        const inputParams = {
-          id: user,
-          expoToken: token,
-        }
-
-        console.log('Input Params', inputParams)
-      }
+    let statusObj = await Permissions.getAsync(Permissions.NOTIFICATIONS)
+    if (statusObj.status !== 'granted') {
+      statusObj = Permissions.askAsync(Permissions.NOTIFICATIONS)
     }
-  }
+    if (statusObj.status !== 'granted') {
+      pushToken = null
+    } else {
+      pushToken = (await Notifications.getExpoPushTokenAsync()).data
+    }
 
-  const [travelPreference, setTravelPreference] = useState('')
+    user.ownerPushToken = pushToken
+
+    console.log('Main Page', pushToken)
+
+    updateUser(user)
+  }
 
   const checkTravelPreference = async () => {
     setTravelPreference(user.travelPreference)

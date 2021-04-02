@@ -13,9 +13,15 @@ import {useCardAnimation} from '@react-navigation/stack'
 import {User, userConverter} from './models/user'
 import {addChat, getChat} from './controllers/chatRoomController'
 
-import {Permissions, Notifications} from 'expo'
-
 import {LogBox} from 'react-native'
+
+import * as Notifications from 'expo-notifications'
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => {
+    return {shouldShowAlert: true}
+  },
+})
 
 export default function App() {
   const [fontReady, setFontReady] = useState(false)
@@ -61,6 +67,7 @@ function Navigation({userId}) {
     return <AuthStackNavigator />
   } else {
     let userRef = userStream(userId)
+
     const [user] = useDocumentData(userRef)
 
     if (user != undefined) {
