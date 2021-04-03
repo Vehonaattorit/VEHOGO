@@ -10,7 +10,6 @@ import {SetUpInit} from '../views/SetUpInit'
 import {Company} from '../views/Company'
 
 const Stack = createStackNavigator()
-
 function SetUpStackNavigator() {
   return (
     <NavigationContainer>
@@ -18,37 +17,107 @@ function SetUpStackNavigator() {
         <Stack.Screen
           name="Company"
           component={Company}
-          options={{title: 'Create or join '}}
+          options={{
+            title: 'Create or join',
+            headerStyle: {
+              backgroundColor: '#000000',
+            },
+            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTintColor: '#ffffff',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
+          }}
         />
         <Stack.Screen
           name="Travel"
           component={Travel}
-          options={{title: 'Travel'}}
+          options={{
+            title: 'Travel',
+            headerStyle: {
+              backgroundColor: '#000000',
+            },
+            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTintColor: '#ffffff',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
+          }}
         />
         <Stack.Screen
           name="Username"
           component={Username}
-          options={{title: 'Username'}}
+          options={{
+            title: 'Username',
+            headerStyle: {
+              backgroundColor: '#000000',
+            },
+            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTintColor: '#ffffff',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
+          }}
         />
         <Stack.Screen
           name="Address"
           component={Address}
-          options={{title: 'Address'}}
+          options={{
+            title: 'Address',
+            headerStyle: {
+              backgroundColor: '#000000',
+            },
+            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTintColor: '#ffffff',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
+          }}
         />
         <Stack.Screen
           name="WorkingDays"
           component={WorkingDays}
-          options={{title: 'Working Days'}}
+          options={{
+            title: 'Working Days',
+            headerStyle: {
+              backgroundColor: '#000000',
+            },
+            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTintColor: '#ffffff',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
+          }}
         />
         <Stack.Screen
           name="WorkingHours"
           component={WorkingHours}
-          options={{title: 'Working Hours'}}
+          options={{
+            title: 'Working Hours',
+            headerStyle: {
+              backgroundColor: '#000000',
+            },
+            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTintColor: '#ffffff',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
+          }}
         />
         <Stack.Screen
           name="SetUpInit"
           component={SetUpInit}
-          options={{title: 'Set Up Init'}}
+          options={{
+            title: 'Set Up Init',
+            headerStyle: {
+              backgroundColor: '#000000',
+            },
+            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTintColor: '#ffffff',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

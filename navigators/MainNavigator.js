@@ -26,6 +26,14 @@ function MainStackNavigator() {
           component={MainPage}
           options={{
             title: 'Main Page',
+            headerStyle: {
+              backgroundColor: '#000000',
+            },
+            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTintColor: '#ffffff',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
           }}
         />
         <Stack.Screen
@@ -33,6 +41,14 @@ function MainStackNavigator() {
           component={OutlookCalendar}
           options={{
             title: 'OutlookCalendar',
+            headerStyle: {
+              backgroundColor: '#000000',
+            },
+            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTintColor: '#ffffff',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
           }}
         />
         <Stack.Screen
@@ -40,6 +56,14 @@ function MainStackNavigator() {
           component={DriverAcceptRefuse}
           options={{
             title: 'DriverAcceptRefuse',
+            headerStyle: {
+              backgroundColor: '#000000',
+            },
+            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTintColor: '#ffffff',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
           }}
         />
         <Stack.Screen
@@ -47,6 +71,14 @@ function MainStackNavigator() {
           component={NewRide}
           options={{
             title: 'NewRide',
+            headerStyle: {
+              backgroundColor: '#000000',
+            },
+            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTintColor: '#ffffff',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
           }}
         />
         <Stack.Screen
@@ -54,6 +86,14 @@ function MainStackNavigator() {
           component={DriverStartRide}
           options={{
             title: 'DriverStartRide',
+            headerStyle: {
+              backgroundColor: '#000000',
+            },
+            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTintColor: '#ffffff',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
           }}
         />
         <Stack.Screen
@@ -61,6 +101,14 @@ function MainStackNavigator() {
           component={DriverRideRequestList}
           options={{
             title: 'DriverRideRequestList',
+            headerStyle: {
+              backgroundColor: '#000000',
+            },
+            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTintColor: '#ffffff',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
           }}
         />
         <Stack.Screen
@@ -68,6 +116,14 @@ function MainStackNavigator() {
           component={DriverOnRoute}
           options={{
             title: 'DriverOnRoute',
+            headerStyle: {
+              backgroundColor: '#000000',
+            },
+            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTintColor: '#ffffff',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
           }}
         />
         <Stack.Screen
@@ -75,6 +131,14 @@ function MainStackNavigator() {
           component={ChatRoom}
           options={{
             title: 'Chat',
+            headerStyle: {
+              backgroundColor: '#000000',
+            },
+            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTintColor: '#ffffff',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
           }}
         />
         <Stack.Screen
@@ -82,6 +146,14 @@ function MainStackNavigator() {
           component={DriverCarList}
           options={{
             title: 'DriverCarList',
+            headerStyle: {
+              backgroundColor: '#000000',
+            },
+            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTintColor: '#ffffff',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
           }}
         />
         <Stack.Screen
@@ -89,6 +161,14 @@ function MainStackNavigator() {
           component={DriverAcceptRefuse}
           options={{
             title: 'Request Ride',
+            headerStyle: {
+              backgroundColor: '#000000',
+            },
+            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTintColor: '#ffffff',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
           }}
         />
       </Stack.Navigator>
