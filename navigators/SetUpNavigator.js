@@ -14,7 +14,6 @@ function SetUpStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-
         <Stack.Screen
           name="Company"
           component={Company}
@@ -60,7 +59,7 @@ function SetUpStackNavigator() {
             backgroundColor: 'black',
           }}
         />
-       <Stack.Screen
+        <Stack.Screen
           name="Address"
           component={Address}
           options={{
@@ -75,7 +74,7 @@ function SetUpStackNavigator() {
             backgroundColor: 'black',
           }}
         />
-      
+
         <Stack.Screen
           name="WorkingDays"
           component={WorkingDays}

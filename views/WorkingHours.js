@@ -10,7 +10,8 @@ import {
 } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import {MaterialCommunityIcons} from '@expo/vector-icons'
-import {CustomButton} from '../components/CustomButton'
+import {CustomButtonIcon} from '../components/CustomButtonIcon'
+import {CustomSubmitButton} from '../components/CustomSubmitButton'
 import {CustomTitle} from '../components/CustomTitle'
 import {UserContext} from '../contexts'
 import {updateUser} from '../controllers/userController'
@@ -210,26 +211,17 @@ export const WorkingHours = ({navigation}) => {
         value={newEventState[selectedTime]}
         onChange={(e, date) => updateValue(date, selectedTime)}
       />
-
-      <CustomTitle style={styles.title} title="Hours" />
       <View style={styles.icon}>
+        <CustomTitle style={styles.title} title="Hours" />
         <MaterialCommunityIcons
           name="clock-fast"
           size={300}
           color={color.secondaryDark}
         />
       </View>
-      <View>
-        <Text>My work hours</Text>
-      </View>
-      <View
-        style={{
-          flexDirection: 'column',
-          width: 300,
-        }}
-      >
-        <View style={styles.btnContainer}>
-          <CustomButton
+      <View style={styles.customButtonConatiner}>
+        <View style={styles.timePickerBtns}>
+          <CustomButtonIcon
             title={
               newEventState.startDate
                 ? formatTime(newEventState.startDate)
@@ -242,8 +234,8 @@ export const WorkingHours = ({navigation}) => {
             }}
           />
         </View>
-        <View style={styles.btnContainer}>
-          <CustomButton
+        <View style={styles.timePickerBtns}>
+          <CustomButtonIcon
             title={
               newEventState.endDate
                 ? formatTime(newEventState.endDate)
@@ -256,12 +248,12 @@ export const WorkingHours = ({navigation}) => {
             }}
           />
         </View>
-        <View>
+        <View style={styles.errorTextContainer}>
           <Text style={styles.errorText}>{error}</Text>
         </View>
-      </View>
-      <View style={styles.btnContainer}>
-        <CustomButton title="Submit" onPress={submitHandler} />
+        <View style={styles.submitButton}>
+          <CustomSubmitButton title="Submit" onPress={submitHandler} />
+        </View>
       </View>
     </View>
   )
@@ -273,16 +265,33 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
-  btnContainer: {
-    margin: 20,
-    alignSelf: 'stretch',
+  icon: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 150,
   },
+
   centeredView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 22,
+  },
+  customButtonConatiner: {
+    position: 'absolute',
+    width: '100%',
+    justifyContent: 'flex-end',
+    backgroundColor: '#000000',
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    bottom: 0,
+    padding: 40,
+  },
+  timePickerBtns: {
+    backgroundColor: '#ffffff',
+    padding: 10,
+    borderRadius: 100,
+    margin: 5,
   },
   modalView: {
     margin: 20,
@@ -299,7 +308,14 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+
+  errorTextContainer: {
+    margin: 4,
+  },
   errorText: {
     color: 'red',
+  },
+  submitButton: {
+    marginLeft: 80,
   },
 })

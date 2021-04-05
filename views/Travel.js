@@ -2,7 +2,7 @@ import React, {useContext} from 'react'
 ;<Text>I would like:</Text>
 import {StyleSheet, View, Button, Text, Icon} from 'react-native'
 import {signOut} from '../controllers/LoginController'
-import AntIcon from "react-native-vector-icons/AntDesign";
+import AntIcon from 'react-native-vector-icons/AntDesign'
 import {CustomTitle} from '../components/CustomTitle'
 import {UserContext} from '../contexts'
 import {updateUser} from '../controllers/userController'
@@ -67,6 +67,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#000000',
     alignItems: 'center',
     justifyContent: 'center',
+    borderTopLeftRadius: 63,
+    borderTopRightRadius: 63,
   },
   btn: {
     margin: 10,
