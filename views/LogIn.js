@@ -1,11 +1,12 @@
 import React, {useEffect} from 'react'
 import {useState} from 'react'
-import {StyleSheet, View} from 'react-native'
+import {StyleSheet, View, Button} from 'react-native'
 import {color} from '../constants/colors'
 import {Input} from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import firebase from '../firebase/fire'
 import {CustomButton} from '../components/CustomButton'
+import {AuthButtons} from '../components/AuthButtons'
 import {CustomTitle} from '../components/CustomTitle'
 import {login, subscribeToAuth} from '../controllers/LoginController'
 
@@ -39,43 +40,30 @@ export const LogIn = ({navigation}) => {
   return (
     <View style={styles.container}>
       <CustomTitle title="VEHOGO" />
-      <View>
-        <View style={styles.inputContainer}>
-          <View style={styles.input}>
-            <Input
-              autoCapitalize="none"
-              placeholder="email@address.com"
-              leftIcon={<Icon name="" size={24} color={color.grey} />}
-              value={email}
-              onChangeText={setEmail}
-            />
-          </View>
+      <Input
+        autoCapitalize="none"
+        placeholder="email@address.com"
+        leftIcon={<Icon name="" size={24} color={color.grey} />}
+        value={email}
+        onChangeText={setEmail}
+      />
 
-          <View style={styles.input}>
-            <Input
-              placeholder="Password"
-              errorStyle={{color: 'red'}}
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry={true}
-              leftIcon={<Icon name="" size={24} color={color.grey} />}
-              errorMessage={error}
-            />
-          </View>
-        </View>
-        <View style={styles.btnsContainer}>
-          <CustomButton
-            title="Log In"
+      <Input
+        placeholder="Password"
+        errorStyle={{color: 'red'}}
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry={true}
+        leftIcon={<Icon name="" size={24} color={color.grey} />}
+        errorMessage={error}
+      />
+      <View style={styles.btnContainer}>
+        <View style={styles.logInBtn}>
+          <AuthButtons
+            style={styles.btns}
+            title="Login"
             onPress={() => {
               logIn()
-            }}
-          />
-        </View>
-        <View style={styles.btnsContainer}>
-          <CustomButton
-            title="Sign Up"
-            onPress={() => {
-              navigation.navigate('SignUp')
             }}
           />
         </View>
@@ -90,13 +78,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  inputContainer: {
-    padding: 20,
+  btnContainer: {
+    backgroundColor: 'black',
+    borderRadius: 10,
   },
-  input: {
-    width: 230,
-  },
-  btnsContainer: {
-    margin: 3,
+  logInBtn: {
+    borderRadius: 10,
+    overflow: 'hidden',
   },
 })

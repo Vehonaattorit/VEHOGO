@@ -11,12 +11,32 @@ function AuthStackNavigator() {
         <Stack.Screen
           name="LogIn"
           component={LogIn}
-          options={{title: 'Log In'}}
+          options={{
+            title: 'Login',
+            headerStyle: {
+              backgroundColor: '#000000',
+            },
+            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTintColor: '#ffffff',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
+          }}
         />
         <Stack.Screen
           name="SignUp"
           component={SignUp}
-          options={{title: 'Sign Up'}}
+          options={{
+            title: 'Register',
+            headerStyle: {
+              backgroundColor: '#000000',
+            },
+            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTintColor: '#ffffff',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>
