@@ -117,10 +117,10 @@ export const RideStartBar = ({user, navigation}) => {
     return time >= start && time < end;
   }
 
-
   const checkButtonVisible = () => {
     var start = driveStartTime.toDate().getHours() * 60 + driveStartTime.toDate().getMinutes()
     var end =  driveEndTime.toDate().getHours()  * 60 + driveEndTime.toDate().getMinutes()
+
 
     if (inTime(start, end) == true) {
       console.log('returned true')
