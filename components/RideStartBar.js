@@ -85,43 +85,51 @@ export const RideStartBar = ({user, navigation}) => {
         const workTripStartInMinutes = startTime.getHours() * 60 + startTime.getMinutes()
         //now is before workTrip start
         if (nowInMinutes < workTripStartInMinutes) {
+          console.log('next ride today')
           //this workTrip is next, display it on the screen
           setDriveStartTime(workTrip.scheduledDrive.start)
           setDriveEndTime(workTrip.scheduledDrive.end)
+          checkButtonVisible(workTrip.scheduledDrive.start, workTrip.scheduledDrive.end)
+          return
         }
       }
       if (driveStartTime == null) {
-
+        console.log('next workday morning')
         // next workday morning workTrip is next and displayed on the screen
         if (tomorrowWorkTrips[0].goingTo == 'home')
           tomorrowWorkTrips.reverse()
         setDriveStartTime(tomorrowWorkTrips[0].scheduledDrive.start)
         setDriveEndTime(tomorrowWorkTrips[0].scheduledDrive.end)
+        checkButtonVisible(tomorrowWorkTrips[0].scheduledDrive.start, tomorrowWorkTrips[0].scheduledDrive.end)
+        return
       }
     }
+
     else {
-      //
+      console.log('next day if today no more rides')
       if (tomorrowWorkTrips[0].goingTo == 'home')
         tomorrowWorkTrips.reverse()
       setDriveStartTime(tomorrowWorkTrips[0].scheduledDrive.start)
       setDriveEndTime(tomorrowWorkTrips[0].scheduledDrive.end)
+      checkButtonVisible(tomorrowWorkTrips[0].scheduledDrive.start, tomorrowWorkTrips[0].scheduledDrive.end)
+      return
     }
-    checkButtonVisible()
+
   }
 
   function inTime(start, end) {
     var now = new Date()
     console.log(now)
-    var time = now.getHours() * 60 + now.getMinutes();
+    var time = now.getHours() * 60 + now.getMinutes()
     console.log(time)
-    return time >= start && time < end;
+    return time >= start && time < end
   }
 
-  const checkButtonVisible = () => {
-    var start = driveStartTime.toDate().getHours() * 60 + driveStartTime.toDate().getMinutes()
-    var end =  driveEndTime.toDate().getHours()  * 60 + driveEndTime.toDate().getMinutes()
-
-
+  const checkButtonVisible = (startDate, endDate) => {
+    console.log('checkButton visible')
+    var start = startDate.toDate().getHours() * 60 + startDate.toDate().getMinutes() - 10
+    var end =  endDate.toDate().getHours()  * 60 + endDate.toDate().getMinutes()
+    console.log('times are set')
     if (inTime(start, end) == true) {
       console.log('returned true')
       setShowStart(true)
@@ -129,7 +137,7 @@ export const RideStartBar = ({user, navigation}) => {
       console.log('returned false')
       setShowStart(false)
     }
-
+    console.log('end of function')
   }
 
   useEffect(() => {
