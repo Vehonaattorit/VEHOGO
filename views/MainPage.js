@@ -30,7 +30,6 @@ import {updateUser} from '../controllers/userController'
 import RideStartBar from '../components/RideStartBar'
 import DriverTripList from '../components/DriverTripList'
 
-
 export const MainPage = ({navigation}) => {
   const {user} = useContext(UserContext)
   const [travelPreference, setTravelPreference] = useState('')
@@ -48,9 +47,8 @@ export const MainPage = ({navigation}) => {
 
     driverTripList,
     queryWithTimeAndDriverId,
-    fetchTodayDriverRides
+    fetchTodayDriverRides,
   } = useWorkTripHooks(user)
-
 
   useEffect(() => {
     checkTravelPreference()
@@ -62,21 +60,17 @@ export const MainPage = ({navigation}) => {
 
   const checkNotificationsPermissions = async () => {
     let pushToken
-
     let statusObj = await Permissions.getAsync(Permissions.NOTIFICATIONS)
     if (statusObj.status !== 'granted') {
-      statusObj = Permissions.askAsync(Permissions.NOTIFICATIONS)
+      statusObj = await Permissions.askAsync(Permissions.NOTIFICATIONS)
     }
     if (statusObj.status !== 'granted') {
       pushToken = null
     } else {
       pushToken = (await Notifications.getExpoPushTokenAsync()).data
     }
-
     user.ownerPushToken = pushToken
-
     console.log('Main Page', pushToken)
-
     updateUser(user)
   }
 
@@ -115,11 +109,10 @@ export const MainPage = ({navigation}) => {
   const displayDriverList = () => {
     if (travelPreference === 'driver') {
       return (
-
         <Container>
-          {driverTripList &&
+          {driverTripList && (
             <RideStartBar user={user} navigation={navigation}></RideStartBar>
-          }
+          )}
 
           <View style={styles.listView}>
             <DriverTripList
@@ -153,15 +146,13 @@ export const MainPage = ({navigation}) => {
 
         <View style={{flexDirection: 'row'}}>
           <View style={{marginVertical: 10, marginRight: 10}}>
-            <Button onPress={travelPreference === 'passenger' ? (
-              queryWithTime
-            ):(
-              queryWithTimeAndDriverId
-            )
-
-
-
-            }>
+            <Button
+              onPress={
+                travelPreference === 'passenger'
+                  ? queryWithTime
+                  : queryWithTimeAndDriverId
+              }
+            >
               <Text>Submit</Text>
             </Button>
           </View>
@@ -192,15 +183,9 @@ export const MainPage = ({navigation}) => {
           opacity={1}
           position="right"
         >
-
-          {travelPreference === 'passenger' ?
-          (
-            displayPassengerList()
-          ):(
-            displayDriverList()
-          )
-
-          }
+          {travelPreference === 'passenger'
+            ? displayPassengerList()
+            : displayDriverList()}
           <View style={styles.scheduleView}>
             <Button
               style={styles.button}
