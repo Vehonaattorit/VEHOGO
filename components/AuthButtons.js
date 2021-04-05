@@ -1,9 +1,10 @@
 import React from 'react'
 import {TouchableOpacity, StyleSheet, Text, Platform} from 'react-native'
 
-export const AuthButtons = ({onPress, title}) => {
+export const AuthButtons = ({onPress, title, ...touchProps}) => {
   return (
     <TouchableOpacity
+      {...touchProps}
       onPress={onPress}
       style={styles.buttonContainer}
     >

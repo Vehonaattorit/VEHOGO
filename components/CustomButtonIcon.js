@@ -1,34 +1,30 @@
-import * as React from 'react';
-import { View, Button, StyleSheet, TouchableOpacity, Text } from 'react-native';
-import Constants from 'expo-constants';
-import Icon from 'react-native-ionicons';
+import * as React from 'react'
+import {View, StyleSheet, TouchableOpacity, Text} from 'react-native'
+import Icon from 'react-native-ionicons'
 
-export const CustomButtonIcon = ({ onPress, title, iconOne, iconTwo }) => {
+export const CustomButtonIcon = ({onPress, title, iconOne, iconTwo}) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.buttonContainer}>
       <View style={styles.container}>
-        <Icon name={iconOne} size={40} color="white" />
+        <Icon name={iconOne} size={40} color="26AAE2" />
         <View style={styles.buttonViewContainer}>
           <Text style={styles.buttonText}>{title}</Text>
-          <Icon name={iconTwo} size={40} color="white" />
+          <Icon name={iconTwo} size={40} color="black" />
         </View>
       </View>
     </TouchableOpacity>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    backgroundColor: '#ffffff',
+    borderRadius: 100,
+    overflow: 'hidden',
+  },
   container: {
     justifyContent: 'center',
     flexDirection: 'row',
-    padding: 10,
-  },
-
-  buttonContainer: {
-    elevation: 8,
-    backgroundColor: '#000000',
-    paddingVertical: 10,
-    paddingHorizontal: 12,
   },
   buttonViewContainer: {
     borderBottomWidth: 4,
@@ -39,10 +35,9 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 25,
-    color: '#fff',
-    fontWeight: 'bold',
+    color: '#000000',
     alignSelf: 'center',
     textTransform: 'uppercase',
     marginRight: 20,
   },
-});
+})

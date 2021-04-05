@@ -15,6 +15,8 @@ import {updateUser} from '../controllers/userController'
 import {UserContext} from '../contexts'
 import CustomInput from '../components/CustomInput'
 import {LongPressGestureHandler} from 'react-native-gesture-handler'
+import {CustomButtonIcon} from '../components/CustomButtonIcon'
+import {CustomSubmitButton} from '../components/CustomSubmitButton'
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE'
 
@@ -91,11 +93,7 @@ export const Username = ({navigation}) => {
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <CustomTitle title="Select username" />
       <View style={styles.icon}>
-        {Platform.OS === 'ios' ? (
-          <AntDesign name="user" size={300} color={color.secondaryDark} />
-        ) : (
-          <FontAwesome name="user" size={300} color={color.secondaryDark} />
-        )}
+        <FontAwesome name="user" size={300} color={color.secondaryDark} />
       </View>
       <View style={styles.inputContainer}>
         <CustomInput
@@ -110,14 +108,15 @@ export const Username = ({navigation}) => {
           minLength={1}
           required
         />
-
-        <CustomButton
-          style={styles.btns}
-          title="Submit"
-          onPress={() => {
-            submitHandler()
-          }}
-        />
+        <View style={styles.submitButton}>
+          <CustomSubmitButton
+            style={styles.btns}
+            title="Submit"
+            onPress={() => {
+              submitHandler()
+            }}
+          />
+        </View>
       </View>
     </KeyboardAvoidingView>
   )
@@ -132,9 +131,15 @@ const styles = StyleSheet.create({
   inputContainer: {
     position: 'absolute',
     justifyContent: 'flex-end',
-    bottom: 60,
-    width: '90%',
-    color: 'white',
+    backgroundColor: '#000000',
+    borderTopLeftRadius: 62,
+    borderTopRightRadius: 62,
+    bottom: 0,
+    width: '100%',
+    padding: 20,
+  },
+  submitButton: {
+    marginLeft: 100,
   },
   icon: {
     marginBottom: 100,

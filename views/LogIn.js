@@ -79,7 +79,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   btnContainer: {
-    backgroundColor: 'black',
     borderRadius: 10,
   },
   logInBtn: {

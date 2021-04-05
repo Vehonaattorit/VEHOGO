@@ -31,11 +31,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 2,
     borderRadius: 100,
-    backgroundColor: color.secondaryDark,
+    backgroundColor: "#26AAE2",
     margin: 3,
   },
 
   titleText: {
-    color: color.pText,
+    color: "#000",
   },
 })

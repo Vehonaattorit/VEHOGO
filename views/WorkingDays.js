@@ -8,6 +8,7 @@ import {EvilIcons, MaterialCommunityIcons} from '@expo/vector-icons'
 import {updateUser, userStream} from '../controllers/userController'
 
 import {UserContext} from '../contexts'
+import {CustomSubmitButton} from '../components/CustomSubmitButton'
 
 export const WorkingDays = ({navigation}) => {
   const {user} = useContext(UserContext)
@@ -111,20 +112,21 @@ export const WorkingDays = ({navigation}) => {
         <CustomTitle title="Days" />
         <EvilIcons name="calendar" size={300} color={color.secondaryDark} />
       </View>
-
-      <View style={styles.btnContainer}>
-        {workDays.map((item) => (
-          <RoundButton
-            key={item.id}
-            item={item}
-            isSelected={item.isSelected}
-            toggleHandler={toggleHandler}
-          />
-        ))}
-      </View>
-      <Text style={styles.errorText}>{error}</Text>
-      <View style={styles.submitBtn}>
-        <CustomButton title="Submit" onPress={submitHandler} />
+      <View style={styles.btnsContainer}>
+        <View style={styles.btnContainer}>
+          {workDays.map((item) => (
+            <RoundButton
+              key={item.id}
+              item={item}
+              isSelected={item.isSelected}
+              toggleHandler={toggleHandler}
+            />
+          ))}
+        </View>
+        <Text style={styles.errorText}>{error}</Text>
+        <View style={styles.submitBtn}>
+          <CustomSubmitButton title="Submit" onPress={submitHandler} />
+        </View>
       </View>
     </View>
   )
@@ -136,17 +138,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  btnsContainer: {
+    position: 'absolute',
+    justifyContent: 'flex-end',
+    backgroundColor: '#000000',
+    borderTopLeftRadius: 98,
+    borderTopRightRadius: 98,
+    bottom: 0,
+    padding: 20,
+  },
   btnContainer: {
     flexDirection: 'row',
-    marginBottom: 20,
+    padding: 10,
+    marginTop: 10,
+    marginBottom: 100,
   },
   titleText: {
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 150,
   },
   submitBtn: {
     position: 'absolute',
     bottom: 50,
+    marginLeft: 210,
     width: '90%',
   },
   errorText: {

@@ -8,7 +8,7 @@ export const CustomSubmitButton = ({onPress, title, iconOne}) => {
     <TouchableOpacity onPress={onPress} style={styles.buttonContainer}>
       <View style={styles.container}>
         <Text style={styles.buttonText}>{title}</Text>
-        <Icon name={iconOne} size={40} color="white" />
+        <Icon name={iconOne} size={20} color="white" />
       </View>
     </TouchableOpacity>
   )
@@ -17,21 +17,17 @@ export const CustomSubmitButton = ({onPress, title, iconOne}) => {
 const styles = StyleSheet.create({
   buttonContainer: {
     width: '50%',
-    elevation: 8,
-    backgroundColor: '#000000',
-    borderRadius: '50%',
+    backgroundColor: '#26AAE2',
+    borderRadius: 100,
   },
-
   container: {
     justifyContent: 'center',
     flexDirection: 'row',
     padding: 10,
   },
-
   buttonText: {
     fontSize: 25,
-    color: '#fff',
-    fontWeight: 'bold',
+    color: '#000',
     alignSelf: 'center',
     textTransform: 'uppercase',
     marginRight: 15,

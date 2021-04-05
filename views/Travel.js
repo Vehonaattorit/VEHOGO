@@ -1,12 +1,12 @@
-import React, {useContext, useEffect} from 'react'
-import {StyleSheet, View, Platform} from 'react-native'
-import {CustomButton} from '../components/CustomButton'
+import React, {useContext} from 'react'
+;<Text>I would like:</Text>
+import {StyleSheet, View, Button, Text, Icon} from 'react-native'
 import {signOut} from '../controllers/LoginController'
-import {Ionicons} from '@expo/vector-icons'
-import {color} from '../constants/colors'
+import AntIcon from "react-native-vector-icons/AntDesign";
 import {CustomTitle} from '../components/CustomTitle'
 import {UserContext} from '../contexts'
 import {updateUser} from '../controllers/userController'
+import {CustomButtonIcon} from '../components/CustomButtonIcon'
 
 export const Travel = ({navigation}) => {
   const {user} = useContext(UserContext)
@@ -20,30 +20,33 @@ export const Travel = ({navigation}) => {
   return (
     <View style={styles.container}>
       <CustomTitle title="Travel" />
-      {Platform.OS === 'ios' ? (
-        <Ionicons name="ios-car" size={300} color={color.secondaryDark} />
-      ) : (
-        <Ionicons name="md-car" size={300} color={color.secondaryDark} />
-      )}
+      <View style={styles.icon}>
+        <AntIcon name="home" size={300} />
+      </View>
       <View style={styles.btnContainer}>
-        <View style={styles.btn}>
-          <CustomButton
-            title="Share My Car"
-            onPress={() => {
-              setTravelPreference('driver')
-              navigation.navigate('Username')
-            }}
-          />
-        </View>
-
-        <View style={styles.btn}>
-          <CustomButton
-            title="Get A Ride"
-            onPress={() => {
-              setTravelPreference('passenger')
-              navigation.navigate('Username')
-            }}
-          />
+        <Text style={{color: 'white'}}>I would like:</Text>
+        <View style={styles.btns}>
+          <View style={styles.btn}>
+            <CustomButtonIcon
+              style={styles.btn}
+              title="Share My Car"
+              onPress={() => {
+                setTravelPreference('driver')
+                navigation.navigate('Username')
+              }}
+            />
+          </View>
+          <View style={styles.btn}>
+            <CustomButtonIcon
+              iconOne=""
+              title="Get A Ride"
+              onPress={() => {
+                setTravelPreference('passenger')
+                navigation.navigate('Username')
+              }}
+              iconTwo={<Icon name="arrow-right" size={15} color="white" />}
+            />
+          </View>
         </View>
       </View>
     </View>
@@ -58,13 +61,17 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     position: 'absolute',
-    bottom: 50,
+    bottom: 0,
     width: '100%',
+    padding: 30,
+    backgroundColor: '#000000',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   btn: {
-    marginTop: 5,
-    marginLeft: 20,
-    marginRight: 20,
-    alignSelf: 'stretch',
+    margin: 10,
+  },
+  icon: {
+    marginBottom: 200,
   },
 })

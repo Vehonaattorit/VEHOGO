@@ -8,7 +8,7 @@ import React, {
 import {StyleSheet, Alert, Text, View, KeyboardAvoidingView} from 'react-native'
 import {color} from '../constants/colors'
 import {Input} from 'react-native-elements'
-import {CustomButton} from '../components/CustomButton'
+import {CustomSubmitButton} from '../components/CustomSubmitButton'
 import {CustomTitle} from '../components/CustomTitle'
 import {AntDesign, FontAwesome} from '@expo/vector-icons'
 import {updateUser} from '../controllers/userController'
@@ -137,32 +137,30 @@ export const Address = ({navigation}) => {
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <CustomTitle title="Address" />
       <View style={styles.icon}>
-        {Platform.OS === 'ios' ? (
-          <AntDesign name="home" size={300} color={color.secondaryDark} />
-        ) : (
-          <FontAwesome name="home" size={300} color={color.secondaryDark} />
-        )}
+        <AntDesign name="home" size={300} color={color.secondaryDark} />
       </View>
-      <View style={styles.inputContainer}>
-        {/* <CustomInput
-          placeholder="Address"
-          initialValue={user.homeAddress}
-          keyboardType="default"
-          autoCapitalize="sentences"
-          returnKeyType="next"
-          id="address"
-          autoCorrect={false}
-          onInputChange={inputChangeHandler}
-          errorText="Please enter a valid address."
-          minLength={1}
-          required
-        /> */}
 
-        <GooglePlacesInput
-          defaultValue={user.homeAddress}
-          style={{alignSelf: 'stretch'}}
-          setAddress={setAddress}
-        />
+      <View style={styles.inputContainer}>
+        <View style={styles.input}>
+          <GooglePlacesInput
+            defaultValue={user.homeAddress}
+            style={{
+              alignSelf: 'stretch',
+              borderBottomWidth: 1,
+              borderBottomColor: '#000',
+            }}
+            setAddress={setAddress}
+          />
+          <View
+            style={{
+              borderBottomColor: 'black',
+              borderBottomWidth: 1,
+              marginBottom: 5,
+              marginLeft: 5,
+              marginRight: 5,
+            }}
+          ></View>
+        </View>
 
         <CustomInput
           placeholder="City"
@@ -177,11 +175,13 @@ export const Address = ({navigation}) => {
           minLength={1}
           required
         />
-        <CustomButton
-          style={styles.btns}
-          title="Submit"
-          onPress={submitHandler}
-        />
+        <View style={styles.submitButton}>
+          <CustomSubmitButton
+            style={styles.btns}
+            title="Submit"
+            onPress={submitHandler}
+          />
+        </View>
       </View>
     </KeyboardAvoidingView>
   )
@@ -196,11 +196,27 @@ const styles = StyleSheet.create({
   inputContainer: {
     position: 'absolute',
     justifyContent: 'flex-end',
-    bottom: 60,
-    width: '90%',
-    color: 'white',
+    bottom: 0,
+    padding: 20,
+    width: '100%',
+    backgroundColor: '#000',
+    borderTopLeftRadius: 62,
+    borderTopRightRadius: 62,
+  },
+  input: {
+    backgroundColor: '#fff',
+    marginTop: 10,
+    paddingTop: 5,
+    paddingBottom: 2,
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderRadius: 100,
+    overflow: 'hidden',
+  },
+  submitButton: {
+    marginLeft: 100,
   },
   icon: {
-    marginBottom: 100,
+    marginBottom: 200,
   },
 })

@@ -1,5 +1,5 @@
 import React, {useReducer, useState, useEffect} from 'react'
-import {View, Text, TextInput, StyleSheet} from 'react-native'
+import {View, Text, TextInput, StyleSheet, Icon} from 'react-native'
 
 import {Input} from 'react-native-elements'
 
@@ -61,12 +61,14 @@ const CustomInput = (props) => {
   return (
     <>
       <Text style={styles.label}>{props.label}</Text>
-      <Input
-        {...props}
-        style={styles.input}
-        value={inputState.value}
-        onChangeText={textChangeHandler}
-      />
+      <View style={styles.inputContainer}>
+        <Input
+          {...props}
+          style={styles.input}
+          value={inputState.value}
+          onChangeText={textChangeHandler}
+        />
+      </View>
       {isError && (
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{props.errorText}</Text>
@@ -80,21 +82,23 @@ const styles = StyleSheet.create({
   formControl: {
     width: '100%',
   },
-  inputContainer: {
-    position: 'absolute',
-    justifyContent: 'flex-end',
-    bottom: 60,
-    width: '90%',
-    color: 'white',
-  },
   label: {
     marginVertical: 8,
   },
+
   input: {
-    paddingHorizontal: 2,
-    paddingVertical: 5,
+    backgroundColor: '#fff',
+    borderRadius: 100,
+    marginTop: 20,
+  },
+  inputContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 100,
+    height: 60,
     borderBottomColor: '#ccc',
-    borderBottomWidth: 1,
+    marginBottom: 20,
   },
   errorContainer: {
     marginVertical: 5,

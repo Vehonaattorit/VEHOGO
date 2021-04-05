@@ -4,6 +4,7 @@ import {StyleSheet, View} from 'react-native'
 import {Input} from 'react-native-elements'
 import {register} from '../controllers/LoginController'
 import {AuthButtons} from '../components/AuthButtons'
+import {CustomTitle} from '../components/CustomTitle'
 
 export const SignUp = () => {
   const [email, setEmail] = useState('')
@@ -42,8 +43,10 @@ export const SignUp = () => {
     return () => clearTimeout(timeout)
   }, [error])
 
+  
   return (
     <View style={styles.container}>
+      <CustomTitle title="VEHOGO" />
       <Input
         autoCapitalize="none"
         placeholder="email@address.com"
@@ -82,13 +85,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   btnContainer: {
-    backgroundColor: 'black',
     borderRadius: 10,
   },
   signUpBtn: {
     borderRadius: 10,
     overflow: 'hidden',
   },
-
-  
 })

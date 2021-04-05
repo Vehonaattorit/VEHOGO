@@ -3,11 +3,29 @@ import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import {LogIn} from '../views/LogIn'
 import {SignUp} from '../views/SignUp'
+import {AuthPage} from '../views/AuthPage'
+
 const Stack = createStackNavigator()
 function AuthStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name="AuthPage"
+          component={AuthPage}
+          options={{
+            title: 'Authentication',
+            headerStyle: {
+              backgroundColor: '#000000',
+            },
+            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTintColor: '#ffffff',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
+          }}
+        />
+
         <Stack.Screen
           name="LogIn"
           component={LogIn}
