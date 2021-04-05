@@ -15,6 +15,7 @@ export const RideStartBar = ({user, navigation}) => {
   const [startingRide, setStartingRide] = useState([])
   const [date, setDate] = useState('')
   const [driveStartTime, setDriveStartTime] = useState(null)
+  const [driveEndTime, setDriveEndTime] = useState(null)
 
   const getNextRide = async () => {
     console.log('fetching')
@@ -66,17 +67,16 @@ export const RideStartBar = ({user, navigation}) => {
     let nextWorkTrip
     for (let i = 0; i < user.preferedWorkingHours.length; i++) {
       const preferedHours = user.preferedWorkingHours[i];
-      if(preferedHours.workDayNum == currentWeekDay){
+      if (preferedHours.workDayNum == currentWeekDay) {
         found = true
         break
       }
     }
 
-    if(found){
+    if (found) {
       // sorting the morning ride to start
-      if(todayWorkTrips[0].goingTo == 'home')
-      todayWorkTrips.reverse()
-
+      if (todayWorkTrips[0].goingTo == 'home')
+        todayWorkTrips.reverse()
 
       for (let i = 0; i < todayWorkTrips.length; i++) {
         const workTrip = todayWorkTrips[i]
@@ -84,24 +84,50 @@ export const RideStartBar = ({user, navigation}) => {
         let startTime = workTrip.scheduledDrive.start.toDate()
         const workTripStartInMinutes = startTime.getHours() * 60 + startTime.getMinutes()
         //now is before workTrip start
-        if(nowInMinutes < workTripStartInMinutes){
+        if (nowInMinutes < workTripStartInMinutes) {
           //this workTrip is next, display it on the screen
           setDriveStartTime(workTrip.scheduledDrive.start)
+          setDriveEndTime(workTrip.scheduledDrive.end)
         }
       }
-      if(driveStartTime == null){
+      if (driveStartTime == null) {
 
         // next workday morning workTrip is next and displayed on the screen
-        if(tomorrowWorkTrips[0].goingTo == 'home')
-        tomorrowWorkTrips.reverse()
+        if (tomorrowWorkTrips[0].goingTo == 'home')
+          tomorrowWorkTrips.reverse()
         setDriveStartTime(tomorrowWorkTrips[0].scheduledDrive.start)
+        setDriveEndTime(tomorrowWorkTrips[0].scheduledDrive.end)
       }
     }
-    else{
-        //
-        if(tomorrowWorkTrips[0].goingTo == 'home')
+    else {
+      //
+      if (tomorrowWorkTrips[0].goingTo == 'home')
         tomorrowWorkTrips.reverse()
-        setDriveStartTime(tomorrowWorkTrips[0].scheduledDrive.start)
+      setDriveStartTime(tomorrowWorkTrips[0].scheduledDrive.start)
+      setDriveEndTime(tomorrowWorkTrips[0].scheduledDrive.end)
+    }
+    checkButtonVisible()
+  }
+
+  function inTime(start, end) {
+    var now = new Date()
+    console.log(now)
+    var time = now.getHours() * 60 + now.getMinutes();
+    console.log(time)
+    return time >= start && time < end;
+  }
+
+
+  const checkButtonVisible = () => {
+    var start = driveStartTime.toDate().getHours() * 60 + driveStartTime.toDate().getMinutes()
+    var end =  driveEndTime.toDate().getHours()  * 60 + driveEndTime.toDate().getMinutes()
+
+    if (inTime(start, end) == true) {
+      console.log('returned true')
+      setShowStart(true)
+    } else {
+      console.log('returned false')
+      setShowStart(false)
     }
 
   }
