@@ -8,4 +8,8 @@ export const color = {
   pText: '#ffffff',
   grey: 'grey',
   lightBlue: '#E1F5FD',
+  darkPurple: '#575AAF',
+  lightPurple: '#B39DDB',
+
+  //B39DDB
 }

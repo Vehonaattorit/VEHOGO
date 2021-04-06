@@ -5,6 +5,7 @@ import {
   View,
   Header,
   Left,
+  Platform,
   Text,
   Icon,
   Button,
@@ -30,6 +31,7 @@ import {updateUser} from '../controllers/userController'
 import RideStartBar from '../components/RideStartBar'
 import DriverTripList from '../components/DriverTripList'
 import DriverIsOnHisWayBar from '../components/DriverIsOnHisWayBar'
+import MainPageButtons from '../components/MainPageButtons'
 
 export const MainPage = ({navigation}) => {
   const {user} = useContext(UserContext)
@@ -196,41 +198,11 @@ export const MainPage = ({navigation}) => {
             ? displayPassengerList()
             : displayDriverList()}
           <View style={styles.scheduleView}>
-            <Button
-              style={styles.button}
-              onPress={() => navigation.navigate('OutlookCalendar')}
-            >
-              <Text>Calender</Text>
-            </Button>
-            <Button style={styles.button} onPress={signOut}>
-              <Text>LogOut</Text>
-            </Button>
-            {travelPreference === 'driver' && (
-              <>
-                <Button
-                  style={styles.button}
-                  onPress={() => navigation.navigate('DriverRideRequestList')}
-                >
-                  <Text>Ride requests</Text>
-                </Button>
-                <Button
-                  style={styles.button}
-                  onPress={() =>
-                    navigation.navigate('DriverStartRide', {
-                      startingRide: driverTripList[0],
-                    })
-                  }
-                >
-                  <Text>Start Ride</Text>
-                </Button>
-                <Button
-                  style={styles.button}
-                  onPress={() => navigation.navigate('DriverCarList')}
-                >
-                  <Text>DriverCarList</Text>
-                </Button>
-              </>
-            )}
+            <MainPageButtons
+              travelPreference={travelPreference}
+              navigation={navigation}
+              driverTripList={driverTripList}
+            />
           </View>
         </MenuDrawer>
       </View>

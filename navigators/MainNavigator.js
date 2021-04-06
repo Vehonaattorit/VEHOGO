@@ -13,6 +13,10 @@ import {DriverRideRequestList} from '../views/DriverRideRequestList'
 import {DriverCarList} from '../views/DriverCarList'
 import ChatRoom from '../views/ChatRoom'
 import {UserContext} from '../contexts'
+import {IconButton} from 'react-native-paper'
+import {signOut} from '../controllers/LoginController'
+import {color} from '../constants/colors'
+
 const Stack = createStackNavigator()
 const Drawer = createStackNavigator()
 function MainStackNavigator() {
@@ -21,7 +25,7 @@ function MainStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen
+        {/* <Stack.Screen
           name="MainPage"
           component={MainPage}
           options={{
@@ -31,10 +35,34 @@ function MainStackNavigator() {
             },
             headerTitleStyle: {textAlign: 'center', flex: 1},
             headerTintColor: '#ffffff',
+            headerRight: () => {
+              ;<IconButton
+                icon="logout"
+                size={28}
+                color="#ffffff"
+                onPress={signOut}
+              />
+            },
           }}
           headerStyle={{
             backgroundColor: 'black',
           }}
+        /> */}
+        <Stack.Screen
+          name="MainPage"
+          component={MainPage}
+          options={({navigation}) => ({
+            headerLeft: () => (
+              <IconButton
+                icon="logout"
+                size={28}
+                color={color.darkPurple}
+                onPress={() => {
+                  signOut()
+                }}
+              />
+            ),
+          })}
         />
         <Stack.Screen
           name="OutlookCalendar"
