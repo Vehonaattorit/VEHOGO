@@ -14,6 +14,15 @@ import {
 } from 'native-base'
 import {UserContext} from '../contexts'
 
+// Ionicons
+import {
+  Ionicons,
+  MaterialCommunityIcons,
+  MaterialIcons,
+  AntDesign,
+  FontAwesome5,
+} from '@expo/vector-icons'
+
 import MainPageButton from './MainPageButton'
 import {color} from '../constants/colors'
 
@@ -25,21 +34,24 @@ const MainPageButtons = ({travelPreference, driverTripList, navigation}) => {
       id: '1',
       travelPreference: ['passenger', 'driver'],
       title: 'Calendar',
-      color: color.lightPurple,
+      iconName: <Ionicons name="calendar" size={80} color="white" />,
+      color: color.primary,
       onPress: () => navigation.navigate('OutlookCalendar'),
     },
     {
       id: '2',
       travelPreference: ['driver'],
       title: 'Ride Request',
-      color: color.lightPurple,
+      iconName: <FontAwesome5 name="user-check" size={80} color="white" />,
+      color: color.primary,
       onPress: () => navigation.navigate('DriverRideRequestList'),
     },
     {
       id: '3',
       travelPreference: ['driver'],
       title: 'Start Ride',
-      color: color.lightPurple,
+      iconName: <Ionicons name="md-car" size={80} color="white" />,
+      color: color.primary,
       onPress: () =>
         navigation.navigate('DriverStartRide', {
           startingRide: driverTripList[0],
@@ -49,18 +61,15 @@ const MainPageButtons = ({travelPreference, driverTripList, navigation}) => {
       id: '4',
       travelPreference: ['driver'],
       title: 'Driver Car List',
-      color: color.lightPurple,
+      iconName: <FontAwesome5 name="car-side" size={80} color="white" />,
+      color: color.primary,
       onPress: () => navigation.navigate('DriverCarList'),
     },
   ]
   const renderGridItem = (itemData) => {
-    console.log('itemData.item.travelPref', itemData.item.travelPreference)
-
     const travelPref = itemData.item.travelPreference.some((trav) =>
       trav.includes(travelPreference)
     )
-
-    console.log('travelPref bool', travelPref)
 
     if (travelPref)
       return (
@@ -68,7 +77,9 @@ const MainPageButtons = ({travelPreference, driverTripList, navigation}) => {
           title={itemData.item.title}
           color={itemData.item.color}
           onPress={itemData.item.onPress}
-        />
+        >
+          {itemData.item.iconName}
+        </MainPageButton>
       )
   }
 
@@ -105,7 +116,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
   },
   calendarText: {
-    // fontFamily: "open-sans-regular",
+    fontFamily: 'open-sans-regular',
     color: 'rgba(255,255,255,1)',
     height: 33,
     width: 121,
@@ -130,7 +141,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
   },
   rideRequestsText: {
-    // fontFamily: "open-sans-regular",
+    fontFamily: 'open-sans-regular',
     color: 'rgba(255,255,255,1)',
     height: 33,
     width: 121,
@@ -160,7 +171,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
   },
   startRideText: {
-    // fontFamily: "open-sans-regular",
+    fontFamily: 'open-sans-regular',
     color: 'rgba(255,255,255,1)',
     height: 33,
     width: 121,
@@ -185,7 +196,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
   },
   driverCarListText: {
-    // fontFamily: "open-sans-regular",
+    fontFamily: 'open-sans-regular',
     color: 'rgba(255,255,255,1)',
     height: 33,
     width: 121,

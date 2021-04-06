@@ -7,8 +7,10 @@ import {
   Platform,
   TouchableNativeFeedback,
 } from 'react-native'
+import {Ionicons} from '@expo/vector-icons'
 
 import {UserContext} from '../contexts'
+import {color} from '../constants/colors'
 
 const MainPageButton = (props) => {
   let TouchableCmp = TouchableOpacity
@@ -16,13 +18,30 @@ const MainPageButton = (props) => {
   if (Platform.OS === 'android' && Platform.Version >= 21) {
     TouchableCmp = TouchableNativeFeedback
   }
+
+  console.log('props.children', props.children)
+
   return (
     <View style={styles.gridItem}>
       <TouchableCmp style={{flex: 1}} onPress={props.onPress}>
         <View style={{...styles.container, ...{backgroundColor: props.color}}}>
-          <Text style={styles.title} numberOfLines={2}>
-            {props.title}
-          </Text>
+          {props.children}
+          <View
+            style={{
+              position: 'absolute',
+              bottom: 10,
+              height: 40,
+              paddingHorizontal: 10,
+              borderRadius: 10,
+              backgroundColor: 'white',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Text style={styles.title} numberOfLines={2}>
+              {props.title}
+            </Text>
+          </View>
         </View>
       </TouchableCmp>
     </View>
@@ -44,6 +63,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   container: {
+    flexDirection: 'row',
     flex: 1,
     borderRadius: 10,
     shadowColor: 'black',
@@ -57,7 +77,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'open-sans-bold',
     fontSize: 22,
-    color: 'white',
+    color: 'black',
     textAlign: 'right',
   },
 })

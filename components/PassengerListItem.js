@@ -74,18 +74,18 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   rectangle: {
-    backgroundColor: color.darkPurple,
+    backgroundColor: color.primary,
     borderRadius: 24,
   },
   passengerName: {
-    // fontFamily: 'roboto-regular',
+    fontFamily: 'open-sans-regular',
 
     flex: 1,
     color: 'white',
   },
   takenSeats: {
     flex: 1,
-    // fontFamily: 'roboto-regular',
+    fontFamily: 'open-sans-regular',
     color: 'white',
   },
   topRow: {
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     marginVertical: 12,
   },
   leaveTime: {
-    // fontFamily: 'roboto-regular',
+    fontFamily: 'open-sans-regular',
     flex: 1,
     color: 'white',
   },
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     height: 25,
   },
   atPassengersText: {
-    // fontFamily: 'roboto-regular',
+    fontFamily: 'open-sans-regular',
     flex: 1,
     color: 'white',
     height: 24,
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     height: 24,
   },
   atWorkTime: {
-    // fontFamily: 'roboto-regular',
+    fontFamily: 'open-sans-regular',
     flex: 1,
     color: 'white',
     height: 24,
@@ -152,14 +152,14 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderBottomWidth: 1,
     borderColor: '#000000',
-    // borderRadius: 24,
+    //  borderRadius: 24,
     borderTopLeftRadius: 24,
     borderBottomLeftRadius: 24,
     padding: 20,
     justifyContent: 'center',
   },
   goingToText: {
-    // fontFamily: 'roboto-regular',
+    fontFamily: 'open-sans-regular',
     color: 'black',
   },
   rectStack: {

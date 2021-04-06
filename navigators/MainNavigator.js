@@ -56,7 +56,7 @@ function MainStackNavigator() {
               <IconButton
                 icon="logout"
                 size={28}
-                color={color.darkPurple}
+                color={color.primary}
                 onPress={() => {
                   signOut()
                 }}

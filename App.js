@@ -31,6 +31,8 @@ export default function App() {
 
   const loadFonts = async () => {
     await Font.loadAsync({
+      'open-sans-regular': require('./assets/fonts/OpenSans-Regular.ttf'),
+      'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
       Roboto: require('native-base/Fonts/Roboto.ttf'),
       Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
     })
