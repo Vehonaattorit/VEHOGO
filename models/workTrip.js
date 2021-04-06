@@ -11,7 +11,7 @@ export class WorkTrip {
     scheduledDrive,
     pendingRideRequests,
     goingTo,
-    route
+    route,
     isDriving,
   }) {
     this.id = id
@@ -82,7 +82,7 @@ export const workTripConverter = {
       goingTo: data.goingTo,
       isDriving: data.isDriving,
       car: data.car,
-      route: data.route
+      route: data.route,
     })
   },
   fromData: function (data) {
@@ -96,7 +96,7 @@ export const workTripConverter = {
       goingTo: data.goingTo,
       isDriving: data.isDriving,
       car: data.car,
-      route: data.route
+      route: data.route,
     })
   },
 }
