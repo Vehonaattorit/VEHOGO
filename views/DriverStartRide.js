@@ -14,8 +14,10 @@ import {
 import {StopList} from '../components/StopList'
 
 export const DriverStartRide = ({navigation, route}) => {
-  let data = route.params
-  console.log(data.startingRide.scheduledDrive.stops)
+  let workTrip = route.params
+  console.log(workTrip.startingRide.scheduledDrive.stops)
+
+
 
   return (
     <View style={styles.view}>
@@ -26,7 +28,7 @@ export const DriverStartRide = ({navigation, route}) => {
           <Button
             large
             style={styles.button}
-            onPress={() => navigation.navigate('DriverOnRoute')}
+            onPress={() => navigation.navigate('DriverOnRoute', {workTrip})}
           >
             <Text style={styles.btntxt}>Start Driving</Text>
           </Button>
@@ -35,7 +37,7 @@ export const DriverStartRide = ({navigation, route}) => {
       </View>
 
       <View style={styles.listView}>
-        <StopList dataArray={data.startingRide.scheduledDrive.stops}></StopList>
+        <StopList dataArray={workTrip.startingRide.scheduledDrive.stops}></StopList>
       </View>
     </View>
   )

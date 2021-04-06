@@ -28,7 +28,7 @@ const StopListItem = ({navigation, singleItem}) => {
         </CardItem>
         <CardItem style={styles.item}>
         <Icon active name="person-outline" />
-          <Text style={styles.title}>{stopUserInfo.userName}</Text>
+          <Text style={styles.title}>{singleItem.stopName}</Text>
         </CardItem>
       </Card>
     </Content>

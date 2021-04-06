@@ -15,7 +15,6 @@ export const RideStartBar = ({user, navigation}) => {
   const [startingRide, setStartingRide] = useState([])
   const [date, setDate] = useState('')
   const [driveStartTime, setDriveStartTime] = useState(null)
-  const [driveEndTime, setDriveEndTime] = useState(null)
 
   const getNextRide = async () => {
     console.log('fetching')
@@ -88,7 +87,7 @@ export const RideStartBar = ({user, navigation}) => {
           console.log('next ride today')
           //this workTrip is next, display it on the screen
           setDriveStartTime(workTrip.scheduledDrive.start)
-          setDriveEndTime(workTrip.scheduledDrive.end)
+          setStartingRide(workTrip)
           checkButtonVisible(workTrip.scheduledDrive.start, workTrip.scheduledDrive.end)
           return
         }
@@ -99,7 +98,7 @@ export const RideStartBar = ({user, navigation}) => {
         if (tomorrowWorkTrips[0].goingTo == 'home')
           tomorrowWorkTrips.reverse()
         setDriveStartTime(tomorrowWorkTrips[0].scheduledDrive.start)
-        setDriveEndTime(tomorrowWorkTrips[0].scheduledDrive.end)
+        setStartingRide(tomorrowWorkTrips[0])
         checkButtonVisible(tomorrowWorkTrips[0].scheduledDrive.start, tomorrowWorkTrips[0].scheduledDrive.end)
         return
       }
@@ -110,7 +109,7 @@ export const RideStartBar = ({user, navigation}) => {
       if (tomorrowWorkTrips[0].goingTo == 'home')
         tomorrowWorkTrips.reverse()
       setDriveStartTime(tomorrowWorkTrips[0].scheduledDrive.start)
-      setDriveEndTime(tomorrowWorkTrips[0].scheduledDrive.end)
+      setStartingRide(tomorrowWorkTrips[0])
       checkButtonVisible(tomorrowWorkTrips[0].scheduledDrive.start, tomorrowWorkTrips[0].scheduledDrive.end)
       return
     }
@@ -128,7 +127,7 @@ export const RideStartBar = ({user, navigation}) => {
   const checkButtonVisible = (startDate, endDate) => {
     console.log('checkButton visible')
     var start = startDate.toDate().getHours() * 60 + startDate.toDate().getMinutes() - 10
-    var end =  endDate.toDate().getHours()  * 60 + endDate.toDate().getMinutes()
+    var end = endDate.toDate().getHours() * 60 + endDate.toDate().getMinutes()
     console.log('times are set')
     if (inTime(start, end) == true) {
       console.log('returned true')
@@ -156,7 +155,7 @@ export const RideStartBar = ({user, navigation}) => {
             )}
           </Left>
           <Right>
-            {showStart ? (
+            {/*showStart for developing purpuse*/true ? (
               <Button onPress={() => navigation.navigate('DriverStartRide', {startingRide})}><Text>Start</Text></Button>
             ) : (
               <Text>{driveStartTime && moment(driveStartTime.toDate()).format('HH:mm')}</Text>
