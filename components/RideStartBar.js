@@ -1,6 +1,15 @@
-import {Button, Left, Right, View, Content, Card, CardItem, Text} from 'native-base';
-import React, {useState, useEffect} from 'react';
-import {FlatList} from 'react-native';
+import {
+  Button,
+  Left,
+  Right,
+  View,
+  Content,
+  Card,
+  CardItem,
+  Text,
+} from 'native-base'
+import React, {useState, useEffect} from 'react'
+import {FlatList} from 'react-native'
 import {StyleSheet} from 'react-native'
 import {CompanyListItem} from '../components/CompanyListItem'
 import moment from 'moment'
@@ -10,7 +19,6 @@ import {
 } from '../controllers/workTripController'
 
 export const RideStartBar = ({user, navigation}) => {
-
   const [showStart, setShowStart] = useState(false)
   const [startingRide, setStartingRide] = useState([])
   const [date, setDate] = useState('')
@@ -26,16 +34,15 @@ export const RideStartBar = ({user, navigation}) => {
     let tomorrowWeekDay
 
     for (let i = currentWeekDay; i <= user.preferedWorkingHours.length; i++) {
-      const preferedWorkingHours = user.preferedWorkingHours[i];
+      const preferedWorkingHours = user.preferedWorkingHours[i]
       if (preferedWorkingHours == undefined) {
         tomorrowWeekDay = user.preferedWorkingHours[0].workDayNum
         break
       }
-      if (preferedWorkingHours.workDayNum == (i + 1)) {
+      if (preferedWorkingHours.workDayNum == i + 1) {
         tomorrowWeekDay = preferedWorkingHours.workDayNum
         break
       }
-
     }
 
     // query tomorrows workTrips with query
@@ -49,7 +56,7 @@ export const RideStartBar = ({user, navigation}) => {
         field: 'driverID',
         condition: '==',
         value: user.id,
-      }
+      },
     ])
     const tomorrowWorkTrips = await workTripMultiQuery(user.company.id, [
       {
@@ -61,12 +68,12 @@ export const RideStartBar = ({user, navigation}) => {
         field: 'driverID',
         condition: '==',
         value: user.id,
-      }
+      },
     ])
     let found = false
     let nextWorkTrip
     for (let i = 0; i < user.preferedWorkingHours.length; i++) {
-      const preferedHours = user.preferedWorkingHours[i];
+      const preferedHours = user.preferedWorkingHours[i]
       if (preferedHours.workDayNum == currentWeekDay) {
         found = true
         break
@@ -75,46 +82,50 @@ export const RideStartBar = ({user, navigation}) => {
 
     if (found) {
       // sorting the morning ride to start
-      if (todayWorkTrips[0].goingTo == 'home')
-        todayWorkTrips.reverse()
+      if (todayWorkTrips[0].goingTo == 'home') todayWorkTrips.reverse()
 
       for (let i = 0; i < todayWorkTrips.length; i++) {
         const workTrip = todayWorkTrips[i]
-        const nowInMinutes = (currentHours * 60) + minutes
+        const nowInMinutes = currentHours * 60 + minutes
         let startTime = workTrip.scheduledDrive.start.toDate()
-        const workTripStartInMinutes = startTime.getHours() * 60 + startTime.getMinutes()
+        const workTripStartInMinutes =
+          startTime.getHours() * 60 + startTime.getMinutes()
         //now is before workTrip start
         if (nowInMinutes < workTripStartInMinutes) {
           console.log('next ride today')
           //this workTrip is next, display it on the screen
           setDriveStartTime(workTrip.scheduledDrive.start)
           setDriveEndTime(workTrip.scheduledDrive.end)
-          checkButtonVisible(workTrip.scheduledDrive.start, workTrip.scheduledDrive.end)
+          checkButtonVisible(
+            workTrip.scheduledDrive.start,
+            workTrip.scheduledDrive.end
+          )
           return
         }
       }
       if (driveStartTime == null) {
         console.log('next workday morning')
         // next workday morning workTrip is next and displayed on the screen
-        if (tomorrowWorkTrips[0].goingTo == 'home')
-          tomorrowWorkTrips.reverse()
+        if (tomorrowWorkTrips[0].goingTo == 'home') tomorrowWorkTrips.reverse()
         setDriveStartTime(tomorrowWorkTrips[0].scheduledDrive.start)
         setDriveEndTime(tomorrowWorkTrips[0].scheduledDrive.end)
-        checkButtonVisible(tomorrowWorkTrips[0].scheduledDrive.start, tomorrowWorkTrips[0].scheduledDrive.end)
+        checkButtonVisible(
+          tomorrowWorkTrips[0].scheduledDrive.start,
+          tomorrowWorkTrips[0].scheduledDrive.end
+        )
         return
       }
-    }
-
-    else {
+    } else {
       console.log('next day if today no more rides')
-      if (tomorrowWorkTrips[0].goingTo == 'home')
-        tomorrowWorkTrips.reverse()
+      if (tomorrowWorkTrips[0].goingTo == 'home') tomorrowWorkTrips.reverse()
       setDriveStartTime(tomorrowWorkTrips[0].scheduledDrive.start)
       setDriveEndTime(tomorrowWorkTrips[0].scheduledDrive.end)
-      checkButtonVisible(tomorrowWorkTrips[0].scheduledDrive.start, tomorrowWorkTrips[0].scheduledDrive.end)
+      checkButtonVisible(
+        tomorrowWorkTrips[0].scheduledDrive.start,
+        tomorrowWorkTrips[0].scheduledDrive.end
+      )
       return
     }
-
   }
 
   function inTime(start, end) {
@@ -127,8 +138,9 @@ export const RideStartBar = ({user, navigation}) => {
 
   const checkButtonVisible = (startDate, endDate) => {
     console.log('checkButton visible')
-    var start = startDate.toDate().getHours() * 60 + startDate.toDate().getMinutes() - 10
-    var end =  endDate.toDate().getHours()  * 60 + endDate.toDate().getMinutes()
+    var start =
+      startDate.toDate().getHours() * 60 + startDate.toDate().getMinutes() - 10
+    var end = endDate.toDate().getHours() * 60 + endDate.toDate().getMinutes()
     console.log('times are set')
     if (inTime(start, end) == true) {
       console.log('returned true')
@@ -157,21 +169,26 @@ export const RideStartBar = ({user, navigation}) => {
           </Left>
           <Right>
             {showStart ? (
-              <Button onPress={() => navigation.navigate('DriverStartRide', {startingRide})}><Text>Start</Text></Button>
+              <Button
+                onPress={() =>
+                  navigation.navigate('DriverStartRide', {startingRide})
+                }
+              >
+                <Text>Start</Text>
+              </Button>
             ) : (
-              <Text>{driveStartTime && moment(driveStartTime.toDate()).format('HH:mm')}</Text>
-            )
-            }
+              <Text>
+                {driveStartTime &&
+                  moment(driveStartTime.toDate()).format('HH:mm')}
+              </Text>
+            )}
           </Right>
         </CardItem>
       </Card>
     </View>
-
   )
 }
 
-const styles = StyleSheet.create({
-
-})
+const styles = StyleSheet.create({})
 
 export default RideStartBar

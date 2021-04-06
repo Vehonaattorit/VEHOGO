@@ -6,5 +6,6 @@ export const color = {
   secondaryDark: '#007bb0',
   sText: '#000000',
   pText: '#ffffff',
-  grey: 'grey'
-};
+  grey: 'grey',
+  lightBlue: '#E1F5FD',
+}

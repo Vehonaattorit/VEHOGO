@@ -6,6 +6,7 @@ import {TouchableOpacity} from 'react-native'
 import moment from 'moment'
 
 import firebase from 'firebase/app'
+import {color} from '../constants/colors'
 
 const PassengerListItem = ({navigation, singleItem}) => {
   const {car, goingTo, scheduledDrive, workDayNum, extraDay} = singleItem
@@ -33,6 +34,7 @@ const PassengerListItem = ({navigation, singleItem}) => {
 
   return (
     <TouchableOpacity
+      style={styles.listItem}
       onPress={() =>
         navigation.navigate('RequestRide', {
           singleItem,
@@ -80,6 +82,19 @@ const PassengerListItem = ({navigation, singleItem}) => {
 }
 
 const styles = StyleSheet.create({
+  listItem: {
+    backgroundColor: color.lightBlue,
+    borderRadius: 5,
+    marginVertical: 10,
+    // ...Platform.select({
+    //   ios: {borderColor: color.secondaryDark, borderRadius: 20},
+    //   android: {
+    //     backgroundColor: color.secondaryDark,
+    //     borderColor: 'rgba(52, 52, 52, 0.3)',
+    //     borderRadius: 5,
+    //   },
+    // }),
+  },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -90,11 +105,11 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     marginTop: 10,
-    backgroundColor: '#26aae2',
+    backgroundColor: color.lightBlue,
     borderRadius: 20,
   },
   item: {
-    backgroundColor: '#26aae2',
+    backgroundColor: color.lightBlue,
   },
 })
 

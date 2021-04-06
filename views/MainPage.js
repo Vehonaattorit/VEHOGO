@@ -16,7 +16,7 @@ import {UserContext} from '../contexts'
 import {signOut} from '../controllers/LoginController'
 import 'firebase/firestore'
 
-import PassengerList from './PassengerList'
+import PassengerList from '../components/PassengerList'
 import MenuDrawer from 'react-native-side-drawer'
 import {color} from '../constants/colors'
 
@@ -29,6 +29,7 @@ import {updateUser} from '../controllers/userController'
 
 import RideStartBar from '../components/RideStartBar'
 import DriverTripList from '../components/DriverTripList'
+import DriverIsOnHisWayBar from '../components/DriverIsOnHisWayBar'
 
 export const MainPage = ({navigation}) => {
   const {user} = useContext(UserContext)
@@ -43,8 +44,8 @@ export const MainPage = ({navigation}) => {
     open,
     setOpen,
     passengerList,
+    activeRide,
     extraDay,
-
     driverTripList,
     queryWithTimeAndDriverId,
     fetchTodayDriverRides,
@@ -53,9 +54,9 @@ export const MainPage = ({navigation}) => {
   useEffect(() => {
     checkTravelPreference()
     checkNotificationsPermissions()
-    // createAsManyWorkTripDocuments()
-    if (travelPreference === 'passenger') fetchTodayRides()
-    if (travelPreference === 'driver') fetchTodayDriverRides()
+    travelPreference === 'passenger'
+      ? fetchTodayRides()
+      : fetchTodayDriverRides()
   }, [travelPreference])
 
   const checkNotificationsPermissions = async () => {
@@ -69,9 +70,9 @@ export const MainPage = ({navigation}) => {
     } else {
       pushToken = (await Notifications.getExpoPushTokenAsync()).data
     }
+
     user.ownerPushToken = pushToken
-    console.log('Main Page', pushToken)
-    updateUser(user)
+    await updateUser(user)
   }
 
   const checkTravelPreference = async () => {
@@ -94,6 +95,14 @@ export const MainPage = ({navigation}) => {
               </Button>
             </Right>
           </Header>
+          {activeRide && (
+            <DriverIsOnHisWayBar
+              user={user}
+              navigation={navigation}
+              activeRide={activeRide}
+            />
+          )}
+
           <View style={styles.listView}>
             <PassengerList
               extraDay={extraDay}
@@ -196,24 +205,32 @@ export const MainPage = ({navigation}) => {
             <Button style={styles.button} onPress={signOut}>
               <Text>LogOut</Text>
             </Button>
-            <Button
-              style={styles.button}
-              onPress={() => navigation.navigate('DriverRideRequestList')}
-            >
-              <Text>Ride requests</Text>
-            </Button>
-            <Button
-              style={styles.button}
-              onPress={() => navigation.navigate('DriverStartRide')}
-            >
-              <Text>Start Ride</Text>
-            </Button>
-            <Button
-              style={styles.button}
-              onPress={() => navigation.navigate('DriverCarList')}
-            >
-              <Text>DriverCarList</Text>
-            </Button>
+            {travelPreference === 'driver' && (
+              <>
+                <Button
+                  style={styles.button}
+                  onPress={() => navigation.navigate('DriverRideRequestList')}
+                >
+                  <Text>Ride requests</Text>
+                </Button>
+                <Button
+                  style={styles.button}
+                  onPress={() =>
+                    navigation.navigate('DriverStartRide', {
+                      startingRide: driverTripList[0],
+                    })
+                  }
+                >
+                  <Text>Start Ride</Text>
+                </Button>
+                <Button
+                  style={styles.button}
+                  onPress={() => navigation.navigate('DriverCarList')}
+                >
+                  <Text>DriverCarList</Text>
+                </Button>
+              </>
+            )}
           </View>
         </MenuDrawer>
       </View>

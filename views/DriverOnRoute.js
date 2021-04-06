@@ -4,7 +4,11 @@ import {Content, Body, Container, Text, View, Icon, Button} from 'native-base'
 import MapView from 'react-native-maps'
 import MapViewDirections from 'react-native-maps-directions'
 
-export const DriverOnRoute = ({navigation}) => {
+export const DriverOnRoute = ({navigation, route}) => {
+  const {activeRide} = route.params
+
+  console.log('activeRide', activeRide)
+
   const origin = {latitude: 60.169929425303415, longitude: 24.938383101854694}
   const destination = {latitude: 60.203218047839, longitude: 24.65566529896304}
   const apikey = 'Your api key here'

@@ -8,7 +8,7 @@ import {updateWorkTrip} from '../controllers/workTripController'
 import {getUser} from '../controllers/userController'
 
 const PassengerAcceptRefuseButton = (props) => {
-  const {user, workTrip, rideRequest} = props
+  const {user, workTrip, rideRequest, navigation} = props
   const [ownerPushToken, setOwnerPushToken] = useState(null)
 
   useEffect(() => {
@@ -17,34 +17,38 @@ const PassengerAcceptRefuseButton = (props) => {
   console.log('ownerPushToken', ownerPushToken)
 
   const getOwnerPushtoken = async () => {
-    console.log('workTrip.senderiD', rideRequest)
+    console.log('workTrip.senderID', rideRequest)
     const passengerId = await getUser(rideRequest.senderID)
-
-    console.log('user driver', passengerId)
 
     setOwnerPushToken(passengerId.ownerPushToken)
   }
 
-  // ExponentPushToken[CpFu1GOw98cSB0zqFWSOVC]
   const acceptPassenger = async () => {
     console.log('workTrip object', workTrip)
     console.log(`Accepting passenger : ${rideRequest.userID}`)
+
     await deleteRideRequest(user.company.id, rideRequest.id)
     let workTripToUpdate = workTrip
-    workTripToUpdate.scheduledDrive.stops.push(
+
+    console.log('rideRequest', rideRequest)
+
+    workTripToUpdate.scheduledDrive.stops.splice(
+      workTripToUpdate.scheduledDrive.stops.length - 1,
+      0,
       new Stop({
         location: rideRequest.homeLocation,
         address: rideRequest.homeAddress,
         stopName: 'passenger',
-        userID: rideRequest.userID,
+        userID: rideRequest.senderID,
       })
     )
+
     console.log('is this the number', workTripToUpdate)
     workTripToUpdate.scheduledDrive.takenSeats += 1
-    console.log(workTripToUpdate)
+    console.log('after workTripToUpdate', workTripToUpdate)
     await updateWorkTrip(user.company.id, workTripToUpdate)
 
-    fetch('https://exp.host/--/api/v2/push/send', {
+    await fetch('https://exp.host/--/api/v2/push/send', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -57,6 +61,8 @@ const PassengerAcceptRefuseButton = (props) => {
         body: `Request was accepted by ${user.userName}`,
       }),
     })
+
+    navigation.popToTop()
   }
 
   const refusePassenger = async () => {
