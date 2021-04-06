@@ -143,44 +143,44 @@ const PassengerAcceptRefuseButton = (props) => {
 
       navigation.popToTop()
     }
+
+    const refusePassenger = async () => {
+      console.log(`Refusing passenger : ${rideRequest.senderID}`)
+      deleteRideRequest(user.company.id, rideRequest.id)
+
+      console.log('refusePassenger', passengerUser.ownerPushToken)
+
+      fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Accept-Encoding': 'gzip, deflate',
+          'Content-Type': 'application/json',
+        },
+
+        body: JSON.stringify({
+          to: passengerUser.ownerPushToken,
+          title: 'Request was refused',
+          body: `Request was refused by ${user.userName}`,
+        }),
+      })
+    }
+
+    return (
+      <View style={styles.buttons}>
+        <Button onPress={acceptPassenger} large style={styles.button}>
+          <Text style={styles.btntxt}>Accept</Text>
+        </Button>
+        <Button
+          onPress={refusePassenger}
+          large
+          style={{...styles.button, backgroundColor: 'red'}}
+        >
+          <Text style={styles.btntxt}>Refuse</Text>
+        </Button>
+      </View>
+    )
   }
-
-  const refusePassenger = async () => {
-    console.log(`Refusing passenger : ${rideRequest.senderID}`)
-    deleteRideRequest(user.company.id, rideRequest.id)
-
-    console.log('refusePassenger', passengerUser.ownerPushToken)
-
-    fetch('https://exp.host/--/api/v2/push/send', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Accept-Encoding': 'gzip, deflate',
-        'Content-Type': 'application/json',
-      },
-
-      body: JSON.stringify({
-        to: passengerUser.ownerPushToken,
-        title: 'Request was refused',
-        body: `Request was refused by ${user.userName}`,
-      }),
-    })
-  }
-
-  return (
-    <View style={styles.buttons}>
-      <Button onPress={acceptPassenger} large style={styles.button}>
-        <Text style={styles.btntxt}>Accept</Text>
-      </Button>
-      <Button
-        onPress={refusePassenger}
-        large
-        style={{...styles.button, backgroundColor: 'red'}}
-      >
-        <Text style={styles.btntxt}>Refuse</Text>
-      </Button>
-    </View>
-  )
 }
 
 const styles = StyleSheet.create({
