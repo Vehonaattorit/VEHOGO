@@ -1,12 +1,10 @@
 import React, {useState, useEffect, useContext} from 'react'
-import {StyleSheet, Alert, Button, Platform, Text, View} from 'react-native'
+import {StyleSheet, Alert, Card, Text, View} from 'react-native'
 import {color} from '../constants/colors'
-import {CustomButton} from '../components/CustomButton'
 import {RoundButton} from '../components/RoundButton'
 import {CustomTitle} from '../components/CustomTitle'
-import {EvilIcons, MaterialCommunityIcons} from '@expo/vector-icons'
-import {updateUser, userStream} from '../controllers/userController'
-
+import {EvilIcons} from '@expo/vector-icons'
+import {updateUser} from '../controllers/userController'
 import {UserContext} from '../contexts'
 import {CustomSubmitButton} from '../components/CustomSubmitButton'
 
@@ -23,21 +21,6 @@ export const WorkingDays = ({navigation}) => {
   ])
 
   const [error, setError] = useState('')
-
-  // const updateWorkDays = () => {
-  //   const preferedWorkDays = []
-
-  //   workDays.forEach((element) => {
-  //     if (element.isSelected) {
-  //       preferedWorkDays.push({workDayNum: element.id})
-  //     }
-  //   })
-
-  //   user.workDays = preferedWorkDays
-
-  //   updateUser(user)
-  // }
-
   useEffect(() => {
     let workDayIds = []
 
@@ -112,7 +95,7 @@ export const WorkingDays = ({navigation}) => {
         <CustomTitle title="Days" />
         <EvilIcons name="calendar" size={300} color={color.secondaryDark} />
       </View>
-      <View style={styles.btnsContainer}>
+      <View style={styles.cardView}>
         <View style={styles.btnContainer}>
           {workDays.map((item) => (
             <RoundButton
@@ -138,20 +121,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  btnsContainer: {
+  cardView: {
     position: 'absolute',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     backgroundColor: '#000000',
-    borderTopLeftRadius: 98,
-    borderTopRightRadius: 98,
+    borderTopLeftRadius: 70,
+    borderTopRightRadius: 70,
     bottom: 0,
+    width: '100%',
     padding: 20,
   },
   btnContainer: {
+    justifyContent: 'center',
     flexDirection: 'row',
-    padding: 10,
-    marginTop: 10,
-    marginBottom: 100,
+    marginTop: 20,
+    marginBottom: 80,
   },
   titleText: {
     alignItems: 'center',

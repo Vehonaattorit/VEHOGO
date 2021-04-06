@@ -1,5 +1,4 @@
 import React, {useContext} from 'react'
-;<Text>I would like:</Text>
 import {StyleSheet, View, Button, Text, Icon} from 'react-native'
 import {signOut} from '../controllers/LoginController'
 import AntIcon from 'react-native-vector-icons/AntDesign'
@@ -72,6 +71,9 @@ const styles = StyleSheet.create({
   },
   btn: {
     margin: 10,
+    padding: 10,
+    backgroundColor: '#ffffff',
+    borderRadius: 100,
   },
   icon: {
     marginBottom: 200,

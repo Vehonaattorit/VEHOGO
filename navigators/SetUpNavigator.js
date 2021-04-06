@@ -14,6 +14,7 @@ function SetUpStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+
         <Stack.Screen
           name="Company"
           component={Company}
@@ -29,41 +30,12 @@ function SetUpStackNavigator() {
             backgroundColor: 'black',
           }}
         />
-        <Stack.Screen
-          name="Travel"
-          component={Travel}
-          options={{
-            title: 'Travel',
-            headerStyle: {
-              backgroundColor: '#000000',
-            },
-            headerTitleStyle: {textAlign: 'center', flex: 1},
-            headerTintColor: '#ffffff',
-          }}
-          headerStyle={{
-            backgroundColor: 'black',
-          }}
-        />
+
         <Stack.Screen
           name="Username"
           component={Username}
           options={{
             title: 'Username',
-            headerStyle: {
-              backgroundColor: '#000000',
-            },
-            headerTitleStyle: {textAlign: 'center', flex: 1},
-            headerTintColor: '#ffffff',
-          }}
-          headerStyle={{
-            backgroundColor: 'black',
-          }}
-        />
-        <Stack.Screen
-          name="Address"
-          component={Address}
-          options={{
-            title: 'Address',
             headerStyle: {
               backgroundColor: '#000000',
             },
@@ -95,6 +67,21 @@ function SetUpStackNavigator() {
           component={WorkingHours}
           options={{
             title: 'Working Hours',
+            headerStyle: {
+              backgroundColor: '#000000',
+            },
+            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTintColor: '#ffffff',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
+          }}
+        />
+             <Stack.Screen
+          name="Address"
+          component={Address}
+          options={{
+            title: 'Address',
             headerStyle: {
               backgroundColor: '#000000',
             },

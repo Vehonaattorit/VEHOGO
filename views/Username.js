@@ -90,35 +90,38 @@ export const Username = ({navigation}) => {
   )
 
   return (
-    <KeyboardAvoidingView behavior="padding" style={styles.container}>
+    <View style={styles.container}>
       <CustomTitle title="Select username" />
       <View style={styles.icon}>
         <FontAwesome name="user" size={300} color={color.secondaryDark} />
       </View>
-      <View style={styles.inputContainer}>
-        <CustomInput
-          placeholder="Username"
-          initialValue={formState.inputValues.userName}
-          keyboardType="default"
-          autoCapitalize="sentences"
-          id="userName"
-          autoCorrect={false}
-          onInputChange={inputChangeHandler}
-          errorText="Please enter a valid username."
-          minLength={1}
-          required
-        />
-        <View style={styles.submitButton}>
-          <CustomSubmitButton
-            style={styles.btns}
-            title="Submit"
-            onPress={() => {
-              submitHandler()
-            }}
+
+      <KeyboardAvoidingView behavior="padding" style={styles.inputContainer}>
+        <>
+          <CustomInput
+            placeholder="Username"
+            initialValue={formState.inputValues.userName}
+            keyboardType="default"
+            autoCapitalize="sentences"
+            id="userName"
+            autoCorrect={false}
+            onInputChange={inputChangeHandler}
+            errorText="Please enter a valid username."
+            minLength={1}
+            required
           />
-        </View>
-      </View>
-    </KeyboardAvoidingView>
+          <View style={styles.submitButton}>
+            <CustomSubmitButton
+              style={styles.btns}
+              title="Submit"
+              onPress={() => {
+                submitHandler()
+              }}
+            />
+          </View>
+        </>
+      </KeyboardAvoidingView>
+    </View>
   )
 }
 
@@ -132,8 +135,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     justifyContent: 'flex-end',
     backgroundColor: '#000000',
-    borderTopLeftRadius: 62,
-    borderTopRightRadius: 62,
+    borderTopLeftRadius: 60,
+    borderTopRightRadius: 60,
     bottom: 0,
     width: '100%',
     padding: 20,
