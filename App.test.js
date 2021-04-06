@@ -1,7 +1,7 @@
 import React from 'react'
 import renderer from 'react-test-renderer'
 
-import TestComponent from './TestComponent'
+import TestComponent from './views/TestComponent'
 
 describe('<TestComponent />', () => {
   it('should have 1 child', () => {
