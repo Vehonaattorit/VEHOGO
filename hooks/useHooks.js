@@ -12,6 +12,7 @@ const useWorkTripHooks = (user) => {
   const [extraDay, setExtraDay] = useState([])
   const [passengerList, setPassengerList] = useState(null)
   const [open, setOpen] = useState(false)
+  const [activeRide, setActiveRide] = useState(null)
 
   //DRIVER
   const [driverTripList, setDriverTripList] = useState(null)
@@ -76,6 +77,12 @@ const useWorkTripHooks = (user) => {
 
     const goingTo = fetchHomeOrWorkTrips()
 
+    const activeRide = await workTripMultiQuery(user.company.id, [
+      {field: 'isDriving', condition: '==', value: true},
+    ])
+
+    setActiveRide(activeRide[0])
+
     const query = await workTripOrderByQuery(user.company.id, [
       {field: 'workDayNum', condition: '==', value: currentWeekDay},
       {field: 'goingTo', condition: '==', value: goingTo},
@@ -83,8 +90,6 @@ const useWorkTripHooks = (user) => {
 
     setPassengerList(query)
   }
-
-  // const perkele = jotain
 
   const slideTime = () => {
     let val0 = multiSliderValue[0]
@@ -117,7 +122,6 @@ const useWorkTripHooks = (user) => {
   //DRIVER SPECIFIC FUNCTIONS STARTS HERE
 
   const queryWithTimeAndDriverId = async () => {
-
     const goingTo = fetchHomeOrWorkTrips()
     console.log(user.id)
     console.log(user.company.id)
@@ -136,7 +140,7 @@ const useWorkTripHooks = (user) => {
       {
         field: 'driverID',
         condition: '==',
-        value: user.id
+        value: user.id,
       },
       // {field: 'workDayNum', condition: '==', value: currentWeekDay},
       /*{
@@ -162,7 +166,7 @@ const useWorkTripHooks = (user) => {
     const query = await workTripOrderByQuery(user.company.id, [
       {field: 'workDayNum', condition: '==', value: currentWeekDay},
       //{field: 'goingTo', condition: '==', value: goingTo},
-      {field: 'driverID', condition: '==', value: user.id}
+      {field: 'driverID', condition: '==', value: user.id},
     ])
 
     console.log(query)
@@ -182,12 +186,12 @@ const useWorkTripHooks = (user) => {
     queryWithTime,
     fetchTodayRides,
     passengerList,
+    activeRide,
 
     //Driver
     queryWithTimeAndDriverId,
     fetchTodayDriverRides,
     driverTripList,
-
   }
 }
 

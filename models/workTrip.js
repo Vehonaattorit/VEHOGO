@@ -12,6 +12,7 @@ export class WorkTrip {
     pendingRideRequests,
     goingTo,
     route
+    isDriving,
   }) {
     this.id = id
     this.driverID = driverID
@@ -22,6 +23,7 @@ export class WorkTrip {
     this.pendingRideRequests = pendingRideRequests
     this.goingTo = goingTo
     this.route = route
+    this.isDriving = isDriving
   }
 }
 
@@ -61,6 +63,10 @@ export const workTripConverter = {
     if (workTrip.route != undefined) {
       workTripObject.route = workTrip.route
     }
+    if (workTrip.isDriving != undefined) {
+      workTripObject.isDriving = workTrip.isDriving
+    }
+
     return workTripObject
   },
   fromFirestore: function (snapshot, options) {
@@ -74,6 +80,7 @@ export const workTripConverter = {
       scheduledDrive: data.scheduledDrive,
       pendingRideRequests: data.pendingRideRequests,
       goingTo: data.goingTo,
+      isDriving: data.isDriving,
       car: data.car,
       route: data.route
     })
@@ -87,6 +94,7 @@ export const workTripConverter = {
       scheduledDrive: scheduleDriveConverter.fromData(data.scheduledDrive),
       pendingRideRequests: data.pendingRideRequests,
       goingTo: data.goingTo,
+      isDriving: data.isDriving,
       car: data.car,
       route: data.route
     })

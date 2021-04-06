@@ -22,7 +22,7 @@ export const SetUpInit = ({route}) => {
   console.log('user company id', user.company.id)
   console.log('user SetUpInit', user)
 
-  const setupWorkTripDocs = () => {
+  const setupWorkTripDocs = async () => {
     const workTripDocuments = user.preferedWorkingHours.reduce(
       (res, current, index, array) => {
         return res.concat([current, current])
@@ -32,7 +32,7 @@ export const SetUpInit = ({route}) => {
 
     // console.log('workTripDocuments', workTripDocuments)
 
-    workTripDocuments.forEach((item, i) => {
+    workTripDocuments.forEach(async (item, i) => {
       let index = i + 1
 
       console.log('WHOLE ITEM', item)
@@ -68,11 +68,17 @@ export const SetUpInit = ({route}) => {
           location: user.homeLocation,
         }),
       ]
-      updateWorkTrip(
+
+      console.log('user.company.id', user.company.id)
+
+      console.log()
+
+      await updateWorkTrip(
         user.company.id, // Looks for company ID that user has joined
         new WorkTrip({
           driverID: user.id,
           goingTo: goingTo,
+          isDriving: false,
           currentLocation: user.homeAddress,
           workDayNum: item.workDayNum,
           scheduledDrive: new ScheduledDrive({

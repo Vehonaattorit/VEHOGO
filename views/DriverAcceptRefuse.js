@@ -84,9 +84,14 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
             Adress{rideRequest == undefined ? '' : rideRequest.homeAddress}
           </Text>
           {user.travelPreference == 'passenger' ? (
-            <PassengerRideRequestButton user={user} workTrip={singleItem} />
+            <PassengerRideRequestButton
+              navigation={navigation}
+              user={user}
+              workTrip={singleItem}
+            />
           ) : (
             <PassengerAcceptRefuseButton
+              navigation={navigation}
               user={user}
               workTrip={singleItem}
               rideRequest={rideRequest}

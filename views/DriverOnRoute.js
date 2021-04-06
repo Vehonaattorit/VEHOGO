@@ -8,10 +8,13 @@ import decodePolyline from 'decode-google-map-polyline'
 export const DriverOnRoute = ({navigation, route}) => {
   const {workTrip} = route.params
   console.log('this worktrip', workTrip)
+  const {activeRide} = route.params
+
+  console.log('activeRide', activeRide)
+
   const origin = {latitude: 60.169929425303415, longitude: 24.938383101854694}
   const destination = {latitude: 60.203218047839, longitude: 24.65566529896304}
   const apikey = 'Your api key here'
-
 
   const [mapRef, setMapRef] = useState(null)
   const [routeCoordinates, setRouteCoordinates] = useState([])
@@ -25,7 +28,7 @@ export const DriverOnRoute = ({navigation, route}) => {
         }}
         title="Random place"
       />
-    ))
+    )),
   ])
 
   useEffect(() => {
@@ -36,15 +39,18 @@ export const DriverOnRoute = ({navigation, route}) => {
       workTrip.route.route.routes[0].legs.map((leg) => {
         leg.steps.map((step) => {
           var decodedPolyLines = decodePolyline(step.polyline.points)
-          decodedPolyLines.forEach(polylineCoords => {
-            tempRouteCoordinates.push({latitude: polylineCoords.lat, longitude: polylineCoords.lng})
+          decodedPolyLines.forEach((polylineCoords) => {
+            tempRouteCoordinates.push({
+              latitude: polylineCoords.lat,
+              longitude: polylineCoords.lng,
+            })
           })
         })
       })
     }
     setRouteCoordinates(tempRouteCoordinates)
     console.log('markers', markers)
-    console.log('decoded polyline',)
+    console.log('decoded polyline')
     setTimeout(() => {
       console.log('now timer ending')
       if (mapRef != undefined && mapRef != null) {
@@ -58,7 +64,6 @@ export const DriverOnRoute = ({navigation, route}) => {
       }
     }, 3000)
   }, [])
-
 
   return (
     <View style={styles.view}>
@@ -87,8 +92,11 @@ export const DriverOnRoute = ({navigation, route}) => {
             style={styles.mapStyle}
             provider={MapView.PROVIDER_GOOGLE}
             initialRegion={{
-              latitude: workTrip.startingRide.scheduledDrive.stops[0].location.latitude,
-              longitude: workTrip.startingRide.scheduledDrive.stops[0].location.longitude,
+              latitude:
+                workTrip.startingRide.scheduledDrive.stops[0].location.latitude,
+              longitude:
+                workTrip.startingRide.scheduledDrive.stops[0].location
+                  .longitude,
               latitudeDelta: 1,
               longitudeDelta: 1,
             }}
@@ -133,4 +141,3 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height,
   },
 })
-

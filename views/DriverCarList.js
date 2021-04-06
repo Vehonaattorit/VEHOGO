@@ -12,7 +12,6 @@ import {
   Button,
   Title,
 } from 'native-base'
-import PassengerList from './PassengerList'
 import {getCars} from '../controllers/carController'
 import DriverCarListItem from '../components/DriverCarListItem'
 import {UserContext} from '../contexts'
