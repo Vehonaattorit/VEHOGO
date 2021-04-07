@@ -1,31 +1,31 @@
 import React from 'react'
-import {LogIn} from '../views/LogIn'
+import {SignUp} from '../views/SignUp'
 
 import {render, waitFor, fireEvent} from '@testing-library/react-native'
 
-// login with error
+// SignUp with error
 
 it('Should throw an error when trying to log in', async () => {
-  const {getByText, getByPlaceholderText, queryByText} = render(<LogIn />)
+  const {getByText, getByPlaceholderText} = render(<SignUp />)
 
   // Write only email
   const emailInput = getByPlaceholderText('email@address.com')
-  const loginBtn = getByText('Login')
+  const registerBtn = getByText('Register')
 
-  // Press 'Login' button
+  // Press 'SignUp' button
   fireEvent.changeText(emailInput, 'driver01@test.com')
-  fireEvent.press(loginBtn)
+  fireEvent.press(registerBtn)
 
   await waitFor(() => {
     const errorMessage = getByText(
-      'The password is invalid or the user does not have a password.'
+      'The password must be 6 characters long or more.'
     )
 
     expect(errorMessage).not.toBeNull()
   })
 })
 
-// login successfully
+// register successfully
 
 // display wrong password error message
 
