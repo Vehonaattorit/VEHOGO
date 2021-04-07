@@ -1,5 +1,5 @@
-import React, {useContext, useState} from 'react'
-import {SafeAreaView, StyleSheet} from 'react-native'
+import React, {useContext, useState, useEffect} from 'react'
+import {StyleSheet} from 'react-native'
 import {
   Content,
   Card,
@@ -16,10 +16,10 @@ import {UserContext} from '../contexts'
 import {updateWorkTrip} from '../controllers/workTripController'
 import {getUser} from '../controllers/userController'
 import {color} from '../constants/colors'
+import * as Location from 'expo-location'
 
 export const DriverStartRide = ({navigation, route}) => {
   let workTrip = route.params
-  console.log(workTrip.startingRide.scheduledDrive.stops)
 
   const {user} = useContext(UserContext)
 
@@ -69,12 +69,33 @@ export const DriverStartRide = ({navigation, route}) => {
     }
   }
 
+  useEffect(() => {
+    ;(async () => {
+      let {status} = await Location.requestPermissionsAsync()
+      if (status !== 'granted') {
+        console.log('Permission to access location was denied')
+        return
+      }
+    })()
+  }, [])
+
+  const drivingTime = () => {
+    let totalTime = 0
+    workTrip.startingRide.route.routes[0].legs.map((leg) => {
+      totalTime += leg.duration.value
+    })
+    return parseFloat((totalTime / 60).toFixed(0))
+  }
   return (
     <View style={styles.view}>
       <View style={styles.iconView}>
         <Body style={styles.iconViewBody}>
           <Icon style={styles.icon} active name="car-outline" />
           <Text style={styles.iconText}>Your Next Ride</Text>
+
+          <Text>
+            Driving time: {workTrip.startingRide.route && drivingTime()} mins
+          </Text>
           <Button
             large
             style={{
@@ -87,40 +108,40 @@ export const DriverStartRide = ({navigation, route}) => {
               {isDriving ? 'Stop Driving' : 'Start Driving'}
             </Text>
           </Button>
-          <Text style={styles.iconText}>Your Passengers</Text>
+          <Text style={styles.iconText}>Stops</Text>
         </Body>
       </View>
 
       <View style={styles.listView}>
-        <StopList dataArray={workTrip.startingRide.scheduledDrive.stops} />
+        <StopList
+          dataArray={workTrip.startingRide.scheduledDrive.stops}
+          route={workTrip.startingRide.route}
+        />
       </View>
     </View>
   )
 }
-
 const styles = StyleSheet.create({
   view: {
     flex: 1,
     backgroundColor: 'white',
   },
-
   iconView: {
-    flex: 2.5,
+    flex: 2,
     backgroundColor: 'white',
   },
   iconViewBody: {
     flex: 1,
   },
   icon: {
-    fontSize: 200,
+    fontSize: 150,
     flex: 3,
     color: color.primary,
   },
   iconText: {
-    fontSize: 30,
+    fontSize: 26,
     flex: 0.75,
   },
-
   listView: {
     flex: 2.5,
   },

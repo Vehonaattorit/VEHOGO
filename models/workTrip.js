@@ -7,7 +7,7 @@ export class WorkTrip {
     driverID,
     workDayNum,
     car,
-    currentLocation,
+    driverCurrentLocation,
     scheduledDrive,
     goingTo,
     route,
@@ -15,7 +15,7 @@ export class WorkTrip {
   }) {
     this.id = id
     this.driverID = driverID
-    this.currentLocation = currentLocation
+    this.driverCurrentLocation = driverCurrentLocation
     this.workDayNum = workDayNum
     this.scheduledDrive = scheduledDrive
     this.car = car
@@ -35,8 +35,8 @@ export const workTripConverter = {
     if (workTrip.driverID != undefined) {
       workTripObject.driverID = workTrip.driverID
     }
-    if (workTrip.currentLocation != undefined) {
-      workTripObject.currentLocation = workTrip.currentLocation
+    if (workTrip.driverCurrentLocation != undefined) {
+      workTripObject.driverCurrentLocation = workTrip.driverCurrentLocation
     }
     if (workTrip.workDayNum != undefined) {
       workTripObject.workDayNum = workTrip.workDayNum
@@ -69,7 +69,7 @@ export const workTripConverter = {
     return new WorkTrip({
       id: data.id,
       driverID: data.driverID,
-      currentLocation: data.currentLocation,
+      driverCurrentLocation: data.driverCurrentLocation,
       workDayNum: data.workDayNum,
       scheduledDrive: data.scheduledDrive,
       goingTo: data.goingTo,
@@ -82,7 +82,7 @@ export const workTripConverter = {
     return new WorkTrip({
       id: data.id,
       driverID: data.driverID,
-      currentLocation: data.currentLocation,
+      driverCurrentLocation: data.driverCurrentLocation,
       workDayNum: data.workDayNum,
       scheduledDrive: scheduleDriveConverter.fromData(data.scheduledDrive),
       goingTo: data.goingTo,

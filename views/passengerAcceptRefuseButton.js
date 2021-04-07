@@ -13,7 +13,6 @@ const PassengerAcceptRefuseButton = (props) => {
   const {user, workTrip, rideRequest, navigation} = props
 
   const [passengerUser, setPassengerUser] = useState(null)
-  const [ownerPushToken, setOwnerPushToken] = useState(null)
 
   useEffect(() => {
     getSenderUser()
@@ -52,10 +51,9 @@ const PassengerAcceptRefuseButton = (props) => {
 
       const responseJson = await response.json()
 
-      const data = {
-        route: responseJson,
-      }
-      console.log('data for life', data)
+      const data = responseJson
+
+      console.log('fetched directions')
 
       return data
     } catch (e) {
@@ -106,6 +104,14 @@ const PassengerAcceptRefuseButton = (props) => {
       //update the stops to the data model before saving to firestore
       workTripToUpdate.scheduledDrive.stops = waypoints
     } else {
+      route = await getTripRoute([
+        {
+          location: rideRequest.homeLocation,
+          address: rideRequest.homeAddress,
+          stopName: passengerUser.userName,
+          userID: rideRequest.senderID,
+        },
+      ])
       workTripToUpdate.scheduledDrive.stops.splice(
         1,
         0,

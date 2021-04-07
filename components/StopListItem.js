@@ -11,16 +11,21 @@ import {
   AntDesign,
   FontAwesome5,
 } from '@expo/vector-icons'
-
-const StopListItem = ({navigation, singleItem}) => {
+const StopListItem = ({singleItem, route, index}) => {
   const [stopUserInfo, setStopUserInfo] = useState([])
+
+  if (index === 0) {
+    console.log('first index', index)
+  } else {
+    console.log('index', index)
+    //console.log('leg',index - 1,route.route.routes[0].legs[index - 1]);
+  }
 
   const getStopUserInfo = async () => {
     const user = await getUser(singleItem.userID)
     console.log(user)
     setStopUserInfo(user)
   }
-
   useEffect(() => {
     getStopUserInfo()
   }, [])
@@ -37,15 +42,39 @@ const StopListItem = ({navigation, singleItem}) => {
               <Text style={styles.text}>{singleItem.address}</Text>
             </View>
           </View>
-          <View style={styles.breakPoint}></View>
-          <View style={styles.bottomRow}>
-            <View style={styles.iconContainer}>
-              <Ionicons name="person-outline" size={24} color="white" />
-            </View>
-            <View style={styles.passengerNameContainer}>
-              <Text style={styles.text}>{singleItem.stopName}</Text>
-            </View>
-          </View>
+          {index === 0 ? (
+            <>
+              <View style={styles.breakPoint}></View>
+              <View style={styles.bottomRow}>
+                <View style={styles.iconContainer}>
+                  <Ionicons name="person-outline" size={24} color="white" />
+                </View>
+                <View style={styles.passengerNameContainer}>
+                  <Text style={styles.text}>{singleItem.stopName}</Text>
+                </View>
+                <View style={styles.routeDistanceContainer}>
+                  <Text style={styles.text}>Start place</Text>
+                </View>
+              </View>
+            </>
+          ) : (
+            <>
+              <View style={styles.breakPoint}></View>
+              <View style={styles.bottomRow}>
+                <View style={styles.iconContainer}>
+                  <Ionicons name="person-outline" size={24} color="white" />
+                </View>
+                <View style={styles.passengerNameContainer}>
+                  <Text style={styles.text}>{singleItem.stopName}</Text>
+                </View>
+                <View style={styles.routeDistanceContainer}>
+                  <Text style={styles.text}>
+                    {route.routes[0].legs[index - 1].duration.text} to here
+                  </Text>
+                </View>
+              </View>
+            </>
+          )}
         </View>
       </View>
     </View>
@@ -67,7 +96,6 @@ const styles = StyleSheet.create({
     fontFamily: 'open-sans-regular',
     color: 'white',
   },
-
   topRow: {
     height: 25,
     flexDirection: 'row',
@@ -77,7 +105,14 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     alignItems: 'flex-start',
   },
+  routeDistanceContainer: {
+    flex: 1,
+    paddingRight: 20,
+    alignItems: 'flex-end',
+  },
+
   passengerNameContainer: {
+    flex: 1,
     paddingLeft: 10,
     alignItems: 'flex-start',
   },
