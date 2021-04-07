@@ -1,21 +1,21 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import {StyleSheet, Dimensions} from 'react-native'
 import {Content, Body, Container, Text, View, Icon, Button} from 'native-base'
 import MapView from 'react-native-maps'
 import MapViewDirections from 'react-native-maps-directions'
 import decodePolyline from 'decode-google-map-polyline'
+import * as Location from 'expo-location'
+import {updateWorkTrip} from '../controllers/workTripController'
+import {WorkTrip} from '../models/workTrip'
+import firebase from 'firebase/app'
+import {UserContext} from '../contexts'
 
 export const DriverOnRoute = ({navigation, route}) => {
   const {workTrip} = route.params
-  console.log('this worktrip', workTrip)
   const {activeRide} = route.params
+  const {user} = useContext(UserContext)
 
-  console.log('activeRide', activeRide)
-
-  const origin = {latitude: 60.169929425303415, longitude: 24.938383101854694}
-  const destination = {latitude: 60.203218047839, longitude: 24.65566529896304}
-  const apikey = 'Your api key here'
-
+  let intervalTimer
   const [mapRef, setMapRef] = useState(null)
   const [routeCoordinates, setRouteCoordinates] = useState([])
   const [markers, setMarkers] = useState([
@@ -31,12 +31,39 @@ export const DriverOnRoute = ({navigation, route}) => {
     )),
   ])
 
+  const updateLocation = async () => {
+    // set interval
+    intervalTimer = setInterval(mycode, 120000);
+    async function mycode() {
+
+      //get current position of user
+      let location = await Location.getCurrentPositionAsync({})
+
+      //modify location to be GeoPoint
+      const locationPoint = new firebase.firestore.GeoPoint(
+        location.coords.latitude,
+        location.coords.longitude,
+      )
+      const time = new Date()
+
+      const workTripToUpdate = new WorkTrip({
+        id: workTrip.startingRide.id, driverCurrentLocation: {
+          location: locationPoint,
+          speed: location.coords.speed,
+          time: new firebase.firestore.Timestamp.fromDate(time)
+      }
+      })
+      await updateWorkTrip(user.company.id,workTripToUpdate)
+      console.log('location updated')
+    }
+  }
+
   useEffect(() => {
     var tempRouteCoordinates = []
-    console.log('workTripRoute inside use effect', workTrip.route)
-    if (workTrip.route != undefined) {
+    console.log('inside useEffect before route', workTrip.startingRide)
+    if (workTrip.startingRide.route != undefined) {
       console.log('inside that if')
-      workTrip.route.route.routes[0].legs.map((leg) => {
+      workTrip.startingRide.route.route.routes[0].legs.map((leg) => {
         leg.steps.map((step) => {
           var decodedPolyLines = decodePolyline(step.polyline.points)
           decodedPolyLines.forEach((polylineCoords) => {
@@ -51,19 +78,14 @@ export const DriverOnRoute = ({navigation, route}) => {
     setRouteCoordinates(tempRouteCoordinates)
     console.log('markers', markers)
     console.log('decoded polyline')
-    setTimeout(() => {
-      console.log('now timer ending')
-      if (mapRef != undefined && mapRef != null) {
-        console.log(
-          'fit markers',
-          workTrip.startingRide.scheduledDrive.stops.map((stop) => stop.address)
-        )
-        mapRef.fitToSuppliedMarkers(
-          workTrip.startingRide.scheduledDrive.stops.map((stop) => stop.address)
-        )
-      }
-    }, 3000)
+    updateLocation()
+
+    return () => {
+      clearInterval(intervalTimer)
+    }
   }, [])
+
+
 
   return (
     <View style={styles.view}>

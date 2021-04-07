@@ -12,6 +12,7 @@ import {WorkTrip} from '../models/workTrip'
 import {ScheduledDrive} from '../models/scheduleDrive'
 import {Car} from '../models/car'
 import {Stop} from '../models/stop'
+import {googleMapsApiKey} from '../secrets/secrets'
 import {updateWorkTrip} from '../controllers/workTripController'
 
 import firebase from 'firebase'
@@ -46,15 +47,30 @@ export const SetUpInit = ({route}) => {
       // Implement how long it takes driver to back home instead of
       //  "item.workDayEnd.toDate().getHours() + 1, 30)" placeholders
 
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.latitude},${user.company.longitude}&key=${googleMapsApiKey}`,
+        {
+          method: 'GET',
+          //Request Type
+        }
+      )
+
+      const responseJson = await response.json()
+
+      const data = responseJson
+
+      let totalTime = 0
+      data.routes[0].legs.map((leg) => {totalTime += leg.duration.value})
+      totalTime = parseFloat((totalTime / 60).toFixed(0))
+
       const end =
         index % 2 === 0
-          ? new Date(1970, 0, 1, item.workDayEnd.toDate().getHours() + 1, 30)
-          : new Date(1970, 0, 1, item.workDayStart.toDate().getHours() + 1, 30)
+          ? new Date(1970, 0, 1, item.workDayEnd.toDate().getHours(), item.workDayEnd.toDate().setMinutes(item.workDayEnd.toDate().getMinutes() + totalTime))
+          : new Date(1970, 0, 1, item.workDayStart.toDate().getHours(), item.workDayEnd.toDate().setMinutes(item.workDayEnd.toDate().getMinutes() + totalTime))
 
       const goingTo = index % 2 === 0 ? 'home' : 'work'
       let initialStops = [
         new Stop({
-          location: user.city,
           address: user.homeAddress,
           stopName: 'Home',
           userID: user.id,
@@ -65,7 +81,6 @@ export const SetUpInit = ({route}) => {
           address: user.company.address,
           stopName: user.company.name,
           userID: user.id,
-          location: user.homeLocation,
         }),
       ]
 
@@ -79,6 +94,7 @@ export const SetUpInit = ({route}) => {
           driverID: user.id,
           goingTo: goingTo,
           isDriving: false,
+          route: data,
           currentLocation: user.homeAddress,
           workDayNum: item.workDayNum,
           scheduledDrive: new ScheduledDrive({

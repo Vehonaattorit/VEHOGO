@@ -3,16 +3,26 @@ import {StyleSheet} from 'react-native'
 import {Content, Card, CardItem, Text, Left, Right, Icon} from 'native-base'
 import {getUser} from '../controllers/userController'
 
-const StopListItem = ({navigation, singleItem}) => {
+const StopListItem = ({singleItem, route, index}) => {
 
   const [stopUserInfo, setStopUserInfo] = useState([])
+
+  if (index === 0) {
+
+    console.log('first index', index)
+  } else {
+    console.log('index', index)
+    //console.log('leg',index - 1,route.route.routes[0].legs[index - 1]);
+  }
+
+
+
 
   const getStopUserInfo = async () => {
     const user = await getUser(singleItem.userID)
     console.log(user)
     setStopUserInfo(user)
   }
-
   useEffect(() => {
     getStopUserInfo()
   }, [])
@@ -26,10 +36,28 @@ const StopListItem = ({navigation, singleItem}) => {
             {singleItem.address}
           </Text>
         </CardItem>
-        <CardItem style={styles.item}>
-        <Icon active name="person-outline" />
-          <Text style={styles.title}>{singleItem.stopName}</Text>
-        </CardItem>
+        {index === 0 ? (
+          <CardItem style={styles.item}>
+            <Left>
+              <Icon active name="person-outline" />
+              <Text style={styles.title}>{singleItem.stopName}</Text>
+            </Left>
+            <Right>
+              <Text style={styles.title}>Start place</Text>
+            </Right>
+          </CardItem>
+        ) : (
+          <CardItem style={styles.item}>
+            <Left>
+              <Icon active name="person-outline" />
+              <Text style={styles.title}>{singleItem.stopName}</Text>
+            </Left>
+            <Right>
+              <Text style={styles.title}>{route.route.routes[0].legs[index - 1].duration.text} to here</Text>
+            </Right>
+          </CardItem>
+        )
+        }
       </Card>
     </Content>
   )

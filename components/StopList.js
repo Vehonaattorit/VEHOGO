@@ -3,7 +3,9 @@ import {FlatList} from 'react-native'
 import {View} from 'native-base'
 import StopListItem from '../components/StopListItem'
 
-export const StopList = ({navigation, dataArray}) => {
+export const StopList = ({dataArray, route}) => {
+//route.route.routes[0].legs[index]
+
   return (
     <View>
       <FlatList
@@ -12,8 +14,8 @@ export const StopList = ({navigation, dataArray}) => {
         }}
         data={dataArray}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({item}) => (
-          <StopListItem navigation={navigation} singleItem={item} />
+        renderItem={({item, index}) => (
+          <StopListItem singleItem={item} route={route} index={index}/>
         )}
       />
     </View>

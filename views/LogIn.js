@@ -67,6 +67,15 @@ export const LogIn = ({navigation}) => {
             }}
           />
         </View>
+        <View style={styles.logInBtn}>
+          <AuthButtons
+            style={styles.btns}
+            title="Register"
+            onPress={() => {
+              navigation.navigate('SignUp')
+            }}
+          />
+        </View>
       </View>
     </View>
   )
