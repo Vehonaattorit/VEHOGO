@@ -8,6 +8,7 @@ import {
 import {View} from 'native-base'
 import Clipboard from 'expo-clipboard';
 
+
 export const CompanyCode = ({navigation, companyCode}) => {
 
   return (

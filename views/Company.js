@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: '#fff',
-    borderRadius: 100,
+    borderRadius: 5,
   },
   createCompanyBtn: {
     alignSelf: 'stretch',
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   companyCodeBtn: {
-    borderRadius: 25,
+    borderRadius: 5,
     marginTop: 3,
     marginRight: 5,
     backgroundColor: '#4FD966',

@@ -70,9 +70,7 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
           postalCode = element.long_name
         }
       })
-
       const address = route + ' ' + streetNumber
-
       const data = {
         point: locationPoint,
         city: city,
@@ -122,10 +120,6 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
       setShowCode(true)
     } else {
       console.log('empty')
-      Alert.alert('Wrong input!', 'Please fill in all the inputs.', [
-        {text: 'Okay'},
-      ])
-      setError('Please fill in all the inputs.')
     }
   }
 
@@ -134,21 +128,22 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
       {!showCode ? (
         <>
           <CustomTitle title="Company" />
-          <Card style={styles.cardView}>
+          <View style={styles.cardView}>
             <View style={styles.inputContainer}>
               <View style={styles.input}>
                 <Input
+                  style={{fontSize: 14}}
                   placeholder="Company name"
                   value={companyName}
                   onChangeText={setName}
                 />
               </View>
-              <View style={styles.input}>
+              <Item>
                 <GooglePlacesInput
                   style={{alignSelf: 'stretch', borderRadius: 100}}
                   setAddress={setAddress}
                 />
-              </View>
+              </Item>
             </View>
             <View style={styles.btnContainer}>
               <Button
@@ -171,7 +166,7 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
                 <Text style={styles.btnText}>Cancel</Text>
               </Button>
             </View>
-          </Card>
+          </View>
         </>
       ) : (
         <CompanyCode
@@ -194,12 +189,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#000',
     width: '90%',
-    borderRadius: 30,
+    borderRadius: 10,
     padding: 30,
   },
   inputContainer: {
     margin: 5,
-    marginBottom: 30,
+    marginBottom: 50,
     alignSelf: 'stretch',
   },
   input: {
@@ -207,8 +202,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     height: 45,
     padding: 5,
-    borderRadius: 100,
-    overflow: 'hidden',
+    borderRadius: 5,
   },
   btnContainer: {
     alignSelf: 'stretch',
@@ -217,6 +211,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#4FD966',
     margin: 5,
     borderRadius: 100,
+    overflow: 'hidden',
   },
   cancel: {
     backgroundColor: '#FB3664',
