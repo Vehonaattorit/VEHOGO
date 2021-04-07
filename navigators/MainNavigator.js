@@ -40,9 +40,7 @@ function MainStackNavigator() {
           name="MainPage"
           component={MainPage}
           options={() => ({
-            title: 'Main Page',
-            headerShown: false,
-
+            title: '',
             headerLeft: () => (
               <IconButton
                 icon="logout"
