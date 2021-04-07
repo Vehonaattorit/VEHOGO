@@ -8,7 +8,7 @@ cache:
     - '.jest'
 before_install:
   - openssl aes-256-cbc -K $encrypted_1630e0724fbb_key -iv $encrypted_1630e0724fbb_iv
-    -in "./secrets/secrets.js.enc" -out "./secrets/secrets.js" -d
+    -in secrets.js.enc -out secrets.js -d
 before_script:
   - npm install -g npm@latest
   - npm install
