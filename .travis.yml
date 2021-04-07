@@ -1,32 +1,30 @@
 language: node_js
 node_js:
-- node
-- lts/*
+  - node
+  - lts/*
 cache:
   directories:
-  - "~/.npm"
-  - ".jest"
+    - '~/.npm'
+    - '.jest'
 before_install:
-- openssl aes-256-cbc -K $encrypted_386c6dfc6fd4_key -iv $encrypted_386c6dfc6fd4_iv
-  -in bacon.txt.enc -out bacon.txt -d
-- openssl aes-256-cbc -K $encrypted_1630e0724fbb_key -iv $encrypted_1630e0724fbb_iv
-  -in ./secrets.js.enc -out secrets3.js -d
+  - openssl aes-256-cbc -K $encrypted_386c6dfc6fd4_key -iv $encrypted_386c6dfc6fd4_iv
+    -in bacon.txt.enc -out bacon.txt -d
 before_script:
-- npm install -g npm@latest
-- npm install
-- npm install jest-expo
-- npm install -g expo-cli
+  - npm install -g npm@latest
+  - npm install
+  - npm install jest-expo
+  - npm install -g expo-cli
 script:
-- npm ci
-- npm run test
+  - npm ci
+  - npm run test
 jobs:
   include:
-  - stage: deploy
-    node_js: lts/*
-    script:
-    - npm ci
-    - npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
-    - npx expo publish --non-interactive
+    - stage: deploy
+      node_js: lts/*
+      script:
+        - npm ci
+        - npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+        - npx expo publish --non-interactive
 env:
   global:
     secure: DzdPT6iZZgcMSDqopu0Cu65YfgAwbfMBvtVIKmgwiCBKM+xpXPMrLgYJgfcsfXv7UomYrbUoX3h5lvH/DeGpUXHjcOslCARZgUp9bKMRuRwootiNUDYug2YAQ8YNQG+ANFCm7MpzVCdOVoETt2NYfL5A/TVfXis1o7xUg2KEoqH15WvFQgoRf1E3tNJgV+AIAoooYyYluXXwTCsBQcMPvlQCnO+vPKD83Z17fSbOLjeYQdw9aPHSMoojKCarVmlWWwcpsFywg/BMj2eYNtSuXn2dE6YVhnVz19wkv6oe5sOINJnvKJTBnu0x1HN+a2qevh5ru4ZDV+95rP/WPC0hcSKvFeltohNwGrW08Tcoq9B6v+1CZ11Vn4HGN1cjaQscWvhToqMJ0KQvk70Ps5tWUkynCh0aXTtSs8ax9WGb81v+YmQwhhiAwFVoPPSc04rRKe6cbDO4pKVypjNEWylOMAyu2mwH+fRaZyUTm0M0Z8v8Et6ac7hFS+M3J8xxBeD7i//WG7OHmHIP+B/87MsH16XeCM0gP+ubFrZrJIMxYVfAHSG14s95PkFC21BOXcO2rQiPEtCstlFJZPjRefk8Y6+obcJUd+atHZbVLmAy+W2XIDQ7R8iDWTB1w1Pb4j22gr7ANTaSrBCqjjNu9m2t0CbA0SRnTEWQoRx8IF2VdqY=
