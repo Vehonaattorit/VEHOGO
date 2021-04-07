@@ -6,8 +6,6 @@ import {color} from '../constants/colors'
 const RequestListItem = ({itemData, viewRequest}) => {
   const {item} = itemData
 
-  console.log('PERKELE', item.id)
-
   return (
     <View style={styles.listItem}>
       <View style={styles.rectStack}>

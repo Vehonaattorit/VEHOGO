@@ -14,7 +14,6 @@ import {
 } from 'native-base'
 import {UserContext} from '../contexts'
 
-// Ionicons
 import {
   Ionicons,
   MaterialCommunityIcons,

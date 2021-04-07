@@ -15,6 +15,7 @@ import {StopList} from '../components/StopList'
 import {UserContext} from '../contexts'
 import {updateWorkTrip} from '../controllers/workTripController'
 import {getUser} from '../controllers/userController'
+import {color} from '../constants/colors'
 
 export const DriverStartRide = ({navigation, route}) => {
   let workTrip = route.params
@@ -25,8 +26,6 @@ export const DriverStartRide = ({navigation, route}) => {
   const {startingRide} = route.params
 
   const [isDriving, setIsDriving] = useState(startingRide.isDriving)
-
-  // console.log("data startingRide", data.startingRide.scheduledDrive.stops)
 
   const startDriving = async () => {
     let workTripToUpdate = startingRide
@@ -76,7 +75,14 @@ export const DriverStartRide = ({navigation, route}) => {
         <Body style={styles.iconViewBody}>
           <Icon style={styles.icon} active name="car-outline" />
           <Text style={styles.iconText}>Your Next Ride</Text>
-          <Button large style={styles.button} onPress={startDriving}>
+          <Button
+            large
+            style={{
+              ...styles.button,
+              backgroundColor: isDriving ? color.radicalRed : color.primary,
+            }}
+            onPress={startDriving}
+          >
             <Text style={styles.btntxt}>
               {isDriving ? 'Stop Driving' : 'Start Driving'}
             </Text>
@@ -86,9 +92,7 @@ export const DriverStartRide = ({navigation, route}) => {
       </View>
 
       <View style={styles.listView}>
-        <StopList
-          dataArray={workTrip.startingRide.scheduledDrive.stops}
-        ></StopList>
+        <StopList dataArray={workTrip.startingRide.scheduledDrive.stops} />
       </View>
     </View>
   )
@@ -110,7 +114,7 @@ const styles = StyleSheet.create({
   icon: {
     fontSize: 200,
     flex: 3,
-    color: '#26aae2',
+    color: color.primary,
   },
   iconText: {
     fontSize: 30,
@@ -120,9 +124,7 @@ const styles = StyleSheet.create({
   listView: {
     flex: 2.5,
   },
-
   button: {
-    backgroundColor: '#26aae2',
     borderRadius: 15,
     alignSelf: 'center',
     flex: 0.5,

@@ -24,16 +24,20 @@ function MainStackNavigator() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: color.primaryLight,
+          },
+          headerTintColor: color.primary,
+        }}
+      >
         <Stack.Screen
           name="MainPage"
           component={MainPage}
           options={() => ({
             title: 'Main Page',
-            headerStyle: {
-              backgroundColor: color.primaryLight,
-            },
-            headerTintColor: color.primary,
+
             headerLeft: () => (
               <IconButton
                 icon="logout"
@@ -46,21 +50,7 @@ function MainStackNavigator() {
             ),
           })}
         />
-        <Stack.Screen
-          name="OutlookCalendar"
-          component={OutlookCalendar}
-          options={{
-            title: 'OutlookCalendar',
-            headerStyle: {
-              backgroundColor: '#000000',
-            },
-            headerTitleStyle: {textAlign: 'center', flex: 1},
-            headerTintColor: '#ffffff',
-          }}
-          headerStyle={{
-            backgroundColor: 'black',
-          }}
-        />
+        <Stack.Screen name="OutlookCalendar" component={OutlookCalendar} />
         <Stack.Screen
           name="DriverAcceptRefuse"
           component={DriverAcceptRefuse}
@@ -76,111 +66,16 @@ function MainStackNavigator() {
             backgroundColor: 'black',
           }}
         />
-        <Stack.Screen
-          name="NewRide"
-          component={NewRide}
-          options={{
-            title: 'NewRide',
-            headerStyle: {
-              backgroundColor: '#000000',
-            },
-            headerTitleStyle: {textAlign: 'center', flex: 1},
-            headerTintColor: '#ffffff',
-          }}
-          headerStyle={{
-            backgroundColor: 'black',
-          }}
-        />
-        <Stack.Screen
-          name="DriverStartRide"
-          component={DriverStartRide}
-          options={{
-            title: 'DriverStartRide',
-            headerStyle: {
-              backgroundColor: '#000000',
-            },
-            headerTitleStyle: {textAlign: 'center', flex: 1},
-            headerTintColor: '#ffffff',
-          }}
-          headerStyle={{
-            backgroundColor: 'black',
-          }}
-        />
+        <Stack.Screen name="NewRide" component={NewRide} />
+        <Stack.Screen name="DriverStartRide" component={DriverStartRide} />
         <Stack.Screen
           name="DriverRideRequestList"
           component={DriverRideRequestList}
-          options={{
-            title: 'DriverRideRequestList',
-            headerStyle: {
-              backgroundColor: '#000000',
-            },
-            headerTitleStyle: {textAlign: 'center', flex: 1},
-            headerTintColor: '#ffffff',
-          }}
-          headerStyle={{
-            backgroundColor: 'black',
-          }}
         />
-        <Stack.Screen
-          name="DriverOnRoute"
-          component={DriverOnRoute}
-          options={{
-            title: 'DriverOnRoute',
-            headerStyle: {
-              backgroundColor: '#000000',
-            },
-            headerTitleStyle: {textAlign: 'center', flex: 1},
-            headerTintColor: '#ffffff',
-          }}
-          headerStyle={{
-            backgroundColor: 'black',
-          }}
-        />
-        <Stack.Screen
-          name="Chat Room"
-          component={ChatRoom}
-          options={{
-            title: 'Chat',
-            headerStyle: {
-              backgroundColor: '#000000',
-            },
-            headerTitleStyle: {textAlign: 'center', flex: 1},
-            headerTintColor: '#ffffff',
-          }}
-          headerStyle={{
-            backgroundColor: 'black',
-          }}
-        />
-        <Stack.Screen
-          name="DriverCarList"
-          component={DriverCarList}
-          options={{
-            title: 'DriverCarList',
-            headerStyle: {
-              backgroundColor: '#000000',
-            },
-            headerTitleStyle: {textAlign: 'center', flex: 1},
-            headerTintColor: '#ffffff',
-          }}
-          headerStyle={{
-            backgroundColor: 'black',
-          }}
-        />
-        <Stack.Screen
-          name="RequestRide"
-          component={DriverAcceptRefuse}
-          options={{
-            title: 'Request Ride',
-            headerStyle: {
-              backgroundColor: '#000000',
-            },
-            headerTitleStyle: {textAlign: 'center', flex: 1},
-            headerTintColor: '#ffffff',
-          }}
-          headerStyle={{
-            backgroundColor: 'black',
-          }}
-        />
+        <Stack.Screen name="DriverOnRoute" component={DriverOnRoute} />
+        <Stack.Screen name="Chat Room" component={ChatRoom} />
+        <Stack.Screen name="DriverCarList" component={DriverCarList} />
+        <Stack.Screen name="RequestRide" component={DriverAcceptRefuse} />
       </Stack.Navigator>
     </NavigationContainer>
   )

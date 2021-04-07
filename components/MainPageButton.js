@@ -8,7 +8,6 @@ import {
   Platform,
   TouchableNativeFeedback,
 } from 'react-native'
-import {Ionicons} from '@expo/vector-icons'
 
 import {UserContext} from '../contexts'
 import {color} from '../constants/colors'
