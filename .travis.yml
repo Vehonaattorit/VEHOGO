@@ -4,8 +4,8 @@ node_js:
   - lts/*
 cache:
   directories:
-    - ~/.npm
-    - .jest
+    - '~/.npm'
+    - '.jest'
 before_script:
   - npm install -g npm@latest
   - npm install
@@ -22,3 +22,6 @@ jobs:
         - npm ci
         - npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
         - npx expo publish --non-interactive
+env:
+  global:
+    secure: DzdPT6iZZgcMSDqopu0Cu65YfgAwbfMBvtVIKmgwiCBKM+xpXPMrLgYJgfcsfXv7UomYrbUoX3h5lvH/DeGpUXHjcOslCARZgUp9bKMRuRwootiNUDYug2YAQ8YNQG+ANFCm7MpzVCdOVoETt2NYfL5A/TVfXis1o7xUg2KEoqH15WvFQgoRf1E3tNJgV+AIAoooYyYluXXwTCsBQcMPvlQCnO+vPKD83Z17fSbOLjeYQdw9aPHSMoojKCarVmlWWwcpsFywg/BMj2eYNtSuXn2dE6YVhnVz19wkv6oe5sOINJnvKJTBnu0x1HN+a2qevh5ru4ZDV+95rP/WPC0hcSKvFeltohNwGrW08Tcoq9B6v+1CZ11Vn4HGN1cjaQscWvhToqMJ0KQvk70Ps5tWUkynCh0aXTtSs8ax9WGb81v+YmQwhhiAwFVoPPSc04rRKe6cbDO4pKVypjNEWylOMAyu2mwH+fRaZyUTm0M0Z8v8Et6ac7hFS+M3J8xxBeD7i//WG7OHmHIP+B/87MsH16XeCM0gP+ubFrZrJIMxYVfAHSG14s95PkFC21BOXcO2rQiPEtCstlFJZPjRefk8Y6+obcJUd+atHZbVLmAy+W2XIDQ7R8iDWTB1w1Pb4j22gr7ANTaSrBCqjjNu9m2t0CbA0SRnTEWQoRx8IF2VdqY=
