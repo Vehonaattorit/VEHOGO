@@ -46,9 +46,9 @@ export const SetUpInit = ({route}) => {
       // TODO:
       // Implement how long it takes driver to back home instead of
       //  "item.workDayEnd.toDate().getHours() + 1, 30)" placeholders
-
+      console.log('fetch call',`https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.latitude},${user.company.longitude}&key=${googleMapsApiKey}`)
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.latitude},${user.company.longitude}&key=${googleMapsApiKey}`,
+        `https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.location.latitude},${user.company.location.longitude}&key=${googleMapsApiKey}`,
         {
           method: 'GET',
           //Request Type
@@ -58,7 +58,6 @@ export const SetUpInit = ({route}) => {
       const responseJson = await response.json()
 
       const data = responseJson
-
       let totalTime = 0
       data.routes[0].legs.map((leg) => {totalTime += leg.duration.value})
       totalTime = parseFloat((totalTime / 60).toFixed(0))
