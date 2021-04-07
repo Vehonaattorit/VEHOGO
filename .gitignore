@@ -8,8 +8,9 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
-secrets/secrets.js
 
 bacon.txt
 # macOS
 .DS_Store
+
+.env

@@ -27,6 +27,7 @@
     "expo-auth-session": "^3.2.1",
     "expo-clipboard": "~1.0.1",
     "expo-localization": "~9.1.0",
+    "expo-location": "~10.0.0",
     "expo-notifications": "~0.8.2",
     "expo-permissions": "~10.0.0",
     "expo-random": "~10.0.0",
@@ -39,6 +40,7 @@
     "react-firebase-hooks": "^3.0.3",
     "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",
     "react-native-calendars": "^1.1254.0",
+    "react-native-dotenv": "^2.5.5",
     "react-native-elements": "^3.3.2",
     "react-native-gesture-handler": "^1.8.0",
     "react-native-gifted-chat": "^0.16.3",
@@ -52,8 +54,7 @@
     "react-native-side-drawer": "^1.2.8",
     "react-native-vector-icons": "^7.1.0",
     "react-native-web": "~0.13.12",
-    "uuid": "^3.4.0",
-    "expo-location": "~10.0.0"
+    "uuid": "^3.4.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
