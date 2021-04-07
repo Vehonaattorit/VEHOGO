@@ -84,7 +84,7 @@ export const DriverStartRide = ({navigation, route}) => {
 
   const drivingTime = () => {
     let totalTime = 0
-    workTrip.startingRide.route.route.routes[0].legs.map((leg) => {totalTime += leg.duration.value})
+    workTrip.startingRide.route.routes[0].legs.map((leg) => {totalTime += leg.duration.value})
     return parseFloat((totalTime / 60).toFixed(0))
   }
   return (

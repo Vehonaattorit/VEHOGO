@@ -53,7 +53,7 @@ const StopListItem = ({singleItem, route, index}) => {
               <Text style={styles.title}>{singleItem.stopName}</Text>
             </Left>
             <Right>
-              <Text style={styles.title}>{route.route.routes[0].legs[index - 1].duration.text} to here</Text>
+              <Text style={styles.title}>{route.routes[0].legs[index - 1].duration.text} to here</Text>
             </Right>
           </CardItem>
         )

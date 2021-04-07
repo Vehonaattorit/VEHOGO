@@ -63,7 +63,7 @@ export const DriverOnRoute = ({navigation, route}) => {
     console.log('inside useEffect before route', workTrip.startingRide)
     if (workTrip.startingRide.route != undefined) {
       console.log('inside that if')
-      workTrip.startingRide.route.route.routes[0].legs.map((leg) => {
+      workTrip.startingRide.route.routes[0].legs.map((leg) => {
         leg.steps.map((step) => {
           var decodedPolyLines = decodePolyline(step.polyline.points)
           decodedPolyLines.forEach((polylineCoords) => {
