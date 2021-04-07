@@ -65,14 +65,14 @@ const styles = StyleSheet.create({
     borderRadius: 24,
   },
   passengerName: {
-    fontFamily: 'open-sans-regular',
+    fontFamily: 'open-sans-semi-bold',
 
     flex: 1,
     color: 'white',
   },
   takenSeats: {
     flex: 1,
-    fontFamily: 'open-sans-regular',
+    fontFamily: 'open-sans-semi-bold',
     color: 'white',
   },
   topRow: {
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     backgroundColor: color.primaryLight,
   },
   leaveTime: {
-    fontFamily: 'open-sans-regular',
+    fontFamily: 'open-sans-semi-bold',
     flex: 1,
     color: 'white',
   },
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     height: 25,
   },
   atPassengersText: {
-    fontFamily: 'open-sans-regular',
+    fontFamily: 'open-sans-semi-bold',
     flex: 1,
     color: 'white',
     height: 24,
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     height: 24,
   },
   atWorkTime: {
-    fontFamily: 'open-sans-regular',
+    fontFamily: 'open-sans-semi-bold',
     flex: 1,
     color: 'white',
     height: 24,
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   goingToText: {
-    fontFamily: 'open-sans-regular',
+    fontFamily: 'open-sans-semi-bold',
     color: 'black',
   },
   rectStack: {

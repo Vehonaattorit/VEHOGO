@@ -162,9 +162,9 @@ export const RideStartBar = ({user, navigation}) => {
         <CardItem>
           <Left>
             {showStart ? (
-              <Text>You can start your next ride</Text>
+              <Text style={styles.text}>You can start your next ride</Text>
             ) : (
-              <Text>Your next ride is at</Text>
+              <Text style={styles.text}>Your next ride is at</Text>
             )}
           </Left>
           <Right>
@@ -176,10 +176,10 @@ export const RideStartBar = ({user, navigation}) => {
                     navigation.navigate('DriverStartRide', {startingRide})
                   }
                 >
-                  <Text>Start</Text>
+                  <Text style={styles.text}>Start</Text>
                 </Button>
               ) : (
-                <Text>
+                <Text style={styles.text}>
                   {driveStartTime &&
                     moment(driveStartTime.toDate()).format('HH:mm')}
                 </Text>
@@ -193,6 +193,9 @@ export const RideStartBar = ({user, navigation}) => {
 }
 
 const styles = StyleSheet.create({
+  text: {
+    fontFamily: 'open-sans-semi-bold',
+  },
   button: {
     backgroundColor: color.primary,
   },

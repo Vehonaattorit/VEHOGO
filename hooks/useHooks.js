@@ -7,6 +7,8 @@ import {
 } from '../controllers/workTripController'
 
 const useWorkTripHooks = (user) => {
+  const [isLoading, setIsLoading] = useState(false)
+
   //PASSENGER
   const [multiSliderValue, setMultiSliderValue] = useState([540, 1020])
   const [extraDay, setExtraDay] = useState([])
@@ -48,6 +50,8 @@ const useWorkTripHooks = (user) => {
   }
 
   const queryWithTime = async () => {
+    setIsLoading(true)
+
     const currentWeekDay = new Date().getDay()
 
     const goingTo = fetchHomeOrWorkTrips()
@@ -70,9 +74,12 @@ const useWorkTripHooks = (user) => {
     setPassengerList(query)
 
     setOpen(!open)
+    setIsLoading(false)
   }
 
   const fetchTodayRides = async () => {
+    setIsLoading(true)
+
     const currentWeekDay = new Date().getDay()
 
     const goingTo = fetchHomeOrWorkTrips()
@@ -89,6 +96,8 @@ const useWorkTripHooks = (user) => {
     ])
 
     setPassengerList(query)
+
+    setIsLoading(false)
   }
 
   const slideTime = () => {
@@ -122,6 +131,8 @@ const useWorkTripHooks = (user) => {
   //DRIVER SPECIFIC FUNCTIONS STARTS HERE
 
   const queryWithTimeAndDriverId = async () => {
+    setIsLoading(true)
+
     const goingTo = fetchHomeOrWorkTrips()
     console.log(user.id)
     console.log(user.company.id)
@@ -155,9 +166,13 @@ const useWorkTripHooks = (user) => {
     setDriverTripList(query)
 
     setOpen(!open)
+
+    setIsLoading(false)
   }
 
   const fetchTodayDriverRides = async () => {
+    setIsLoading(true)
+
     const currentWeekDay = new Date().getDay()
 
     const goingTo = fetchHomeOrWorkTrips()
@@ -172,6 +187,7 @@ const useWorkTripHooks = (user) => {
     console.log(query)
 
     setDriverTripList(query)
+    setIsLoading(false)
   }
 
   return {
@@ -181,6 +197,7 @@ const useWorkTripHooks = (user) => {
     open,
     setOpen,
     extraDay,
+    isLoading,
 
     //Passenger
     queryWithTime,

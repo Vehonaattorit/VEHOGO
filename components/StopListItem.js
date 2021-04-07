@@ -48,20 +48,7 @@ const StopListItem = ({navigation, singleItem}) => {
           </View>
         </View>
       </View>
-    </View> // <Content>
-    //   <Card style={styles.list}>
-    //     <CardItem style={styles.item}>
-    //       <Icon active name="location-outline" />
-    //       <Text style={styles.title}>
-    //         {singleItem.address}
-    //       </Text>
-    //     </CardItem>
-    //     <CardItem style={styles.item}>
-    //     <Icon active name="person-outline" />
-    //       <Text style={styles.title}>{singleItem.stopName}</Text>
-    //     </CardItem>
-    //   </Card>
-    // </Content>
+    </View>
   )
 }
 

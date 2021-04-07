@@ -194,6 +194,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   btntxt: {
+    fontFamily: 'open-sans-regular',
     color: 'white',
   },
   list: {

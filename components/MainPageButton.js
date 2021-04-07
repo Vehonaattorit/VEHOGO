@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontFamily: 'open-sans-bold',
+    fontFamily: 'open-sans-semi-bold',
     fontSize: 22,
     color: 'black',
     textAlign: 'right',

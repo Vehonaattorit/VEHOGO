@@ -20,7 +20,7 @@ const PendingRequestsListItem = ({singleItem, navigation}) => {
             <Icon active name="person-outline" />
             <Text style={styles.title}>{singleItem.name}</Text>
             <Button onPress={() => navigation.navigate('DriverAcceptRefuse')}>
-              <Text>Accept</Text>
+              <Text style={styles.text}>Accept</Text>
             </Button>
           </Left>
           <Right>
@@ -39,7 +39,11 @@ const PendingRequestsListItem = ({singleItem, navigation}) => {
 }
 
 const styles = StyleSheet.create({
+  text: {
+    fontFamily: 'open-sans-semi-bold',
+  },
   title: {
+    fontFamily: 'open-sans-bold',
     fontSize: 18,
     fontWeight: 'bold',
     color: 'black',

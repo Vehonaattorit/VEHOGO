@@ -72,15 +72,15 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
       <Container style={styles.requestAcceptRefuseContent}>
         <Content padder>
           <View style={styles.info}>
-            <Text>
+            <Text style={styles.text}>
               {rideRequest == undefined
                 ? singleItem.car.driverName
                 : rideRequest.userName}
             </Text>
-            <Text>2km</Text>
+            <Text style={styles.text}>2km</Text>
           </View>
 
-          <Text style={{margin: 10}}>
+          <Text style={{...styles.text, margin: 10}}>
             Address{rideRequest == undefined ? '' : rideRequest.homeAddress}
           </Text>
           {user.travelPreference == 'passenger' ? (
@@ -104,6 +104,9 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
 }
 
 const styles = StyleSheet.create({
+  text: {
+    fontFamily: 'open-sans-semi-bold',
+  },
   view: {
     flex: 1,
     display: 'flex',

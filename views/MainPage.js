@@ -48,10 +48,13 @@ export const MainPage = ({navigation}) => {
     passengerList,
     activeRide,
     extraDay,
+    isLoading,
     driverTripList,
     queryWithTimeAndDriverId,
     fetchTodayDriverRides,
   } = useWorkTripHooks(user)
+
+  console.log('isLoading', isLoading)
 
   useEffect(() => {
     checkTravelPreference()
@@ -111,6 +114,7 @@ export const MainPage = ({navigation}) => {
 
           <View style={styles.listView}>
             <PassengerList
+              isLoading={isLoading}
               extraDay={extraDay}
               navigation={navigation}
               dataArray={passengerList}
@@ -131,6 +135,7 @@ export const MainPage = ({navigation}) => {
 
           <View style={styles.listView}>
             <DriverTripList
+              isLoading={isLoading}
               extraDay={extraDay}
               navigation={navigation}
               driverTrips={driverTripList}
@@ -145,7 +150,7 @@ export const MainPage = ({navigation}) => {
     return (
       <View style={styles.animatedBox}>
         <Text style={styles.startTime}>Start time </Text>
-        <Text>Min - Max </Text>
+        <Text style={styles.minMax}>Min - Max </Text>
         <MultiSlider
           selectedStyle={{
             backgroundColor: color.primary,
@@ -163,7 +168,9 @@ export const MainPage = ({navigation}) => {
           snapped
         />
         {/* <Text>{`${slideTime().startTime} - ${slideTime().endTime}`}</Text> */}
-        <Text>{`${timeValues[0].hours}:${timeValues[0].minutes} - ${timeValues[1].hours}:${timeValues[1].minutes}`}</Text>
+        <Text
+          style={styles.text}
+        >{`${timeValues[0].hours}:${timeValues[0].minutes} - ${timeValues[1].hours}:${timeValues[1].minutes}`}</Text>
 
         <View style={{flexDirection: 'row'}}>
           <View style={{marginVertical: 10, marginRight: 10}}>
@@ -175,7 +182,7 @@ export const MainPage = ({navigation}) => {
                   : queryWithTimeAndDriverId
               }
             >
-              <Text>Submit</Text>
+              <Text style={styles.text}>Submit</Text>
             </Button>
           </View>
           <View style={{marginVertical: 10, marginRight: 10}}>
@@ -185,7 +192,7 @@ export const MainPage = ({navigation}) => {
                 setOpen(!open)
               }}
             >
-              <Text>Cancel</Text>
+              <Text style={styles.text}>Cancel</Text>
             </Button>
           </View>
         </View>
@@ -222,7 +229,7 @@ export const MainPage = ({navigation}) => {
 }
 
 const styles = StyleSheet.create({
-  startTime: {
+  text: {
     fontFamily: 'open-sans-regular',
   },
   animatedBox: {

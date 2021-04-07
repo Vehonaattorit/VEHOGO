@@ -29,6 +29,10 @@ function MainStackNavigator() {
           headerStyle: {
             backgroundColor: color.primaryLight,
           },
+
+          headerTitleStyle: {
+            fontFamily: 'open-sans-semi-bold',
+          },
           headerTintColor: color.primary,
         }}
       >
@@ -37,6 +41,7 @@ function MainStackNavigator() {
           component={MainPage}
           options={() => ({
             title: 'Main Page',
+            headerShown: false,
 
             headerLeft: () => (
               <IconButton
@@ -54,17 +59,6 @@ function MainStackNavigator() {
         <Stack.Screen
           name="DriverAcceptRefuse"
           component={DriverAcceptRefuse}
-          options={{
-            title: 'DriverAcceptRefuse',
-            headerStyle: {
-              backgroundColor: '#000000',
-            },
-            headerTitleStyle: {textAlign: 'center', flex: 1},
-            headerTintColor: '#ffffff',
-          }}
-          headerStyle={{
-            backgroundColor: 'black',
-          }}
         />
         <Stack.Screen name="NewRide" component={NewRide} />
         <Stack.Screen name="DriverStartRide" component={DriverStartRide} />

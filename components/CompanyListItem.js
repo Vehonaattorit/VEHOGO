@@ -29,12 +29,11 @@ export const CompanyListItem = ({singleItem, navigation}) => {
       console.log('joined company')
 
       const companyUserData = {
-          address: singleItem.address,
-          name: singleItem.displayName,
-          location: singleItem.location,
-          id: companyId,
-        }
-
+        address: singleItem.address,
+        name: singleItem.displayName,
+        location: singleItem.location,
+        id: companyId,
+      }
 
       console.log('data id', companyId)
 
@@ -57,7 +56,7 @@ export const CompanyListItem = ({singleItem, navigation}) => {
           </Left>
           <Right>
             <Button onPress={() => joinCompany()}>
-              <Text>Join</Text>
+              <Text style={styles.text}>Join</Text>
             </Button>
           </Right>
         </CardItem>
@@ -78,7 +77,11 @@ export const CompanyListItem = ({singleItem, navigation}) => {
 }
 
 const styles = StyleSheet.create({
+  text: {
+    fontFamily: 'open-sans-regular',
+  },
   title: {
+    fontFamily: 'open-sans-regular',
     fontSize: 18,
     fontWeight: 'bold',
     color: 'black',

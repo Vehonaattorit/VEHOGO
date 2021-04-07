@@ -1,26 +1,7 @@
-import React, {useEffect, useContext, useState} from 'react'
-import {Alert, FlatList, StyleSheet} from 'react-native'
-import {
-  Body,
-  View,
-  Header,
-  Left,
-  Text,
-  Icon,
-  Button,
-  Container,
-  Title,
-  Right,
-} from 'native-base'
-import {UserContext} from '../contexts'
+import React from 'react'
+import {FlatList} from 'react-native'
 
-import {
-  Ionicons,
-  MaterialCommunityIcons,
-  MaterialIcons,
-  AntDesign,
-  FontAwesome5,
-} from '@expo/vector-icons'
+import {Ionicons, FontAwesome5} from '@expo/vector-icons'
 
 import MainPageButton from './MainPageButton'
 import {color} from '../constants/colors'
