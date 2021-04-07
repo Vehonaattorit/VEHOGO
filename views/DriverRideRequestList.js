@@ -5,10 +5,13 @@ import {Text, View, Button} from 'native-base'
 import {StyleSheet, Dimensions} from 'react-native'
 import {rideRequestQuery} from '../controllers/rideRequestController'
 import {getWorkTrip} from '../controllers/workTripController'
+import {color} from '../constants/colors'
+import moment from 'moment'
+import RequestListItem from '../components/RequestListItem'
 
 export const DriverRideRequestList = ({navigation, dataArray}) => {
   const {user} = useContext(UserContext)
-  const [rideRequests, setRideRequests] = useState([])
+  const [rideRequests, setRideRequests] = useState(null)
 
   const getRideRequests = async () => {
     let requests = await rideRequestQuery(
@@ -17,7 +20,7 @@ export const DriverRideRequestList = ({navigation, dataArray}) => {
       '==',
       user.id
     )
-    console.log(requests)
+
     setRideRequests(requests)
   }
   useEffect(() => {
@@ -25,7 +28,6 @@ export const DriverRideRequestList = ({navigation, dataArray}) => {
   }, [])
 
   const viewRequest = async (rideRequest) => {
-    console.log(user.company.id, rideRequest.workTripRefID)
     let singleItem = await getWorkTrip(
       user.company.id,
       rideRequest.workTripRefID
@@ -37,65 +39,23 @@ export const DriverRideRequestList = ({navigation, dataArray}) => {
       rideRequest: rideRequest,
     })
   }
-  return (
-    <View>
-      {rideRequests.map((rideRequest) => {
-        console.log('rideRequest', rideRequest)
 
-        return (
-          <View key={rideRequest.id}>
-            <Text>{rideRequest.userName}</Text>
-            <Button
-              onPress={() => {
-                viewRequest(rideRequest)
-              }}
-              large
-              style={styles.button}
-            >
-              <Text style={styles.btntxt}>Request</Text>
-            </Button>
-          </View>
-        )
-      })}
-    </View>
+  const renderGridItem = (itemData) => {
+    return (
+      <RequestListItem
+        keyExtractor={({item}, index) => {
+          return item.id
+        }}
+        viewRequest={viewRequest}
+        itemData={itemData}
+      />
+    )
+  }
+
+  return (
+    <FlatList
+      data={rideRequests !== null ? rideRequests : null}
+      renderItem={renderGridItem}
+    />
   )
 }
-
-const styles = StyleSheet.create({
-  view: {
-    flex: 1,
-    display: 'flex',
-    backgroundColor: '#26aae2',
-  },
-  requestMapContent: {
-    flex: 2.0,
-    backgroundColor: 'black',
-  },
-  requestAcceptRefuseContent: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  buttons: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 20,
-  },
-  button: {
-    backgroundColor: '#26aae2',
-    borderRadius: 15,
-  },
-  info: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    margin: 10,
-  },
-  btntxt: {
-    color: 'white',
-  },
-  mapStyle: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
-  },
-})

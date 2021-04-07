@@ -3,6 +3,7 @@ import {
   TouchableOpacity,
   View,
   Text,
+  Dimensions,
   StyleSheet,
   Platform,
   TouchableNativeFeedback,
@@ -18,8 +19,6 @@ const MainPageButton = (props) => {
   if (Platform.OS === 'android' && Platform.Version >= 21) {
     TouchableCmp = TouchableNativeFeedback
   }
-
-  console.log('props.children', props.children)
 
   return (
     <View style={styles.gridItem}>

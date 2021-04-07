@@ -11,27 +11,6 @@ import {color} from '../constants/colors'
 const PassengerListItem = ({navigation, singleItem}) => {
   const {car, goingTo, scheduledDrive, workDayNum, extraDay} = singleItem
 
-  const checkWhatDayItIs = (dayNum) => {
-    switch (String(dayNum)) {
-      case '1':
-        return 'Monday'
-      case '2':
-        return 'Tuesday'
-      case '3':
-        return 'Wednesday'
-      case '4':
-        return 'Thursday'
-      case '5':
-        return 'Friday'
-      case '6':
-        return 'Saturday'
-      case '7':
-        return 'Sunday'
-      default:
-        return 'Monday'
-    }
-  }
-
   return (
     <TouchableOpacity
       // style={styles.listItem}
@@ -45,8 +24,14 @@ const PassengerListItem = ({navigation, singleItem}) => {
         <View style={styles.rectStack}>
           <View style={styles.rectangle}>
             <View style={styles.topRow}>
-              <Text style={styles.passengerName}>{car.driverName}</Text>
-              <Text style={styles.takenSeats}>3/4</Text>
+              <View style={styles.driverNameContainer}>
+                <Text style={styles.passengerName}>{car.driverName}</Text>
+              </View>
+              <View style={styles.takenSeatsContainer}>
+                <Text style={styles.takenSeats}>
+                  {scheduledDrive.takenSeats}/4
+                </Text>
+              </View>
             </View>
             <View style={styles.breakPoint}></View>
             <View style={styles.bottomRow}>
@@ -60,7 +45,9 @@ const PassengerListItem = ({navigation, singleItem}) => {
             </View>
           </View>
           <View style={styles.leftGoingTo}>
-            <Text style={styles.goingToText}>{goingTo}</Text>
+            <Text style={styles.goingToText}>
+              {goingTo.charAt(0).toUpperCase() + goingTo.slice(1)}
+            </Text>
           </View>
         </View>
       </View>
@@ -91,14 +78,21 @@ const styles = StyleSheet.create({
   topRow: {
     height: 25,
     flexDirection: 'row',
-    marginTop: 21,
-    marginLeft: 97,
+    marginVertical: 20,
+    marginLeft: 98,
     marginRight: 17,
+  },
+  driverNameContainer: {
+    flex: 1,
+    alignItems: 'flex-start',
+  },
+  takenSeatsContainer: {
+    flex: 1,
+    alignItems: 'flex-end',
   },
   breakPoint: {
     height: 1,
-    backgroundColor: 'black',
-    marginVertical: 12,
+    backgroundColor: color.primaryLight,
   },
   leaveTime: {
     fontFamily: 'open-sans-regular',
@@ -138,8 +132,8 @@ const styles = StyleSheet.create({
   bottomRow: {
     height: 25,
     flexDirection: 'row',
-    marginTop: 23,
-    marginLeft: 97,
+    marginVertical: 20,
+    marginLeft: 98,
     marginRight: 17,
   },
   leftGoingTo: {
@@ -152,7 +146,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderBottomWidth: 1,
     borderColor: '#000000',
-    //  borderRadius: 24,
     borderTopLeftRadius: 24,
     borderBottomLeftRadius: 24,
     padding: 20,
@@ -168,88 +161,3 @@ const styles = StyleSheet.create({
 })
 
 export default PassengerListItem
-
-// return (
-//   <TouchableOpacity
-//     style={styles.listItem}
-//     onPress={() =>
-//       navigation.navigate('RequestRide', {
-//         singleItem,
-//       })
-//     }
-//   >
-//     <Content>
-//       <Card style={styles.list}>
-//         <CardItem style={styles.item}>
-//           <Left>
-//             <Icon active name="person-outline" />
-//             <Text style={styles.title}>
-//               {car.driverName} to {goingTo} place{' '}
-//               {checkWhatDayItIs(
-//                 extraDay ? Number(workDayNum) + Number(extraDay) : workDayNum
-//               )}
-//             </Text>
-//           </Left>
-//           <Right>
-//             <Text style={styles.title}>{singleItem.distance}20 km</Text>
-//           </Right>
-//         </CardItem>
-//         <CardItem style={styles.item}>
-//           <Left>
-//             <Icon active name="location-outline" />
-//             <Text style={styles.title}>
-//               {scheduledDrive.stops[0].address}
-//             </Text>
-//           </Left>
-//         </CardItem>
-//         <CardItem style={styles.item}>
-//           <Left>
-//             <Icon active name="time" />
-//             <Text>
-//               {moment(scheduledDrive.start.toDate()).format('HH:mm') +
-//                 ' - ' +
-//                 moment(scheduledDrive.end.toDate()).format('HH:mm')}
-//             </Text>
-//           </Left>
-//         </CardItem>
-//       </Card>
-//     </Content>
-//   </TouchableOpacity>
-// )
-// }
-
-// <View style={{flexDirection: 'row'}}>
-//         <View
-//           style={{
-//             marginVertical: 20,
-//             backgroundColor: 'white',
-//             height: '100%',
-//           }}
-//         >
-//           <Text>Work</Text>
-//         </View>
-//         <View
-//           style={{
-//             flexDirection: 'column',
-//           }}
-//         >
-//           <View
-//             style={{
-//               flexDirection: 'row',
-//               alignItems: 'center',
-//               justifyContent: 'space-between',
-//             }}
-//           >
-//             <View>
-//               <Text>Laura</Text>
-//             </View>
-//             <View>
-//               <Text>Laura</Text>
-//             </View>
-//           </View>
-//           <View style={{flexDirection: 'row'}}>
-//             <Text>fsafas</Text>
-//           </View>
-//         </View>
-//       </View>
-//     </TouchableOpacity>

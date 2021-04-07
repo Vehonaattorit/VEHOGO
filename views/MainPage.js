@@ -85,7 +85,11 @@ export const MainPage = ({navigation}) => {
     if (travelPreference === 'passenger') {
       return (
         <Container>
-          <Header>
+          <Header
+            style={{
+              backgroundColor: color.primary,
+            }}
+          >
             <Right>
               <Button
                 onPress={() => {
@@ -140,9 +144,15 @@ export const MainPage = ({navigation}) => {
   const drawerContent = () => {
     return (
       <View style={styles.animatedBox}>
-        <Text>Start time </Text>
+        <Text style={styles.startTime}>Start time </Text>
         <Text>Min - Max </Text>
         <MultiSlider
+          selectedStyle={{
+            backgroundColor: color.primary,
+          }}
+          markerStyle={{
+            backgroundColor: color.primary,
+          }}
           values={[multiSliderValue[0], multiSliderValue[1]]}
           sliderLength={250}
           onValuesChange={multiSliderValuesChange}
@@ -158,6 +168,7 @@ export const MainPage = ({navigation}) => {
         <View style={{flexDirection: 'row'}}>
           <View style={{marginVertical: 10, marginRight: 10}}>
             <Button
+              style={{backgroundColor: color.malachiteGreen}}
               onPress={
                 travelPreference === 'passenger'
                   ? queryWithTime
@@ -169,7 +180,7 @@ export const MainPage = ({navigation}) => {
           </View>
           <View style={{marginVertical: 10, marginRight: 10}}>
             <Button
-              style={{backgroundColor: 'firebrick'}}
+              style={{backgroundColor: color.radicalRed}}
               onPress={() => {
                 setOpen(!open)
               }}
@@ -211,9 +222,12 @@ export const MainPage = ({navigation}) => {
 }
 
 const styles = StyleSheet.create({
+  startTime: {
+    fontFamily: 'open-sans-regular',
+  },
   animatedBox: {
     flex: 1,
-    backgroundColor: color.secondary,
+    backgroundColor: color.primaryLight,
     zIndex: 999,
     padding: 10,
   },
@@ -227,7 +241,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  listView: {},
+  listView: {
+    flex: 2,
+  },
 
   scheduleView: {
     flex: 1,

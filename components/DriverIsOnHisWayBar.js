@@ -8,7 +8,10 @@ import {
   CardItem,
   Text,
 } from 'native-base'
+
+import {StyleSheet} from 'react-native'
 import React from 'react'
+import {color} from '../constants/colors'
 
 export default DriverIsOnHisWayBar = ({user, navigation, activeRide}) => {
   return (
@@ -21,6 +24,7 @@ export default DriverIsOnHisWayBar = ({user, navigation, activeRide}) => {
 
           <Right>
             <Button
+              style={styles.button}
               onPress={() =>
                 navigation.navigate('DriverOnRoute', {
                   activeRide,
@@ -35,3 +39,9 @@ export default DriverIsOnHisWayBar = ({user, navigation, activeRide}) => {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: color.primary,
+  },
+})

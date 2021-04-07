@@ -25,33 +25,15 @@ function MainStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen
-          name="MainPage"
-          component={MainPage}
-          options={{
-            title: 'Main Page',
-            headerStyle: {
-              backgroundColor: '#000000',
-            },
-            headerTitleStyle: {textAlign: 'center', flex: 1},
-            headerTintColor: '#ffffff',
-            headerRight: () => {
-              ;<IconButton
-                icon="logout"
-                size={28}
-                color="#ffffff"
-                onPress={signOut}
-              />
-            },
-          }}
-          headerStyle={{
-            backgroundColor: 'black',
-          }}
-        /> */}
         <Stack.Screen
           name="MainPage"
           component={MainPage}
-          options={({navigation}) => ({
+          options={() => ({
+            title: 'Main Page',
+            headerStyle: {
+              backgroundColor: color.primaryLight,
+            },
+            headerTintColor: color.primary,
             headerLeft: () => (
               <IconButton
                 icon="logout"

@@ -1,16 +1,27 @@
 import React from 'react'
 import {StyleSheet} from 'react-native'
-import {Content, Card, CardItem, Text, Left, Right, Icon, Button} from 'native-base'
+import {
+  Content,
+  Card,
+  CardItem,
+  Text,
+  Left,
+  Right,
+  Icon,
+  Button,
+} from 'native-base'
 
 const PendingRequestsListItem = ({singleItem, navigation}) => {
   return (
     <Content>
-      <Card style={styles.list} >
+      <Card style={styles.list}>
         <CardItem style={styles.item}>
           <Left>
             <Icon active name="person-outline" />
             <Text style={styles.title}>{singleItem.name}</Text>
-            <Button onPress={() => navigation.navigate('DriverAcceptRefuse')}><Text>Accept</Text></Button>
+            <Button onPress={() => navigation.navigate('DriverAcceptRefuse')}>
+              <Text>Accept</Text>
+            </Button>
           </Left>
           <Right>
             <Text style={styles.title}>{singleItem.distance}km</Text>

@@ -1,50 +1,40 @@
 import React from 'react'
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native'
-
-import moment from 'moment'
-
+import {Text, View, Button} from 'native-base'
+import {StyleSheet, Dimensions} from 'react-native'
 import {color} from '../constants/colors'
 
-import {checkWhatDayItIs} from '../utils/utils'
+const RequestListItem = ({itemData, viewRequest}) => {
+  const {item} = itemData
 
-const DriverTripListItem = ({singleTrip, navigation}) => {
+  console.log('PERKELE', item.id)
+
   return (
     <View style={styles.listItem}>
       <View style={styles.rectStack}>
         <View style={styles.rectangle}>
           <View style={styles.topRow}>
-            <Text style={styles.weekDayText}>
-              {checkWhatDayItIs(singleTrip.workDayNum)}
-            </Text>
-            <Text style={styles.stopsText}>
-              Stops: {singleTrip.scheduledDrive.stops.length}
-            </Text>
+            <View>
+              <Text style={styles.userNameText}>{item.userName}</Text>
+            </View>
+            <View>
+              <Text numberOfLines={2} style={styles.homeAddressText}>
+                {item.homeAddress}
+              </Text>
+            </View>
           </View>
           <View style={styles.breakPoint}></View>
-          <View style={styles.bottomRow}>
-            <Text style={styles.arrivalTimeText}>
-              Arrival time to {singleTrip.goingTo} -{' '}
-              {moment(singleTrip.scheduledDrive.end.toDate()).format('HH:mm')}
-            </Text>
-          </View>
-        </View>
-        <View style={styles.leftGoingTo}>
-          <View style={styles.leftGoingTop}>
-            <Text style={styles.goingToText}>
-              {singleTrip.goingTo.charAt(0).toUpperCase() +
-                singleTrip.goingTo.slice(1)}
-            </Text>
-          </View>
-          <View style={styles.startTime}>
-            <Text>
-              {moment(singleTrip.scheduledDrive.start.toDate()).format('HH:mm')}
-            </Text>
+          <View style={styles.middleRow}>
+            <Button style={styles.button} onPress={() => viewRequest(item)}>
+              <Text style={styles.btntxt}>Show Request</Text>
+            </Button>
           </View>
         </View>
       </View>
     </View>
   )
 }
+
+export default RequestListItem
 
 const styles = StyleSheet.create({
   listItem: {
@@ -55,22 +45,21 @@ const styles = StyleSheet.create({
     backgroundColor: color.primary,
     borderRadius: 24,
   },
-  weekDayText: {
+  userNameText: {
     fontFamily: 'open-sans-regular',
     flex: 1,
     color: 'white',
   },
-  stopsText: {
+  homeAddressText: {
     flex: 1,
     fontFamily: 'open-sans-regular',
     color: 'white',
   },
   topRow: {
-    height: 25,
+    flex: 1,
+    justifyContent: 'space-between',
     flexDirection: 'row',
-    marginVertical: 20,
-    marginLeft: 98,
-    marginRight: 17,
+    padding: 20,
   },
   breakPoint: {
     height: 1,
@@ -110,11 +99,11 @@ const styles = StyleSheet.create({
     color: 'white',
     height: 24,
   },
-  bottomRow: {
-    height: 25,
-    marginVertical: 20,
-    marginLeft: 98,
-    marginRight: 17,
+  middleRow: {
+    flex: 1,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    padding: 20,
   },
   leftGoingTo: {
     top: 0,
@@ -146,6 +135,13 @@ const styles = StyleSheet.create({
   rectStack: {
     marginTop: 20,
   },
-})
 
-export default DriverTripListItem
+  button: {
+    backgroundColor: color.primaryLight,
+    borderRadius: 15,
+  },
+
+  btntxt: {
+    color: color.primary,
+  },
+})

@@ -17,6 +17,7 @@ import {
   workTripMultiQuery,
   workTripOrderByQuery,
 } from '../controllers/workTripController'
+import {color} from '../constants/colors'
 
 export const RideStartBar = ({user, navigation}) => {
   const [showStart, setShowStart] = useState(false)
@@ -170,6 +171,7 @@ export const RideStartBar = ({user, navigation}) => {
             {
               /*showStart for developing purpuse*/ true ? (
                 <Button
+                  style={styles.button}
                   onPress={() =>
                     navigation.navigate('DriverStartRide', {startingRide})
                   }
@@ -190,6 +192,10 @@ export const RideStartBar = ({user, navigation}) => {
   )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: color.primary,
+  },
+})
 
 export default RideStartBar

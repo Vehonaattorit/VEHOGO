@@ -9,7 +9,6 @@ export class WorkTrip {
     car,
     currentLocation,
     scheduledDrive,
-    pendingRideRequests,
     goingTo,
     route,
     isDriving,
@@ -20,7 +19,6 @@ export class WorkTrip {
     this.workDayNum = workDayNum
     this.scheduledDrive = scheduledDrive
     this.car = car
-    this.pendingRideRequests = pendingRideRequests
     this.goingTo = goingTo
     this.route = route
     this.isDriving = isDriving
@@ -52,10 +50,6 @@ export const workTripConverter = {
       workTripObject.car = carConverter.toFirestore(workTrip.car)
     }
 
-    if (workTrip.pendingRideRequests != undefined) {
-      workTripObject.pendingRideRequests = workTrip.pendingRideRequests
-    }
-
     if (workTrip.goingTo != undefined) {
       workTripObject.goingTo = workTrip.goingTo
     }
@@ -78,7 +72,6 @@ export const workTripConverter = {
       currentLocation: data.currentLocation,
       workDayNum: data.workDayNum,
       scheduledDrive: data.scheduledDrive,
-      pendingRideRequests: data.pendingRideRequests,
       goingTo: data.goingTo,
       isDriving: data.isDriving,
       car: data.car,
@@ -92,7 +85,6 @@ export const workTripConverter = {
       currentLocation: data.currentLocation,
       workDayNum: data.workDayNum,
       scheduledDrive: scheduleDriveConverter.fromData(data.scheduledDrive),
-      pendingRideRequests: data.pendingRideRequests,
       goingTo: data.goingTo,
       isDriving: data.isDriving,
       car: data.car,

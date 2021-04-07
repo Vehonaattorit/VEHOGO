@@ -11,5 +11,9 @@ export const color = {
   darkPurple: '#575AAF',
   lightPurple: '#B39DDB',
 
-  //B39DDB
+  // VEHO Go guidelines colors
+  cyan: '#26AAE2',
+  radicalRed: '#FB3664',
+  malachiteGreen: '#4FD966',
+  platina: '#EAEAEA',
 }
