@@ -32,7 +32,10 @@ export const SetUpInit = ({route}) => {
     )
 
     // console.log('workTripDocuments', workTripDocuments)
-
+    console.log(
+      'fetch call',
+      `https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.location.latitude},${user.company.location.longitude}&key=${googleMapsApiKey}`
+    )
     workTripDocuments.forEach(async (item, i) => {
       let index = i + 1
 
@@ -67,7 +70,7 @@ export const SetUpInit = ({route}) => {
       })
       totalTime = parseFloat((totalTime / 60).toFixed(0))
 
-      const end =
+      let end =
         index % 2 === 0
           ? new Date(
               1970,
