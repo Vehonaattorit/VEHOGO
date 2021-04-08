@@ -14,6 +14,8 @@ import React from 'react'
 import {color} from '../constants/colors'
 
 export default DriverIsOnHisWayBar = ({user, navigation, activeRide}) => {
+
+  const workTrip = activeRide
   return (
     <View>
       <Card>
@@ -27,7 +29,7 @@ export default DriverIsOnHisWayBar = ({user, navigation, activeRide}) => {
               style={styles.button}
               onPress={() =>
                 navigation.navigate('DriverOnRoute', {
-                  activeRide,
+                  workTrip,
                 })
               }
             >

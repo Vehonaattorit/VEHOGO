@@ -19,26 +19,24 @@ import {color} from '../constants/colors'
 import * as Location from 'expo-location'
 
 export const DriverStartRide = ({navigation, route}) => {
-  let workTrip = route.params
+  let workTrip = route.params.workTrip
 
   const {user} = useContext(UserContext)
 
-  const {startingRide} = route.params
 
-  const [isDriving, setIsDriving] = useState(startingRide.isDriving)
+  const [isDriving, setIsDriving] = useState(workTrip.isDriving)
 
   const startDriving = async () => {
-    let workTripToUpdate = startingRide
+    let workTripToUpdate = workTrip
 
-    workTripToUpdate.isDriving = !startingRide.isDriving
+    workTripToUpdate.isDriving = !workTrip.isDriving
 
     setIsDriving(workTripToUpdate.isDriving)
     await updateWorkTrip(user.company.id, workTripToUpdate)
 
     if (workTripToUpdate.isDriving) {
       navigation.navigate('DriverOnRoute', {
-        activeRide: workTripToUpdate,
-        workTrip,
+        workTrip: workTrip,
       })
     }
 
@@ -81,7 +79,7 @@ export const DriverStartRide = ({navigation, route}) => {
 
   const drivingTime = () => {
     let totalTime = 0
-    workTrip.startingRide.route.routes[0].legs.map((leg) => {
+    workTrip.route.routes[0].legs.map((leg) => {
       totalTime += leg.duration.value
     })
     return parseFloat((totalTime / 60).toFixed(0))
@@ -94,7 +92,7 @@ export const DriverStartRide = ({navigation, route}) => {
           <Text style={styles.iconText}>Your Next Ride</Text>
 
           <Text>
-            Driving time: {workTrip.startingRide.route && drivingTime()} mins
+            Driving time: {workTrip.route && drivingTime()} mins
           </Text>
           <Button
             large
@@ -114,8 +112,8 @@ export const DriverStartRide = ({navigation, route}) => {
 
       <View style={styles.listView}>
         <StopList
-          dataArray={workTrip.startingRide.scheduledDrive.stops}
-          route={workTrip.startingRide.route}
+          dataArray={workTrip.scheduledDrive.stops}
+          route={workTrip.route}
         />
       </View>
     </View>
