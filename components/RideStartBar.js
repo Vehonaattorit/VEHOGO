@@ -176,7 +176,7 @@ export const RideStartBar = ({user, navigation}) => {
                     navigation.navigate('DriverStartRide', {startingRide})
                   }
                 >
-                  <Text style={styles.text}>Start</Text>
+                  <Text style={styles.starText}>Start</Text>
                 </Button>
               ) : (
                 <Text style={styles.text}>
@@ -194,10 +194,14 @@ export const RideStartBar = ({user, navigation}) => {
 
 const styles = StyleSheet.create({
   text: {
+    color: color.lightBlack,
+    fontFamily: 'open-sans-semi-bold',
+  },
+  startText: {
     fontFamily: 'open-sans-semi-bold',
   },
   button: {
-    backgroundColor: color.primary,
+    backgroundColor: color.darkBlue,
   },
 })
 

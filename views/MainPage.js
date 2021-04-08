@@ -1,8 +1,7 @@
 import React, {useEffect, useContext, useState} from 'react'
-import {Alert, StyleSheet} from 'react-native'
+import {Alert, View, StyleSheet} from 'react-native'
 import {
   Body,
-  View,
   Header,
   Left,
   Platform,
@@ -219,7 +218,7 @@ export const MainPage = ({navigation}) => {
           {travelPreference === 'passenger'
             ? displayPassengerList()
             : displayDriverList()}
-          <View style={styles.scheduleView}>
+          <View>
             <MainPageButtons
               travelPreference={travelPreference}
               navigation={navigation}
@@ -253,10 +252,6 @@ const styles = StyleSheet.create({
   },
 
   listView: {
-    flex: 2,
-  },
-
-  scheduleView: {
     flex: 1,
   },
 

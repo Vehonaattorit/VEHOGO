@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     position: 'absolute',
 
-    backgroundColor: 'white',
+    backgroundColor: color.darkBlue,
     borderLeftWidth: 1,
     borderTopWidth: 1,
     borderBottomWidth: 1,

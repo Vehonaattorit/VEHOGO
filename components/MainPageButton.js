@@ -9,7 +9,6 @@ import {
   TouchableNativeFeedback,
 } from 'react-native'
 
-import {UserContext} from '../contexts'
 import {color} from '../constants/colors'
 
 const MainPageButton = (props) => {
@@ -22,20 +21,9 @@ const MainPageButton = (props) => {
   return (
     <View style={styles.gridItem}>
       <TouchableCmp style={{flex: 1}} onPress={props.onPress}>
-        <View style={{...styles.container, ...{backgroundColor: props.color}}}>
+        <View style={styles.container}>
           {props.children}
-          <View
-            style={{
-              position: 'absolute',
-              bottom: 10,
-              height: 40,
-              paddingHorizontal: 10,
-              borderRadius: 10,
-              backgroundColor: 'white',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+          <View style={styles.titleContainer}>
             <Text style={styles.title} numberOfLines={2}>
               {props.title}
             </Text>
@@ -52,17 +40,15 @@ const styles = StyleSheet.create({
   gridItem: {
     flex: 1,
     margin: 15,
-    height: 100,
     borderRadius: 10,
     overflow:
       Platform.OS === 'android' && Platform.Version >= 21
         ? 'hidden'
         : 'visible',
-    elevation: 5,
+    elevation: 20,
   },
   container: {
-    flexDirection: 'row',
-    flex: 1,
+    backgroundColor: color.lightBlue,
     borderRadius: 10,
     shadowColor: 'black',
     shadowOpacity: 0.26,
@@ -72,10 +58,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  titleContainer: {
+    width: '100%',
+    marginTop: 10,
+    backgroundColor: 'white',
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+  },
   title: {
     fontFamily: 'open-sans-semi-bold',
-    fontSize: 22,
-    color: 'black',
+    fontSize: Dimensions.get('window').height * 0.03,
+    color: color.lightBlack,
     textAlign: 'right',
   },
 })
