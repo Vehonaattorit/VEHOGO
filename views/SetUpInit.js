@@ -32,7 +32,10 @@ export const SetUpInit = ({route}) => {
     )
 
     // console.log('workTripDocuments', workTripDocuments)
-
+    console.log(
+      'fetch call',
+      `https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.location.latitude},${user.company.location.longitude}&key=${googleMapsApiKey}`
+    )
     workTripDocuments.forEach(async (item, i) => {
       let index = i + 1
 
@@ -46,7 +49,7 @@ export const SetUpInit = ({route}) => {
       // TODO:
       // Implement how long it takes driver to back home instead of
       //  "item.workDayEnd.toDate().getHours() + 1, 30)" placeholders
-      console.log('fetch call',`https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.latitude},${user.company.longitude}&key=${googleMapsApiKey}`)
+
       const response = await fetch(
         `https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.location.latitude},${user.company.location.longitude}&key=${googleMapsApiKey}`,
         {
@@ -59,13 +62,19 @@ export const SetUpInit = ({route}) => {
 
       const data = responseJson
       let totalTime = 0
-      data.routes[0].legs.map((leg) => {totalTime += leg.duration.value})
-      totalTime = parseFloat((totalTime / 60).toFixed(0))
+      data.routes[0].legs.map((leg) => {
+        totalTime += leg.duration.value
+      })
+      totalTime = parseFloat(totalTime.toFixed(0))
+      console.log('total time', totalTime)
 
-      const end =
+      let end =
         index % 2 === 0
-          ? new Date(1970, 0, 1, item.workDayEnd.toDate().getHours(), item.workDayEnd.toDate().setMinutes(item.workDayEnd.toDate().getMinutes() + totalTime))
-          : new Date(1970, 0, 1, item.workDayStart.toDate().getHours(), item.workDayEnd.toDate().setMinutes(item.workDayEnd.toDate().getMinutes() + totalTime))
+          ? new Date(1970, 0, 1, item.workDayEnd.toDate().getHours(), 0)
+          : new Date(1970, 0, 1, item.workDayStart.toDate().getHours(), 0)
+
+      //adding ride time to end time
+      end = new Date(end.getTime() + totalTime * 1000)
 
       const goingTo = index % 2 === 0 ? 'home' : 'work'
       let initialStops = [
