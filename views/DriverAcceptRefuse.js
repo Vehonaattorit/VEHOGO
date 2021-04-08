@@ -5,25 +5,29 @@ import {Content, Container, Text, View} from 'native-base'
 import MapView from 'react-native-maps'
 import PassengerRideRequestButton from './passengerRideRequestButton'
 import PassengerAcceptRefuseButton from './passengerAcceptRefuseButton'
+import decodePolyline from 'decode-google-map-polyline'
 
 export const DriverAcceptRefuse = ({navigation, route}) => {
   const {singleItem, rideRequest} = route.params
   const {user} = useContext(UserContext)
 
   const [mapRef, setMapRef] = useState(null)
+  const [routeCoordinates, setRouteCoordinates] = useState([])
   const [markers, setMarkers] = useState([
     singleItem.scheduledDrive.stops.map((stop) => (
       <MapView.Marker
+        image={stop.stopName == 'Home' || stop.stopName == user.company.name ? stop.stopName == 'Home' ? require('../images/home-map-icon-white.png') : require('../images/work-map-icon-white.png') : require('../images/passenger-map-icon-white.png')}
         key={stop.address}
         coordinate={{
           latitude: stop.location.latitude,
           longitude: stop.location.longitude,
         }}
-        title="Random place"
+        title={stop.address}
       />
     )),
     rideRequest != undefined && (
       <MapView.Marker
+        image={require('../images/passenger-map-icon-green.png')}
         key={rideRequest.address}
         coordinate={{
           latitude: rideRequest.homeLocation.latitude,
@@ -32,6 +36,27 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
       />
     ),
   ])
+  //console.log('requested route',singleItem)
+
+  useEffect(() => {
+    var tempRouteCoordinates = []
+    console.log('inside useEffect before route', singleItem.route)
+    if (singleItem.route != undefined) {
+      console.log('inside that if')
+      singleItem.route.routes[0].legs.map((leg) => {
+        leg.steps.map((step) => {
+          var decodedPolyLines = decodePolyline(step.polyline.points)
+          decodedPolyLines.forEach((polylineCoords) => {
+            tempRouteCoordinates.push({
+              latitude: polylineCoords.lat,
+              longitude: polylineCoords.lng,
+            })
+          })
+        })
+      })
+    }
+    setRouteCoordinates(tempRouteCoordinates)
+  }, [])
 
   // useEffect(() => {
   //   setTimeout(() => {
@@ -64,6 +89,11 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
             longitudeDelta: 1,
           }}
         >
+          <MapView.Polyline
+            coordinates={routeCoordinates}
+            strokeColor="#000"
+            strokeWidth={4}
+          />
           {markers}
         </MapView>
       </Container>

@@ -44,6 +44,7 @@ const formReducer = (state, action) => {
 }
 
 export const Address = ({navigation}) => {
+  console.log('api key in address', googleMapsApiKey)
   const {user} = useContext(UserContext)
 
   const [address, setAddress] = useState(user.homeAddress || '')

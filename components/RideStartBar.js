@@ -173,7 +173,7 @@ export const RideStartBar = ({user, navigation}) => {
                 <Button
                   style={styles.button}
                   onPress={() =>
-                    navigation.navigate('DriverStartRide', {startingRide})
+                    navigation.navigate('DriverStartRide', {workTrip:startingRide})
                   }
                 >
                   <Text style={styles.starText}>Start</Text>
