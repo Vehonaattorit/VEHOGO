@@ -101,7 +101,7 @@ export const Address = ({navigation}) => {
   const getAddressGeoLocation = async () => {
     try {
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${googleMapsApiKey}`,
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&language=fi&key=${googleMapsApiKey}`,
         {
           method: 'GET',
           //Request Type

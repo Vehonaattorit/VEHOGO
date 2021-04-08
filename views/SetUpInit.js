@@ -46,7 +46,10 @@ export const SetUpInit = ({route}) => {
       // TODO:
       // Implement how long it takes driver to back home instead of
       //  "item.workDayEnd.toDate().getHours() + 1, 30)" placeholders
-      console.log('fetch call',`https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.latitude},${user.company.longitude}&key=${googleMapsApiKey}`)
+      console.log(
+        'fetch call',
+        `https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.latitude},${user.company.longitude}&key=${googleMapsApiKey}`
+      )
       const response = await fetch(
         `https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.location.latitude},${user.company.location.longitude}&key=${googleMapsApiKey}`,
         {
@@ -59,13 +62,31 @@ export const SetUpInit = ({route}) => {
 
       const data = responseJson
       let totalTime = 0
-      data.routes[0].legs.map((leg) => {totalTime += leg.duration.value})
+      data.routes[0].legs.map((leg) => {
+        totalTime += leg.duration.value
+      })
       totalTime = parseFloat((totalTime / 60).toFixed(0))
 
       const end =
         index % 2 === 0
-          ? new Date(1970, 0, 1, item.workDayEnd.toDate().getHours(), item.workDayEnd.toDate().setMinutes(item.workDayEnd.toDate().getMinutes() + totalTime))
-          : new Date(1970, 0, 1, item.workDayStart.toDate().getHours(), item.workDayEnd.toDate().setMinutes(item.workDayEnd.toDate().getMinutes() + totalTime))
+          ? new Date(
+              1970,
+              0,
+              1,
+              item.workDayEnd.toDate().getHours(),
+              item.workDayEnd
+                .toDate()
+                .setMinutes(item.workDayEnd.toDate().getMinutes() + totalTime)
+            )
+          : new Date(
+              1970,
+              0,
+              1,
+              item.workDayStart.toDate().getHours(),
+              item.workDayEnd
+                .toDate()
+                .setMinutes(item.workDayEnd.toDate().getMinutes() + totalTime)
+            )
 
       const goingTo = index % 2 === 0 ? 'home' : 'work'
       let initialStops = [
@@ -84,8 +105,6 @@ export const SetUpInit = ({route}) => {
       ]
 
       console.log('user.company.id', user.company.id)
-
-      console.log()
 
       await updateWorkTrip(
         user.company.id, // Looks for company ID that user has joined
@@ -140,7 +159,6 @@ export const SetUpInit = ({route}) => {
           title="Finish setup"
           onPress={() => {
             finishSetup()
-            // navigation.navigate('Address')
           }}
         />
       </View>

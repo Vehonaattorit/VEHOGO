@@ -1,9 +1,8 @@
 import React, {useState, useEffect, useRef, useContext} from 'react'
 import {UserContext} from '../contexts'
 import {StyleSheet, Dimensions} from 'react-native'
-import {Content, Body, Container, Text, View, Button} from 'native-base'
+import {Content, Container, Text, View} from 'native-base'
 import MapView from 'react-native-maps'
-import {updateWorkTrip} from '../controllers/workTripController'
 import PassengerRideRequestButton from './passengerRideRequestButton'
 import PassengerAcceptRefuseButton from './passengerAcceptRefuseButton'
 
@@ -34,20 +33,20 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
     ),
   ])
 
-  useEffect(() => {
-    setTimeout(() => {
-      console.log('now timer ending')
-      if (mapRef != undefined && mapRef != null) {
-        console.log(
-          'fit markers',
-          singleItem.scheduledDrive.stops.map((stop) => stop.address)
-        )
-        mapRef.fitToSuppliedMarkers(
-          singleItem.scheduledDrive.stops.map((stop) => stop.address)
-        )
-      }
-    }, 3000)
-  }, [mapRef])
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     console.log('now timer ending')
+  //     if (mapRef != undefined && mapRef != null) {
+  //       console.log(
+  //         'fit markers',
+  //         singleItem.scheduledDrive.stops.map((stop) => stop.address)
+  //       )
+  //       mapRef.fitToSuppliedMarkers(
+  //         singleItem.scheduledDrive.stops.map((stop) => stop.address)
+  //       )
+  //     }
+  //   }, 3000)
+  // }, [mapRef])
 
   return (
     <View style={styles.view}>

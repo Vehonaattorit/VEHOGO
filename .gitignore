@@ -9,7 +9,6 @@ npm-debug.*
 *.orig.*
 web-build/
 
-bacon.txt
 # macOS
 .DS_Store
 

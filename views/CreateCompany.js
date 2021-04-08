@@ -24,18 +24,21 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
   const [companyCode, setCompanyCode] = useState('')
 
   function getRandomString(length) {
-    var randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var result = '';
+    var randomChars =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    var result = ''
     for (var i = 0; i < length; i++) {
-      result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
+      result += randomChars.charAt(
+        Math.floor(Math.random() * randomChars.length)
+      )
     }
-    return result;
+    return result
   }
 
   const getCompanyGeoLocation = async () => {
     try {
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${companyAddress}&key=${googleMapsApiKey}`,
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${companyAddress}&language=fi&key=${googleMapsApiKey}`,
         {
           method: 'GET',
           //Request Type
@@ -56,13 +59,13 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
         if (element.types[0] === 'locality') {
           city = element.long_name
         }
-        if (element.types[0] === 'route'){
+        if (element.types[0] === 'route') {
           route = element.long_name
         }
-        if (element.types[0] === 'street_number'){
+        if (element.types[0] === 'street_number') {
           streetNumber = element.long_name
         }
-        if (element.types[0] === 'postal_code'){
+        if (element.types[0] === 'postal_code') {
           postalCode = element.long_name
         }
       })
@@ -73,7 +76,7 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
         point: locationPoint,
         city: city,
         address: address,
-        postalCode: postalCode
+        postalCode: postalCode,
       }
       console.log(data)
 
@@ -84,7 +87,6 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
   }
   const sendCompanyData = async () => {
     if (companyAddress.length > 0 && companyName.length > 0) {
-
       const cCode = getRandomString(6)
 
       const data = await getCompanyGeoLocation()
@@ -98,15 +100,15 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
           location: data.point,
           city: data.city,
           companyCode: cCode,
-          postalCode: data.postalCode
+          postalCode: data.postalCode,
         })
       )
 
       const companyUserData = {
-          address: data.address,
-          name: companyName,
-          location: data.point,
-          id: companyId
+        address: data.address,
+        name: companyName,
+        location: data.point,
+        id: companyId,
       }
 
       user.company = companyUserData
@@ -125,7 +127,6 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
 
   return (
     <View style={styles.container}>
-
       {!showCode ? (
         <>
           <CustomTitle title="Company" />
@@ -171,9 +172,11 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
           </View>
         </>
       ) : (
-        <CompanyCode navigation={navigation} companyCode={companyCode}></CompanyCode>
-    )}
-
+        <CompanyCode
+          navigation={navigation}
+          companyCode={companyCode}
+        ></CompanyCode>
+      )}
     </View>
   )
 }

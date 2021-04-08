@@ -76,7 +76,11 @@ export const MainPage = ({navigation}) => {
       pushToken = (await Notifications.getExpoPushTokenAsync()).data
     }
 
+    console.log('OwnerPushToken', pushToken)
+
     user.ownerPushToken = pushToken
+
+    console.log('user.ownerPushToken', user.ownerPushToken)
     await updateUser(user)
   }
 

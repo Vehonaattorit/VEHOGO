@@ -1,8 +1,7 @@
 import React from 'react'
-import {StyleSheet, View} from 'react-native'
+import {StyleSheet, TouchableOpacity, View} from 'react-native'
 import {Content, Card, CardItem, Text, Left, Right, Icon} from 'native-base'
 
-import {TouchableOpacity} from 'react-native'
 import moment from 'moment'
 
 import firebase from 'firebase/app'
