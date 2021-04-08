@@ -81,7 +81,7 @@ export const DriverOnRoute = ({navigation, route}) => {
 
       return (
         <>
-          {doc && <MapView.Marker
+          {doc != undefined && doc.driverCurrentLocation != undefined ? <MapView.Marker
             image={require('../images/car-marker.png')}
             key={'driver-car'}
             coordinate={{
@@ -89,7 +89,7 @@ export const DriverOnRoute = ({navigation, route}) => {
               longitude: doc.driverCurrentLocation.location.longitude,
             }}
             title="car"
-          />}
+          />:<View/>}
         </>)
     }
     else return <View />
