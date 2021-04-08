@@ -9,7 +9,7 @@ import {color} from '../constants/colors'
 const MainPageButtons = ({travelPreference, driverTripList, navigation}) => {
   console.log('travelPreference', travelPreference)
 
-  const CATEGORIES = [
+  const mainPageButtons = [
     {
       id: '1',
       travelPreference: ['passenger', 'driver'],
@@ -89,7 +89,7 @@ const MainPageButtons = ({travelPreference, driverTripList, navigation}) => {
         backgroundColor: 'white',
       }}
       keyExtractor={(item, index) => item.id}
-      data={CATEGORIES}
+      data={mainPageButtons}
       renderItem={renderGridItem}
       numColumns={2}
     />
