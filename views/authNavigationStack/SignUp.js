@@ -54,7 +54,7 @@ export const SignUp = () => {
         <Input
           autoCapitalize="none"
           leftIcon={<Icon name="user" size={24} color={color.primary} />}
-          placeholder="email@address.com"
+          placeholder="Email"
           value={email}
           onChangeText={setEmail}
         />
