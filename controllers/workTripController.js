@@ -149,3 +149,23 @@ export async function workTripOrder(companyId) {
     return
   }
 }
+
+export function workTripMultiQueryStream(companyId, querys) {
+  try {
+    // Add a new document in collection "users"
+    let queryRef = db
+      .collection('companys')
+      .doc(companyId)
+      .collection('workTrips')
+      .withConverter(workTripConverter)
+
+    querys.forEach((query) => {
+      queryRef = queryRef.where(query.field, query.condition, query.value)
+    })
+
+    return queryRef
+  } catch (error) {
+    console.error('Error getting document: ', error)
+    return
+  }
+}

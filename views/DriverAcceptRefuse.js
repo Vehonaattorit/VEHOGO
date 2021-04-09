@@ -120,10 +120,10 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
             />
           ) : (
             <PassengerAcceptRefuseButton
-              // navigation={navigation}
               user={user}
               workTrip={singleItem}
               rideRequest={rideRequest}
+              navigation={navigation}
             />
           )}
         </Content>
