@@ -16,7 +16,13 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
   const [markers, setMarkers] = useState([
     singleItem.scheduledDrive.stops.map((stop) => (
       <MapView.Marker
-        image={stop.stopName == 'Home' || stop.stopName == user.company.name ? stop.stopName == 'Home' ? require('../images/home-map-icon-white.png') : require('../images/work-map-icon-white.png') : require('../images/passenger-map-icon-white.png')}
+        image={
+          stop.stopName == 'Home' || stop.stopName == user.company.name
+            ? stop.stopName == 'Home'
+              ? require('../images/home-map-icon-white.png')
+              : require('../images/work-map-icon-white.png')
+            : require('../images/passenger-map-icon-white.png')
+        }
         key={stop.address}
         coordinate={{
           latitude: stop.location.latitude,
@@ -106,11 +112,11 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
                 ? singleItem.car.driverName
                 : rideRequest.userName}
             </Text>
-            <Text style={styles.text}>2km</Text>
+            <Text style={styles.text}>2 km</Text>
           </View>
 
           <Text style={{...styles.text, margin: 10}}>
-            Address{rideRequest == undefined ? '' : rideRequest.homeAddress}
+            {rideRequest == undefined ? '' : rideRequest.homeAddress}
           </Text>
           {user.travelPreference == 'passenger' ? (
             <PassengerRideRequestButton

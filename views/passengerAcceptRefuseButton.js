@@ -9,6 +9,7 @@ import {updateWorkTrip} from '../controllers/workTripController'
 import {getUser} from '../controllers/userController'
 import {googleMapsApiKey} from '../secrets/secrets'
 import {calculateDistance} from '../utils/utils'
+import {color} from '../constants/colors'
 const PassengerAcceptRefuseButton = (props) => {
   const {user, workTrip, rideRequest, navigation} = props
 
@@ -169,13 +170,17 @@ const PassengerAcceptRefuseButton = (props) => {
 
   return (
     <View style={styles.buttons}>
-      <Button onPress={acceptPassenger} large style={styles.button}>
+      <Button
+        onPress={acceptPassenger}
+        large
+        style={{...styles.button, backgroundColor: color.malachiteGreen}}
+      >
         <Text style={styles.btntxt}>Accept</Text>
       </Button>
       <Button
         onPress={refusePassenger}
         large
-        style={{...styles.button, backgroundColor: 'red'}}
+        style={{...styles.button, backgroundColor: color.radicalRed}}
       >
         <Text style={styles.btntxt}>Refuse</Text>
       </Button>
@@ -185,13 +190,15 @@ const PassengerAcceptRefuseButton = (props) => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#26aae2',
+    flex: 1,
+    justifyContent: 'center',
+    marginHorizontal: 10,
     borderRadius: 15,
   },
   buttons: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     marginTop: 20,
   },
   title: {

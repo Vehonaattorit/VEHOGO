@@ -7,11 +7,7 @@ import {
   View,
   Text,
 } from 'react-native'
-import {
-  Ionicons,
-  MaterialCommunityIcons,
-  FontAwesome5,
-} from '@expo/vector-icons'
+import {MaterialCommunityIcons} from '@expo/vector-icons'
 
 import {color} from '../constants/colors'
 import moment from 'moment'

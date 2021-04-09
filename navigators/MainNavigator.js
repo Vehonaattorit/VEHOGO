@@ -17,6 +17,12 @@ import {IconButton} from 'react-native-paper'
 import {signOut} from '../controllers/LoginController'
 import {color} from '../constants/colors'
 
+import {Entypo} from '@expo/vector-icons'
+
+import {HeaderButtons, Item} from 'react-navigation-header-buttons'
+import HeaderButton from '../components/CustomHeaderButton'
+import CarEditForm from '../views/CarEditForm'
+
 const Stack = createStackNavigator()
 const Drawer = createStackNavigator()
 function MainStackNavigator() {
@@ -36,6 +42,32 @@ function MainStackNavigator() {
           headerTintColor: color.primary,
         }}
       >
+        <Stack.Screen
+          options={({navigation}) => ({
+            headerRight: () => (
+              <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                <Item
+                  title="Menu"
+                  iconComponent={Entypo}
+                  iconName="new-message"
+                  onPress={() => {
+                    navigation.navigate('CarEditForm')
+                  }}
+                />
+              </HeaderButtons>
+              // <IconButton
+              //   icon="logout"
+              //   size={28}
+              //   color={color.darkBlue}
+              //   onPress={() => {
+              //     signOut()
+              //   }}
+              // />
+            ),
+          })}
+          name="DriverCarList"
+          component={DriverCarList}
+        />
         <Stack.Screen
           name="MainPage"
           component={MainPage}
@@ -66,7 +98,33 @@ function MainStackNavigator() {
         />
         <Stack.Screen name="DriverOnRoute" component={DriverOnRoute} />
         <Stack.Screen name="Chat Room" component={ChatRoom} />
-        <Stack.Screen name="DriverCarList" component={DriverCarList} />
+        {/* <Stack.Screen
+          options={({navigation}) => ({
+            headerRight: () => (
+              <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                <Item
+                  title="Menu"
+                  iconComponent={Entypo}
+                  iconName="new-message"
+                  onPress={() => {
+                    navigation.navigate('CarEditForm')
+                  }}
+                />
+              </HeaderButtons>
+              // <IconButton
+              //   icon="logout"
+              //   size={28}
+              //   color={color.darkBlue}
+              //   onPress={() => {
+              //     signOut()
+              //   }}
+              // />
+            ),
+          })}
+          name="DriverCarList"
+          component={DriverCarList}
+        /> */}
+        <Stack.Screen name="CarEditForm" component={CarEditForm} />
         <Stack.Screen name="RequestRide" component={DriverAcceptRefuse} />
       </Stack.Navigator>
     </NavigationContainer>
