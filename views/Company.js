@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {StyleSheet} from 'react-native'
+import {StyleSheet, KeyboardAvoidingView} from 'react-native'
 import {Text, Icon, Button} from 'native-base'
 import {View, Item, Input} from 'native-base'
 import {JoinCompany} from './JoinCompany'
@@ -31,9 +31,9 @@ export const Company = ({navigation}) => {
   }
 
   return (
-    <View style={styles.view}>
+    <KeyboardAvoidingView behavior="padding" style={styles.view}>
       {showBtns && (
-        <View>
+        <>
           <View style={styles.poweredContainer}>
             <View style={styles.btnContainer}>
               <CustomIconButton
@@ -75,7 +75,7 @@ export const Company = ({navigation}) => {
             </Item>
             {error && <Text style={styles.errorText}>Code is not valid</Text>}
           </View>
-        </View>
+        </>
       )}
       {showBtns === false && showJoin === true ? (
         <JoinCompany
@@ -94,7 +94,7 @@ export const Company = ({navigation}) => {
           />
         )
       )}
-    </View>
+    </KeyboardAvoidingView>
   )
 }
 
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   poweredContainer: {
-    marginTop: 500,
+    marginTop: 400,
   },
 
   btnContainer: {
