@@ -1,15 +1,11 @@
 import React, {useState} from 'react'
 import {StyleSheet} from 'react-native'
-import {
-  Text,
-  Icon,
-  Button,
-} from 'native-base'
+import {Text, Icon, Button} from 'native-base'
 import {View, Item, Input} from 'native-base'
 import {JoinCompany} from './JoinCompany'
-import {CustomButton} from '../components/CustomButton'
 import {CreateCompany} from './CreateCompany'
 import {companyQuery} from '../controllers/companyController'
+import CustomIconButton from '../components/CustomIconButton'
 
 export const Company = ({navigation}) => {
   const [showBtns, setShowBtns] = useState(true)
@@ -32,53 +28,54 @@ export const Company = ({navigation}) => {
       setShowBtns(false)
       setError(false)
     }
-
   }
 
   return (
     <View style={styles.view}>
       {showBtns && (
-        <>
-          <View style={styles.btnContainer}>
-            <View style={styles.btn}>
-              <CustomButton
-                title="Create A Company"
+        <View>
+          <View style={styles.poweredContainer}>
+            <View style={styles.btnContainer}>
+              <CustomIconButton
                 onPress={() => {
                   setShowCreate(true)
                   setShowBtns(false)
                 }}
+                title="Create A Company"
               />
             </View>
-            <Text style={{alignSelf: 'center', margin: 5}}>
-              or if you are invited to company insert code
-            </Text>
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Item>
+            <Item style={styles.inputContainer}>
               <Input
+                backgroundColor="white"
                 placeholder="Company Invitation Code"
                 value={companyCode}
+                style={{borderRadius: 5}}
                 onChangeText={setCompanyCode}
                 errorMessage={
                   companyCode.length < 1 &&
                   'Company name must be at least 1 character long'
                 }
               />
-              <Button onPress={() => {
-                getCompanies()
-              }
-              }>
-                <Icon active name='checkmark-circle-outline' />
-              </Button>
+
+              <View style={styles.companyCodeBtnContainer}>
+                <Button
+                  onPress={() => {
+                    getCompanies()
+                  }}
+                  backgroundColor="#69CBE8"
+                  borderRadius={5}
+                >
+                  <Icon
+                    active
+                    name="checkmark-circle-outline"
+                    backgroundColor="black"
+                  />
+                </Button>
+              </View>
             </Item>
-            {error &&
-              <Text style={styles.errorText}>Code is not valid</Text>
-            }
-
+            {error && <Text style={styles.errorText}>Code is not valid</Text>}
           </View>
-
-        </>
+        </View>
       )}
       {showBtns === false && showJoin === true ? (
         <JoinCompany
@@ -107,12 +104,29 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'center',
   },
-  button: {
-    marginTop: 10,
+  poweredContainer: {
+    marginTop: 500,
+  },
+
+  btnContainer: {
+    marginBottom: 40,
+  },
+  inputContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#E1F5FD',
+    marginLeft: 40,
+    marginRight: 40,
+    borderRadius: 5,
+    padding: 10,
+  },
+
+  companyCodeBtnContainer: {
+    borderRadius: 5,
+    marginLeft: 5,
   },
   errorText: {
     color: 'red',
-    alignSelf:'center'
-  }
-
+    alignSelf: 'center',
+  },
 })

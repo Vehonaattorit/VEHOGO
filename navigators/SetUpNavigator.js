@@ -19,11 +19,12 @@ function SetUpStackNavigator() {
           component={Company}
           options={{
             title: 'Create or join',
-            headerStyle: {
-              backgroundColor: '#000000',
+            headerTitleStyle: {
+              fontSize: 30,
+              textAlign: 'center',
+              flex: 1,
             },
-            headerTitleStyle: {textAlign: 'center', flex: 1},
-            headerTintColor: '#ffffff',
+            headerTintColor: '#000000',
           }}
           headerStyle={{
             backgroundColor: 'black',
@@ -34,11 +35,8 @@ function SetUpStackNavigator() {
           component={Travel}
           options={{
             title: 'Travel',
-            headerStyle: {
-              backgroundColor: '#000000',
-            },
             headerTitleStyle: {textAlign: 'center', flex: 1},
-            headerTintColor: '#ffffff',
+            headerTintColor: '#000000',
           }}
           headerStyle={{
             backgroundColor: 'black',
@@ -49,11 +47,8 @@ function SetUpStackNavigator() {
           component={Username}
           options={{
             title: 'Username',
-            headerStyle: {
-              backgroundColor: '#000000',
-            },
             headerTitleStyle: {textAlign: 'center', flex: 1},
-            headerTintColor: '#ffffff',
+            headerTintColor: '#000000',
           }}
           headerStyle={{
             backgroundColor: 'black',
@@ -63,12 +58,8 @@ function SetUpStackNavigator() {
           name="Address"
           component={Address}
           options={{
-            title: 'Address',
-            headerStyle: {
-              backgroundColor: '#000000',
-            },
             headerTitleStyle: {textAlign: 'center', flex: 1},
-            headerTintColor: '#ffffff',
+            headerTintColor: '#000000',
           }}
           headerStyle={{
             backgroundColor: 'black',
@@ -79,11 +70,8 @@ function SetUpStackNavigator() {
           component={WorkingDays}
           options={{
             title: 'Working Days',
-            headerStyle: {
-              backgroundColor: '#000000',
-            },
             headerTitleStyle: {textAlign: 'center', flex: 1},
-            headerTintColor: '#ffffff',
+            headerTintColor: '#000000',
           }}
           headerStyle={{
             backgroundColor: 'black',
@@ -94,11 +82,8 @@ function SetUpStackNavigator() {
           component={WorkingHours}
           options={{
             title: 'Working Hours',
-            headerStyle: {
-              backgroundColor: '#000000',
-            },
             headerTitleStyle: {textAlign: 'center', flex: 1},
-            headerTintColor: '#ffffff',
+            headerTintColor: '#000000',
           }}
           headerStyle={{
             backgroundColor: 'black',
@@ -109,11 +94,8 @@ function SetUpStackNavigator() {
           component={SetUpInit}
           options={{
             title: 'Set Up Init',
-            headerStyle: {
-              backgroundColor: '#000000',
-            },
             headerTitleStyle: {textAlign: 'center', flex: 1},
-            headerTintColor: '#ffffff',
+            headerTintColor: '#000000',
           }}
           headerStyle={{
             backgroundColor: 'black',
