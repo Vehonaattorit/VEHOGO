@@ -5,18 +5,18 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
-  SafeAreaView,
   StyleSheet,
   StatusBar,
 } from 'react-native'
 
-import {Agenda} from 'react-native-calendars'
+import {Agenda, Calendar} from 'react-native-calendars'
 import {Card} from 'react-native-paper'
 
 import moment from 'moment-timezone'
 
 import {AuthContext} from './contexts/AuthContext'
 import calendarHooks from './calendarHooks'
+import {color} from '../constants/colors'
 
 /**
  *
@@ -50,7 +50,7 @@ export const OutlookCalendar = () => {
                 style={{
                   marginTop: 8,
                   marginBottom: 10,
-                  color: '#404040',
+                  color: color.darkBlue,
                 }}
               >
                 {item.start} - {item.end}
@@ -68,7 +68,7 @@ export const OutlookCalendar = () => {
               <Text
                 style={{
                   fontSize: 16,
-                  color: '#202020',
+                  color: color.darkBlue,
                 }}
               >
                 {item.subject}
@@ -121,9 +121,11 @@ export const OutlookCalendar = () => {
     <View style={styles.AndroidSafeArea}>
       <AuthContext.Provider value={authContext}>
         <Button
+          color={color.darkBlue}
           title={state.userToken ? 'Sign out' : ' Log in'}
           onPress={state.userToken ? signOutAsync : signInAsync}
         />
+
         <Agenda
           onRefresh={bootstrapAsync}
           refreshing={calendarState.loadingEvents}
@@ -137,6 +139,13 @@ export const OutlookCalendar = () => {
             } else {
               return largeActivityIndicator()
             }
+          }}
+          theme={{
+            monthTextColor: color.darkBlue,
+            indicatorColor: color.darkBlue,
+            textDayFontFamily: 'open-sans-regular',
+            textMonthFontFamily: 'open-sans-regular',
+            textDayHeaderFontFamily: 'open-sans-regular',
           }}
         />
       </AuthContext.Provider>

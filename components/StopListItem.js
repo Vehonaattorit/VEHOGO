@@ -4,13 +4,7 @@ import {color} from '../constants/colors'
 // import {Content, Card, CardItem, Text, Left, Right, Icon} from 'native-base'
 import {getUser} from '../controllers/userController'
 
-import {
-  Ionicons,
-  MaterialCommunityIcons,
-  MaterialIcons,
-  AntDesign,
-  FontAwesome5,
-} from '@expo/vector-icons'
+import {Ionicons} from '@expo/vector-icons'
 const StopListItem = ({singleItem, route, index}) => {
   const [stopUserInfo, setStopUserInfo] = useState([])
 

@@ -199,9 +199,7 @@ const styles = StyleSheet.create({
     color: color.lightBlack,
     fontFamily: 'open-sans-semi-bold',
   },
-  startText: {
-    fontFamily: 'open-sans-semi-bold',
-  },
+
   button: {
     backgroundColor: color.darkBlue,
   },

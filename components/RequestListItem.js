@@ -1,31 +1,33 @@
 import React from 'react'
 import {Text, View, Button} from 'native-base'
-import {StyleSheet, Dimensions} from 'react-native'
+import {StyleSheet, Dimensions, Platform} from 'react-native'
 import {color} from '../constants/colors'
+import {Ionicons} from '@expo/vector-icons'
 
 const RequestListItem = ({itemData, viewRequest}) => {
   const {item} = itemData
 
   return (
     <View style={styles.listItem}>
-      <View style={styles.rectStack}>
-        <View style={styles.rectangle}>
-          <View style={styles.topRow}>
-            <View>
-              <Text style={styles.userNameText}>{item.userName}</Text>
-            </View>
-            <View>
-              <Text numberOfLines={2} style={styles.homeAddressText}>
-                {item.homeAddress}
-              </Text>
-            </View>
+      <View style={styles.rectangle}>
+        <View style={styles.topRow}>
+          <Ionicons name="person-outline" size={24} color={color.lightBlack} />
+          <View style={styles.marginLeft}>
+            <Text style={styles.userNameText}>{item.userName}</Text>
           </View>
-          <View style={styles.breakPoint}></View>
-          <View style={styles.middleRow}>
-            <Button style={styles.button} onPress={() => viewRequest(item)}>
-              <Text style={styles.btntxt}>Show Request</Text>
-            </Button>
+        </View>
+
+        <View style={styles.breakPoint}></View>
+        <View style={styles.bottomRow}>
+          <Ionicons name="location" size={24} color={color.lightBlack} />
+          <View style={styles.marginLeft}>
+            <Text style={styles.homeAddressText}>{item.homeAddress}</Text>
           </View>
+        </View>
+        <View style={styles.bottomRow}>
+          <Button style={styles.button} onPress={() => viewRequest(item)}>
+            <Text style={styles.btntxt}>Show Request</Text>
+          </Button>
         </View>
       </View>
     </View>
@@ -37,25 +39,34 @@ export default RequestListItem
 const styles = StyleSheet.create({
   listItem: {
     flex: 1,
-    marginHorizontal: 20,
+    margin: 15,
+    overflow:
+      Platform.OS === 'android' && Platform.Version >= 21
+        ? 'hidden'
+        : 'visible',
+    elevation: 10,
+    borderRadius: 10,
   },
   rectangle: {
-    backgroundColor: color.primary,
-    borderRadius: 24,
+    backgroundColor: color.lightBlue,
+    shadowColor: 'black',
+    shadowOpacity: 0.26,
+    shadowOffset: {width: 0, height: 2},
+    shadowRadius: 10,
+    borderRadius: 10,
   },
   userNameText: {
     fontFamily: 'open-sans-regular',
     flex: 1,
-    color: 'white',
+    color: color.lightBlack,
   },
   homeAddressText: {
     flex: 1,
     fontFamily: 'open-sans-regular',
-    color: 'white',
+    color: color.lightBlack,
   },
   topRow: {
     flex: 1,
-    justifyContent: 'space-between',
     flexDirection: 'row',
     padding: 20,
   },
@@ -65,7 +76,7 @@ const styles = StyleSheet.create({
   },
   arrivalTimeText: {
     fontFamily: 'open-sans-regular',
-    color: 'white',
+    color: color.lightBlack,
   },
   rect4: {
     top: 6,
@@ -79,7 +90,7 @@ const styles = StyleSheet.create({
   atPassengersText: {
     fontFamily: 'open-sans-regular',
     flex: 1,
-    color: 'white',
+    color: color.lightBlack,
     height: 24,
   },
   rect5: {
@@ -94,12 +105,14 @@ const styles = StyleSheet.create({
   atWorkTime: {
     fontFamily: 'open-sans-regular',
     flex: 1,
-    color: 'white',
+    color: color.lightBlack,
     height: 24,
   },
-  middleRow: {
+  marginLeft: {
+    marginLeft: 10,
+  },
+  bottomRow: {
     flex: 1,
-    justifyContent: 'space-between',
     flexDirection: 'row',
     padding: 20,
   },
@@ -107,7 +120,7 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     position: 'absolute',
-    backgroundColor: 'white',
+    backgroundColor: color.lightBlack,
     borderLeftWidth: 1,
     borderTopWidth: 1,
     borderBottomWidth: 1,
@@ -130,16 +143,16 @@ const styles = StyleSheet.create({
     fontFamily: 'open-sans-regular',
     color: 'black',
   },
-  rectStack: {
-    marginTop: 20,
-  },
 
   button: {
-    backgroundColor: color.primaryLight,
-    borderRadius: 15,
+    width: '100%',
+    justifyContent: 'center',
+    backgroundColor: color.darkBlue,
+    borderRadius: 10,
   },
 
   btntxt: {
-    color: color.primary,
+    fontFamily: 'open-sans-semi-bold',
+    color: 'white',
   },
 })

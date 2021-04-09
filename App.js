@@ -13,6 +13,8 @@ import {useCardAnimation} from '@react-navigation/stack'
 import {User, userConverter} from './models/user'
 import {addChat, getChat} from './controllers/chatRoomController'
 
+import {GOOGLE_API_KEY} from '@env'
+
 import {LogBox} from 'react-native'
 
 import * as Notifications from 'expo-notifications'
@@ -24,6 +26,7 @@ Notifications.setNotificationHandler({
 })
 
 export default function App() {
+  console.log('GOOGLEAPI KEY ', GOOGLE_API_KEY)
   const [fontReady, setFontReady] = useState(false)
   const [userId, setUserId] = useState(null)
 

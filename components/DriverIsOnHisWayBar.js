@@ -14,14 +14,13 @@ import React from 'react'
 import {color} from '../constants/colors'
 
 export default DriverIsOnHisWayBar = ({user, navigation, activeRide}) => {
-
   const workTrip = activeRide
   return (
     <View>
       <Card>
         <CardItem>
           <Left>
-            <Text>Your driver is on your way.</Text>
+            <Text style={styles.text}>Your driver is on its way.</Text>
           </Left>
 
           <Right>
@@ -43,7 +42,14 @@ export default DriverIsOnHisWayBar = ({user, navigation, activeRide}) => {
 }
 
 const styles = StyleSheet.create({
+  text: {
+    color: color.lightBlack,
+    fontFamily: 'open-sans-semi-bold',
+  },
+  startText: {
+    fontFamily: 'open-sans-semi-bold',
+  },
   button: {
-    backgroundColor: color.primary,
+    backgroundColor: color.darkBlue,
   },
 })

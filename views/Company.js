@@ -1,10 +1,6 @@
 import React, {useState} from 'react'
 import {StyleSheet} from 'react-native'
-import {
-  Text,
-  Icon,
-  Button,
-} from 'native-base'
+import {Text, Icon, Button} from 'native-base'
 import {View, Item, Input} from 'native-base'
 import {JoinCompany} from './JoinCompany'
 import {CustomButton} from '../components/CustomButton'
@@ -32,7 +28,6 @@ export const Company = ({navigation}) => {
       setShowBtns(false)
       setError(false)
     }
-
   }
 
   return (
@@ -65,19 +60,16 @@ export const Company = ({navigation}) => {
                   'Company name must be at least 1 character long'
                 }
               />
-              <Button onPress={() => {
-                getCompanies()
-              }
-              }>
-                <Icon active name='checkmark-circle-outline' />
+              <Button
+                onPress={() => {
+                  getCompanies()
+                }}
+              >
+                <Icon active name="checkmark-circle-outline" />
               </Button>
             </Item>
-            {error &&
-              <Text style={styles.errorText}>Code is not valid</Text>
-            }
-
+            {error && <Text style={styles.errorText}>Code is not valid</Text>}
           </View>
-
         </>
       )}
       {showBtns === false && showJoin === true ? (
@@ -112,7 +104,6 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: 'red',
-    alignSelf:'center'
-  }
-
+    alignSelf: 'center',
+  },
 })

@@ -6,11 +6,13 @@ import {
   Left,
   Platform,
   Text,
+  Card,
   Icon,
   Button,
   Container,
   Title,
   Right,
+  CardItem,
 } from 'native-base'
 import {UserContext} from '../contexts'
 import {signOut} from '../controllers/LoginController'
@@ -88,44 +90,43 @@ export const MainPage = ({navigation}) => {
   }
 
   const displayPassengerList = () => {
-    if (travelPreference === 'passenger') {
-      return (
-        <Container>
-          <Header
-            style={{
-              backgroundColor: color.primary,
-            }}
-          >
-            <Right>
-              <Button
-                onPress={() => {
-                  setOpen(!open)
-                }}
-                transparent
-              >
-                <Icon name="filter" />
-              </Button>
-            </Right>
-          </Header>
-          {activeRide && (
-            <DriverIsOnHisWayBar
-              user={user}
-              navigation={navigation}
-              activeRide={activeRide}
-            />
-          )}
+    return (
+      <Container>
+        <Header style={styles.header}>
+          <Right>
+            <Button
+              onPress={() => {
+                setOpen(!open)
+              }}
+              transparent
+            >
+              <Icon style={styles.sortIcon} name="filter" />
+            </Button>
+          </Right>
+        </Header>
+        {/* {activeRide && ( */}
+        {/* // DOES NOT WORK PROPERLY. activeRide is not functioning */}
+        <DriverIsOnHisWayBar
+          user={user}
+          navigation={navigation}
+          activeRide={activeRide}
+        />
+        {/* )} */}
 
-          <View style={styles.listView}>
-            <PassengerList
-              isLoading={isLoading}
-              extraDay={extraDay}
-              navigation={navigation}
-              dataArray={passengerList}
-            />
-          </View>
-        </Container>
-      )
-    }
+        <View style={styles.availableRidesContainer}>
+          <Text style={styles.availableText}>Available Rides</Text>
+        </View>
+
+        <View style={styles.listView}>
+          <PassengerList
+            isLoading={isLoading}
+            extraDay={extraDay}
+            navigation={navigation}
+            dataArray={passengerList}
+          />
+        </View>
+      </Container>
+    )
   }
 
   const displayDriverList = () => {
@@ -235,6 +236,15 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'open-sans-regular',
   },
+  availableRidesContainer: {
+    marginTop: 15,
+    marginHorizontal: 15,
+    borderBottomWidth: 2,
+  },
+  availableText: {
+    fontSize: 24,
+    fontFamily: 'open-sans-regular',
+  },
   animatedBox: {
     flex: 1,
     backgroundColor: color.primaryLight,
@@ -266,5 +276,11 @@ const styles = StyleSheet.create({
 
   driverTripList: {
     flex: 1,
+  },
+  header: {
+    backgroundColor: 'white',
+  },
+  sortIcon: {
+    color: color.darkBlue,
   },
 })
