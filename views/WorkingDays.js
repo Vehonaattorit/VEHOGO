@@ -90,7 +90,7 @@ export const WorkingDays = ({navigation}) => {
       }
     })
 
-    user.workDays = preferedWorkDays
+    user.preferedWorkingHours = preferedWorkDays
 
     updateUser(user)
 

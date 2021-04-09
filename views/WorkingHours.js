@@ -123,13 +123,13 @@ export const WorkingHours = ({navigation}) => {
   // If starting and ending time was found in db, set fetched values instead of default
   const [newEventState, setNewEventState] = useState({
     startDate:
-      user.preferedWorkingHours === undefined
+      user.preferedWorkingHours[0].workDayStart === undefined
         ? null
         : user.preferedWorkingHours[0].workDayStart.toDate()
         ? user.preferedWorkingHours[0].workDayStart.toDate()
         : user.preferedWorkingHours[0].workDayStart,
     endDate:
-      user.preferedWorkingHours === undefined
+      user.preferedWorkingHours[0].workDayEnd === undefined
         ? null
         : user.preferedWorkingHours[0].workDayEnd.toDate()
         ? user.preferedWorkingHours[0].workDayEnd.toDate()
@@ -171,7 +171,7 @@ export const WorkingHours = ({navigation}) => {
 
     const end = new Date(1970, 0, 1, endDate.getHours(), endDate.getMinutes())
 
-    user.workDays.forEach((element) => {
+    user.preferedWorkingHours.forEach((element) => {
       tempArr.push({
         workDayNum: element.workDayNum,
         workDayStart: new firebase.firestore.Timestamp.fromDate(start),

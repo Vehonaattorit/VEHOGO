@@ -80,7 +80,6 @@ function Navigation({userId}) {
         user.city == undefined ||
         user.userName == undefined ||
         user.homeAddress == undefined ||
-        user.workDays == undefined ||
         user.travelPreference == undefined ||
         user.preferedWorkingHours == undefined ||
         user.setupIsCompleted == false ||

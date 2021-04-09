@@ -25,7 +25,7 @@ import {useWorkTripHooks} from '../hooks/useHooks'
 
 import * as Permissions from 'expo-permissions'
 import * as Notifications from 'expo-notifications'
-import {updateUser} from '../controllers/userController'
+import {userDocumentUpdater} from '../controllers/userController'
 
 import RideStartBar from '../components/RideStartBar'
 import DriverTripList from '../components/DriverTripList'
@@ -80,7 +80,7 @@ export const MainPage = ({navigation}) => {
     user.ownerPushToken = pushToken
 
     console.log('user.ownerPushToken', user.ownerPushToken)
-    await updateUser(user)
+    await userDocumentUpdater(user)
   }
 
   const checkTravelPreference = async () => {

@@ -80,7 +80,7 @@ export function workTripStream(companyId, workTripId) {
   }
 }
 
-export async function workTripOrderByQuery(companyId, querys, currentTime) {
+export async function workTripOrderByQuery(companyId, querys) {
   try {
     // Add a new document in collection "users"
     let queryRef = await db
