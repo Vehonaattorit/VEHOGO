@@ -169,7 +169,7 @@ export const RideStartBar = ({user, navigation}) => {
           </Left>
           <Right>
             {
-              /*showStart for developing purpuse*/ true ? (
+              showStart ? (
                 <Button
                   style={styles.button}
                   onPress={() =>
@@ -178,7 +178,8 @@ export const RideStartBar = ({user, navigation}) => {
                     })
                   }
                 >
-                  <Text style={styles.starText}>Start</Text>
+                  <Text style={styles.starText}>Start {driveStartTime &&
+                    moment(driveStartTime.toDate()).format('HH:mm')}</Text>
                 </Button>
               ) : (
                 <Text style={styles.text}>
@@ -196,6 +197,7 @@ export const RideStartBar = ({user, navigation}) => {
 
 const styles = StyleSheet.create({
   text: {
+    fontSize: 14,
     color: color.lightBlack,
     fontFamily: 'open-sans-semi-bold',
   },

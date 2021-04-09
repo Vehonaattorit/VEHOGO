@@ -130,65 +130,7 @@ const useWorkTripHooks = (user) => {
 
   //DRIVER SPECIFIC FUNCTIONS STARTS HERE
 
-  const queryWithTimeAndDriverId = async () => {
-    setIsLoading(true)
 
-    const goingTo = fetchHomeOrWorkTrips()
-    console.log(user.id)
-    console.log(user.company.id)
-    const query = await workTripMultiQuery(user.company.id, [
-      /*{
-        field: 'scheduledDrive.start',
-        condition: '>=',
-        value: new Date(1970, 0, 1, timeValues[0].hours, timeValues[0].minutes),
-      },
-      {
-        field: 'scheduledDrive.start',
-        condition: '<=',
-        value: new Date(1970, 0, 1, timeValues[1].hours, timeValues[1].minutes),
-      },*/
-
-      {
-        field: 'driverID',
-        condition: '==',
-        value: user.id,
-      },
-      // {field: 'workDayNum', condition: '==', value: currentWeekDay},
-      /*{
-        field: 'goingTo',
-        condition: '==',
-        value: goingTo
-      },*/
-    ])
-
-    console.log(query)
-
-    setDriverTripList(query)
-
-    setOpen(!open)
-
-    setIsLoading(false)
-  }
-
-  const fetchTodayDriverRides = async () => {
-    setIsLoading(true)
-
-    const currentWeekDay = new Date().getDay()
-
-    const goingTo = fetchHomeOrWorkTrips()
-    console.log(user.id)
-    console.log(user.company.id)
-    const query = await workTripOrderByQuery(user.company.id, [
-      {field: 'workDayNum', condition: '==', value: currentWeekDay},
-      //{field: 'goingTo', condition: '==', value: goingTo},
-      {field: 'driverID', condition: '==', value: user.id},
-    ])
-
-    console.log(query)
-
-    setDriverTripList(query)
-    setIsLoading(false)
-  }
 
   return {
     multiSliderValuesChange,
@@ -206,9 +148,9 @@ const useWorkTripHooks = (user) => {
     activeRide,
 
     //Driver
-    queryWithTimeAndDriverId,
-    fetchTodayDriverRides,
     driverTripList,
+    setDriverTripList,
+
   }
 }
 
