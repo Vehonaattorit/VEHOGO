@@ -32,9 +32,15 @@ import DriverTripList from '../components/DriverTripList'
 import DriverIsOnHisWayBar from '../components/DriverIsOnHisWayBar'
 import MainPageButtons from '../components/MainPageButtons'
 
+import {workTripMultiQueryStream} from '../controllers/workTripController'
+import {useCollectionData} from 'react-firebase-hooks/firestore'
+
 export const MainPage = ({navigation}) => {
+  console.log('MainPage rendered')
   const {user} = useContext(UserContext)
   const [travelPreference, setTravelPreference] = useState('')
+
+  const [driverTrips, setDriverTrips] = useState(null)
 
   const {
     multiSliderValue,
@@ -48,19 +54,41 @@ export const MainPage = ({navigation}) => {
     activeRide,
     extraDay,
     isLoading,
-    driverTripList,
-    queryWithTimeAndDriverId,
-    fetchTodayDriverRides,
   } = useWorkTripHooks(user)
 
   console.log('isLoading', isLoading)
 
+  //data stream for driver trips
+  const driverTripStream = () => {
+    const currentWeekDay = new Date().getDay()
+    let ref = workTripMultiQueryStream(user.company.id, [
+      {field: 'workDayNum', condition: '==', value: currentWeekDay},
+      {field: 'driverID', condition: '==', value: user.id},
+    ])
+    ref.onSnapshot((querySnapshot) => {
+      var trips = []
+      console.log('updating trips in mainPage')
+      querySnapshot.forEach((doc) => {
+
+        console.log('doc data',doc.data())
+        trips.push(doc.data());
+
+      })
+      setDriverTrips(trips)
+    })
+  }
+
   useEffect(() => {
     checkTravelPreference()
     checkNotificationsPermissions()
-    travelPreference === 'passenger'
-      ? fetchTodayRides()
-      : fetchTodayDriverRides()
+
+    if (travelPreference === 'driver') {
+      driverTripStream()
+    }
+    if (travelPreference === 'passenger') {
+      fetchTodayRides()
+    }
+
   }, [travelPreference])
 
   const checkNotificationsPermissions = async () => {
@@ -132,7 +160,7 @@ export const MainPage = ({navigation}) => {
     if (travelPreference === 'driver') {
       return (
         <Container>
-          {driverTripList && (
+          {driverTrips && (
             <RideStartBar user={user} navigation={navigation}></RideStartBar>
           )}
 
@@ -141,7 +169,7 @@ export const MainPage = ({navigation}) => {
               isLoading={isLoading}
               extraDay={extraDay}
               navigation={navigation}
-              driverTrips={driverTripList}
+              driverTrips={driverTrips}
             />
           </View>
         </Container>
@@ -181,8 +209,8 @@ export const MainPage = ({navigation}) => {
               style={{backgroundColor: color.malachiteGreen}}
               onPress={
                 travelPreference === 'passenger'
-                  ? queryWithTime
-                  : queryWithTimeAndDriverId
+                  && queryWithTime
+
               }
             >
               <Text style={styles.text}>Submit</Text>
@@ -222,7 +250,7 @@ export const MainPage = ({navigation}) => {
             <MainPageButtons
               travelPreference={travelPreference}
               navigation={navigation}
-              driverTripList={driverTripList}
+              driverTripList={driverTrips}
             />
           </View>
         </MenuDrawer>

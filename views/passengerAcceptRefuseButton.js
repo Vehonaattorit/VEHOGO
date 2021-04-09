@@ -9,10 +9,17 @@ import {updateWorkTrip} from '../controllers/workTripController'
 import {getUser} from '../controllers/userController'
 import {googleMapsApiKey} from '../secrets/secrets'
 import {calculateDistance} from '../utils/utils'
+import {useWorkTripHooks} from '../hooks/useHooks'
+
 const PassengerAcceptRefuseButton = (props) => {
   const {user, workTrip, rideRequest, navigation} = props
 
   const [passengerUser, setPassengerUser] = useState(null)
+
+  const {
+    updateTodayDriverRides,
+    setDriverTripList
+  } = useWorkTripHooks(user)
 
   useEffect(() => {
     getSenderUser()
@@ -142,6 +149,7 @@ const PassengerAcceptRefuseButton = (props) => {
       }),
     })
 
+    //navigation.navigate('MainPage')
     navigation.popToTop()
   }
 
