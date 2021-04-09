@@ -1,9 +1,11 @@
 import React, {useRef, useEffect} from 'react'
 import {useState} from 'react'
-import {StyleSheet, View} from 'react-native'
+import {StyleSheet, View, Dimensions, Image} from 'react-native'
 import {Input} from 'react-native-elements'
-import {register} from '../controllers/LoginController'
-import {AuthButtons} from '../components/AuthButtons'
+import {color} from '../../constants/colors'
+import Icon from 'react-native-vector-icons/FontAwesome'
+import {register} from '../../controllers/LoginController'
+import {AuthButton} from '../../components/AuthButton'
 
 export const SignUp = () => {
   const [email, setEmail] = useState('')
@@ -44,27 +46,36 @@ export const SignUp = () => {
 
   return (
     <View style={styles.container}>
-      <Input
-        autoCapitalize="none"
-        placeholder="email@address.com"
-        value={email}
-        onChangeText={setEmail}
+      <Image
+        source={require('../../images/vehogo_logo_musta_RGB.png')}
+        style={{width: 150, height: 170, marginBottom: 30}}
       />
+      <View style={{width: Dimensions.get('window').width * 0.8}}>
+        <Input
+          autoCapitalize="none"
+          leftIcon={<Icon name="user" size={24} color={color.primary} />}
+          placeholder="email@address.com"
+          value={email}
+          onChangeText={setEmail}
+        />
 
-      <Input
-        placeholder="Password"
-        errorStyle={{color: 'red'}}
-        secureTextEntry={true}
-        value={password}
-        onChangeText={setPassword}
-        errorMessage={error}
-      />
+        <Input
+          placeholder="Password"
+          errorStyle={{color: 'red'}}
+          leftIcon={<Icon name="lock" size={24} color={color.primary} />}
+          secureTextEntry={true}
+          value={password}
+          onChangeText={setPassword}
+          errorMessage={error}
+        />
+      </View>
 
       <View style={styles.btnContainer}>
         <View style={styles.signUpBtn}>
-          <AuthButtons
+          <AuthButton
             style={styles.btns}
             title="Register"
+            width={300}
             onPress={() => {
               registerUser()
             }}
@@ -77,18 +88,16 @@ export const SignUp = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: Dimensions.get('window').width,
     alignItems: 'center',
     justifyContent: 'center',
   },
   btnContainer: {
     backgroundColor: 'black',
-    borderRadius: 10,
+    borderRadius: 4,
   },
   signUpBtn: {
-    borderRadius: 10,
+    borderRadius: 4,
     overflow: 'hidden',
   },
-
-  
 })
