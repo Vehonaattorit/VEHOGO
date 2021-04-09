@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   poweredContainer: {
-    marginTop: 400,
+    marginTop: 450,
   },
 
   btnContainer: {
