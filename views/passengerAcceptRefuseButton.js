@@ -65,7 +65,7 @@ const PassengerAcceptRefuseButton = (props) => {
     let route
 
     console.log(`Accepting passenger : ${rideRequest.senderID}`)
-    //await deleteRideRequest(user.company.id, rideRequest.id)
+
     let workTripToUpdate = workTrip
     workTripToUpdate.scheduledDrive.takenSeats += 1
     if (workTripToUpdate.scheduledDrive.stops.length > 2) {
@@ -127,7 +127,7 @@ const PassengerAcceptRefuseButton = (props) => {
     workTripToUpdate.route = route
     console.log('stops to update', workTripToUpdate)
     await updateWorkTrip(user.company.id, workTripToUpdate)
-
+    await deleteRideRequest(user.company.id, rideRequest.id)
     await fetch('https://exp.host/--/api/v2/push/send', {
       method: 'POST',
       headers: {

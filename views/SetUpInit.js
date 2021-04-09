@@ -68,28 +68,16 @@ export const SetUpInit = ({route}) => {
       data.routes[0].legs.map((leg) => {
         totalTime += leg.duration.value
       })
-      totalTime = parseFloat((totalTime / 60).toFixed(0))
+      totalTime = parseFloat(totalTime.toFixed(0))
+      console.log('total drive time', totalTime)
 
       let end =
         index % 2 === 0
-          ? new Date(
-              1970,
-              0,
-              1,
-              item.workDayEnd.toDate().getHours(),
-              item.workDayEnd
-                .toDate()
-                .setMinutes(item.workDayEnd.toDate().getMinutes() + totalTime)
-            )
-          : new Date(
-              1970,
-              0,
-              1,
-              item.workDayStart.toDate().getHours(),
-              item.workDayEnd
-                .toDate()
-                .setMinutes(item.workDayEnd.toDate().getMinutes() + totalTime)
-            )
+          ? new Date(1970, 0, 1, item.workDayEnd.toDate().getHours(), 0)
+          : new Date(1970, 0, 1, item.workDayStart.toDate().getHours(), 0)
+
+      //adding ride time to end time
+      end = new Date(end.getTime() + totalTime * 1000)
 
       const goingTo = index % 2 === 0 ? 'home' : 'work'
       let initialStops = [

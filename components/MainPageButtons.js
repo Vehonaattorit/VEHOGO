@@ -1,5 +1,5 @@
 import React from 'react'
-import {FlatList} from 'react-native'
+import {Dimensions, FlatList} from 'react-native'
 
 import {Ionicons, FontAwesome5} from '@expo/vector-icons'
 
@@ -9,29 +9,44 @@ import {color} from '../constants/colors'
 const MainPageButtons = ({travelPreference, driverTripList, navigation}) => {
   console.log('travelPreference', travelPreference)
 
-  const CATEGORIES = [
+  const mainPageButtons = [
     {
       id: '1',
       travelPreference: ['passenger', 'driver'],
       title: 'Calendar',
-      iconName: <Ionicons name="calendar" size={80} color="white" />,
-      color: color.primary,
+      icon: (
+        <Ionicons
+          name="calendar"
+          size={Dimensions.get('window').width * 0.12}
+          color={color.darkBlue}
+        />
+      ),
       onPress: () => navigation.navigate('OutlookCalendar'),
     },
     {
       id: '2',
       travelPreference: ['driver'],
-      title: 'Ride Request',
-      iconName: <FontAwesome5 name="user-check" size={80} color="white" />,
-      color: color.primary,
+      title: 'Requests',
+      icon: (
+        <FontAwesome5
+          name="user-check"
+          size={Dimensions.get('window').width * 0.12}
+          color={color.darkBlue}
+        />
+      ),
       onPress: () => navigation.navigate('DriverRideRequestList'),
     },
     {
       id: '3',
       travelPreference: ['driver'],
       title: 'Start Ride',
-      iconName: <Ionicons name="md-car" size={80} color="white" />,
-      color: color.primary,
+      icon: (
+        <Ionicons
+          name="md-car"
+          size={Dimensions.get('window').width * 0.12}
+          color={color.darkBlue}
+        />
+      ),
       onPress: () =>
         navigation.navigate('DriverStartRide', {
           startingRide: driverTripList[0],
@@ -40,9 +55,14 @@ const MainPageButtons = ({travelPreference, driverTripList, navigation}) => {
     {
       id: '4',
       travelPreference: ['driver'],
-      title: 'Driver Car List',
-      iconName: <FontAwesome5 name="car-side" size={80} color="white" />,
-      color: color.primary,
+      title: 'Cars',
+      icon: (
+        <FontAwesome5
+          name="car-side"
+          size={Dimensions.get('window').width * 0.12}
+          color={color.darkBlue}
+        />
+      ),
       onPress: () => navigation.navigate('DriverCarList'),
     },
   ]
@@ -55,18 +75,21 @@ const MainPageButtons = ({travelPreference, driverTripList, navigation}) => {
       return (
         <MainPageButton
           title={itemData.item.title}
-          color={itemData.item.color}
           onPress={itemData.item.onPress}
         >
-          {itemData.item.iconName}
+          {itemData.item.icon}
         </MainPageButton>
       )
   }
 
   return (
     <FlatList
+      contentContainerStyle={{
+        paddingBottom: 80,
+        backgroundColor: 'white',
+      }}
       keyExtractor={(item, index) => item.id}
-      data={CATEGORIES}
+      data={mainPageButtons}
       renderItem={renderGridItem}
       numColumns={2}
     />

@@ -1,69 +1,56 @@
 import React, {useState, useEffect, useContext} from 'react'
-import {StyleSheet, Dimensions} from 'react-native'
+import {StyleSheet, Dimensions, Image} from 'react-native'
 import {Content, Body, Container, Text, View, Icon, Button} from 'native-base'
 import MapView from 'react-native-maps'
 import MapViewDirections from 'react-native-maps-directions'
 import decodePolyline from 'decode-google-map-polyline'
 import * as Location from 'expo-location'
-import {updateWorkTrip} from '../controllers/workTripController'
+import {updateWorkTrip, workTripStream} from '../controllers/workTripController'
 import {WorkTrip} from '../models/workTrip'
 import firebase from 'firebase/app'
 import {UserContext} from '../contexts'
+import {updateUserPosition} from '../utils/driverFunctions'
+import {useDocumentData} from 'react-firebase-hooks/firestore'
 
 export const DriverOnRoute = ({navigation, route}) => {
   const {workTrip} = route.params
-  const {activeRide} = route.params
   const {user} = useContext(UserContext)
 
   let intervalTimer
   const [mapRef, setMapRef] = useState(null)
   const [routeCoordinates, setRouteCoordinates] = useState([])
+
   const [markers, setMarkers] = useState([
-    workTrip.startingRide.scheduledDrive.stops.map((stop) => (
+    workTrip.scheduledDrive.stops.map((stop) => (
       <MapView.Marker
+        image={stop.stopName == 'Home' || stop.stopName == user.company.name ? stop.stopName == 'Home' ? require('../images/home-map-icon-white.png') : require('../images/work-map-icon-white.png') : require('../images/passenger-map-icon-white.png')}
         key={stop.address}
         coordinate={{
           latitude: stop.location.latitude,
           longitude: stop.location.longitude,
         }}
-        title="Random place"
+        title={stop.address}
       />
     )),
   ])
 
-  const updateLocation = async () => {
-    // set interval
-    intervalTimer = setInterval(mycode, 120000);
-    async function mycode() {
-
-      //get current position of user
-      let location = await Location.getCurrentPositionAsync({})
-
-      //modify location to be GeoPoint
-      const locationPoint = new firebase.firestore.GeoPoint(
-        location.coords.latitude,
-        location.coords.longitude,
-      )
-      const time = new Date()
-
-      const workTripToUpdate = new WorkTrip({
-        id: workTrip.startingRide.id, driverCurrentLocation: {
-          location: locationPoint,
-          speed: location.coords.speed,
-          time: new firebase.firestore.Timestamp.fromDate(time)
+  const updateLocationInterval = async () => {
+    // if user is driver, update location
+    if (user.travelPreference == 'driver') {
+      // car position updated every 60 seconds
+      intervalTimer = setInterval(callUpdateUserPosition, 60000);
+      async function callUpdateUserPosition() {
+        let location = await updateUserPosition(user, workTrip.id)
       }
-      })
-      await updateWorkTrip(user.company.id,workTripToUpdate)
-      console.log('location updated')
     }
   }
 
   useEffect(() => {
     var tempRouteCoordinates = []
-    console.log('inside useEffect before route', workTrip.startingRide)
-    if (workTrip.startingRide.route != undefined) {
+    console.log('inside useEffect before route', workTrip)
+    if (workTrip.route != undefined) {
       console.log('inside that if')
-      workTrip.startingRide.route.routes[0].legs.map((leg) => {
+      workTrip.route.routes[0].legs.map((leg) => {
         leg.steps.map((step) => {
           var decodedPolyLines = decodePolyline(step.polyline.points)
           decodedPolyLines.forEach((polylineCoords) => {
@@ -78,14 +65,35 @@ export const DriverOnRoute = ({navigation, route}) => {
     setRouteCoordinates(tempRouteCoordinates)
     console.log('markers', markers)
     console.log('decoded polyline')
-    updateLocation()
+    updateLocationInterval()
 
     return () => {
       clearInterval(intervalTimer)
     }
   }, [])
 
+  const DriverMarker = ({workTrip}) => {
+    console.log('listening to stream', workTrip.id)
+    if (workTrip != undefined) {
+      let reference = workTripStream(user.company.id, workTrip.id)
+      const [doc] = useDocumentData(reference)
+      doc && console.log('workTrip stream', doc)
 
+      return (
+        <>
+          {doc != undefined && doc.driverCurrentLocation != undefined ? <MapView.Marker
+            image={require('../images/car-marker.png')}
+            key={'driver-car'}
+            coordinate={{
+              latitude: doc.driverCurrentLocation.location.latitude,
+              longitude: doc.driverCurrentLocation.location.longitude,
+            }}
+            title="car"
+          />:<View/>}
+        </>)
+    }
+    else return <View />
+  }
 
   return (
     <View style={styles.view}>
@@ -115,9 +123,9 @@ export const DriverOnRoute = ({navigation, route}) => {
             provider={MapView.PROVIDER_GOOGLE}
             initialRegion={{
               latitude:
-                workTrip.startingRide.scheduledDrive.stops[0].location.latitude,
+                workTrip.scheduledDrive.stops[0].location.latitude,
               longitude:
-                workTrip.startingRide.scheduledDrive.stops[0].location
+                workTrip.scheduledDrive.stops[0].location
                   .longitude,
               latitudeDelta: 1,
               longitudeDelta: 1,
@@ -126,9 +134,10 @@ export const DriverOnRoute = ({navigation, route}) => {
             <MapView.Polyline
               coordinates={routeCoordinates}
               strokeColor="#000"
-              strokeWidth={6}
+              strokeWidth={4}
             />
             {markers}
+            <DriverMarker workTrip={workTrip} />
           </MapView>
         </Container>
       </View>

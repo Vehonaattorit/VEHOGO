@@ -16,4 +16,12 @@ export const color = {
   radicalRed: '#FB3664',
   malachiteGreen: '#4FD966',
   platina: '#EAEAEA',
+
+  // 08.04.2021 NEW COLORS
+  darkBlue: '#26AAE2',
+  middleBlue: '#69CBE8',
+  lightBlue: '#E1F5FD',
+  greyText: '#9797A1',
+  lightBlack: '#343445',
+  // END
 }

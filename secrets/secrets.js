@@ -11,6 +11,7 @@ import {
   tenantId,
   prompt,
   scope,
+  GOOGLE_API_KEY,
 } from '@env'
 
 const firebaseConfig = {
@@ -22,7 +23,7 @@ const firebaseConfig = {
   appId: appId,
   measurementId: measurementId,
 }
-export const googleMapsApiKey = 'AIzaSyAoqMKIm3iIs5pshqmzjwWOOylH8VzlyvM'
+export const googleMapsApiKey = GOOGLE_API_KEY
 export {firebaseConfig}
 
 import {Platform} from 'react-native'
