@@ -32,12 +32,21 @@ export const SetUpInit = ({route}) => {
       []
     )
 
-    // console.log('workTripDocuments', workTripDocuments)
     console.log(
       'fetch call',
       `https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.location.latitude},${user.company.location.longitude}&key=${googleMapsApiKey}`
     )
+    let userToUpdate = user
     workTripDocuments.forEach(async (item, i) => {
+      let preferedWorkHourindex
+      // Find the
+      for (let i = 0; i < user.preferedWorkingHours.length; i++) {
+        const element = user.preferedWorkingHours[i]
+        if (element.workDayNum == item.workDayNum) {
+          preferedWorkHourindex = i
+        }
+      }
+
       let index = i + 1
 
       console.log('WHOLE ITEM', item)
@@ -47,9 +56,6 @@ export const SetUpInit = ({route}) => {
       const start =
         index % 2 === 0 ? item.workDayEnd.toDate() : item.workDayStart.toDate()
 
-      // TODO:
-      // Implement how long it takes driver to back home instead of
-      //  "item.workDayEnd.toDate().getHours() + 1, 30)" placeholders
       console.log(
         'fetch call',
         `https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.latitude},${user.company.longitude}&key=${googleMapsApiKey}`
@@ -98,9 +104,10 @@ export const SetUpInit = ({route}) => {
 
       console.log('user.company.id', user.company.id)
 
-      await updateWorkTrip(
+      let workTripId = await updateWorkTrip(
         user.company.id, // Looks for company ID that user has joined
         new WorkTrip({
+          driverName: user.userName,
           driverID: user.id,
           goingTo: goingTo,
           isDriving: false,
@@ -113,25 +120,32 @@ export const SetUpInit = ({route}) => {
             takenSeats: 0,
             stops: goingTo == 'work' ? initialStops : initialStops.reverse(),
           }),
-          car: new Car({
-            id: 'dashfihasi',
-            driverName: user.userName,
-            registerNumber: 'KIR-180',
-            vehicleDescription: 'Musta sedan',
-            availableSeats: 3,
-          }),
         })
       )
+      console.log('worktrip id is', workTripId)
+      if (goingTo == 'work') {
+        userToUpdate.preferedWorkingHours[
+          preferedWorkHourindex
+        ].toWorkRefID = workTripId
+      } else {
+        userToUpdate.preferedWorkingHours[
+          preferedWorkHourindex
+        ].toHomeRefID = workTripId
+      }
+      console.log('updating user', userToUpdate)
+      user = userToUpdate
     })
+    console.log('final user', userToUpdate)
+    await userDocumentUpdater(userToUpdate)
   }
 
-  const finishSetup = () => {
+  const finishSetup = async () => {
     if (!user.setupIsCompleted) {
       console.log('Setup is completed')
       user.setupIsCompleted = true
-      updateUser(user)
+      await userDocumentUpdater(user)
 
-      if (user.travelPreference === 'driver') setupWorkTripDocs()
+      if (user.travelPreference === 'driver') await setupWorkTripDocs()
     }
   }
 

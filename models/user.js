@@ -1,3 +1,4 @@
+import {preferedWorkingHoursConverter} from './preferedWorkingHours'
 import {WorkDay, workDayConverter} from './workDay'
 
 export class User {
@@ -10,7 +11,6 @@ export class User {
     homeAddress,
     city,
     displayPhotoURL,
-    workDays,
     travelPreference,
     schoosedCarID,
     cars,
@@ -25,7 +25,6 @@ export class User {
     this.homeAddress = homeAddress
     this.city = city
     this.displayPhotoURL = displayPhotoURL
-    this.workDays = workDays
     this.travelPreference = travelPreference
     this.schoosedCarID = schoosedCarID
     this.cars = cars
@@ -62,9 +61,6 @@ export const userConverter = {
     if (user.displayPhotoURL != undefined) {
       userObject.displayPhotoURL = user.displayPhotoURL
     }
-    if (user.workDays != undefined) {
-      userObject.workDays = user.workDays
-    }
     if (user.travelPreference != undefined) {
       userObject.travelPreference = user.travelPreference
     }
@@ -75,7 +71,9 @@ export const userConverter = {
       userObject.cars = user.cars
     }
     if (user.preferedWorkingHours != undefined) {
-      userObject.preferedWorkingHours = user.preferedWorkingHours
+      userObject.preferedWorkingHours = preferedWorkingHoursConverter.toFirestore(
+        user.preferedWorkingHours
+      )
     }
     if (user.setupIsCompleted != undefined) {
       userObject.setupIsCompleted = user.setupIsCompleted
@@ -94,10 +92,11 @@ export const userConverter = {
       homeAddress: data.homeAddress,
       city: data.city,
       displayPhotoURL: data.displayPhotoURL,
-      workDays: data.workDays,
       travelPreference: data.travelPreference,
       schoosedCarID: data.schoosedCarID,
-      preferedWorkingHours: data.preferedWorkingHours,
+      preferedWorkingHours: preferedWorkingHoursConverter.fromData(
+        data.preferedWorkingHours
+      ),
       setupIsCompleted: data.setupIsCompleted,
     })
   },

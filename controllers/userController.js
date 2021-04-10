@@ -15,6 +15,17 @@ export async function updateUser(user) {
   }
 }
 
+export async function userDocumentUpdater(user) {
+  try {
+    // Add a new document in collection "users"
+    let userRef = db.collection('users').doc(user.id)
+
+    userRef.withConverter(userConverter).update(user)
+  } catch (error) {
+    console.error('Error writing document: ', error)
+  }
+}
+
 export async function getUser(userId) {
   try {
     // Add a new document in collection "users"

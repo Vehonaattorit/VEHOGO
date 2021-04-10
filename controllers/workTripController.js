@@ -80,7 +80,7 @@ export function workTripStream(companyId, workTripId) {
   }
 }
 
-export async function workTripOrderByQuery(companyId, querys, currentTime) {
+export async function workTripOrderByQuery(companyId, querys) {
   try {
     // Add a new document in collection "users"
     let queryRef = await db
@@ -144,6 +144,26 @@ export async function workTripOrder(companyId) {
       workTripList.push(workTripConverter.fromData(doc.data()))
     })
     return workTripList
+  } catch (error) {
+    console.error('Error getting document: ', error)
+    return
+  }
+}
+
+export function workTripMultiQueryStream(companyId, querys) {
+  try {
+    // Add a new document in collection "users"
+    let queryRef = db
+      .collection('companys')
+      .doc(companyId)
+      .collection('workTrips')
+      .withConverter(workTripConverter)
+
+    querys.forEach((query) => {
+      queryRef = queryRef.where(query.field, query.condition, query.value)
+    })
+
+    return queryRef
   } catch (error) {
     console.error('Error getting document: ', error)
     return
