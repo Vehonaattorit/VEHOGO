@@ -26,7 +26,6 @@ Notifications.setNotificationHandler({
 })
 
 export default function App() {
-  console.log('GOOGLEAPI KEY ', GOOGLE_API_KEY)
   const [fontReady, setFontReady] = useState(false)
   const [userId, setUserId] = useState(null)
 

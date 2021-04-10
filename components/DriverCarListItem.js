@@ -1,24 +1,48 @@
-import React, {useState} from 'react'
-import {StyleSheet, View, TextInput, Text, TouchableOpacity} from 'react-native'
-import {
-  Content,
-  Card,
-  CardItem,
-  // Text,
-  Left,
-  Right,
-  Icon,
-  Button,
-} from 'native-base'
-import NewRideForm from '../views/NewRideForm'
+import React, {useContext, useState} from 'react'
+import {StyleSheet, Alert, View, Text} from 'react-native'
+import {Icon, Button} from 'native-base'
 import {color} from '../constants/colors'
-import {Entypo, AntDesign, MaterialCommunityIcons} from '@expo/vector-icons'
+import {AntDesign, MaterialCommunityIcons} from '@expo/vector-icons'
+import {removeCar} from '../controllers/carController'
+import {UserContext} from '../contexts'
+import {updateUser} from '../controllers/userController'
 
 const DriverCarListItem = ({singleItem, navigation, loadCars}) => {
   const [showItem, setItemVisibility] = useState(true)
 
-  const edit = () => {
+  const {user} = useContext(UserContext)
+
+  const editItem = () => {
     navigation.navigate('CarEditForm', {editCar: singleItem})
+  }
+
+  const deleteItem = () => {
+    Alert.alert(
+      'Delete car',
+      `Are you sure you want to ${singleItem.vehicleDescription}?`,
+      [
+        {text: 'No', style: 'default'},
+        {
+          text: 'Yes',
+          style: 'destructive',
+          onPress: async () => {
+            console.log('user.id, singleItem', user.id, singleItem)
+
+            await removeCar(user.id, singleItem)
+
+            await loadCars()
+          },
+        },
+      ]
+    )
+  }
+
+  const selectCar = async () => {
+    user.schoosedCarID = singleItem.id
+
+    console.log('user.schoosedCarID', user.schoosedCarID)
+
+    await updateUser(user)
   }
 
   return (
@@ -38,77 +62,87 @@ const DriverCarListItem = ({singleItem, navigation, loadCars}) => {
           />
           <Text>{singleItem.availableSeats}</Text>
         </View>
-        <View
-          style={{
-            flex: 1,
-
-            alignItems: 'center',
-            alignItems: 'flex-end',
-          }}
-        >
+        <View style={styles.listItemButtons}>
           <View>
             <Button
               style={{
-                backgroundColor: 'white',
-                padding: 10,
-                margin: 10,
-                borderRadius: 10,
+                ...styles.listItemButton,
+                backgroundColor: color.radicalRed,
               }}
-              onPress={edit}
+              onPress={deleteItem}
             >
-              {/* <View
+              <AntDesign name="delete" size={24} color="white" />
+            </Button>
+          </View>
+          <View>
+            <Button
               style={{
-                backgroundColor: 'white',
-                padding: 10,
-                margin: 10,
-                borderRadius: 10,
+                ...styles.listItemButton,
+                backgroundColor: color.darkBlue,
               }}
-            ></View> */}
-              <AntDesign name="edit" size={24} color={color.lightBlack} />
+              onPress={editItem}
+            >
+              <AntDesign name="edit" size={24} color="white" />
             </Button>
           </View>
         </View>
       </View>
+      <View style={styles.bottomRow}>
+        {user.schoosedCarID === singleItem.id ? (
+          <View style={styles.selectedCarContainer}>
+            <Text style={{...styles.text, color: color.lightBlack}}>
+              SELECTED CAR
+            </Text>
+            <View
+              style={{
+                marginLeft: 10,
+              }}
+            >
+              <AntDesign
+                name="checkcircle"
+                size={24}
+                color={color.malachiteGreen}
+              />
+            </View>
+          </View>
+        ) : (
+          <Button style={styles.selectCarButton} onPress={selectCar}>
+            <Text style={styles.text}>SELECT CAR </Text>
+          </Button>
+        )}
+      </View>
     </View>
-    // <Content>
-    //   <Card style={styles.list}>
-    //     <CardItem style={styles.item}>
-    //       <Left>
-    //         <Icon active name="document-text-outline" />
-    //         <Text style={styles.title}>{singleItem.registerNumber}</Text>
-    //       </Left>
-    //       <Right>
-    //         <Text style={styles.title}>seats: {singleItem.availableSeats}</Text>
-    //       </Right>
-    //     </CardItem>
-
-    //     <CardItem style={styles.item}>
-    //       <Left>
-    //         <Icon active name="car-outline" />
-    //         <Text style={styles.title}>{singleItem.vehicleDescription}</Text>
-    //       </Left>
-    //     </CardItem>
-
-    //     <CardItem style={styles.item}>
-    //       <Left>
-    //         <Icon active name="person-outline" />
-    //         <Text style={styles.title}>Driver: {singleItem.driverName}</Text>
-    //       </Left>
-    //       <Right>
-    //         <Button onPress={() => setItemVisibility(false)}>
-    //           <Icon active name="create-outline" />
-    //         </Button>
-    //       </Right>
-    //     </CardItem>
-    //   </Card>
-    // </Content>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    height: '100%',
+    marginTop: 10,
+  },
+  listItemButton: {
+    backgroundColor: 'white',
+    padding: 10,
+    margin: 10,
+    borderRadius: 10,
+  },
+  selectedCarContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    width: '100%',
+    borderRadius: 10,
+  },
+  selectCarButton: {
+    backgroundColor: color.darkBlue,
+    justifyContent: 'center',
+    width: '100%',
+    borderRadius: 10,
+  },
+  listItemButtons: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
   },
   button: {
     marginTop: 20,
@@ -127,6 +161,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
   },
+
+  bottomRow: {
+    padding: 10,
+    backgroundColor: color.lightBlue,
+    borderBottomLeftRadius: 10,
+    borderBottomEndRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   iconContainer: {
     padding: 10,
     margin: 10,
@@ -135,6 +178,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
   },
+
   textInput: {
     color: color.lightBlack,
     marginLeft: 15,
@@ -142,12 +186,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   text: {
+    fontSize: 20,
     fontFamily: 'open-sans-regular',
-    color: color.lightBlack,
-  },
-  breakPoint: {
-    height: 1,
-    backgroundColor: color.grey,
+    color: 'white',
   },
   title: {
     fontSize: 18,
@@ -168,80 +209,3 @@ const styles = StyleSheet.create({
 })
 
 export default DriverCarListItem
-
-// import React, {useState} from 'react'
-// import {StyleSheet, TouchableOpacity} from 'react-native'
-// import {Content, Card, CardItem, Text, Left, Right, Icon, Button} from 'native-base'
-// import NewRideForm from '../views/NewRideForm'
-
-// const DriverCarListItem = ({singleItem, navigation, loadCars}) => {
-
-//   const [showItem, setItemVisibility] = useState(true)
-//   return (
-//     <Content>
-
-//       { showItem ? (
-
-//           <Card style={styles.list} >
-
-//             <CardItem style={styles.item}>
-//               <Left>
-//                 <Icon active name="document-text-outline" />
-//                 <Text style={styles.title}>{singleItem.registerNumber}</Text>
-//               </Left>
-//               <Right>
-//                 <Text style={styles.title}>seats: {singleItem.availableSeats}</Text>
-//               </Right>
-//             </CardItem>
-
-//             <CardItem style={styles.item}>
-//               <Left>
-//                 <Icon active name="car-outline" />
-//                 <Text style={styles.title}>{singleItem.vehicleDescription}</Text>
-
-//               </Left>
-//             </CardItem>
-
-//             <CardItem style={styles.item}>
-//               <Left>
-//                 <Icon active name="person-outline" />
-//                 <Text style={styles.title}>Driver: {singleItem.driverName}</Text>
-//               </Left>
-//               <Right>
-//                 <Button onPress={() => setItemVisibility(false)}><Icon active name="create-outline" /></Button>
-//               </Right>
-//             </CardItem>
-
-//           </Card>
-
-//       ) : (
-//         <>
-//         <NewRideForm carId={singleItem.id} setItemVisibility={setItemVisibility} loadCars={loadCars} modify={true} ></NewRideForm>
-//         </>
-//       )
-
-//       }
-//     </Content>
-//   )
-// }
-
-// const styles = StyleSheet.create({
-//   title: {
-//     fontSize: 18,
-//     fontWeight: 'bold',
-//     color: 'black',
-//   },
-//   list: {
-//     marginBottom: 0,
-//     marginLeft: 10,
-//     marginRight: 10,
-//     marginTop: 10,
-//     backgroundColor: 'white',
-//     borderRadius: 20,
-//   },
-//   item: {
-//     backgroundColor: 'white',
-//   },
-// })
-
-// export default DriverCarListItem

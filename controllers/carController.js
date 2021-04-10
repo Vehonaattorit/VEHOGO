@@ -12,7 +12,7 @@ export async function updateCar(userId, car) {
       car.id = v4()
     }
     // Add a new document in collection "users"
-    let userRef = db
+    let userRef = await db
       .collection('users')
       .doc(userId)
       .collection('cars')
@@ -20,6 +20,20 @@ export async function updateCar(userId, car) {
     userRef.withConverter(carConverter).set(car, {merge: true})
   } catch (error) {
     console.error('Error writing document: ', error)
+  }
+}
+
+export async function removeCar(userId, car) {
+  try {
+    // Add a new document in collection "users"
+    let userRef = await db
+      .collection('users')
+      .doc(userId)
+      .collection('cars')
+      .doc(car.id)
+    userRef.withConverter(carConverter).delete()
+  } catch (err) {
+    console.error('Error removing document: ', error)
   }
 }
 
