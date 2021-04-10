@@ -8,6 +8,7 @@ import {EvilIcons, MaterialCommunityIcons} from '@expo/vector-icons'
 import {updateUser, userStream} from '../controllers/userController'
 
 import {UserContext} from '../contexts'
+import CustomButtonIcon from '../components/CustomIconButton'
 
 export const WorkingDays = ({navigation}) => {
   const {user} = useContext(UserContext)
@@ -107,9 +108,8 @@ export const WorkingDays = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.titleText}>
-        <CustomTitle title="Days" />
-        <EvilIcons name="calendar" size={300} color={color.secondaryDark} />
+      <View style={styles.iconContainer}>
+        <EvilIcons name="calendar" size={300} color="#26AAE2" />
       </View>
 
       <View style={styles.btnContainer}>
@@ -124,7 +124,11 @@ export const WorkingDays = ({navigation}) => {
       </View>
       <Text style={styles.errorText}>{error}</Text>
       <View style={styles.submitBtn}>
-        <CustomButton title="Submit" onPress={submitHandler} />
+        <CustomButtonIcon
+          title="Submit"
+          onPress={submitHandler}
+          iconTwo="keyboard-arrow-right"
+        />
       </View>
     </View>
   )
@@ -138,11 +142,11 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     flexDirection: 'row',
-    marginBottom: 20,
+    margin: 20,
   },
-  titleText: {
+  iconContainer: {
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 100,
   },
   submitBtn: {
     position: 'absolute',

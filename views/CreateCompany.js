@@ -1,11 +1,7 @@
 import React, {useState, useContext} from 'react'
-import {StyleSheet, View, KeyboardAvoidingView} from 'react-native'
-import {Button, Item, Text} from 'native-base'
-import {color} from '../constants/colors'
+import {KeyboardAvoidingView, StyleSheet, View} from 'react-native'
+import {Item} from 'native-base'
 import {Input} from 'react-native-elements'
-import {CustomButton} from '../components/CustomButton'
-import {CustomTitle} from '../components/CustomTitle'
-import {MaterialCommunityIcons} from '@expo/vector-icons'
 import {googleMapsApiKey} from '../secrets/secrets'
 import {updateCompany} from '../controllers/companyController'
 import {Company} from '../models/company'
@@ -15,6 +11,7 @@ import {updateUser} from '../controllers/userController'
 import GooglePlacesInput from '../components/GooglePlaceInput'
 import {updateCompanyCity} from '../controllers/companyCitiesController'
 import {CompanyCode} from './CompanyCode'
+import CustomButtonIcon from '../components/CustomIconButton'
 
 export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
   const [companyAddress, setAddress] = useState('')
@@ -129,9 +126,8 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
     <View style={styles.container}>
       {!showCode ? (
         <>
-          <CustomTitle title="Company" />
           <View style={styles.inputContainer}>
-            <Item>
+            <Item style={styles.companyNameInputContainer}>
               <Input
                 placeholder="Company name"
                 value={companyName}
@@ -143,32 +139,31 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
               />
             </Item>
             <Item>
-              <GooglePlacesInput
-                style={{alignSelf: 'stretch'}}
-                setAddress={setAddress}
-              />
+              <GooglePlacesInput setAddress={setAddress} />
             </Item>
           </View>
           <View style={styles.btnContainer}>
-            <Button
-              block
-              style={styles.btns}
-              onPress={() => {
-                sendCompanyData()
-              }}
-            >
-              <Text>Continue</Text>
-            </Button>
-            <Button
-              block
-              style={styles.btns}
-              onPress={() => {
-                setShowCreate(false)
-                setShowBtns(true)
-              }}
-            >
-              <Text>Cancel</Text>
-            </Button>
+            <View style={styles.continueBtnContainer}>
+              <CustomButtonIcon
+                style={styles.btns}
+                onPress={() => {
+                  sendCompanyData()
+                }}
+                title="Continue"
+                iconTwo="keyboard-arrow-right"
+              />
+            </View>
+            <View style={styles.cancelBtnContainer}>
+              <CustomButtonIcon
+                iconOne="keyboard-arrow-left"
+                style={styles.btns}
+                onPress={() => {
+                  setShowCreate(false)
+                  setShowBtns(true)
+                }}
+                title="Cancel"
+              />
+            </View>
           </View>
         </>
       ) : (
@@ -185,8 +180,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
   },
   inputContainer: {
+    marginTop: 100,
+  },
+  companyNameInputContainer: {
+    backgroundColor: '#E1F5FD',
+  },
+
+  btnContainer: {
+    marginTop: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 10,
+    marginRight: 10,
+    alignSelf: 'stretch',
+  },
+  continueBtnContainer: {
+    alignSelf: 'stretch',
+    marginBottom: 10,
+  },
+  cancelBtnContainer: {
     alignSelf: 'stretch',
   },
   btns: {

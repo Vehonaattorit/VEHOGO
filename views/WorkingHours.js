@@ -14,12 +14,13 @@ import {CustomButton} from '../components/CustomButton'
 import {CustomTitle} from '../components/CustomTitle'
 import {UserContext} from '../contexts'
 import {updateUser} from '../controllers/userController'
-
+import {AntDesign} from '@expo/vector-icons'
 import {color} from '../constants/colors'
 
 import {formatTime} from '../utils/utils'
 
 import firebase from 'firebase'
+import CustomButtonIcon from '../components/CustomIconButton'
 
 const DateTimeInput = (props) => {
   const [showTimePicker, setShowTimePicker] = useState(Platform.OS === 'ios')
@@ -203,65 +204,63 @@ export const WorkingHours = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <TimeModal
-        isPickerShow={isPickerShow}
-        modalVisible={modalVisible}
-        handleModal={handleModal}
-        value={newEventState[selectedTime]}
-        onChange={(e, date) => updateValue(date, selectedTime)}
-      />
-
-      <CustomTitle style={styles.title} title="Hours" />
-      <View style={styles.icon}>
-        <MaterialCommunityIcons
-          name="clock-fast"
-          size={300}
-          color={color.secondaryDark}
+      <View style={styles.poweredContainer}>
+        <TimeModal
+          isPickerShow={isPickerShow}
+          modalVisible={modalVisible}
+          handleModal={handleModal}
+          value={newEventState[selectedTime]}
+          onChange={(e, date) => updateValue(date, selectedTime)}
         />
-      </View>
-      <View>
-        <Text>My work hours</Text>
+        <View style={styles.icon}>
+          <AntDesign name="clockcircle" size={200} color="#26AAE2" />
+        </View>
       </View>
       <View
         style={{
           flexDirection: 'column',
-          width: 300,
+          alignSelf: 'stretch',
         }}
       >
         <View style={styles.btnContainer}>
-          <CustomButton
-            title={
-              newEventState.startDate
-                ? formatTime(newEventState.startDate)
-                : 'Start time'
-            }
-            onPress={() => {
-              setModalVisible(true)
-              setSelectedTime('startDate')
-              setIsPickerShow(true)
-            }}
-          />
+          <View style={styles.powereBtnContainer}>
+            <CustomButtonIcon
+              iconOne=""
+              title={
+                newEventState.startDate
+                  ? formatTime(newEventState.startDate)
+                  : 'Start time'
+              }
+              onPress={() => {
+                setModalVisible(true)
+                setSelectedTime('startDate')
+                setIsPickerShow(true)
+              }}
+            />
+          </View>
+          <View style={styles.powereBtnContainer}>
+            <CustomButtonIcon
+              title={
+                newEventState.endDate
+                  ? formatTime(newEventState.endDate)
+                  : 'End time'
+              }
+              onPress={() => {
+                setModalVisible(true)
+                setSelectedTime('endDate')
+                setIsPickerShow(true)
+              }}
+            />
+          </View>
+          <View>
+            <Text style={styles.errorText}>{error}</Text>
+          </View>
         </View>
-        <View style={styles.btnContainer}>
-          <CustomButton
-            title={
-              newEventState.endDate
-                ? formatTime(newEventState.endDate)
-                : 'End time'
-            }
-            onPress={() => {
-              setModalVisible(true)
-              setSelectedTime('endDate')
-              setIsPickerShow(true)
-            }}
-          />
-        </View>
-        <View>
-          <Text style={styles.errorText}>{error}</Text>
-        </View>
-      </View>
-      <View style={styles.btnContainer}>
-        <CustomButton title="Submit" onPress={submitHandler} />
+        <CustomButtonIcon
+          title="Submit"
+          onPress={submitHandler}
+          iconTwo="keyboard-arrow-right"
+        />
       </View>
     </View>
   )
@@ -273,11 +272,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  poweredContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  icon: {
+    marginBottom: 130,
+  },
 
   btnContainer: {
-    margin: 20,
+    margin: 5,
     alignSelf: 'stretch',
   },
+  powereBtnContainer: {
+    width: '100%',
+    margin: 5,
+  },
+
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -299,6 +310,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+
   errorText: {
     color: 'red',
   },

@@ -6,6 +6,7 @@ import {JoinCompany} from './JoinCompany'
 import {CreateCompany} from './CreateCompany'
 import {companyQuery} from '../controllers/companyController'
 import CustomIconButton from '../components/CustomIconButton'
+import {FontAwesome} from '@expo/vector-icons'
 
 export const Company = ({navigation}) => {
   const [showBtns, setShowBtns] = useState(true)
@@ -35,6 +36,8 @@ export const Company = ({navigation}) => {
       {showBtns && (
         <>
           <View style={styles.poweredContainer}>
+            <FontAwesome name="check-circle-o" size={300} color="#26AAE2" />
+
             <View style={styles.btnContainer}>
               <CustomIconButton
                 onPress={() => {
@@ -42,6 +45,7 @@ export const Company = ({navigation}) => {
                   setShowBtns(false)
                 }}
                 title="Create A Company"
+                iconTwo="keyboard-arrow-right"
               />
             </View>
             <Item style={styles.inputContainer}>
@@ -105,20 +109,30 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   poweredContainer: {
-    marginTop: 450,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   btnContainer: {
-    marginBottom: 40,
+    marginTop: 120,
+    marginBottom: 10,
+    marginLeft: 10,
+    marginRight: 10,
+    alignSelf: 'stretch',
   },
   inputContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#E1F5FD',
-    marginLeft: 40,
-    marginRight: 40,
+    marginLeft: 30,
+    marginRight: 30,
     borderRadius: 5,
     padding: 10,
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOpacity: 0.8,
+    elevation: 6,
+    shadowRadius: 15,
+    shadowOffset: {width: 1, height: 13},
   },
 
   companyCodeBtnContainer: {

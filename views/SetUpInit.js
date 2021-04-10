@@ -16,6 +16,7 @@ import {googleMapsApiKey} from '../secrets/secrets'
 import {updateWorkTrip} from '../controllers/workTripController'
 
 import firebase from 'firebase'
+import CustomButtonIcon from '../components/CustomIconButton'
 
 export const SetUpInit = ({route}) => {
   const {user} = useContext(UserContext)
@@ -137,16 +138,9 @@ export const SetUpInit = ({route}) => {
   return (
     <View style={styles.container}>
       <CustomTitle title="You are done." />
-      <View style={styles.icon}>
-        {Platform.OS === 'ios' ? (
-          <AntDesign name="user" size={300} color={color.secondaryDark} />
-        ) : (
-          <FontAwesome name="user" size={300} color={color.secondaryDark} />
-        )}
-      </View>
-      <View style={styles.inputContainer}>
-        <CustomButton
-          style={styles.btns}
+      <View style={styles.btnContainer}>
+        <CustomButtonIcon
+          style={styles.poweredBtnContainer}
           title="Finish setup"
           onPress={() => {
             finishSetup()
@@ -164,7 +158,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  inputContainer: {
+  btnContainer: {
     position: 'absolute',
     justifyContent: 'flex-end',
     bottom: 60,

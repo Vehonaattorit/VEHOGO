@@ -19,7 +19,21 @@ const GooglePlacesInput = ({setAddress, defaultValue}) => {
       query={{
         key: googleMapsApiKey,
         language: 'en',
-        types: 'address'
+        types: 'address',
+      }}
+      styles={{
+        textInputContainer: {
+          backgroundColor: '#E1F5FD',
+          color: '#E1F5FD',
+        },
+        textInput: {
+          height: 50,
+          color: '#000',
+          fontSize: 16,
+        },
+        predefinedPlacesDescription: {
+          color: '#1faadb',
+        },
       }}
     />
   )
