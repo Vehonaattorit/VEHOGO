@@ -43,32 +43,6 @@ function MainStackNavigator() {
         }}
       >
         <Stack.Screen
-          options={({navigation}) => ({
-            headerRight: () => (
-              <HeaderButtons HeaderButtonComponent={HeaderButton}>
-                <Item
-                  title="Menu"
-                  iconComponent={Entypo}
-                  iconName="new-message"
-                  onPress={() => {
-                    navigation.navigate('CarEditForm')
-                  }}
-                />
-              </HeaderButtons>
-              // <IconButton
-              //   icon="logout"
-              //   size={28}
-              //   color={color.darkBlue}
-              //   onPress={() => {
-              //     signOut()
-              //   }}
-              // />
-            ),
-          })}
-          name="DriverCarList"
-          component={DriverCarList}
-        />
-        <Stack.Screen
           name="MainPage"
           component={MainPage}
           options={() => ({
@@ -98,7 +72,7 @@ function MainStackNavigator() {
         />
         <Stack.Screen name="DriverOnRoute" component={DriverOnRoute} />
         <Stack.Screen name="Chat Room" component={ChatRoom} />
-        {/* <Stack.Screen
+        <Stack.Screen
           options={({navigation}) => ({
             headerRight: () => (
               <HeaderButtons HeaderButtonComponent={HeaderButton}>
@@ -111,19 +85,11 @@ function MainStackNavigator() {
                   }}
                 />
               </HeaderButtons>
-              // <IconButton
-              //   icon="logout"
-              //   size={28}
-              //   color={color.darkBlue}
-              //   onPress={() => {
-              //     signOut()
-              //   }}
-              // />
             ),
           })}
           name="DriverCarList"
           component={DriverCarList}
-        /> */}
+        />
         <Stack.Screen name="CarEditForm" component={CarEditForm} />
         <Stack.Screen name="RequestRide" component={DriverAcceptRefuse} />
       </Stack.Navigator>

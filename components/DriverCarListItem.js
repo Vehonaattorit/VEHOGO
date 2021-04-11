@@ -1,5 +1,13 @@
 import React, {useContext, useState} from 'react'
-import {StyleSheet, Alert, View, Text} from 'react-native'
+import {
+  StyleSheet,
+  Alert,
+  View,
+  TouchableOpacity,
+  TouchableNativeFeedback,
+  Platform,
+  Text,
+} from 'react-native'
 import {Icon, Button} from 'native-base'
 import {color} from '../constants/colors'
 import {AntDesign, MaterialCommunityIcons} from '@expo/vector-icons'
@@ -8,9 +16,16 @@ import {UserContext} from '../contexts'
 import {updateUser} from '../controllers/userController'
 
 const DriverCarListItem = ({singleItem, navigation, loadCars}) => {
-  const [showItem, setItemVisibility] = useState(true)
+  let TouchableCmp = TouchableOpacity
+
+  if (Platform.OS === 'android' && Platform.Version >= 21)
+    TouchableCmp = TouchableNativeFeedback
+
+  const [selectCarShown, setSelectCarShown] = useState(false)
 
   const {user} = useContext(UserContext)
+
+  const isCarSelected = user.schoosedCarID === singleItem.id
 
   const editItem = () => {
     navigation.navigate('CarEditForm', {editCar: singleItem})
@@ -46,78 +61,104 @@ const DriverCarListItem = ({singleItem, navigation, loadCars}) => {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.formItem}>
-        <View style={styles.iconContainer}>
-          <Icon active name="car-outline" />
-        </View>
-        <Text>{singleItem.registerNumber}</Text>
-        <View
-          style={{...styles.iconContainer, backgroundColor: color.lightBlue}}
-        >
-          <MaterialCommunityIcons
-            name="seat-passenger"
-            size={30}
-            color={color.lightBlack}
-          />
-          <Text>{singleItem.availableSeats}</Text>
-        </View>
-        <View style={styles.listItemButtons}>
-          <View>
-            <Button
-              style={{
-                ...styles.listItemButton,
-                backgroundColor: color.radicalRed,
-              }}
-              onPress={deleteItem}
-            >
-              <AntDesign name="delete" size={24} color="white" />
-            </Button>
+    <View
+      style={{
+        ...styles.container,
+        backgroundColor: isCarSelected ? color.malachiteGreen : color.lightBlue,
+      }}
+    >
+      <TouchableCmp
+        disabled={isCarSelected ? true : false}
+        onPress={() => setSelectCarShown(!selectCarShown)}
+      >
+        <View style={styles.formItem}>
+          <View style={styles.iconContainer}>
+            <Icon active name="car-outline" />
           </View>
-          <View>
-            <Button
-              style={{
-                ...styles.listItemButton,
-                backgroundColor: color.darkBlue,
-              }}
-              onPress={editItem}
-            >
-              <AntDesign name="edit" size={24} color="white" />
-            </Button>
+          <Text>{singleItem.registerNumber}</Text>
+          <View
+            style={{
+              ...styles.iconContainer,
+              backgroundColor: isCarSelected
+                ? color.malachiteGreen
+                : color.lightBlue,
+            }}
+          >
+            <MaterialCommunityIcons
+              name="seat-passenger"
+              size={30}
+              color={color.lightBlack}
+            />
+            <Text>{singleItem.availableSeats}</Text>
           </View>
-        </View>
-      </View>
-      <View style={styles.bottomRow}>
-        {user.schoosedCarID === singleItem.id ? (
-          <View style={styles.selectedCarContainer}>
-            <Text style={{...styles.text, color: color.lightBlack}}>
-              SELECTED CAR
-            </Text>
-            <View
-              style={{
-                marginLeft: 10,
-              }}
-            >
-              <AntDesign
-                name="checkcircle"
-                size={24}
-                color={color.malachiteGreen}
-              />
+          <View style={styles.listItemButtons}>
+            <View>
+              <Button
+                style={{
+                  ...styles.listItemButton,
+                  backgroundColor: color.radicalRed,
+                }}
+                onPress={deleteItem}
+              >
+                <AntDesign name="delete" size={24} color="white" />
+              </Button>
             </View>
+            <View>
+              <Button
+                style={{
+                  ...styles.listItemButton,
+                  backgroundColor: color.darkBlue,
+                }}
+                onPress={editItem}
+              >
+                <AntDesign name="edit" size={24} color="white" />
+              </Button>
+            </View>
+            {isCarSelected ? (
+              <View>
+                <Button
+                  style={{
+                    ...styles.listItemButton,
+                    backgroundColor: color.malachiteGreen,
+                  }}
+                >
+                  <AntDesign name="checkcircleo" size={24} color="white" />
+                </Button>
+              </View>
+            ) : (
+              <View>
+                <Button
+                  style={{
+                    ...styles.listItemButton,
+                    backgroundColor: color.lightBlue,
+                  }}
+                  onPress={() => setSelectCarShown(!selectCarShown)}
+                >
+                  <AntDesign
+                    name={selectCarShown ? 'caretup' : 'caretdown'}
+                    size={24}
+                    color={color.darkBlue}
+                  />
+                </Button>
+              </View>
+            )}
           </View>
-        ) : (
-          <Button style={styles.selectCarButton} onPress={selectCar}>
-            <Text style={styles.text}>SELECT CAR </Text>
-          </Button>
+        </View>
+        {!isCarSelected && selectCarShown && (
+          <View style={styles.bottomRow}>
+            <Button style={styles.selectCarButton} onPress={selectCar}>
+              <Text style={styles.text}>SELECT CAR </Text>
+            </Button>
+          </View>
         )}
-      </View>
+      </TouchableCmp>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    borderRadius: 10,
     marginTop: 10,
   },
   listItemButton: {
@@ -154,7 +195,6 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   formItem: {
-    backgroundColor: color.lightBlue,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     flexDirection: 'row',
@@ -164,7 +204,6 @@ const styles = StyleSheet.create({
 
   bottomRow: {
     padding: 10,
-    backgroundColor: color.lightBlue,
     borderBottomLeftRadius: 10,
     borderBottomEndRadius: 10,
     flexDirection: 'row',
@@ -202,9 +241,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     backgroundColor: 'white',
     borderRadius: 20,
-  },
-  item: {
-    backgroundColor: 'white',
   },
 })
 
