@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {StyleSheet, View, Text} from 'react-native'
+import {StyleSheet, View, Text, Platform} from 'react-native'
 import {color} from '../constants/colors'
 // import {Content, Card, CardItem, Text, Left, Right, Icon} from 'native-base'
 import {getUser} from '../controllers/userController'
@@ -26,50 +26,60 @@ const StopListItem = ({singleItem, route, index}) => {
 
   return (
     <View style={styles.listItem}>
-      <View style={styles.rectStack}>
-        <View style={styles.rectangle}>
-          <View style={styles.topRow}>
-            <View style={styles.iconContainer}>
-              <Ionicons name="location-outline" size={24} color="white" />
-            </View>
-            <View style={styles.homeAddressContainer}>
-              <Text style={styles.text}>{singleItem.address}</Text>
-            </View>
+      <View style={styles.container}>
+        <View style={styles.topRow}>
+          <View style={styles.iconContainer}>
+            <Ionicons
+              name="location-outline"
+              size={24}
+              color={color.lightBlack}
+            />
           </View>
-          {index === 0 ? (
-            <>
-              <View style={styles.breakPoint}></View>
-              <View style={styles.bottomRow}>
-                <View style={styles.iconContainer}>
-                  <Ionicons name="person-outline" size={24} color="white" />
-                </View>
-                <View style={styles.passengerNameContainer}>
-                  <Text style={styles.text}>{singleItem.stopName}</Text>
-                </View>
-                <View style={styles.routeDistanceContainer}>
-                  <Text style={styles.text}>Start place</Text>
-                </View>
-              </View>
-            </>
-          ) : (
-            <>
-              <View style={styles.breakPoint}></View>
-              <View style={styles.bottomRow}>
-                <View style={styles.iconContainer}>
-                  <Ionicons name="person-outline" size={24} color="white" />
-                </View>
-                <View style={styles.passengerNameContainer}>
-                  <Text style={styles.text}>{singleItem.stopName}</Text>
-                </View>
-                <View style={styles.routeDistanceContainer}>
-                  <Text style={styles.text}>
-                    {route.routes[0].legs[index - 1].duration.text} to here
-                  </Text>
-                </View>
-              </View>
-            </>
-          )}
+          <View style={styles.homeAddressContainer}>
+            <Text style={styles.text}>{singleItem.address}</Text>
+          </View>
         </View>
+        {index === 0 ? (
+          <>
+            <View style={styles.breakPoint}></View>
+            <View style={styles.bottomRow}>
+              <View style={styles.iconContainer}>
+                <Ionicons
+                  name="person-outline"
+                  size={24}
+                  color={color.lightBlack}
+                />
+              </View>
+              <View style={styles.passengerNameContainer}>
+                <Text style={styles.text}>{singleItem.stopName}</Text>
+              </View>
+              <View style={styles.routeDistanceContainer}>
+                <Text style={styles.text}>Start place</Text>
+              </View>
+            </View>
+          </>
+        ) : (
+          <>
+            <View style={styles.breakPoint}></View>
+            <View style={styles.bottomRow}>
+              <View style={styles.iconContainer}>
+                <Ionicons
+                  name="person-outline"
+                  size={24}
+                  color={color.lightBlack}
+                />
+              </View>
+              <View style={styles.passengerNameContainer}>
+                <Text style={styles.text}>{singleItem.stopName}</Text>
+              </View>
+              <View style={styles.routeDistanceContainer}>
+                <Text style={styles.text}>
+                  {route.routes[0].legs[index - 1].duration.text} to here
+                </Text>
+              </View>
+            </View>
+          </>
+        )}
       </View>
     </View>
   )
@@ -77,18 +87,28 @@ const StopListItem = ({singleItem, route, index}) => {
 
 const styles = StyleSheet.create({
   listItem: {
+    marginTop: 20,
     flex: 1,
     marginHorizontal: 20,
+    overflow:
+      Platform.OS === 'android' && Platform.Version >= 21
+        ? 'hidden'
+        : 'visible',
+    elevation: 14,
   },
-  rectangle: {
-    backgroundColor: color.primary,
-    borderRadius: 24,
+  container: {
+    backgroundColor: color.lightBlue,
+    borderRadius: 10,
+    shadowColor: 'black',
+    shadowOpacity: 0.26,
+    shadowOffset: {width: 0, height: 2},
+    shadowRadius: 10,
   },
   text: {
     textAlign: 'center',
     fontSize: 16,
     fontFamily: 'open-sans-regular',
-    color: 'white',
+    color: color.lightBlack,
   },
   topRow: {
     height: 25,
@@ -119,12 +139,12 @@ const styles = StyleSheet.create({
   },
   breakPoint: {
     height: 1,
-    backgroundColor: color.primaryLight,
+    backgroundColor: color.lightBlack,
   },
   leaveTime: {
     fontFamily: 'open-sans-regular',
     flex: 1,
-    color: 'white',
+    color: color.lightBlack,
   },
   rect4: {
     top: 6,
@@ -152,7 +172,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     position: 'absolute',
 
-    backgroundColor: 'white',
+    backgroundColor: color.lightBlack,
     borderLeftWidth: 1,
     borderTopWidth: 1,
     borderBottomWidth: 1,
@@ -161,9 +181,6 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 24,
     padding: 20,
     justifyContent: 'center',
-  },
-  rectStack: {
-    marginTop: 20,
   },
 })
 

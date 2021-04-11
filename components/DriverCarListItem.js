@@ -18,9 +18,9 @@ import {updateUser} from '../controllers/userController'
 const DriverCarListItem = ({singleItem, navigation, loadCars}) => {
   let TouchableCmp = TouchableOpacity
 
-  if (Platform.OS === 'android' && Platform.Version >= 21)
+  if (Platform.OS === 'android' && Platform.Version >= 21) {
     TouchableCmp = TouchableNativeFeedback
-
+  }
   const [selectCarShown, setSelectCarShown] = useState(false)
 
   const {user} = useContext(UserContext)
@@ -71,86 +71,88 @@ const DriverCarListItem = ({singleItem, navigation, loadCars}) => {
         disabled={isCarSelected ? true : false}
         onPress={() => setSelectCarShown(!selectCarShown)}
       >
-        <View style={styles.formItem}>
-          <View style={styles.iconContainer}>
-            <Icon active name="car-outline" />
-          </View>
-          <Text>{singleItem.registerNumber}</Text>
-          <View
-            style={{
-              ...styles.iconContainer,
-              backgroundColor: isCarSelected
-                ? color.malachiteGreen
-                : color.lightBlue,
-            }}
-          >
-            <MaterialCommunityIcons
-              name="seat-passenger"
-              size={30}
-              color={color.lightBlack}
-            />
-            <Text>{singleItem.availableSeats}</Text>
-          </View>
-          <View style={styles.listItemButtons}>
-            <View>
-              <Button
-                style={{
-                  ...styles.listItemButton,
-                  backgroundColor: color.radicalRed,
-                }}
-                onPress={deleteItem}
-              >
-                <AntDesign name="delete" size={24} color="white" />
-              </Button>
+        <View>
+          <View style={styles.formItem}>
+            <View style={styles.iconContainer}>
+              <Icon active name="car-outline" />
             </View>
-            <View>
-              <Button
-                style={{
-                  ...styles.listItemButton,
-                  backgroundColor: color.darkBlue,
-                }}
-                onPress={editItem}
-              >
-                <AntDesign name="edit" size={24} color="white" />
-              </Button>
+            <Text>{singleItem.registerNumber}</Text>
+            <View
+              style={{
+                ...styles.iconContainer,
+                backgroundColor: isCarSelected
+                  ? color.malachiteGreen
+                  : color.lightBlue,
+              }}
+            >
+              <MaterialCommunityIcons
+                name="seat-passenger"
+                size={30}
+                color={color.lightBlack}
+              />
+              <Text>{singleItem.availableSeats}</Text>
             </View>
-            {isCarSelected ? (
+            <View style={styles.listItemButtons}>
               <View>
                 <Button
                   style={{
                     ...styles.listItemButton,
-                    backgroundColor: color.malachiteGreen,
+                    backgroundColor: color.radicalRed,
                   }}
+                  onPress={deleteItem}
                 >
-                  <AntDesign name="checkcircleo" size={24} color="white" />
+                  <AntDesign name="delete" size={24} color="white" />
                 </Button>
               </View>
-            ) : (
               <View>
                 <Button
                   style={{
                     ...styles.listItemButton,
-                    backgroundColor: color.lightBlue,
+                    backgroundColor: color.darkBlue,
                   }}
-                  onPress={() => setSelectCarShown(!selectCarShown)}
+                  onPress={editItem}
                 >
-                  <AntDesign
-                    name={selectCarShown ? 'caretup' : 'caretdown'}
-                    size={24}
-                    color={color.darkBlue}
-                  />
+                  <AntDesign name="edit" size={24} color="white" />
                 </Button>
               </View>
-            )}
+              {isCarSelected ? (
+                <View>
+                  <Button
+                    style={{
+                      ...styles.listItemButton,
+                      backgroundColor: color.malachiteGreen,
+                    }}
+                  >
+                    <AntDesign name="checkcircleo" size={24} color="white" />
+                  </Button>
+                </View>
+              ) : (
+                <View>
+                  <Button
+                    style={{
+                      ...styles.listItemButton,
+                      backgroundColor: color.lightBlue,
+                    }}
+                    onPress={() => setSelectCarShown(!selectCarShown)}
+                  >
+                    <AntDesign
+                      name={selectCarShown ? 'caretup' : 'caretdown'}
+                      size={24}
+                      color={color.darkBlue}
+                    />
+                  </Button>
+                </View>
+              )}
+            </View>
           </View>
+          {!isCarSelected && selectCarShown && (
+            <View style={styles.bottomRow}>
+              <Button style={styles.selectCarButton} onPress={selectCar}>
+                <Text style={styles.text}>SELECT CAR </Text>
+              </Button>
+            </View>
+          )}
         </View>
-        {!isCarSelected && selectCarShown && (
-          <View style={styles.bottomRow}>
-            <Button style={styles.selectCarButton} onPress={selectCar}>
-              <Text style={styles.text}>SELECT CAR </Text>
-            </Button>
-          </View>
-        )}
       </TouchableCmp>
     </View>
   )

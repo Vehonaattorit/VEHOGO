@@ -81,6 +81,15 @@ const CarEditForm = ({
 
     navigation.goBack()
   }
+
+  const seatsInputHandler = (inputText) => {
+    setSeats(inputText.replace(/[^0-9]/g, ''))
+  }
+
+  const registrationInputHandler = (inputText) => {
+    setRegistration(inputText.replace(/[^0-9]/g, ''))
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.form}>
@@ -90,6 +99,8 @@ const CarEditForm = ({
           </View>
           <TextInput
             placeholder="Driver name"
+            maxLength={20}
+            autoCorrect={false}
             value={name}
             onChangeText={setName}
             style={styles.textInput}
@@ -109,6 +120,8 @@ const CarEditForm = ({
           </View>
           <TextInput
             placeholder="Vehicle description"
+            maxLength={30}
+            autoCorrect={false}
             value={description}
             onChangeText={setDescription}
             style={styles.textInput}
@@ -130,7 +143,7 @@ const CarEditForm = ({
           <TextInput
             placeholder="Registration number"
             value={registration}
-            onChangeText={setRegistration}
+            onChangeText={registrationInputHandler}
             style={styles.textInput}
           />
         </View>
@@ -153,9 +166,11 @@ const CarEditForm = ({
             />
           </View>
           <TextInput
+            keyboardType="numeric"
+            maxLength={2}
             placeholder="Available seats"
             value={seats}
-            onChangeText={setSeats}
+            onChangeText={seatsInputHandler}
             style={styles.textInput}
           />
         </View>
@@ -164,7 +179,7 @@ const CarEditForm = ({
           style={{...styles.button, backgroundColor: color.malachiteGreen}}
           large
         >
-          <Text style={styles.text}>Save </Text>
+          <Text style={styles.text}>Save</Text>
         </Button>
         <Button
           onPress={cancel}
