@@ -18,24 +18,24 @@ export class PreferedWorkingHours {
 
 // Firestore data converter
 export const preferedWorkingHoursConverter = {
-  toFirestore: function (workDay) {
-    let workDayObject = {}
-    if (workDay.workDayNum != undefined) {
-      workDayObject.workDayNum = workDay.workDayNum
+  toFirestore: function (preferedWorkingHours) {
+    let preferedWorkingHouresObject = {}
+    if (preferedWorkingHours.workDayNum != undefined) {
+      preferedWorkingHouresObject.workDayNum = preferedWorkingHours.workDayNum
     }
-    if (workDay.toWorkRefID != undefined) {
-      workDayObject.toWorkRefID = workDay.toWorkRefID
+    if (preferedWorkingHours.toWorkRefID != undefined) {
+      preferedWorkingHouresObject.toWorkRefID = preferedWorkingHours.toWorkRefID
     }
-    if (workDay.toHomeRefID != undefined) {
-      workDayObject.toHomeRefID = workDay.toHomeRefID
+    if (preferedWorkingHours.toHomeRefID != undefined) {
+      preferedWorkingHouresObject.toHomeRefID = preferedWorkingHours.toHomeRefID
     }
-    if (workDay.workDayEnd != undefined) {
-      workDayObject.workDayEnd = workDay.workDayEnd
+    if (preferedWorkingHours.workDayEnd != undefined) {
+      preferedWorkingHouresObject.workDayEnd = preferedWorkingHours.workDayEnd
     }
-    if (workDay.workDayStart != undefined) {
-      workDayObject.workDayStart = workDay.workDayStart
+    if (preferedWorkingHours.workDayStart != undefined) {
+      preferedWorkingHouresObject.workDayStart = preferedWorkingHours.workDayStart
     }
-    return workDayObject
+    return preferedWorkingHouresObject
   },
   fromFirestore: function (snapshot, options) {
     const data = snapshot.data(options)
@@ -48,6 +48,7 @@ export const preferedWorkingHoursConverter = {
     })
   },
   fromData: function (data) {
+    if (data == undefined) return undefined
     return new PreferedWorkingHours({
       workDayNum: data.workDayNum,
       toWorkRefID: data.toWorkRefID,

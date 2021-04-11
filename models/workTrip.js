@@ -1,4 +1,3 @@
-import {WorkDay, workDayConverter} from './workDay'
 import {ScheduledDrive, scheduleDriveConverter} from './scheduleDrive'
 import {carConverter, Car} from './car'
 export class WorkTrip {

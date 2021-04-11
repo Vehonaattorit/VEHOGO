@@ -7,7 +7,7 @@ import {Input} from 'react-native-elements'
 import {CustomButton} from '../components/CustomButton'
 import {CustomTitle} from '../components/CustomTitle'
 import {AntDesign, FontAwesome} from '@expo/vector-icons'
-import {updateUser} from '../controllers/userController'
+import {updateUser, userDocumentUpdater} from '../controllers/userController'
 import {WorkTrip} from '../models/workTrip'
 import {ScheduledDrive} from '../models/scheduleDrive'
 import {Car} from '../models/car'
@@ -17,6 +17,7 @@ import {updateWorkTrip} from '../controllers/workTripController'
 
 import firebase from 'firebase'
 import CustomButtonIcon from '../components/CustomIconButton'
+import {userConverter} from '../models/user'
 
 export const SetUpInit = ({route}) => {
   const {user} = useContext(UserContext)
@@ -132,18 +133,16 @@ export const SetUpInit = ({route}) => {
           preferedWorkHourindex
         ].toHomeRefID = workTripId
       }
-      console.log('updating user', userToUpdate)
-      user = userToUpdate
+      await updateUser(userToUpdate)
+      console.log('toFirestore function',userConverter.toFirestore(userToUpdate))
     })
-    console.log('final user', userToUpdate)
-    await userDocumentUpdater(userToUpdate)
   }
 
   const finishSetup = async () => {
     if (!user.setupIsCompleted) {
       console.log('Setup is completed')
       user.setupIsCompleted = true
-      await userDocumentUpdater(user)
+      await updateUser(user)
 
       if (user.travelPreference === 'driver') await setupWorkTripDocs()
     }

@@ -1,5 +1,4 @@
 import {preferedWorkingHoursConverter} from './preferedWorkingHours'
-import {WorkDay, workDayConverter} from './workDay'
 
 export class User {
   constructor({
@@ -71,9 +70,12 @@ export const userConverter = {
       userObject.cars = user.cars
     }
     if (user.preferedWorkingHours != undefined) {
-      userObject.preferedWorkingHours = preferedWorkingHoursConverter.toFirestore(
-        user.preferedWorkingHours
-      )
+      let hours = []
+      user.preferedWorkingHours.forEach((workingHours) => {
+        hours.push(preferedWorkingHoursConverter.toFirestore(workingHours))
+      })
+
+      userObject.preferedWorkingHours = user.preferedWorkingHours
     }
     if (user.setupIsCompleted != undefined) {
       userObject.setupIsCompleted = user.setupIsCompleted
@@ -82,7 +84,13 @@ export const userConverter = {
   },
   fromFirestore: function (snapshot, options) {
     const data = snapshot.data(options)
-
+    let hours = undefined
+    if (data.preferedWorkingHours != undefined) {
+      hours = []
+      data.preferedWorkingHours.forEach((hour) => {
+        hours.push(preferedWorkingHoursConverter.fromData(hour))
+      })
+    }
     return new User({
       id: data.id,
       ownerPushToken: data.ownerPushToken,
@@ -94,9 +102,7 @@ export const userConverter = {
       displayPhotoURL: data.displayPhotoURL,
       travelPreference: data.travelPreference,
       schoosedCarID: data.schoosedCarID,
-      preferedWorkingHours: preferedWorkingHoursConverter.fromData(
-        data.preferedWorkingHours
-      ),
+      preferedWorkingHours: data.preferedWorkingHours,
       setupIsCompleted: data.setupIsCompleted,
     })
   },

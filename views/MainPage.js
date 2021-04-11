@@ -25,7 +25,11 @@ import {useWorkTripHooks} from '../hooks/useHooks'
 
 import * as Permissions from 'expo-permissions'
 import * as Notifications from 'expo-notifications'
-import {userDocumentUpdater} from '../controllers/userController'
+import {
+  getUser,
+  updateUser,
+  userDocumentUpdater,
+} from '../controllers/userController'
 
 import RideStartBar from '../components/RideStartBar'
 import DriverTripList from '../components/DriverTripList'
@@ -69,10 +73,8 @@ export const MainPage = ({navigation}) => {
       var trips = []
       console.log('updating trips in mainPage')
       querySnapshot.forEach((doc) => {
-
-        console.log('doc data',doc.data())
-        trips.push(doc.data());
-
+        console.log('doc data', doc.data())
+        trips.push(doc.data())
       })
       setDriverTrips(trips)
     })
@@ -88,7 +90,6 @@ export const MainPage = ({navigation}) => {
     if (travelPreference === 'passenger') {
       fetchTodayRides()
     }
-
   }, [travelPreference])
 
   const checkNotificationsPermissions = async () => {
@@ -105,10 +106,11 @@ export const MainPage = ({navigation}) => {
 
     console.log('OwnerPushToken', pushToken)
 
-    user.ownerPushToken = pushToken
+    let updatedUser = await getUser(user.id)
+    updatedUser.ownerPushToken = pushToken
 
     console.log('user.ownerPushToken', user.ownerPushToken)
-    await userDocumentUpdater(user)
+    await updateUser(updatedUser)
   }
 
   const checkTravelPreference = async () => {
@@ -207,11 +209,7 @@ export const MainPage = ({navigation}) => {
           <View style={{marginVertical: 10, marginRight: 10}}>
             <Button
               style={{backgroundColor: color.malachiteGreen}}
-              onPress={
-                travelPreference === 'passenger'
-                  && queryWithTime
-
-              }
+              onPress={travelPreference === 'passenger' && queryWithTime}
             >
               <Text style={styles.text}>Submit</Text>
             </Button>

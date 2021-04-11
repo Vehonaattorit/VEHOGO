@@ -71,7 +71,7 @@ export const WorkingDays = ({navigation}) => {
     setWorkDays(newArr)
   }
 
-  const submitHandler = () => {
+  const submitHandler = async () => {
     const isValid = workDays.some((item) => item.isSelected === true)
 
     if (!isValid) {
@@ -90,10 +90,9 @@ export const WorkingDays = ({navigation}) => {
         preferedWorkDays.push({workDayNum: element.id})
       }
     })
-
     user.preferedWorkingHours = preferedWorkDays
 
-    updateUser(user)
+    await updateUser(user)
 
     navigation.navigate('WorkingHours')
   }
