@@ -1,4 +1,4 @@
-import {WorkDay, workDayConverter} from './workDay'
+import {preferedWorkingHoursConverter} from './preferedWorkingHours'
 
 export class User {
   constructor({
@@ -10,7 +10,6 @@ export class User {
     homeAddress,
     city,
     displayPhotoURL,
-    workDays,
     travelPreference,
     schoosedCarID,
     cars,
@@ -25,7 +24,6 @@ export class User {
     this.homeAddress = homeAddress
     this.city = city
     this.displayPhotoURL = displayPhotoURL
-    this.workDays = workDays
     this.travelPreference = travelPreference
     this.schoosedCarID = schoosedCarID
     this.cars = cars
@@ -62,9 +60,6 @@ export const userConverter = {
     if (user.displayPhotoURL != undefined) {
       userObject.displayPhotoURL = user.displayPhotoURL
     }
-    if (user.workDays != undefined) {
-      userObject.workDays = user.workDays
-    }
     if (user.travelPreference != undefined) {
       userObject.travelPreference = user.travelPreference
     }
@@ -75,6 +70,11 @@ export const userConverter = {
       userObject.cars = user.cars
     }
     if (user.preferedWorkingHours != undefined) {
+      let hours = []
+      user.preferedWorkingHours.forEach((workingHours) => {
+        hours.push(preferedWorkingHoursConverter.toFirestore(workingHours))
+      })
+
       userObject.preferedWorkingHours = user.preferedWorkingHours
     }
     if (user.setupIsCompleted != undefined) {
@@ -84,7 +84,13 @@ export const userConverter = {
   },
   fromFirestore: function (snapshot, options) {
     const data = snapshot.data(options)
-
+    let hours = undefined
+    if (data.preferedWorkingHours != undefined) {
+      hours = []
+      data.preferedWorkingHours.forEach((hour) => {
+        hours.push(preferedWorkingHoursConverter.fromData(hour))
+      })
+    }
     return new User({
       id: data.id,
       ownerPushToken: data.ownerPushToken,
@@ -94,7 +100,6 @@ export const userConverter = {
       homeAddress: data.homeAddress,
       city: data.city,
       displayPhotoURL: data.displayPhotoURL,
-      workDays: data.workDays,
       travelPreference: data.travelPreference,
       schoosedCarID: data.schoosedCarID,
       preferedWorkingHours: data.preferedWorkingHours,

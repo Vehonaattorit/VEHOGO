@@ -7,7 +7,8 @@ import {color} from '../constants/colors'
 import {CustomTitle} from '../components/CustomTitle'
 import {UserContext} from '../contexts'
 import {updateUser} from '../controllers/userController'
-
+import CustomButtonIcon from '../components/CustomIconButton'
+import {MaterialCommunityIcons} from '@expo/vector-icons'
 export const Travel = ({navigation}) => {
   const {user} = useContext(UserContext)
 
@@ -19,15 +20,14 @@ export const Travel = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <CustomTitle title="Travel" />
-      {Platform.OS === 'ios' ? (
-        <Ionicons name="ios-car" size={300} color={color.secondaryDark} />
-      ) : (
-        <Ionicons name="md-car" size={300} color={color.secondaryDark} />
-      )}
+      <View style={styles.iconContainer}>
+        <MaterialCommunityIcons name="car-sports" size={300} color="#26AAE2" />
+      </View>
       <View style={styles.btnContainer}>
         <View style={styles.btn}>
-          <CustomButton
+          <CustomButtonIcon
+            iconOne="directions-car"
+            iconTwo="keyboard-arrow-right"
             title="Share My Car"
             onPress={() => {
               setTravelPreference('driver')
@@ -37,7 +37,9 @@ export const Travel = ({navigation}) => {
         </View>
 
         <View style={styles.btn}>
-          <CustomButton
+          <CustomButtonIcon
+            iconOne="airline-seat-recline-extra"
+            iconTwo="keyboard-arrow-right"
             title="Get A Ride"
             onPress={() => {
               setTravelPreference('passenger')
@@ -55,6 +57,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  iconContainer: {
+    marginBottom: 200,
   },
   btnContainer: {
     position: 'absolute',

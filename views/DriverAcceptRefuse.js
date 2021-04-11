@@ -109,7 +109,7 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
           <View style={styles.info}>
             <Text style={styles.text}>
               {rideRequest == undefined
-                ? singleItem.car.driverName
+                ? singleItem.driverName
                 : rideRequest.userName}
             </Text>
             <Text style={styles.text}>2 km</Text>
@@ -126,10 +126,10 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
             />
           ) : (
             <PassengerAcceptRefuseButton
-              // navigation={navigation}
               user={user}
               workTrip={singleItem}
               rideRequest={rideRequest}
+              navigation={navigation}
             />
           )}
         </Content>

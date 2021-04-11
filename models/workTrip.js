@@ -1,10 +1,10 @@
-import {WorkDay, workDayConverter} from './workDay'
 import {ScheduledDrive, scheduleDriveConverter} from './scheduleDrive'
 import {carConverter, Car} from './car'
 export class WorkTrip {
   constructor({
     id,
     driverID,
+    driverName,
     workDayNum,
     car,
     driverCurrentLocation,
@@ -15,6 +15,7 @@ export class WorkTrip {
   }) {
     this.id = id
     this.driverID = driverID
+    this.driverName = driverName
     this.driverCurrentLocation = driverCurrentLocation
     this.workDayNum = workDayNum
     this.scheduledDrive = scheduledDrive
@@ -34,6 +35,9 @@ export const workTripConverter = {
     }
     if (workTrip.driverID != undefined) {
       workTripObject.driverID = workTrip.driverID
+    }
+    if (workTrip.driverName != undefined) {
+      workTripObject.driverName = workTrip.driverName
     }
     if (workTrip.driverCurrentLocation != undefined) {
       workTripObject.driverCurrentLocation = workTrip.driverCurrentLocation
@@ -69,6 +73,7 @@ export const workTripConverter = {
     return new WorkTrip({
       id: data.id,
       driverID: data.driverID,
+      driverName: data.driverName,
       driverCurrentLocation: data.driverCurrentLocation,
       workDayNum: data.workDayNum,
       scheduledDrive: data.scheduledDrive,
@@ -82,6 +87,7 @@ export const workTripConverter = {
     return new WorkTrip({
       id: data.id,
       driverID: data.driverID,
+      driverName: data.driverName,
       driverCurrentLocation: data.driverCurrentLocation,
       workDayNum: data.workDayNum,
       scheduledDrive: scheduleDriveConverter.fromData(data.scheduledDrive),

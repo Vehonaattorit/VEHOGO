@@ -7,7 +7,7 @@ import {Input} from 'react-native-elements'
 import {CustomButton} from '../components/CustomButton'
 import {CustomTitle} from '../components/CustomTitle'
 import {AntDesign, FontAwesome} from '@expo/vector-icons'
-import {updateUser} from '../controllers/userController'
+import {updateUser, userDocumentUpdater} from '../controllers/userController'
 import {WorkTrip} from '../models/workTrip'
 import {ScheduledDrive} from '../models/scheduleDrive'
 import {Car} from '../models/car'
@@ -16,6 +16,8 @@ import {googleMapsApiKey} from '../secrets/secrets'
 import {updateWorkTrip} from '../controllers/workTripController'
 
 import firebase from 'firebase'
+import CustomButtonIcon from '../components/CustomIconButton'
+import {userConverter} from '../models/user'
 
 export const SetUpInit = ({route}) => {
   const {user} = useContext(UserContext)
@@ -31,12 +33,21 @@ export const SetUpInit = ({route}) => {
       []
     )
 
-    // console.log('workTripDocuments', workTripDocuments)
     console.log(
       'fetch call',
       `https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.location.latitude},${user.company.location.longitude}&key=${googleMapsApiKey}`
     )
+    let userToUpdate = user
     workTripDocuments.forEach(async (item, i) => {
+      let preferedWorkHourindex
+      // Find the
+      for (let i = 0; i < user.preferedWorkingHours.length; i++) {
+        const element = user.preferedWorkingHours[i]
+        if (element.workDayNum == item.workDayNum) {
+          preferedWorkHourindex = i
+        }
+      }
+
       let index = i + 1
 
       console.log('WHOLE ITEM', item)
@@ -46,9 +57,6 @@ export const SetUpInit = ({route}) => {
       const start =
         index % 2 === 0 ? item.workDayEnd.toDate() : item.workDayStart.toDate()
 
-      // TODO:
-      // Implement how long it takes driver to back home instead of
-      //  "item.workDayEnd.toDate().getHours() + 1, 30)" placeholders
       console.log(
         'fetch call',
         `https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.latitude},${user.company.longitude}&key=${googleMapsApiKey}`
@@ -68,28 +76,16 @@ export const SetUpInit = ({route}) => {
       data.routes[0].legs.map((leg) => {
         totalTime += leg.duration.value
       })
-      totalTime = parseFloat((totalTime / 60).toFixed(0))
+      totalTime = parseFloat(totalTime.toFixed(0))
+      console.log('total drive time', totalTime)
 
       let end =
         index % 2 === 0
-          ? new Date(
-              1970,
-              0,
-              1,
-              item.workDayEnd.toDate().getHours(),
-              item.workDayEnd
-                .toDate()
-                .setMinutes(item.workDayEnd.toDate().getMinutes() + totalTime)
-            )
-          : new Date(
-              1970,
-              0,
-              1,
-              item.workDayStart.toDate().getHours(),
-              item.workDayEnd
-                .toDate()
-                .setMinutes(item.workDayEnd.toDate().getMinutes() + totalTime)
-            )
+          ? new Date(1970, 0, 1, item.workDayEnd.toDate().getHours(), 0)
+          : new Date(1970, 0, 1, item.workDayStart.toDate().getHours(), 0)
+
+      //adding ride time to end time
+      end = new Date(end.getTime() + totalTime * 1000)
 
       const goingTo = index % 2 === 0 ? 'home' : 'work'
       let initialStops = [
@@ -109,9 +105,10 @@ export const SetUpInit = ({route}) => {
 
       console.log('user.company.id', user.company.id)
 
-      await updateWorkTrip(
+      let workTripId = await updateWorkTrip(
         user.company.id, // Looks for company ID that user has joined
         new WorkTrip({
+          driverName: user.userName,
           driverID: user.id,
           goingTo: goingTo,
           isDriving: false,
@@ -124,41 +121,39 @@ export const SetUpInit = ({route}) => {
             takenSeats: 0,
             stops: goingTo == 'work' ? initialStops : initialStops.reverse(),
           }),
-          car: new Car({
-            id: 'dashfihasi',
-            driverName: user.userName,
-            registerNumber: 'KIR-180',
-            vehicleDescription: 'Musta sedan',
-            availableSeats: 3,
-          }),
         })
       )
+      console.log('worktrip id is', workTripId)
+      if (goingTo == 'work') {
+        userToUpdate.preferedWorkingHours[
+          preferedWorkHourindex
+        ].toWorkRefID = workTripId
+      } else {
+        userToUpdate.preferedWorkingHours[
+          preferedWorkHourindex
+        ].toHomeRefID = workTripId
+      }
+      await updateUser(userToUpdate)
+      console.log('toFirestore function',userConverter.toFirestore(userToUpdate))
     })
   }
 
-  const finishSetup = () => {
+  const finishSetup = async () => {
     if (!user.setupIsCompleted) {
       console.log('Setup is completed')
       user.setupIsCompleted = true
-      updateUser(user)
+      await updateUser(user)
 
-      if (user.travelPreference === 'driver') setupWorkTripDocs()
+      if (user.travelPreference === 'driver') await setupWorkTripDocs()
     }
   }
 
   return (
     <View style={styles.container}>
       <CustomTitle title="You are done." />
-      <View style={styles.icon}>
-        {Platform.OS === 'ios' ? (
-          <AntDesign name="user" size={300} color={color.secondaryDark} />
-        ) : (
-          <FontAwesome name="user" size={300} color={color.secondaryDark} />
-        )}
-      </View>
-      <View style={styles.inputContainer}>
-        <CustomButton
-          style={styles.btns}
+      <View style={styles.btnContainer}>
+        <CustomButtonIcon
+          style={styles.poweredBtnContainer}
           title="Finish setup"
           onPress={() => {
             finishSetup()
@@ -176,7 +171,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  inputContainer: {
+  btnContainer: {
     position: 'absolute',
     justifyContent: 'flex-end',
     bottom: 60,

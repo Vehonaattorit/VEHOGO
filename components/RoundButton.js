@@ -8,9 +8,7 @@ export const RoundButton = ({toggleHandler, item, isSelected}) => {
       onPress={() => toggleHandler(item, !isSelected)}
       style={{
         ...styles.roundButton,
-        backgroundColor: isSelected
-          ? color.secondaryDark
-          : color.secondaryLight,
+        backgroundColor: isSelected ? '#26AAE2' : '#E1F5FD',
       }}
     >
       <Text style={styles.titleText}>{item.weekDay}</Text>
@@ -30,12 +28,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 2,
-    borderRadius: 100,
-    backgroundColor: color.secondaryDark,
+    borderRadius: 10,
+    backgroundColor: '#E1F5FD',
     margin: 3,
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOpacity: 0.8,
+    elevation: 6,
+    shadowRadius: 15,
+    shadowOffset: {width: 1, height: 13},
   },
 
   titleText: {
-    color: color.pText,
+    color: 'black',
+    fontSize: 20,
   },
 })

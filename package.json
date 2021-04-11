@@ -12,6 +12,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@expo/vector-icons": "^12.0.4",
     "@microsoft/microsoft-graph-client": "^2.2.1",
     "@ptomasroos/react-native-multi-slider": "^2.2.2",
     "@react-native-community/async-storage": "~1.12.0",
@@ -45,6 +46,7 @@
     "react-native-gesture-handler": "^1.8.0",
     "react-native-gifted-chat": "^0.16.3",
     "react-native-google-places-autocomplete": "^2.2.0",
+    "react-native-ionicons": "^4.6.5",
     "react-native-maps": "0.27.1",
     "react-native-maps-directions": "^1.8.0",
     "react-native-paper": "^4.7.2",
@@ -59,16 +61,16 @@
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
-    "babel-jest": "^26.6.3",
     "@testing-library/react-native": "^7.1.0",
-    "jest": "^26.6.3",
     "babel-eslint": "^10.1.0",
+    "babel-jest": "^26.6.3",
     "eslint": "^7.22.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-native": "^3.10.0",
+    "jest": "^26.6.3",
     "jest-expo": "^40.0.2",
     "prettier": "^2.2.1",
     "react-test-renderer": "^17.0.2"

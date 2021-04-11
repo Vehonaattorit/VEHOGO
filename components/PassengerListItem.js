@@ -13,7 +13,9 @@ import {color} from '../constants/colors'
 import moment from 'moment'
 
 const PassengerListItem = ({navigation, singleItem}) => {
-  const {car, goingTo, scheduledDrive, workDayNum, extraDay} = singleItem
+  const {driverName, goingTo, scheduledDrive, workDayNum, extraDay} = singleItem
+
+  console.log('singleItem', driverName)
 
   return (
     <TouchableOpacity
@@ -40,7 +42,7 @@ const PassengerListItem = ({navigation, singleItem}) => {
           </View>
           <View style={styles.weekDayBlock}>
             <View style={styles.topRow}>
-              <Text style={styles.driverNameText}>{car.driverName}</Text>
+              <Text style={styles.driverNameText}>{driverName}</Text>
             </View>
             <View style={styles.bottomRow}>
               <Text style={styles.arrivalTimeText}>
