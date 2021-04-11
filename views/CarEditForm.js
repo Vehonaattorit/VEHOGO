@@ -15,16 +15,9 @@ import {Car} from '../models/car'
 import {UserContext} from '../contexts'
 import {color} from '../constants/colors'
 import {MaterialCommunityIcons} from '@expo/vector-icons'
+import {updateUser} from '../controllers/userController'
 
-const CarEditForm = ({
-  carId,
-  setItemVisibility,
-  setListVisibility,
-  modify,
-  navigation,
-  route,
-  loadCars,
-}) => {
+const CarEditForm = ({navigation, route}) => {
   const editCar = route.params !== undefined ? route.params.editCar : undefined
 
   const [name, setName] = useState(
@@ -48,7 +41,6 @@ const CarEditForm = ({
     const formRegistration = registration.trim().length > 0
     const formSeats = seats.trim().length > 0
 
-    console.log('formName', formName)
     if (formName && formDesc && formRegistration && formSeats) {
       return true
     }
@@ -68,16 +60,19 @@ const CarEditForm = ({
 
     console.log('Validation success')
 
-    await updateCar(
-      user.id,
-      new Car({
-        id: editCar !== undefined ? editCar.id : undefined,
-        driverName: name,
-        vehicleDescription: description,
-        registerNumber: registration,
-        availableSeats: seats,
-      })
-    )
+    const car = new Car({
+      id: editCar !== undefined ? editCar.id : undefined,
+      driverName: name,
+      vehicleDescription: description,
+      registerNumber: registration,
+      availableSeats: seats,
+    })
+
+    await updateCar(user.id, car)
+
+    user.schoosedCarID = car.id
+
+    await updateUser(user)
 
     navigation.goBack()
   }
@@ -86,9 +81,18 @@ const CarEditForm = ({
     setSeats(inputText.replace(/[^0-9]/g, ''))
   }
 
-  const registrationInputHandler = (inputText) => {
-    setRegistration(inputText.replace(/[^0-9]/g, ''))
-  }
+  useEffect(() => {
+    let headerTitle
+    if (route.params !== undefined) {
+      headerTitle = 'Edit Car'
+    } else {
+      headerTitle = 'Add Car'
+    }
+
+    navigation.setOptions({
+      title: headerTitle,
+    })
+  }, [])
 
   return (
     <View style={styles.container}>
@@ -141,9 +145,10 @@ const CarEditForm = ({
             <Icon active name="document-text-outline" />
           </View>
           <TextInput
+            autoCapitalize="characters"
             placeholder="Registration number"
             value={registration}
-            onChangeText={registrationInputHandler}
+            onChangeText={setRegistration}
             style={styles.textInput}
           />
         </View>

@@ -24,7 +24,7 @@ import {color} from '../constants/colors'
  *
  */
 
-export const OutlookCalendar = () => {
+export const OutlookCalendar = ({navigation}) => {
   const {
     state,
     bootstrapAsync,

@@ -59,21 +59,60 @@ function MainStackNavigator() {
             ),
           })}
         />
-        <Stack.Screen name="OutlookCalendar" component={OutlookCalendar} />
+        <Stack.Screen
+          name="OutlookCalendar"
+          component={OutlookCalendar}
+          options={{
+            title: 'Calendar',
+          }}
+        />
         <Stack.Screen
           name="DriverAcceptRefuse"
           component={DriverAcceptRefuse}
+          options={{
+            title: 'Request',
+          }}
         />
-        <Stack.Screen name="NewRide" component={NewRide} />
-        <Stack.Screen name="DriverStartRide" component={DriverStartRide} />
+        <Stack.Screen
+          name="NewRide"
+          component={NewRide}
+          options={{
+            title: 'Start Driving',
+          }}
+        />
+        <Stack.Screen
+          name="DriverStartRide"
+          component={DriverStartRide}
+          options={{
+            title: 'Start Ride',
+          }}
+        />
         <Stack.Screen
           name="DriverRideRequestList"
           component={DriverRideRequestList}
+          options={{
+            title: 'Requests',
+          }}
         />
-        <Stack.Screen name="DriverOnRoute" component={DriverOnRoute} />
-        <Stack.Screen name="Chat Room" component={ChatRoom} />
         <Stack.Screen
+          name="DriverOnRoute"
+          component={DriverOnRoute}
+          options={{
+            title: 'Route',
+          }}
+        />
+        <Stack.Screen
+          name="ChatRoom"
+          component={ChatRoom}
+          options={{
+            title: 'Chat',
+          }}
+        />
+        <Stack.Screen
+          name="DriverCarList"
+          component={DriverCarList}
           options={({navigation}) => ({
+            title: 'Select Car',
             headerRight: () => (
               <HeaderButtons HeaderButtonComponent={HeaderButton}>
                 <Item
@@ -87,11 +126,15 @@ function MainStackNavigator() {
               </HeaderButtons>
             ),
           })}
-          name="DriverCarList"
-          component={DriverCarList}
         />
         <Stack.Screen name="CarEditForm" component={CarEditForm} />
-        <Stack.Screen name="RequestRide" component={DriverAcceptRefuse} />
+        <Stack.Screen
+          options={{
+            title: 'Request Ride',
+          }}
+          name="RequestRide"
+          component={DriverAcceptRefuse}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   )

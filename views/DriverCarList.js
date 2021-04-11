@@ -24,7 +24,6 @@ export const DriverCarList = ({navigation}) => {
 
   const loadCars = async () => {
     const carList = await getCars(user.id)
-    console.log('list of cars', carList)
     setCarList(carList)
   }
 
