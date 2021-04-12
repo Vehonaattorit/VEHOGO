@@ -23,7 +23,13 @@ export const DriverOnRoute = ({navigation, route}) => {
   const [markers, setMarkers] = useState([
     workTrip.scheduledDrive.stops.map((stop) => (
       <MapView.Marker
-        image={stop.stopName == 'Home' || stop.stopName == user.company.name ? stop.stopName == 'Home' ? require('../images/home-map-icon-white.png') : require('../images/work-map-icon-white.png') : require('../images/passenger-map-icon-white.png')}
+        image={
+          stop.stopName == 'Home' || stop.stopName == user.company.name
+            ? stop.stopName == 'Home'
+              ? require('../images/home-map-icon-white.png')
+              : require('../images/work-map-icon-white.png')
+            : require('../images/passenger-map-icon-white.png')
+        }
         key={stop.address}
         coordinate={{
           latitude: stop.location.latitude,
@@ -38,7 +44,7 @@ export const DriverOnRoute = ({navigation, route}) => {
     // if user is driver, update location
     if (user.travelPreference == 'driver') {
       // car position updated every 60 seconds
-      intervalTimer = setInterval(callUpdateUserPosition, 60000);
+      intervalTimer = setInterval(callUpdateUserPosition, 60000)
       async function callUpdateUserPosition() {
         let location = await updateUserPosition(user, workTrip.id)
       }
@@ -47,7 +53,7 @@ export const DriverOnRoute = ({navigation, route}) => {
 
   useEffect(() => {
     var tempRouteCoordinates = []
-    console.log('inside useEffect before route', workTrip)
+    // console.log('inside useEffect before route', workTrip)
     if (workTrip.route != undefined) {
       console.log('inside that if')
       workTrip.route.routes[0].legs.map((leg) => {
@@ -81,18 +87,22 @@ export const DriverOnRoute = ({navigation, route}) => {
 
       return (
         <>
-          {doc != undefined && doc.driverCurrentLocation != undefined ? <MapView.Marker
-            image={require('../images/car-marker.png')}
-            key={'driver-car'}
-            coordinate={{
-              latitude: doc.driverCurrentLocation.location.latitude,
-              longitude: doc.driverCurrentLocation.location.longitude,
-            }}
-            title="car"
-          />:<View/>}
-        </>)
-    }
-    else return <View />
+          {doc != undefined && doc.driverCurrentLocation != undefined ? (
+            <MapView.Marker
+              image={require('../images/car-marker.png')}
+              key={'driver-car'}
+              coordinate={{
+                latitude: doc.driverCurrentLocation.location.latitude,
+                longitude: doc.driverCurrentLocation.location.longitude,
+              }}
+              title="car"
+            />
+          ) : (
+            <View />
+          )}
+        </>
+      )
+    } else return <View />
   }
 
   return (
@@ -122,11 +132,8 @@ export const DriverOnRoute = ({navigation, route}) => {
             style={styles.mapStyle}
             provider={MapView.PROVIDER_GOOGLE}
             initialRegion={{
-              latitude:
-                workTrip.scheduledDrive.stops[0].location.latitude,
-              longitude:
-                workTrip.scheduledDrive.stops[0].location
-                  .longitude,
+              latitude: workTrip.scheduledDrive.stops[0].location.latitude,
+              longitude: workTrip.scheduledDrive.stops[0].location.longitude,
               latitudeDelta: 1,
               longitudeDelta: 1,
             }}

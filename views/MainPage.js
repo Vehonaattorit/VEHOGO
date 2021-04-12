@@ -75,7 +75,6 @@ export const MainPage = ({navigation}) => {
       var trips = []
       console.log('updating trips in mainPage')
       querySnapshot.forEach((doc) => {
-        console.log('doc data', doc.data())
         trips.push(doc.data())
       })
       setDriverTrips(trips)

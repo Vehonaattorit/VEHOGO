@@ -11,6 +11,8 @@ import {googleMapsApiKey} from '../secrets/secrets'
 import {calculateDistance} from '../utils/utils'
 import {useWorkTripHooks} from '../hooks/useHooks'
 
+import {color} from '../constants/colors'
+
 const PassengerAcceptRefuseButton = (props) => {
   const {user, workTrip, rideRequest, navigation} = props
 
@@ -146,7 +148,6 @@ const PassengerAcceptRefuseButton = (props) => {
       }),
     })
 
-    //navigation.navigate('MainPage')
     navigation.popToTop()
   }
 
@@ -170,6 +171,8 @@ const PassengerAcceptRefuseButton = (props) => {
         body: `Request was refused by ${user.userName}`,
       }),
     })
+
+    navigation.popToTop()
   }
 
   return (

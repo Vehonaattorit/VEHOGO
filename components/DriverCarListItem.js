@@ -34,7 +34,7 @@ const DriverCarListItem = ({singleItem, navigation, loadCars}) => {
   const deleteItem = () => {
     Alert.alert(
       'Delete car',
-      `Are you sure you want to ${singleItem.vehicleDescription}?`,
+      `Are you sure you want to remove this car with the registration plate ${singleItem.registerNumber}?`,
       [
         {text: 'No', style: 'default'},
         {

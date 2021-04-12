@@ -10,7 +10,6 @@ import moment from 'moment'
 import RequestListItem from '../components/RequestListItem'
 
 export const DriverRideRequestList = ({navigation, dataArray}) => {
-
   const {user} = useContext(UserContext)
   const [rideRequests, setRideRequests] = useState(null)
 
@@ -33,7 +32,6 @@ export const DriverRideRequestList = ({navigation, dataArray}) => {
       user.company.id,
       rideRequest.workTripRefID
     )
-    console.log('driverRideRequest single item', singleItem)
     if (singleItem == undefined) return
     navigation.navigate('RequestRide', {
       singleItem: singleItem,

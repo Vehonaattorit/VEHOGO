@@ -142,6 +142,9 @@ export const RideStartBar = ({user, navigation}) => {
       startDate.toDate().getHours() * 60 + startDate.toDate().getMinutes() - 10
     var end = endDate.toDate().getHours() * 60 + endDate.toDate().getMinutes()
     console.log('times are set')
+
+    console.log('start', start)
+    console.log('end', end)
     if (inTime(start, end) == true) {
       console.log('returned true')
       setShowStart(true)
@@ -168,26 +171,27 @@ export const RideStartBar = ({user, navigation}) => {
             )}
           </Left>
           <Right>
-            {
-              showStart ? (
-                <Button
-                  style={styles.button}
-                  onPress={() =>
-                    navigation.navigate('DriverStartRide', {
-                      workTrip: startingRide,
-                    })
-                  }
-                >
-                  <Text style={styles.starText}>Start {driveStartTime &&
-                    moment(driveStartTime.toDate()).format('HH:mm')}</Text>
-                </Button>
-              ) : (
-                <Text style={styles.text}>
+            {showStart ? (
+              <Button
+                style={styles.button}
+                onPress={() =>
+                  navigation.navigate('DriverStartRide', {
+                    workTrip: startingRide,
+                  })
+                }
+              >
+                <Text style={styles.starText}>
+                  Start{' '}
                   {driveStartTime &&
                     moment(driveStartTime.toDate()).format('HH:mm')}
                 </Text>
-              )
-            }
+              </Button>
+            ) : (
+              <Text style={styles.text}>
+                {driveStartTime &&
+                  moment(driveStartTime.toDate()).format('HH:mm')}
+              </Text>
+            )}
           </Right>
         </CardItem>
       </Card>
