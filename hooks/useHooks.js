@@ -91,7 +91,7 @@ const useWorkTripHooks = (user) => {
     setActiveRide(activeRide[0])
 
     const query = await workTripOrderByQuery(user.company.id, [
-      {field: 'workDayNum', condition: '==', value: 1},
+      {field: 'workDayNum', condition: '==', value: currentWeekDay},
       {field: 'goingTo', condition: '==', value: goingTo},
     ])
 
