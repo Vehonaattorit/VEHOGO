@@ -61,7 +61,7 @@ export const DriverStartRide = ({navigation, route}) => {
         body: JSON.stringify({
           to: notifyUser.ownerPushToken,
           title: `Driver has started his ride to ${workTripToUpdate.goingTo}.`,
-          body: `${workTripToUpdate.car.driverName} is coming to pick you up.`,
+          body: `${workTripToUpdate.driverName} is coming to pick you up.`,
         }),
       })
     }

@@ -14,6 +14,7 @@ import {AntDesign, MaterialCommunityIcons} from '@expo/vector-icons'
 import {removeCar} from '../controllers/carController'
 import {UserContext} from '../contexts'
 import {updateUser} from '../controllers/userController'
+import {updateUserCarToWorkTrips} from '../utils/updateWorkTripCar'
 
 const DriverCarListItem = ({singleItem, navigation, loadCars}) => {
   let TouchableCmp = TouchableOpacity
@@ -58,6 +59,7 @@ const DriverCarListItem = ({singleItem, navigation, loadCars}) => {
     console.log('user.schoosedCarID', user.schoosedCarID)
 
     await updateUser(user)
+    await updateUserCarToWorkTrips(user)
   }
 
   return (

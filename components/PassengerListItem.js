@@ -51,7 +51,7 @@ const PassengerListItem = ({navigation, singleItem}) => {
               </Text>
             </View>
           </View>
-          <View style={styles.takenSeatsBlock}>
+          <View style={styles.availableSeatsBlock}>
             <View style={styles.passengerTextContainer}>
               <MaterialCommunityIcons
                 name="seat-passenger"
@@ -60,8 +60,8 @@ const PassengerListItem = ({navigation, singleItem}) => {
               />
             </View>
             <View style={styles.passengerTextContainer}>
-              <Text style={styles.takenSeatsText}>
-                {scheduledDrive.takenSeats}/4
+              <Text style={styles.availableSeatsText}>
+                {scheduledDrive.availableSeats}/4
               </Text>
             </View>
           </View>
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     flex: 2,
     backgroundColor: color.lightBlue,
   },
-  takenSeatsBlock: {
+  availableSeatsBlock: {
     flex: 1,
     flexDirection: 'row',
     alignContent: 'center',
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   startTimeText: {
     fontFamily: 'open-sans-regular',
   },
-  takenSeatsText: {
+  availableSeatsText: {
     fontSize: 20,
     fontFamily: 'open-sans-semi-bold',
     color: 'white',
