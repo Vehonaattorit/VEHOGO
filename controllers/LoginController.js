@@ -4,23 +4,16 @@ import {User} from '../models/user'
 
 export async function login(email, password) {
   try {
-    console.log('Log In success')
-
     await firebase.auth().signInWithEmailAndPassword(email, password)
   } catch (e) {
-    console.log('Login failed' + e.message)
-
     return e.message
   }
 }
 
 export async function register(email, password) {
   try {
-    console.log('Register success')
-
     await firebase.auth().createUserWithEmailAndPassword(email, password)
   } catch (e) {
-    console.log('Register failed' + e.message)
     return e.message
   }
 }
@@ -28,10 +21,7 @@ export async function register(email, password) {
 export async function signOut() {
   try {
     await firebase.auth().signOut()
-    console.log('Logout success')
-  } catch (e) {
-    console.log('Logout failed ' + e)
-  }
+  } catch (e) {}
 }
 
 export async function subscribeToAuth(authStateChanged) {

@@ -49,8 +49,6 @@ export const DriverStartRide = ({navigation, route}) => {
     for (const userId of userIds) {
       const notifyUser = await getUser(userId)
 
-      console.log('notifyUser', notifyUser)
-
       await fetch('https://exp.host/--/api/v2/push/send', {
         method: 'POST',
         headers: {
@@ -71,7 +69,6 @@ export const DriverStartRide = ({navigation, route}) => {
     ;(async () => {
       let {status} = await Location.requestPermissionsAsync()
       if (status !== 'granted') {
-        console.log('Permission to access location was denied')
         return
       }
     })()

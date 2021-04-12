@@ -56,7 +56,6 @@ export default function App() {
   }
 
   if (!fontReady) {
-    console.log('Waiting for fonts...')
     return <AppLoading />
   }
 

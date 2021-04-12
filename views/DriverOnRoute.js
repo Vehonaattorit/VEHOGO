@@ -1,6 +1,13 @@
-import React, {useState, useEffect, useContext} from 'react'
-import {StyleSheet, Dimensions, Image} from 'react-native'
-import {Content, Body, Container, Text, View, Icon, Button} from 'native-base'
+import React, {useState, useEffect, useContext, useRef} from 'react'
+import {
+  StyleSheet,
+  View,
+  Text,
+  Dimensions,
+  TouchableOpacity,
+  Image,
+} from 'react-native'
+import {Content, Body, Container, Icon, Button} from 'native-base'
 import MapView from 'react-native-maps'
 import MapViewDirections from 'react-native-maps-directions'
 import decodePolyline from 'decode-google-map-polyline'
@@ -11,10 +18,22 @@ import firebase from 'firebase/app'
 import {UserContext} from '../contexts'
 import {updateUserPosition} from '../utils/driverFunctions'
 import {useDocumentData} from 'react-firebase-hooks/firestore'
+import Carousel, {ParallaxImage} from 'react-native-snap-carousel'
+import {ChatRoom} from '../models/chatRoom'
+import {addChat, getChatRoomByIds} from '../controllers/chatRoomController'
+import {AntDesign, Ionicons} from '@expo/vector-icons'
+import {color} from '../constants/colors'
+
+const {width: screenWidth} = Dimensions.get('window')
 
 export const DriverOnRoute = ({navigation, route}) => {
   const {workTrip} = route.params
+
+  const passengerStops = workTrip.scheduledDrive.stops.slice(1, -1)
+
   const {user} = useContext(UserContext)
+
+  console.log('DriverOnRoute', workTrip)
 
   let intervalTimer
   const [mapRef, setMapRef] = useState(null)
@@ -53,9 +72,8 @@ export const DriverOnRoute = ({navigation, route}) => {
 
   useEffect(() => {
     var tempRouteCoordinates = []
-    // console.log('inside useEffect before route', workTrip)
+    //
     if (workTrip.route != undefined) {
-      console.log('inside that if')
       workTrip.route.routes[0].legs.map((leg) => {
         leg.steps.map((step) => {
           var decodedPolyLines = decodePolyline(step.polyline.points)
@@ -69,8 +87,8 @@ export const DriverOnRoute = ({navigation, route}) => {
       })
     }
     setRouteCoordinates(tempRouteCoordinates)
-    console.log('markers', markers)
-    console.log('decoded polyline')
+    //
+    //
     updateLocationInterval()
 
     return () => {
@@ -79,11 +97,11 @@ export const DriverOnRoute = ({navigation, route}) => {
   }, [])
 
   const DriverMarker = ({workTrip}) => {
-    console.log('listening to stream', workTrip.id)
+    //
     if (workTrip != undefined) {
       let reference = workTripStream(user.company.id, workTrip.id)
       const [doc] = useDocumentData(reference)
-      doc && console.log('workTrip stream', doc)
+      // doc &&
 
       return (
         <>
@@ -105,23 +123,112 @@ export const DriverOnRoute = ({navigation, route}) => {
     } else return <View />
   }
 
-  return (
-    <View style={styles.view}>
-      <Container style={styles.requestAcceptRefuseContent}>
-        <Content padder>
-          <View style={styles.info}>
-            <Text>Michael Lock</Text>
-            <Text>2km</Text>
-          </View>
+  const createChatRoom = async (name) => {
+    const chatRooms = await getChatRoomByIds([
+      {
+        field: 'passengerID',
+        condition: '==',
+        value: workTrip.scheduledDrive.stops[1].userID,
+      },
+      {
+        field: 'driverID',
+        condition: '==',
+        value: workTrip.driverID,
+      },
+    ])
 
-          <View style={styles.info}>
-            <Text>Olen etuovella</Text>
-            <Button small onPress={() => navigation.navigate('Chat')}>
-              <Icon active name="chatbox-ellipses-outline" />
-            </Button>
+    // Chatrooms array is empty
+    let chatRoomID
+    if (typeof chatRooms !== 'undefined' && chatRooms.length === 0) {
+      chatRoomID = await addChat(
+        new ChatRoom({
+          driverID: workTrip.driverID,
+          passengerID: workTrip.scheduledDrive.stops[1].userID,
+        })
+      )
+    } else {
+      chatRoomID = chatRooms[0].id
+    }
+
+    navigation.navigate('ChatRoom', {
+      chatRoomID,
+      chatRoomTitle: name,
+    })
+  }
+
+  // Render Passenger List at top of the screen
+  const renderItem = ({item, index}, parallaxProps) => {
+    return (
+      <View style={styles.listItemContainer}>
+        <TouchableOpacity
+          onPress={() => createChatRoom(item.stopName)}
+          style={{flex: 1}}
+        >
+          <View style={styles.listItemTopRow}>
+            <View>
+              <Text style={styles.nameTopRow}>{item.stopName}</Text>
+            </View>
+            <View>
+              <Text style={styles.distanceTopRow}>2 km</Text>
+            </View>
           </View>
-        </Content>
-      </Container>
+          <View style={styles.listItemBottomRow}>
+            <View>
+              <Text style={styles.latestMessageBottomRow}>
+                <Ionicons
+                  name="checkmark-done"
+                  size={24}
+                  color={color.lightBlack}
+                />
+                Olen etuovella
+              </Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
+  return (
+    <View style={styles.container}>
+      {user.travelPreference === 'passenger' ? (
+        <View style={styles.listItemContainer}>
+          <TouchableOpacity
+            onPress={() => createChatRoom(workTrip.driverName)}
+            style={{flex: 1}}
+          >
+            <View style={styles.listItemTopRow}>
+              <View>
+                <Text style={styles.nameTopRow}>{workTrip.driverName}</Text>
+              </View>
+              <View>
+                <Text style={styles.distanceTopRow}>2 km</Text>
+              </View>
+            </View>
+            <View style={styles.listItemBottomRow}>
+              <View>
+                <Text style={styles.latestMessageBottomRow}>
+                  <Ionicons
+                    name="checkmark-done"
+                    size={24}
+                    color={color.lightBlack}
+                  />
+                  Olen etuovella
+                </Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <Carousel
+          sliderWidth={screenWidth}
+          sliderHeight={screenWidth}
+          itemWidth={screenWidth - 30}
+          data={passengerStops}
+          renderItem={renderItem}
+          hasParallaxImages={true}
+        />
+      )}
 
       <View style={styles.requestMapContent}>
         <Container style={styles.requestMapContent}>
@@ -149,15 +256,54 @@ export const DriverOnRoute = ({navigation, route}) => {
         </Container>
       </View>
     </View>
+    // <View style={styles.view}>
+
+    //   {/* <Container style={styles.requestAcceptRefuseContent}>
+    //     <Content padder>
+    //       <View style={styles.info}>
+    //         <Text>Michael Lock</Text>
+    //         <Text>2km</Text>
+    //       </View>
+
+    //       <View style={styles.info}>
+    //         <Text>Olen etuovella</Text>
+    //         <Button small onPress={() => navigation.navigate('ChatRoom')}>
+    //           <Icon active name="chatbox-ellipses-outline" />
+    //         </Button>
+    //       </View>
+    //     </Content>
+    //   </Container> */}
+
+    //   <View style={styles.requestMapContent}>
+    //     <Container style={styles.requestMapContent}>
+    //       <MapView
+    //         ref={(ref) => {
+    //           setMapRef(ref)
+    //         }}
+    //         style={styles.mapStyle}
+    //         provider={MapView.PROVIDER_GOOGLE}
+    //         initialRegion={{
+    //           latitude: workTrip.scheduledDrive.stops[0].location.latitude,
+    //           longitude: workTrip.scheduledDrive.stops[0].location.longitude,
+    //           latitudeDelta: 1,
+    //           longitudeDelta: 1,
+    //         }}
+    //       >
+    //         <MapView.Polyline
+    //           coordinates={routeCoordinates}
+    //           strokeColor="#000"
+    //           strokeWidth={4}
+    //         />
+    //         {markers}
+    //         <DriverMarker workTrip={workTrip} />
+    //       </MapView>
+    //     </Container>
+    //   </View>
+    // </View>
   )
 }
 
 const styles = StyleSheet.create({
-  view: {
-    flex: 1,
-    display: 'flex',
-    backgroundColor: '#26aae2',
-  },
   requestMapContent: {
     flex: 5,
     backgroundColor: 'black',
@@ -177,5 +323,56 @@ const styles = StyleSheet.create({
   mapStyle: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  item: {
+    width: screenWidth - 60,
+    height: screenWidth - 60,
+  },
+  imageContainer: {
+    flex: 1,
+    marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
+    backgroundColor: 'white',
+    borderRadius: 8,
+  },
+  image: {
+    ...StyleSheet.absoluteFillObject,
+    resizeMode: 'cover',
+  },
+  // 12.04.2020 New FlatListItem for Passengers & Drivder
+  listItemContainer: {
+    flex: 1,
+    backgroundColor: 'white',
+    justifyContent: 'space-between',
+  },
+  listItemTopRow: {
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  nameTopRow: {
+    fontSize: 20,
+    color: color.lightBlack,
+    fontFamily: 'open-sans-regular',
+  },
+  latestMessageBottomRow: {
+    fontSize: 16,
+    color: color.lightBlack,
+    fontFamily: 'open-sans-regular',
+  },
+
+  listItemBottomRow: {
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+  },
+  distanceTopRow: {
+    fontSize: 16,
+    color: color.lightBlack,
+    fontFamily: 'open-sans-regular',
   },
 })

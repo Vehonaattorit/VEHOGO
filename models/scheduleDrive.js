@@ -63,9 +63,7 @@ export const scheduleDriveConverter = {
           startTime = data.start
           endTime = data.end
         }
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) {}
       return new ScheduledDrive({
         start: startTime,
         end: endTime,

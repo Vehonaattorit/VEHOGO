@@ -8,8 +8,6 @@ import {UserContext} from '../contexts'
 import {color} from '../constants/colors'
 
 const DriverTripList = ({isLoading, driverTrips, navigation}) => {
-  console.log('DriverTripList', isLoading)
-
   if (isLoading) {
     return (
       <View style={styles.centered}>

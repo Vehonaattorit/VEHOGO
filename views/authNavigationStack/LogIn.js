@@ -33,9 +33,7 @@ export const LogIn = ({navigation, scrollRef}) => {
       .then((res) => {
         setError(res)
       })
-      .catch((err) => {
-        console.log(err.message)
-      })
+      .catch((err) => {})
   }
 
   useEffect(() => {

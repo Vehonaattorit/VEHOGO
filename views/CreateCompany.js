@@ -47,7 +47,7 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
         responseJson.results[0].geometry.location.lat,
         responseJson.results[0].geometry.location.lng
       )
-      console.log(locationPoint)
+
       var city = ''
       var route = ''
       var streetNumber = ''
@@ -75,7 +75,6 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
         address: address,
         postalCode: postalCode,
       }
-      console.log(data)
 
       return data
     } catch (e) {
@@ -112,13 +111,9 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
 
       updateUser(user)
 
-      console.log('data id', data)
-
-      console.log('updated')
       setCompanyCode(cCode)
       setShowCode(true)
     } else {
-      console.log('inputs empty')
     }
   }
 

@@ -42,7 +42,6 @@ import {workTripMultiQueryStream} from '../controllers/workTripController'
 import {useCollectionData} from 'react-firebase-hooks/firestore'
 
 export const MainPage = ({navigation}) => {
-  console.log('MainPage rendered')
   const {user} = useContext(UserContext)
   const [travelPreference, setTravelPreference] = useState('')
 
@@ -62,8 +61,6 @@ export const MainPage = ({navigation}) => {
     isLoading,
   } = useWorkTripHooks(user)
 
-  console.log('isLoading', isLoading)
-
   //data stream for driver trips
   const driverTripStream = () => {
     const currentWeekDay = new Date().getDay()
@@ -73,7 +70,7 @@ export const MainPage = ({navigation}) => {
     ])
     ref.onSnapshot((querySnapshot) => {
       var trips = []
-      console.log('updating trips in mainPage')
+
       querySnapshot.forEach((doc) => {
         trips.push(doc.data())
       })
@@ -105,12 +102,9 @@ export const MainPage = ({navigation}) => {
       pushToken = (await Notifications.getExpoPushTokenAsync()).data
     }
 
-    console.log('OwnerPushToken', pushToken)
-
     let updatedUser = await getUser(user.id)
     updatedUser.ownerPushToken = pushToken
 
-    console.log('user.ownerPushToken', user.ownerPushToken)
     await updateUser(updatedUser)
   }
 

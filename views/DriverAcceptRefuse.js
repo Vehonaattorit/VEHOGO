@@ -42,13 +42,12 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
       />
     ),
   ])
-  //console.log('requested route',singleItem)
+  //
 
   useEffect(() => {
     var tempRouteCoordinates = []
-    console.log('inside useEffect before route', singleItem.route)
+
     if (singleItem.route != undefined) {
-      console.log('inside that if')
       singleItem.route.routes[0].legs.map((leg) => {
         leg.steps.map((step) => {
           var decodedPolyLines = decodePolyline(step.polyline.points)
@@ -66,9 +65,9 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
 
   // useEffect(() => {
   //   setTimeout(() => {
-  //     console.log('now timer ending')
+  //
   //     if (mapRef != undefined && mapRef != null) {
-  //       console.log(
+  //
   //         'fit markers',
   //         singleItem.scheduledDrive.stops.map((stop) => stop.address)
   //       )

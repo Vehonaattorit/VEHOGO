@@ -131,7 +131,7 @@ const PassengerAcceptRefuseButton = (props) => {
     }
 
     workTripToUpdate.route = route
-    console.log('stops to update', workTripToUpdate)
+    // console.log('stops to update', workTripToUpdate)
     await updateWorkTrip(user.company.id, workTripToUpdate)
     await deleteRideRequest(user.company.id, rideRequest.id)
     await fetch('https://exp.host/--/api/v2/push/send', {

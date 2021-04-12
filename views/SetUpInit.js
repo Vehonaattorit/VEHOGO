@@ -134,7 +134,10 @@ export const SetUpInit = ({route}) => {
         ].toHomeRefID = workTripId
       }
       await updateUser(userToUpdate)
-      console.log('toFirestore function',userConverter.toFirestore(userToUpdate))
+      console.log(
+        'toFirestore function',
+        userConverter.toFirestore(userToUpdate)
+      )
     })
   }
 

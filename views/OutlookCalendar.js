@@ -115,8 +115,6 @@ export const OutlookCalendar = ({navigation}) => {
     )
   }
 
-  console.log('calendar state events', calendarState.events)
-
   return (
     <View style={styles.AndroidSafeArea}>
       <AuthContext.Provider value={authContext}>

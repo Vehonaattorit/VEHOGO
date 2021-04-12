@@ -1,6 +1,6 @@
 export class ChatMessage {
-  constructor({id, text, createdAt, user}) {
-    this.id = id
+  constructor({_id, text, createdAt, user}) {
+    this._id = _id
     this.text = text
     this.createdAt = createdAt
     this.user = user
@@ -10,11 +10,11 @@ export class ChatMessage {
 // Firestore data converter
 export const chatMessageConverter = {
   toFirestore: function (chatMessage) {
-    console.log('toFirestore chatMessage', chatMessage)
+    console.log('To Firestore', chatMessage)
 
     let chatRoomObject = {}
-    if (chatMessage.id != undefined) {
-      chatRoomObject.id = chatMessage.id
+    if (chatMessage._id != undefined) {
+      chatRoomObject._id = chatMessage._id
     }
     if (chatMessage.text != undefined) {
       chatRoomObject.text = chatMessage.text
@@ -23,53 +23,63 @@ export const chatMessageConverter = {
       chatRoomObject.createdAt = chatMessage.createdAt
     }
     if (chatMessage.user != undefined) {
-      chatRoomObject.user = userConverter.toFirestore(chatMessage.user)
+      chatRoomObject.user = chatMessage.user
+      // chatRoomObject.user = userConverter.toFirestore(chatMessage.user)
     }
 
-    console.log('chatRoomObject chatRoomObject', chatRoomObject)
+    console.log('ChatRoomObject', chatRoomObject)
 
     return chatRoomObject
   },
   fromFirestore: function (snapshot, options) {
+    console.log('snapshots', snapshot.data(options))
     const data = snapshot.data(options)
+
     return new ChatMessage({
-      id: data._id,
+      _id: data._id,
       text: data.text,
       createdAt: data.createdAt,
-      user: userConverter.fromFirestore(data.user),
+      user: data.user,
     })
   },
-}
-
-class User {
-  constructor({id, email}) {
-    this.id = id
-    this.email = email
-  }
-}
-
-// Firestore data converter
-const userConverter = {
-  toFirestore: function (user) {
-    console.log('userConverter toFirestore user', user)
-
-    let userObject = {}
-    if (user._id != undefined) {
-      userObject.id = user._id
-    }
-    if (user.email != undefined) {
-      userObject.email = user.email
-    }
-
-    console.log('userObject', userObject)
-
-    return userObject
-  },
-  fromFirestore: function (snapshot, options) {
-    const data = snapshot.data(options)
-    return new User({
-      id: data._id,
+  fromData: function (data) {
+    return new ChatMessage({
+      _id: data._id,
+      text: data.text,
       createdAt: data.createdAt,
+      user: data.user,
     })
   },
 }
+
+// class User {
+//   constructor({id, email}) {
+//     this.id = id
+//     this.email = email
+//   }
+// }
+
+// // Firestore data converter
+// const userConverter = {
+//   toFirestore: function (user) {
+//     let userObject = {}
+//     if (user._id != undefined) {
+//       userObject.id = user._id
+//     }
+//     if (user.email != undefined) {
+//       userObject.email = user.email
+//     }
+
+//     return userObject
+//   },
+//   fromFirestore: function (snapshot, options) {
+//     const data = snapshot.data(options)
+
+//
+
+//     return new User({
+//       id: data.id,
+//       createdAt: data.createdAt,
+//     })
+//   },
+// }
