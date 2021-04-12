@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   iconContainer: {
     marginLeft: 20,
   },
-  takenSeatsContainer: {
+  availableSeatsContainer: {
     flex: 1,
     alignItems: 'flex-end',
   },

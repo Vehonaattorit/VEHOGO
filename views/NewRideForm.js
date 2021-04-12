@@ -17,8 +17,8 @@ const NewRideForm = ({carId, setItemVisibility, setListVisibility, loadCars, mod
   const id = carId
 
 
-  const uploadCar = () => {
-    const carId = updateCar(user.id, new Car({id: id, driverName: name, vehicleDescription: description, registerNumber: registration, availableSeats: seats}))
+  const uploadCar = async () => {
+    const carId = await updateCar(user.id, new Car({id: id, driverName: name, vehicleDescription: description, registerNumber: registration, availableSeats: seats}))
     console.log('car id ' + carId)
   }
   return (
