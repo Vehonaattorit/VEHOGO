@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {StyleSheet, KeyboardAvoidingView} from 'react-native'
 import {Text, Icon, Button} from 'native-base'
 import {View, Item, Input} from 'native-base'
@@ -7,6 +7,7 @@ import {CreateCompany} from './CreateCompany'
 import {companyQuery} from '../controllers/companyController'
 import CustomIconButton from '../components/CustomIconButton'
 import {FontAwesome} from '@expo/vector-icons'
+import firebase from '../firebase/fire'
 
 export const Company = ({navigation}) => {
   const [showBtns, setShowBtns] = useState(true)
@@ -30,6 +31,8 @@ export const Company = ({navigation}) => {
       setError(false)
     }
   }
+
+
 
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.view}>

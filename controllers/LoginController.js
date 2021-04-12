@@ -18,7 +18,9 @@ export async function register(email, password) {
   try {
     console.log('Register success')
 
-    await firebase.auth().createUserWithEmailAndPassword(email, password)
+    const response = await firebase.auth().createUserWithEmailAndPassword(email, password)
+    await response.user.sendEmailVerification()
+    return response
   } catch (e) {
     console.log('Register failed' + e.message)
     return e.message
@@ -44,4 +46,14 @@ export async function subscribeToAuth(authStateChanged) {
     }
     authStateChanged(user)
   })
+}
+
+export async function checkEmailVerification() {
+  try {
+  const response = await firebase.auth().currentUser.emailVerified
+  return response
+  } catch(e) {
+    console.log('Verification failed' + e.message)
+    return e.message
+  }
 }
