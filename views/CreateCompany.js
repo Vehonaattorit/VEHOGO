@@ -126,8 +126,8 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
     <View style={styles.container}>
       {!showCode ? (
         <>
-          <View style={styles.inputContainer}>
-            <Item style={styles.companyNameInputContainer}>
+          <View>
+            <Item>
               <Input
                 placeholder="Company name"
                 value={companyName}
