@@ -12,12 +12,14 @@ import {
 } from 'react-native'
 import {color} from '../../constants/colors'
 import {Input} from 'react-native-elements'
-import Icon from 'react-native-vector-icons/FontAwesome'
 import firebase from '../../firebase/fire'
 import {CustomButton} from '../../components/CustomButton'
 import {AuthButton} from '../../components/AuthButton'
 import {CustomTitle} from '../../components/CustomTitle'
 import {login, subscribeToAuth} from '../../controllers/LoginController'
+import {
+  Icon
+  } from 'native-base'
 
 export const LogIn = ({navigation, scrollRef}) => {
   const [email, setEmail] = useState('')
@@ -56,7 +58,7 @@ export const LogIn = ({navigation, scrollRef}) => {
         <Input
           autoCapitalize="none"
           placeholder="Email"
-          leftIcon={<Icon name="user" size={24} color={color.primary} />}
+          leftIcon={<Icon name="mail-outline" size={24} color={color.primary} />}
           value={email}
           onChangeText={setEmail}
         />
@@ -67,7 +69,7 @@ export const LogIn = ({navigation, scrollRef}) => {
           value={password}
           onChangeText={setPassword}
           secureTextEntry={true}
-          leftIcon={<Icon name="lock" size={24} color={color.primary} />}
+          leftIcon={<Icon name="lock-closed-outline" size={24} color={color.primary} />}
           errorMessage={error}
         />
       </View>

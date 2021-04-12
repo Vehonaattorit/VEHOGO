@@ -15,6 +15,8 @@ export class User {
     cars,
     preferedWorkingHours,
     setupIsCompleted,
+    phoneNumber,
+    fullName
   }) {
     this.id = id
     this.ownerPushToken = ownerPushToken
@@ -29,6 +31,8 @@ export class User {
     this.cars = cars
     this.preferedWorkingHours = preferedWorkingHours
     this.setupIsCompleted = setupIsCompleted
+    this.phoneNumber = phoneNumber
+    this.fullName = fullName
   }
 }
 
@@ -80,6 +84,13 @@ export const userConverter = {
     if (user.setupIsCompleted != undefined) {
       userObject.setupIsCompleted = user.setupIsCompleted
     }
+    if (user.phoneNumber != undefined) {
+      userObject.phoneNumber = user.phoneNumber
+    }
+    if (user.fullName != undefined) {
+      userObject.fullName = user.fullName
+    }
+
     return userObject
   },
   fromFirestore: function (snapshot, options) {
@@ -104,6 +115,8 @@ export const userConverter = {
       schoosedCarID: data.schoosedCarID,
       preferedWorkingHours: data.preferedWorkingHours,
       setupIsCompleted: data.setupIsCompleted,
+      phoneNumber: data.phoneNumber,
+      fullName: data.fullName
     })
   },
 }
