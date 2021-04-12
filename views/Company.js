@@ -32,7 +32,7 @@ export const Company = ({navigation}) => {
   }
 
   return (
-    <KeyboardAvoidingView behavior="padding" style={styles.view}>
+    <KeyboardAvoidingView behavior="position" style={styles.view}>
       {showBtns && (
         <>
           <View style={styles.poweredContainer}>

@@ -42,13 +42,16 @@ function SetUpStackNavigator() {
             backgroundColor: 'black',
           }}
         />
-
         <Stack.Screen
           name="Username"
           component={Username}
           options={{
-            title: 'Username',
-            headerTitleStyle: {textAlign: 'center', flex: 1},
+            title: 'Full Name',
+            headerTitleStyle: {
+              fontSize: 30,
+              textAlign: 'center',
+              flex: 1,
+            },
             headerTintColor: '#000000',
           }}
           headerStyle={{
@@ -66,7 +69,6 @@ function SetUpStackNavigator() {
             backgroundColor: 'black',
           }}
         />
-
         <Stack.Screen
           name="WorkingDays"
           component={WorkingDays}
@@ -79,7 +81,7 @@ function SetUpStackNavigator() {
             backgroundColor: 'black',
           }}
         />
-        {/* workingHours */}
+   
         <Stack.Screen
           name="WorkingHours"
           component={WorkingHours}

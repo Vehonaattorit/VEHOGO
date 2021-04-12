@@ -1,7 +1,6 @@
 import React, {useReducer, useState, useEffect} from 'react'
 import {View, Text, TextInput, StyleSheet} from 'react-native'
-
-import {Input} from 'react-native-elements'
+import {Ionicons} from '@expo/vector-icons'
 
 const INPUT_CHANGE = 'INPUT_CHANGE'
 
@@ -61,17 +60,17 @@ const CustomInput = (props) => {
   return (
     <>
       <Text style={styles.label}>{props.label}</Text>
-      <Input
-        {...props}
-        style={styles.input}
-        value={inputState.value}
-        onChangeText={textChangeHandler}
-      />
-      {isError && (
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>{props.errorText}</Text>
+      <View style={styles.inputContainer}>
+        <View style={styles.icon}>
+          <Ionicons name={props.iconName} size={30} color="black" />
         </View>
-      )}
+        <TextInput
+          {...props}
+          style={styles.input}
+          value={inputState.value}
+          onChangeText={textChangeHandler}
+        />
+      </View>
     </>
   )
 }
@@ -81,20 +80,27 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   inputContainer: {
-    position: 'absolute',
-    justifyContent: 'flex-end',
-    bottom: 60,
-    width: '90%',
-    color: 'white',
+    alignItems: 'center',
+    alignItems: 'center',
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOpacity: 0.8,
+    elevation: 6,
+    shadowRadius: 15,
+    shadowOffset: {width: 1, height: 13},
+    flexDirection: 'row',
+    backgroundColor: '#E1F5FD',
+    borderRadius: 10,
   },
-  label: {
-    marginVertical: 8,
+  icon: {
+    margin: 10,
   },
   input: {
-    paddingHorizontal: 2,
-    paddingVertical: 5,
-    borderBottomColor: '#ccc',
-    borderBottomWidth: 1,
+    backgroundColor: '#fff',
+    width: '80%',
+    margin: 5,
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 5,
   },
   errorContainer: {
     marginVertical: 5,

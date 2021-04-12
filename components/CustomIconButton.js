@@ -39,12 +39,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   iconTwoContainer: {
     width: 40,
     height: 40,
   },
-
   text: {
     fontSize: 20,
   },
