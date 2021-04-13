@@ -8,6 +8,7 @@ import firebase from '../firebase/fire'
 
 import {sendMessage, getMessages} from '../controllers/chatMessageController'
 import {UserContext} from '../contexts'
+import {getUser} from '../controllers/userController'
 import {ChatMessage, chatMessageConverter} from '../models/chatMessage'
 import {useAuthState} from 'react-firebase-hooks/auth'
 
@@ -18,27 +19,36 @@ const auth = firebase.auth()
 const firestore = firebase.firestore()
 
 export default ChatRoom = ({navigation, route}) => {
-  const [user] = useAuthState(auth)
+  const {chatRoom, chatRoomTitle} = route.params
+  const [ownerPushToken, setOwnerPushToken] = useState(null)
+  const [messages, setMessages] = useState([])
 
-  const {chatRoomID, chatRoomTitle} = route.params
+  const {user} = useContext(UserContext)
 
-  // const fetchMessages = async () => {
-  //   const prevMessages = await getMessages(chatRoomID)
+  const [chatUser] = useAuthState(auth)
 
-  //   setMessages(prevMessages)
-  // }
+  const getOwnerPushToken = async () => {
+    const {passengerID, driverID} = chatRoom
 
-  console.log('ChatRoomTitle', chatRoomTitle)
+    // Get opposite user's ID
+    const userId =
+      user.travelPreference === 'passenger' ? driverID : passengerID
+    const userDriver = await getUser(userId)
+
+    setOwnerPushToken(userDriver.ownerPushToken)
+  }
 
   useEffect(() => {
     navigation.setOptions({
       title: chatRoomTitle,
     })
 
+    getOwnerPushToken()
+
     const messagesListener = firebase
       .firestore()
       .collection('chats')
-      .doc(chatRoomID)
+      .doc(chatRoom.id)
       .collection('chatMessages')
       .withConverter(chatMessageConverter)
       .limit(25)
@@ -56,30 +66,6 @@ export default ChatRoom = ({navigation, route}) => {
     return () => messagesListener()
   }, [])
 
-  const [messages, setMessages] = useState([
-    /**
-     * Mock message data
-     *
-     */
-
-    // example of system message
-    {
-      _id: 0,
-      text: 'New room created.',
-      createdAt: new Date().getTime(),
-      system: true,
-    },
-    {
-      _id: 1,
-      text: 'Hello !',
-      createdAt: new Date().getTime(),
-      user: {
-        _id: 2,
-        name: 'User Test',
-      },
-    },
-  ])
-
   const renderSystemMessage = (props) => {
     return (
       <SystemMessage
@@ -93,19 +79,34 @@ export default ChatRoom = ({navigation, route}) => {
   const handleSend = async (messages) => {
     const text = messages[0].text
 
-    const {email, uid} = user
+    const {uid} = chatUser
 
     await sendMessage(
-      chatRoomID,
+      chatRoom.id,
       new ChatMessage({
         text,
         createdAt: new Date().getTime(),
         user: {
           _id: uid,
-          name: email,
+          name: user.userName,
         },
       })
     )
+
+    fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-Encoding': 'gzip, deflate',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        to: ownerPushToken,
+        title: 'Received new message',
+        body: `Message sent from ${user.userName}`,
+      }),
+    })
+    console.log('finished update')
   }
 
   const renderLoading = () => {
@@ -158,7 +159,7 @@ export default ChatRoom = ({navigation, route}) => {
     <GiftedChat
       messages={messages}
       onSend={handleSend}
-      user={{_id: user.uid}}
+      user={{_id: chatUser.uid}}
       renderBubble={renderBubble}
       placeholder="Type your message here..."
       showUserAvatar

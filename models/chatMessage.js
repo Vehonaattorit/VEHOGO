@@ -10,8 +10,6 @@ export class ChatMessage {
 // Firestore data converter
 export const chatMessageConverter = {
   toFirestore: function (chatMessage) {
-    console.log('To Firestore', chatMessage)
-
     let chatRoomObject = {}
     if (chatMessage._id != undefined) {
       chatRoomObject._id = chatMessage._id
@@ -27,12 +25,9 @@ export const chatMessageConverter = {
       // chatRoomObject.user = userConverter.toFirestore(chatMessage.user)
     }
 
-    console.log('ChatRoomObject', chatRoomObject)
-
     return chatRoomObject
   },
   fromFirestore: function (snapshot, options) {
-    console.log('snapshots', snapshot.data(options))
     const data = snapshot.data(options)
 
     return new ChatMessage({

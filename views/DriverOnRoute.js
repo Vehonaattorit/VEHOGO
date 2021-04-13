@@ -142,20 +142,20 @@ export const DriverOnRoute = ({navigation, route}) => {
     ])
 
     // Chatrooms array is empty
-    let chatRoomID
+    let chatRoom
     if (typeof chatRooms !== 'undefined' && chatRooms.length === 0) {
-      chatRoomID = await addChat(
+      chatRoom = await addChat(
         new ChatRoom({
           driverID: workTrip.driverID,
           passengerID: userID,
         })
       )
     } else {
-      chatRoomID = chatRooms[0].id
+      chatRoom = chatRooms[0]
     }
 
     navigation.navigate('ChatRoom', {
-      chatRoomID,
+      chatRoom,
       chatRoomTitle: chatRoomName,
     })
   }
@@ -163,10 +163,13 @@ export const DriverOnRoute = ({navigation, route}) => {
   // Render Passenger List at top of the screen
   const renderItem = ({item, index}, parallaxProps) => {
     return (
-      <View style={styles.listItemContainer}>
+      <View style={{flex: 1, flexDirection: 'row'}}>
+        <View style={styles.leftArrowContainer}>
+          <AntDesign name="caretleft" size={24} color={color.lightBlack} />
+        </View>
         <TouchableOpacity
           onPress={() => createChatRoom(item)}
-          style={{flex: 1}}
+          style={styles.listItemContainer}
         >
           <View style={styles.listItemTopRow}>
             <View>
@@ -187,9 +190,42 @@ export const DriverOnRoute = ({navigation, route}) => {
                 Olen etuovella
               </Text>
             </View>
+            <View>
+              <Text style={styles.clockTimeContainer}>12:53</Text>
+            </View>
           </View>
         </TouchableOpacity>
+        <View style={styles.leftArrowContainer}>
+          <AntDesign name="caretright" size={24} color={color.lightBlack} />
+        </View>
       </View>
+      // <View style={styles.listItemContainer}>
+      //   <TouchableOpacity
+      //     onPress={() => createChatRoom(item)}
+      //     style={{flex: 1}}
+      //   >
+      //     <View style={styles.listItemTopRow}>
+      //       <View>
+      //         <Text style={styles.nameTopRow}>{item.stopName}</Text>
+      //       </View>
+      //       <View>
+      //         <Text style={styles.distanceTopRow}>2 km</Text>
+      //       </View>
+      //     </View>
+      //     <View style={styles.listItemBottomRow}>
+      //       <View>
+      //         <Text style={styles.latestMessageBottomRow}>
+      //           <Ionicons
+      //             name="checkmark-done"
+      //             size={24}
+      //             color={color.lightBlack}
+      //           />
+      //           Olen etuovella
+      //         </Text>
+      //       </View>
+      //     </View>
+      //   </TouchableOpacity>
+      // </View>
     )
   }
 
