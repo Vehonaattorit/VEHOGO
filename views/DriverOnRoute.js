@@ -33,8 +33,6 @@ export const DriverOnRoute = ({navigation, route}) => {
 
   const {user} = useContext(UserContext)
 
-  console.log('DriverOnRoute', workTrip)
-
   let intervalTimer
   const [mapRef, setMapRef] = useState(null)
   const [routeCoordinates, setRouteCoordinates] = useState([])
@@ -123,12 +121,18 @@ export const DriverOnRoute = ({navigation, route}) => {
     } else return <View />
   }
 
-  const createChatRoom = async (name) => {
+  const createChatRoom = async (item) => {
+    const userID = user.travelPreference === 'passenger' ? item.id : item.userID
+    const chatRoomName =
+      user.travelPreference === 'passenger'
+        ? workTrip.driverName
+        : item.stopName
+
     const chatRooms = await getChatRoomByIds([
       {
         field: 'passengerID',
         condition: '==',
-        value: workTrip.scheduledDrive.stops[1].userID,
+        value: userID,
       },
       {
         field: 'driverID',
@@ -143,7 +147,8 @@ export const DriverOnRoute = ({navigation, route}) => {
       chatRoomID = await addChat(
         new ChatRoom({
           driverID: workTrip.driverID,
-          passengerID: workTrip.scheduledDrive.stops[1].userID,
+          passengerID: userID,
+          // passengerID: workTrip.scheduledDrive.stops[1].userID,
         })
       )
     } else {
@@ -152,7 +157,7 @@ export const DriverOnRoute = ({navigation, route}) => {
 
     navigation.navigate('ChatRoom', {
       chatRoomID,
-      chatRoomTitle: name,
+      chatRoomTitle: chatRoomName,
     })
   }
 
@@ -161,7 +166,7 @@ export const DriverOnRoute = ({navigation, route}) => {
     return (
       <View style={styles.listItemContainer}>
         <TouchableOpacity
-          onPress={() => createChatRoom(item.stopName)}
+          onPress={() => createChatRoom(item)}
           style={{flex: 1}}
         >
           <View style={styles.listItemTopRow}>
@@ -198,7 +203,7 @@ export const DriverOnRoute = ({navigation, route}) => {
             <AntDesign name="caretleft" size={24} color={color.lightBlack} />
           </View>
           <TouchableOpacity
-            onPress={() => createChatRoom(workTrip.driverName)}
+            onPress={() => createChatRoom(user)}
             style={styles.listItemContainer}
           >
             <View style={styles.listItemTopRow}>
@@ -267,50 +272,6 @@ export const DriverOnRoute = ({navigation, route}) => {
         </Container>
       </View>
     </View>
-    // <View style={styles.view}>
-
-    //   {/* <Container style={styles.requestAcceptRefuseContent}>
-    //     <Content padder>
-    //       <View style={styles.info}>
-    //         <Text>Michael Lock</Text>
-    //         <Text>2km</Text>
-    //       </View>
-
-    //       <View style={styles.info}>
-    //         <Text>Olen etuovella</Text>
-    //         <Button small onPress={() => navigation.navigate('ChatRoom')}>
-    //           <Icon active name="chatbox-ellipses-outline" />
-    //         </Button>
-    //       </View>
-    //     </Content>
-    //   </Container> */}
-
-    //   <View style={styles.requestMapContent}>
-    //     <Container style={styles.requestMapContent}>
-    //       <MapView
-    //         ref={(ref) => {
-    //           setMapRef(ref)
-    //         }}
-    //         style={styles.mapStyle}
-    //         provider={MapView.PROVIDER_GOOGLE}
-    //         initialRegion={{
-    //           latitude: workTrip.scheduledDrive.stops[0].location.latitude,
-    //           longitude: workTrip.scheduledDrive.stops[0].location.longitude,
-    //           latitudeDelta: 1,
-    //           longitudeDelta: 1,
-    //         }}
-    //       >
-    //         <MapView.Polyline
-    //           coordinates={routeCoordinates}
-    //           strokeColor="#000"
-    //           strokeWidth={4}
-    //         />
-    //         {markers}
-    //         <DriverMarker workTrip={workTrip} />
-    //       </MapView>
-    //     </Container>
-    //   </View>
-    // </View>
   )
 }
 
