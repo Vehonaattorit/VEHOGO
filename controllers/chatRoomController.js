@@ -75,6 +75,36 @@ export async function getChat(chatId) {
   }
 }
 
+export const queryChatRoom = async (userID, driverID) => {
+  const chatRooms = await getChatRoomByIds([
+    {
+      field: 'passengerID',
+      condition: '==',
+      value: userID,
+    },
+    {
+      field: 'driverID',
+      condition: '==',
+      value: driverID,
+    },
+  ])
+
+  // Chatrooms array is empty
+  let chatRoom
+  if (typeof chatRooms !== 'undefined' && chatRooms.length === 0) {
+    chatRoom = await addChat(
+      new ChatRoom({
+        driverID: driverId,
+        passengerID: userID,
+      })
+    )
+  } else {
+    chatRoom = chatRooms[0]
+  }
+
+  return chatRoom
+}
+
 export function chatStream(chatId) {
   try {
     // Add a new message in collection "chats"

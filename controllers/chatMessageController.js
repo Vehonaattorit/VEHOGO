@@ -2,12 +2,11 @@ import firebase from 'firebase/app'
 import {v4} from 'uuid/v4'
 import {chatMessageConverter} from '../models/chatMessage'
 import 'firebase/firestore'
+import {chatRoomConverter} from '../models/chatRoom'
 
 const db = firebase.firestore()
 
 export async function sendMessage(chatRoomID, chatMessage) {
-  console.log('Send Mesgus', chatMessage)
-
   try {
     if (chatMessage._id === undefined) {
       chatMessage._id = v4()
@@ -24,35 +23,24 @@ export async function sendMessage(chatRoomID, chatMessage) {
       merge: true,
     })
 
+    let chatRoomRef = db.collection('chats').doc(chatRoomID)
+
+    chatRoomRef.withConverter(chatRoomConverter).set(
+      {
+        latestMessage: {
+          text: chatMessage.text,
+          createdAt: chatMessage.createdAt,
+        },
+      },
+      {merge: true}
+    )
+
     return chatMessage.id
   } catch (error) {
     console.error('Error writing document: ', error)
 
     return
   }
-  // try {
-  //   if (chatMessage.id === undefined) {
-  //     chatMessage.id = v4()
-  //   }
-
-  //   // Create a new message document
-  //   let messageRef = db
-  //     .collection('chats')
-  //     .doc(chatRoomID)
-  //     .collection('chatMessages')
-
-  //   console.log('sendMessage', chatMessage)
-
-  //   messageRef
-  //     .withConverter(chatMessageConverter)
-  //     .set(chatMessage, {merge: true})
-
-  //   return chatMessage.id
-  // } catch (error) {
-  //   console.error('Error writing document: ', error)
-
-  //   return
-  // }
 }
 
 export async function updateMessage(message) {
@@ -82,60 +70,16 @@ export async function getMessages(chatRoomID) {
         const messages = querySnapshot.docs.map((doc) => {
           const firebaseData = doc.data()
 
-          console.log('FireBaseData', firebaseData)
-
           return firebaseData
-
-          // const data = {
-          //   _id: doc.id,
-          //   text: '',
-          //   createdAt: new Date().getTime(),
-          //   ...firebaseData,
-          // }
-
-          // if (!firebaseData.system) {
-          //   data.user = {
-          //     ...firebaseData.user,
-          //     name: firebaseData.user.email,
-          //   }
-          // }
-
-          // return data
         })
 
         return messages
       })
-
-    // let query = await messagesRef.orderBy('createdAt', 'desc').limit(25).get()
-
-    // const messages = []
-
-    // query.forEach((doc) => {
-    //   messages.push(chatMessageConverter.fromData(doc.data()))
-    // })
-
-    // return messages
   } catch (error) {
     console.error('Error writing document: ', error)
     return
   }
 }
-
-// export async function getMessage(messageId) {
-//   try {
-//     // Add a new document in collection "messages"
-//     let doc = await db
-//       .collection('messages')
-//       .doc(messageId)
-//       .withConverter(chatMessageConverter)
-//       .get()
-
-//     return doc.data()
-//   } catch (error) {
-//     console.error('Error writing document: ', error)
-//     return
-//   }
-// }
 
 export function messageStream(messageId) {
   try {
