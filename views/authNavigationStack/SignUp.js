@@ -32,7 +32,7 @@ export const SignUp = () => {
         setConfirmError('')
         const result = await register(email, password)
         console.log(result.user.uid)
-        await updateUser(new User ({id:result.user.uid, fullName: name, phoneNumber: phoneNumber}))
+        await updateUser(new User ({id:result.user.uid, userName: name, phoneNumber: phoneNumber}))
 
         .then((res) => {
           if (!mountedRef.current) return null
