@@ -148,7 +148,6 @@ export const DriverOnRoute = ({navigation, route}) => {
         new ChatRoom({
           driverID: workTrip.driverID,
           passengerID: userID,
-          // passengerID: workTrip.scheduledDrive.stops[1].userID,
         })
       )
     } else {
