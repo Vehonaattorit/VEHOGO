@@ -16,7 +16,6 @@ import 'firebase/firestore'
 import 'firebase/auth'
 
 const auth = firebase.auth()
-const firestore = firebase.firestore()
 
 export default ChatRoom = ({navigation, route}) => {
   const {chatRoom, chatRoomTitle} = route.params
@@ -106,7 +105,6 @@ export default ChatRoom = ({navigation, route}) => {
         body: `Message sent from ${user.userName}`,
       }),
     })
-    console.log('finished update')
   }
 
   const renderLoading = () => {

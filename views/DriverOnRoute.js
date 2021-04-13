@@ -5,26 +5,31 @@ import {
   Text,
   Dimensions,
   TouchableOpacity,
-  Image,
 } from 'react-native'
-import {Content, Body, Container, Icon, Button} from 'native-base'
+import {Container, Picker} from 'native-base'
 import MapView from 'react-native-maps'
 import MapViewDirections from 'react-native-maps-directions'
 import decodePolyline from 'decode-google-map-polyline'
 import * as Location from 'expo-location'
 import {updateWorkTrip, workTripStream} from '../controllers/workTripController'
-import {WorkTrip} from '../models/workTrip'
 import firebase from 'firebase/app'
 import {UserContext} from '../contexts'
 import {updateUserPosition} from '../utils/driverFunctions'
 import {useDocumentData} from 'react-firebase-hooks/firestore'
 import Carousel, {ParallaxImage} from 'react-native-snap-carousel'
 import {ChatRoom} from '../models/chatRoom'
-import {addChat, getChatRoomByIds} from '../controllers/chatRoomController'
+import {queryChatRoom} from '../controllers/chatRoomController'
 import {AntDesign, Ionicons} from '@expo/vector-icons'
 import {color} from '../constants/colors'
+import {sendMessage} from '../controllers/chatMessageController'
+import {ChatMessage} from '../models/chatMessage'
+import {useAuthState} from 'react-firebase-hooks/auth'
 
 const {width: screenWidth} = Dimensions.get('window')
+
+import 'firebase/auth'
+import {getUser} from '../controllers/userController'
+import QuickMessagesMenu from '../components/QuickMessagesMenu'
 
 export const DriverOnRoute = ({navigation, route}) => {
   const {workTrip} = route.params
@@ -95,11 +100,9 @@ export const DriverOnRoute = ({navigation, route}) => {
   }, [])
 
   const DriverMarker = ({workTrip}) => {
-    //
     if (workTrip != undefined) {
       let reference = workTripStream(user.company.id, workTrip.id)
       const [doc] = useDocumentData(reference)
-      // doc &&
 
       return (
         <>
@@ -128,31 +131,7 @@ export const DriverOnRoute = ({navigation, route}) => {
         ? workTrip.driverName
         : item.stopName
 
-    const chatRooms = await getChatRoomByIds([
-      {
-        field: 'passengerID',
-        condition: '==',
-        value: userID,
-      },
-      {
-        field: 'driverID',
-        condition: '==',
-        value: workTrip.driverID,
-      },
-    ])
-
-    // Chatrooms array is empty
-    let chatRoom
-    if (typeof chatRooms !== 'undefined' && chatRooms.length === 0) {
-      chatRoom = await addChat(
-        new ChatRoom({
-          driverID: workTrip.driverID,
-          passengerID: userID,
-        })
-      )
-    } else {
-      chatRoom = chatRooms[0]
-    }
+    const chatRoom = await queryChatRoom(userID, workTrip.driverID)
 
     navigation.navigate('ChatRoom', {
       chatRoom,
@@ -167,89 +146,17 @@ export const DriverOnRoute = ({navigation, route}) => {
         <View style={styles.leftArrowContainer}>
           <AntDesign name="caretleft" size={24} color={color.lightBlack} />
         </View>
-        <TouchableOpacity
-          onPress={() => createChatRoom(item)}
-          style={styles.listItemContainer}
-        >
-          <View style={styles.listItemTopRow}>
-            <View>
-              <Text style={styles.nameTopRow}>{item.stopName}</Text>
-            </View>
-            <View>
-              <Text style={styles.distanceTopRow}>2 km</Text>
-            </View>
-          </View>
-          <View style={styles.listItemBottomRow}>
-            <View>
-              <Text style={styles.latestMessageBottomRow}>
-                <Ionicons
-                  name="checkmark-done"
-                  size={24}
-                  color={color.lightBlack}
-                />
-                Olen etuovella
-              </Text>
-            </View>
-            <View>
-              <Text style={styles.clockTimeContainer}>12:53</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-        <View style={styles.leftArrowContainer}>
-          <AntDesign name="caretright" size={24} color={color.lightBlack} />
-        </View>
-      </View>
-      // <View style={styles.listItemContainer}>
-      //   <TouchableOpacity
-      //     onPress={() => createChatRoom(item)}
-      //     style={{flex: 1}}
-      //   >
-      //     <View style={styles.listItemTopRow}>
-      //       <View>
-      //         <Text style={styles.nameTopRow}>{item.stopName}</Text>
-      //       </View>
-      //       <View>
-      //         <Text style={styles.distanceTopRow}>2 km</Text>
-      //       </View>
-      //     </View>
-      //     <View style={styles.listItemBottomRow}>
-      //       <View>
-      //         <Text style={styles.latestMessageBottomRow}>
-      //           <Ionicons
-      //             name="checkmark-done"
-      //             size={24}
-      //             color={color.lightBlack}
-      //           />
-      //           Olen etuovella
-      //         </Text>
-      //       </View>
-      //     </View>
-      //   </TouchableOpacity>
-      // </View>
-    )
-  }
-
-  return (
-    // Passenger
-    <View style={styles.container}>
-      {user.travelPreference === 'passenger' ? (
-        <View style={{flex: 1, flexDirection: 'row'}}>
-          <View style={styles.leftArrowContainer}>
-            <AntDesign name="caretleft" size={24} color={color.lightBlack} />
-          </View>
-          <TouchableOpacity
-            onPress={() => createChatRoom(user)}
-            style={styles.listItemContainer}
-          >
+        <View style={styles.listItemContainer}>
+          <TouchableOpacity onPress={() => createChatRoom(item)}>
             <View style={styles.listItemTopRow}>
               <View>
-                <Text style={styles.nameTopRow}>{workTrip.driverName}</Text>
+                <Text style={styles.nameTopRow}>{item.stopName}</Text>
               </View>
               <View>
                 <Text style={styles.distanceTopRow}>2 km</Text>
               </View>
             </View>
-            <View style={styles.listItemBottomRow}>
+            <View style={styles.listItemMiddleRow}>
               <View>
                 <Text style={styles.latestMessageBottomRow}>
                   <Ionicons
@@ -265,8 +172,54 @@ export const DriverOnRoute = ({navigation, route}) => {
               </View>
             </View>
           </TouchableOpacity>
-          <View style={styles.leftArrowContainer}>
-            <AntDesign name="caretright" size={24} color={color.lightBlack} />
+          <View style={styles.listItemBottomRow}>
+            <QuickMessagesMenu user={user} workTrip={workTrip} item={item} />
+          </View>
+        </View>
+
+        <View style={styles.leftArrowContainer}>
+          <AntDesign name="caretright" size={24} color={color.lightBlack} />
+        </View>
+      </View>
+    )
+  }
+
+  return (
+    // Passenger
+    <View style={styles.container}>
+      {user.travelPreference === 'passenger' ? (
+        <View style={{...styles.listItemContainer, margin: 15}}>
+          <TouchableOpacity onPress={() => createChatRoom(user)}>
+            <View style={styles.listItemTopRow}>
+              <View>
+                <Text style={styles.nameTopRow}>{workTrip.driverName}</Text>
+              </View>
+              <View>
+                <Text style={styles.distanceTopRow}>2 km</Text>
+              </View>
+            </View>
+            <View style={styles.listItemMiddleRow}>
+              <View>
+                <Text style={styles.latestMessageBottomRow}>
+                  <Ionicons
+                    name="checkmark-done"
+                    size={24}
+                    color={color.lightBlack}
+                  />
+                  Olen etuovella
+                </Text>
+              </View>
+              <View>
+                <Text style={styles.clockTimeContainer}>12:53</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+          <View style={styles.listItemBottomRow}>
+            <QuickMessagesMenu
+              user={user}
+              workTrip={workTrip}
+              item={{id: user.id}}
+            />
           </View>
         </View>
       ) : (
@@ -351,19 +304,26 @@ const styles = StyleSheet.create({
   listItemContainer: {
     flex: 1,
     backgroundColor: 'white',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
   },
-
   leftArrowContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
     padding: 10,
   },
   listItemTopRow: {
-    padding: 10,
-    marginTop: 10,
+    alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
+  },
+  listItemMiddleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  listItemBottomRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
   },
   nameTopRow: {
     fontSize: 20,
@@ -379,13 +339,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: color.lightBlack,
     fontFamily: 'open-sans-regular',
-  },
-  listItemBottomRow: {
-    padding: 10,
-    marginBottom: 10,
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
   },
   distanceTopRow: {
     fontSize: 16,
