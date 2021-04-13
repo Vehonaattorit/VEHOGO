@@ -67,8 +67,8 @@ const latestMessageConverter = {
 
     return LatestMessageObject
   },
-  fromFirestore: function (data) {
-    // const data = snapshot.data(options)
+  fromFirestore: function (options) {
+    const data = snapshot.data(options)
 
     return new LatestMessage({
       createdAt: data.createdAt,

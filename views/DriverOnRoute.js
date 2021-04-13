@@ -41,6 +41,7 @@ export const DriverOnRoute = ({navigation, route}) => {
   let intervalTimer
   const [mapRef, setMapRef] = useState(null)
   const [routeCoordinates, setRouteCoordinates] = useState([])
+  const [chatRooms, setChatRooms] = useState([])
 
   const [markers, setMarkers] = useState([
     workTrip.scheduledDrive.stops.map((stop) => (
@@ -138,6 +139,28 @@ export const DriverOnRoute = ({navigation, route}) => {
       chatRoomTitle: chatRoomName,
     })
   }
+
+  useEffect(() => {
+    const chatRoomsListener = firebase
+      .firestore()
+      .collection('chats')
+      .onSnapshot((querySnapshot) => {
+        const chatRooms = querySnapshot.docs.map((doc) => {
+          return {
+            _id: doc.id,
+            name: '',
+            lastestMessage: {
+              text: '',
+            },
+            ...doc.data(),
+          }
+        })
+
+        setChatRooms(chatRooms)
+      })
+
+    return () => chatRoomsListener()
+  }, [])
 
   // Render Passenger List at top of the screen
   const renderItem = ({item, index}, parallaxProps) => {
