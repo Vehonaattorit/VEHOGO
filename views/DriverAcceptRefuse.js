@@ -63,20 +63,6 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
     setRouteCoordinates(tempRouteCoordinates)
   }, [])
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //
-  //     if (mapRef != undefined && mapRef != null) {
-  //
-  //         'fit markers',
-  //         singleItem.scheduledDrive.stops.map((stop) => stop.address)
-  //       )
-  //       mapRef.fitToSuppliedMarkers(
-  //         singleItem.scheduledDrive.stops.map((stop) => stop.address)
-  //       )
-  //     }
-  //   }, 3000)
-  // }, [mapRef])
 
   return (
     <View style={styles.view}>

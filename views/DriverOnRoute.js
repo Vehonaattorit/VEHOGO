@@ -5,16 +5,11 @@ import {
   Text,
   Dimensions,
   TouchableOpacity,
-  Image,
 } from 'react-native'
-import {Content, Body, Container, Icon, Button} from 'native-base'
+import {Container} from 'native-base'
 import MapView from 'react-native-maps'
-import MapViewDirections from 'react-native-maps-directions'
 import decodePolyline from 'decode-google-map-polyline'
-import * as Location from 'expo-location'
 import {updateWorkTrip, workTripStream} from '../controllers/workTripController'
-import {WorkTrip} from '../models/workTrip'
-import firebase from 'firebase/app'
 import {UserContext} from '../contexts'
 import {updateUserPosition} from '../utils/driverFunctions'
 import {useDocumentData} from 'react-firebase-hooks/firestore'
@@ -23,19 +18,25 @@ import {ChatRoom} from '../models/chatRoom'
 import {addChat, getChatRoomByIds} from '../controllers/chatRoomController'
 import {AntDesign, Ionicons} from '@expo/vector-icons'
 import {color} from '../constants/colors'
+import {calculateDistance} from '../utils/utils'
+import {FullWidthButton} from '../components/fullWidthButton'
+
 
 const {width: screenWidth} = Dimensions.get('window')
 
 export const DriverOnRoute = ({navigation, route}) => {
   const {workTrip} = route.params
+  const scrollRef = useRef()
+  const mapRef = useRef()
 
-  const passengerStops = workTrip.scheduledDrive.stops.slice(1, -1)
+  const passengerStops = workTrip.scheduledDrive.stops.slice(1)
 
   const {user} = useContext(UserContext)
 
   let intervalTimer
-  const [mapRef, setMapRef] = useState(null)
   const [routeCoordinates, setRouteCoordinates] = useState([])
+  const [showNextStopBar, setShowNextStopBar] = useState(false)
+  const [showStop, setShowStop] = useState(false)
 
   const [markers, setMarkers] = useState([
     workTrip.scheduledDrive.stops.map((stop) => (
@@ -48,6 +49,7 @@ export const DriverOnRoute = ({navigation, route}) => {
             : require('../images/passenger-map-icon-white.png')
         }
         key={stop.address}
+        identifier={stop.address}
         coordinate={{
           latitude: stop.location.latitude,
           longitude: stop.location.longitude,
@@ -61,14 +63,65 @@ export const DriverOnRoute = ({navigation, route}) => {
     // if user is driver, update location
     if (user.travelPreference == 'driver') {
       // car position updated every 60 seconds
-      intervalTimer = setInterval(callUpdateUserPosition, 60000)
+      intervalTimer = setInterval(callUpdateUserPosition, 5000)
       async function callUpdateUserPosition() {
+
+        //update driver position to firebase
         let location = await updateUserPosition(user, workTrip.id)
+
+        //calculate distance between next stop and current position
+        let distance = calculateDistance(location.coords.latitude, location.coords.longitude, workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop].location.latitude, workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop].location.longitude)
+        console.log('distance', distance)
+
+        //show NextStopBar if distance less than 300m
+        if (distance <= 0.3) {
+
+          if (workTrip.scheduledDrive.stops.length - 1 === workTrip.scheduledDrive.nextStop) {
+            setShowStop(true)
+          } else {
+            setShowNextStopBar(true)
+          }
+
+        }
       }
     }
   }
 
+  const changeNextStop = async () => {
+    setShowNextStopBar(false)
+    if (workTrip.scheduledDrive.stops.length - 1 !== workTrip.scheduledDrive.nextStop) {
+
+      workTrip.scheduledDrive.nextStop += 1
+      await updateWorkTrip(user.company.id, workTrip)
+      //check if stop is laststop
+      if (workTrip.scheduledDrive.stops.length - 1 === workTrip.scheduledDrive.nextStop) {
+        workTrip.isDriving = false
+        await updateWorkTrip(user.company.id, workTrip)
+        console.log('Arrived to location')
+      } else {
+        scrollRef.current.snapToItem(workTrip.scheduledDrive.nextStop - 1)
+      }
+    }
+
+  }
+
+  const stopDriving = async () => {
+    workTrip.isDriving = false
+    await updateWorkTrip(user.company.id, workTrip)
+    navigation.popToTop()
+  }
+  // useEffect(() => {
+
+  // }, [mapRef])
+
   useEffect(() => {
+    setTimeout(() => {
+      if (mapRef != undefined) {
+        mapRef.current.fitToSuppliedMarkers(workTrip.scheduledDrive.stops.map((stop) => stop.address), { edgePadding: { top: 0, right: 150, bottom: 500, left: 150 },animated: true })
+      }
+    }, 500)
+
+
     var tempRouteCoordinates = []
     //
     if (workTrip.route != undefined) {
@@ -86,21 +139,21 @@ export const DriverOnRoute = ({navigation, route}) => {
     }
     setRouteCoordinates(tempRouteCoordinates)
     //
-    //
     updateLocationInterval()
-
     return () => {
       clearInterval(intervalTimer)
     }
   }, [])
 
   const DriverMarker = ({workTrip}) => {
-    //
+
     if (workTrip != undefined) {
       let reference = workTripStream(user.company.id, workTrip.id)
       const [doc] = useDocumentData(reference)
       // doc &&
-
+      if (doc != undefined && doc.driverCurrentLocation != undefined) {
+        console.log('user location', doc.driverCurrentLocation.location)
+      }
       return (
         <>
           {doc != undefined && doc.driverCurrentLocation != undefined ? (
@@ -272,29 +325,25 @@ export const DriverOnRoute = ({navigation, route}) => {
       ) : (
         // Driver
         <Carousel
+          firstItem={workTrip.scheduledDrive.nextStop - 1}
           sliderWidth={screenWidth}
           sliderHeight={screenWidth}
           itemWidth={screenWidth - 30}
           data={passengerStops}
           renderItem={renderItem}
           hasParallaxImages={true}
+          ref={scrollRef}
+
+        //onSnapToItem={workTrip.scheduledDrive.nextStop}
         />
       )}
 
       <View style={styles.requestMapContent}>
         <Container style={styles.requestMapContent}>
           <MapView
-            ref={(ref) => {
-              setMapRef(ref)
-            }}
+            ref={mapRef}
             style={styles.mapStyle}
             provider={MapView.PROVIDER_GOOGLE}
-            initialRegion={{
-              latitude: workTrip.scheduledDrive.stops[0].location.latitude,
-              longitude: workTrip.scheduledDrive.stops[0].location.longitude,
-              latitudeDelta: 1,
-              longitudeDelta: 1,
-            }}
           >
             <MapView.Polyline
               coordinates={routeCoordinates}
@@ -305,6 +354,27 @@ export const DriverOnRoute = ({navigation, route}) => {
             <DriverMarker workTrip={workTrip} />
           </MapView>
         </Container>
+        {showNextStopBar &&
+          <FullWidthButton
+            title={'Next Stop'}
+            direction={'row'}
+            children={<Text>Picked up passenger?</Text>}
+            onPress={() => {changeNextStop()}}
+          >
+
+          </FullWidthButton>
+        }
+        {showStop &&
+          <FullWidthButton
+            title={'Stop Driving'}
+            direction={'row'}
+            color={color.radicalRed}
+            children={<Text>Destination reached</Text>}
+            onPress={() => {stopDriving()}}
+          >
+
+          </FullWidthButton>
+        }
       </View>
     </View>
   )
@@ -388,6 +458,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   distanceTopRow: {
+    fontSize: 16,
+    color: color.lightBlack,
+    fontFamily: 'open-sans-regular',
+  },
+  nextButtonBottomRow: {
+    alignSelf: 'center',
     fontSize: 16,
     color: color.lightBlack,
     fontFamily: 'open-sans-regular',

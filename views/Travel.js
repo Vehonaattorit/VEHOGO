@@ -31,7 +31,7 @@ export const Travel = ({navigation}) => {
             title="Share My Car"
             onPress={() => {
               setTravelPreference('driver')
-              navigation.navigate('Username')
+              navigation.navigate('Address')
             }}
           />
         </View>
@@ -43,7 +43,7 @@ export const Travel = ({navigation}) => {
             title="Get A Ride"
             onPress={() => {
               setTravelPreference('passenger')
-              navigation.navigate('Username')
+              navigation.navigate('Address')
             }}
           />
         </View>

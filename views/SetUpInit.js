@@ -120,6 +120,7 @@ export const SetUpInit = ({route}) => {
             end: new firebase.firestore.Timestamp.fromDate(end),
             availableSeats: 0,
             stops: goingTo == 'work' ? initialStops : initialStops.reverse(),
+            nextStop: 0
           }),
         })
       )
