@@ -190,12 +190,16 @@ export const DriverOnRoute = ({navigation, route}) => {
   }
 
   return (
+    // Passenger
     <View style={styles.container}>
       {user.travelPreference === 'passenger' ? (
-        <View style={styles.listItemContainer}>
+        <View style={{flex: 1, flexDirection: 'row'}}>
+          <View style={styles.leftArrowContainer}>
+            <AntDesign name="caretleft" size={24} color={color.lightBlack} />
+          </View>
           <TouchableOpacity
             onPress={() => createChatRoom(workTrip.driverName)}
-            style={{flex: 1}}
+            style={styles.listItemContainer}
           >
             <View style={styles.listItemTopRow}>
               <View>
@@ -216,10 +220,17 @@ export const DriverOnRoute = ({navigation, route}) => {
                   Olen etuovella
                 </Text>
               </View>
+              <View>
+                <Text style={styles.clockTimeContainer}>12:53</Text>
+              </View>
             </View>
           </TouchableOpacity>
+          <View style={styles.leftArrowContainer}>
+            <AntDesign name="caretright" size={24} color={color.lightBlack} />
+          </View>
         </View>
       ) : (
+        // Driver
         <Carousel
           sliderWidth={screenWidth}
           sliderHeight={screenWidth}
@@ -312,14 +323,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
-
   info: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     margin: 10,
   },
-
   mapStyle: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
@@ -348,10 +357,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'space-between',
   },
+
+  leftArrowContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    padding: 10,
+  },
   listItemTopRow: {
     padding: 10,
-    flexDirection: 'row',
+    marginTop: 10,
     justifyContent: 'space-between',
+    flexDirection: 'row',
   },
   nameTopRow: {
     fontSize: 20,
@@ -363,12 +379,17 @@ const styles = StyleSheet.create({
     color: color.lightBlack,
     fontFamily: 'open-sans-regular',
   },
-
+  clockTimeContainer: {
+    fontSize: 16,
+    color: color.lightBlack,
+    fontFamily: 'open-sans-regular',
+  },
   listItemBottomRow: {
     padding: 10,
+    marginBottom: 10,
     flexDirection: 'row',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
   },
   distanceTopRow: {
     fontSize: 16,
