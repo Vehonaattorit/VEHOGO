@@ -118,7 +118,7 @@ export const SetUpInit = ({route}) => {
           scheduledDrive: new ScheduledDrive({
             start: new firebase.firestore.Timestamp.fromDate(start),
             end: new firebase.firestore.Timestamp.fromDate(end),
-            takenSeats: 0,
+            availableSeats: 0,
             stops: goingTo == 'work' ? initialStops : initialStops.reverse(),
           }),
         })

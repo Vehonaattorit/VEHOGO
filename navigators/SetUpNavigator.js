@@ -8,12 +8,42 @@ import {WorkingDays} from '../views/WorkingDays'
 import {Username} from '../views/Username'
 import {SetUpInit} from '../views/SetUpInit'
 import {Company} from '../views/Company'
+import {VerifyEmail} from '../views/VerifyEmail'
+import {IconButton} from 'react-native-paper'
+import {color} from '../constants/colors'
+import {signOut} from '../controllers/LoginController'
 
 const Stack = createStackNavigator()
 function SetUpStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name="VerifyEmail"
+          component={VerifyEmail}
+          options={() => ({
+            title: 'Verify Email',
+            headerTitleStyle: {
+              fontSize: 30,
+              textAlign: 'center',
+              flex: 1,
+            },
+            headerTintColor: '#000000',
+            headerLeft: () => (
+              <IconButton
+                icon="logout"
+                size={28}
+                color={color.darkBlue}
+                onPress={() => {
+                  signOut()
+                }}
+              />
+            ),
+          })}
+          headerStyle={{
+            backgroundColor: 'black',
+          }}
+        />
         <Stack.Screen
           name="Company"
           component={Company}
@@ -42,13 +72,16 @@ function SetUpStackNavigator() {
             backgroundColor: 'black',
           }}
         />
-
         <Stack.Screen
           name="Username"
           component={Username}
           options={{
-            title: 'Username',
-            headerTitleStyle: {textAlign: 'center', flex: 1},
+            title: 'Full Name',
+            headerTitleStyle: {
+              fontSize: 30,
+              textAlign: 'center',
+              flex: 1,
+            },
             headerTintColor: '#000000',
           }}
           headerStyle={{
@@ -66,7 +99,6 @@ function SetUpStackNavigator() {
             backgroundColor: 'black',
           }}
         />
-
         <Stack.Screen
           name="WorkingDays"
           component={WorkingDays}
@@ -79,7 +111,7 @@ function SetUpStackNavigator() {
             backgroundColor: 'black',
           }}
         />
-        {/* workingHours */}
+   
         <Stack.Screen
           name="WorkingHours"
           component={WorkingHours}

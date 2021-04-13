@@ -1,50 +1,61 @@
 import React, {useEffect, useState} from 'react'
 import {StyleSheet, View, Text} from 'react-native'
-import {Input, Item, Icon, Content, Form} from 'native-base';
+import {Input, Item, Icon, Content, Form} from 'native-base'
 import {Button} from 'react-native-paper'
 import {CustomButton} from '../components/CustomButton'
 import {CompanyList} from '../components/CompanyList'
 import {companyQuery} from '../controllers/companyController'
-export const JoinCompany = ({navigation, setShowJoin, setShowBtns, companyData}) => {
-
+import CustomButtonIcon from '../components/CustomIconButton'
+export const JoinCompany = ({
+  navigation,
+  setShowJoin,
+  setShowBtns,
+  companyData,
+}) => {
   const [filteredCompanyData, setFilteredCompanyData] = useState([])
   const [filter, setFilter] = useState('')
 
   const getCompaniesWithFilter = async () => {
-    const filteredData = companyData.filter(company => company.displayName.includes(filter))
+    const filteredData = companyData.filter((company) =>
+      company.displayName.includes(filter)
+    )
     setFilteredCompanyData(filteredData)
   }
 
   return (
     <View style={styles.container}>
-      <CustomButton
+      <CustomButtonIcon
         style={styles.button}
         title="Cancel"
         onPress={() => {
           setShowJoin(false)
           setShowBtns(true)
         }}
+        iconOne="keyboard-arrow-left"
       />
       <Form style={styles.input}>
         <Item>
-          <Input placeholder="Search by name"
+          <Input
+            placeholder="Search by name"
             value={filter}
             onChangeText={setFilter}
           />
-          <Button onPress={getCompaniesWithFilter} >
-              <Icon active name='search-outline' />
+          <Button onPress={getCompaniesWithFilter}>
+            <Icon active name="search-outline" />
           </Button>
         </Item>
       </Form>
 
       <View style={styles.companyList}>
         {filteredCompanyData.length != 0 ? (
-          <CompanyList navigation={navigation} companyData={filteredCompanyData} />
+          <CompanyList
+            navigation={navigation}
+            companyData={filteredCompanyData}
+          />
         ) : (
           <CompanyList navigation={navigation} companyData={companyData} />
         )}
       </View>
-
     </View>
   )
 }
@@ -54,11 +65,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   button: {
-    flex: 1
+    flex: 1,
   },
   companyList: {
     flex: 6,
   },
-  input: {
-  },
+  input: {},
 })

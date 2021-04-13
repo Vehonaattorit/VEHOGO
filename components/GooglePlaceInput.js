@@ -27,6 +27,7 @@ const GooglePlacesInput = ({setAddress, defaultValue}) => {
         },
         textInput: {
           height: 50,
+          borderRadius: 10,
           color: '#000',
           fontSize: 16,
         },

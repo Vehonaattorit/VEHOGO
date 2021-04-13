@@ -15,6 +15,8 @@ import {updateUser} from '../controllers/userController'
 import {UserContext} from '../contexts'
 import CustomInput from '../components/CustomInput'
 import {LongPressGestureHandler} from 'react-native-gesture-handler'
+import CustomButtonIcon from '../components/CustomIconButton'
+import {Ionicons} from '@expo/vector-icons'
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE'
 
@@ -86,38 +88,41 @@ export const Username = ({navigation}) => {
   )
 
   return (
-    <KeyboardAvoidingView behavior="padding" style={styles.container}>
-      <CustomTitle title="Select username" />
-      <View style={styles.icon}>
-        {Platform.OS === 'ios' ? (
-          <AntDesign name="user" size={300} color={color.secondaryDark} />
-        ) : (
-          <FontAwesome name="user" size={300} color={color.secondaryDark} />
-        )}
-      </View>
-      <View style={styles.inputContainer}>
-        <CustomInput
-          placeholder="Username"
-          initialValue={formState.inputValues.userName}
-          keyboardType="default"
-          autoCapitalize="sentences"
-          id="userName"
-          autoCorrect={false}
-          onInputChange={inputChangeHandler}
-          errorText="Please enter a valid username."
-          minLength={1}
-          required
-        />
-
-        <CustomButton
+    <View style={styles.container}>
+      <Ionicons name="md-person" size={300} color="#26AAE2" />
+      <View  style={styles.inputContainer}>
+        <View style={styles.poweredInputContainer}>
+          <CustomInput
+            placeholder="First name"
+            initialValue={formState.inputValues.userName}
+            keyboardType="default"
+            autoCapitalize="sentences"
+            id="userName"
+            iconName="md-person"
+            autoCorrect={false}
+            onInputChange={inputChangeHandler}
+            errorText="Please enter a valid username."
+            minLength={1}
+            required
+          />
+          <CustomInput
+            iconName="md-person"
+            autoCorrect={false}
+            errorText="Please enter a valid username."
+            minLength={1}
+            required
+          />
+        </View>
+        <CustomButtonIcon
           style={styles.btns}
           title="Submit"
           onPress={() => {
             submitHandler()
           }}
+          iconTwo="keyboard-arrow-right"
         />
       </View>
-    </KeyboardAvoidingView>
+    </View>
   )
 }
 
@@ -128,13 +133,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   inputContainer: {
-    position: 'absolute',
-    justifyContent: 'flex-end',
-    bottom: 60,
+    flex: 0.2,
     width: '90%',
     color: 'white',
   },
+  poweredInputContainer: {
+    marginBottom: 40,
+    marginHorizontal: 20,
+  },
   icon: {
-    marginBottom: 100,
+    flex: 0.7,
   },
 })
