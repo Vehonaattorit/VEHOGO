@@ -12,7 +12,13 @@ export async function login(email, password) {
 
 export async function register(email, password) {
   try {
-    await firebase.auth().createUserWithEmailAndPassword(email, password)
+    console.log('Register success')
+
+    const response = await firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+    await response.user.sendEmailVerification()
+    return response
   } catch (e) {
     return e.message
   }
@@ -34,4 +40,14 @@ export async function subscribeToAuth(authStateChanged) {
     }
     authStateChanged(user)
   })
+}
+
+export async function checkEmailVerification() {
+  try {
+    const response = await firebase.auth().currentUser.emailVerified
+    return response
+  } catch (e) {
+    console.log('Verification failed' + e.message)
+    return e.message
+  }
 }

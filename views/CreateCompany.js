@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react'
-import {KeyboardAvoidingView, StyleSheet, View} from 'react-native'
+import {KeyboardAvoidingView, TextInput, StyleSheet, View} from 'react-native'
 import {Item} from 'native-base'
 import {Input} from 'react-native-elements'
 import {googleMapsApiKey} from '../secrets/secrets'
@@ -122,18 +122,19 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
       {!showCode ? (
         <>
           <View style={styles.inputContainer}>
-            <Item style={styles.companyNameInputContainer}>
-              <Input
+            <View style={styles.companyNameInputContainer}>
+              <TextInput
                 placeholder="Company name"
                 value={companyName}
                 onChangeText={setName}
+                style={styles.companyNameTextInput}
                 errorMessage={
                   companyName.length < 1 &&
                   'Company name must be at least 1 character long'
                 }
               />
-            </Item>
-            <Item>
+            </View>
+            <Item style={styles.companyAddressInputContainer}>
               <GooglePlacesInput setAddress={setAddress} />
             </Item>
           </View>
@@ -178,14 +179,46 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   inputContainer: {
-    marginTop: 100,
+    width: '100%',
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   companyNameInputContainer: {
+    alignSelf: 'stretch',
+    width: '100%',
+    borderRadius: 10,
+    paddingTop: 30,
+    paddingBottom: 30,
+    paddingLeft: 15,
+    paddingRight: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#E1F5FD',
   },
 
+  companyNameTextInput: {
+    fontSize: 15,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    height: 50,
+    width: '100%',
+  },
+  companyAddressInputContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 63,
+    marginTop: 15,
+    paddingTop: 8,
+    paddingHorizontal: 13,
+
+    paddingBottom: 2,
+    borderRadius: 10,
+    backgroundColor: '#E1F5FD',
+  },
   btnContainer: {
-    marginTop: 200,
+    marginTop: 300,
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 10,
@@ -194,7 +227,7 @@ const styles = StyleSheet.create({
   },
   continueBtnContainer: {
     alignSelf: 'stretch',
-    marginBottom: 10,
+    marginBottom: 70,
   },
   cancelBtnContainer: {
     alignSelf: 'stretch',

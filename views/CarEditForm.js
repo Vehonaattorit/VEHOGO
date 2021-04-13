@@ -16,13 +16,11 @@ import {UserContext} from '../contexts'
 import {color} from '../constants/colors'
 import {MaterialCommunityIcons} from '@expo/vector-icons'
 import {updateUser} from '../controllers/userController'
+import {updateUserCarToWorkTrips} from '../utils/updateWorkTripCar'
 
 const CarEditForm = ({navigation, route}) => {
   const editCar = route.params !== undefined ? route.params.editCar : undefined
 
-  const [name, setName] = useState(
-    editCar !== undefined ? editCar.driverName : ''
-  )
 
   const [description, setDescription] = useState(
     editCar !== undefined ? editCar.vehicleDescription : ''
@@ -36,12 +34,11 @@ const CarEditForm = ({navigation, route}) => {
   const {user} = useContext(UserContext)
 
   const validateForm = () => {
-    const formName = name.trim().length > 0
     const formDesc = description.trim().length > 0
     const formRegistration = registration.trim().length > 0
     const formSeats = seats.trim().length > 0
 
-    if (formName && formDesc && formRegistration && formSeats) {
+    if (formDesc && formRegistration && formSeats) {
       return true
     }
 
@@ -59,7 +56,7 @@ const CarEditForm = ({navigation, route}) => {
 
     const car = new Car({
       id: editCar !== undefined ? editCar.id : undefined,
-      driverName: name,
+      driverName: user.userName,
       vehicleDescription: description,
       registerNumber: registration,
       availableSeats: seats,
@@ -70,7 +67,7 @@ const CarEditForm = ({navigation, route}) => {
     user.schoosedCarID = car.id
 
     await updateUser(user)
-
+    await updateUserCarToWorkTrips(user)
     navigation.goBack()
   }
 
@@ -94,20 +91,7 @@ const CarEditForm = ({navigation, route}) => {
   return (
     <View style={styles.container}>
       <View style={styles.form}>
-        <View style={styles.formItem}>
-          <View style={styles.iconContainer}>
-            <Icon active name="person-outline" />
-          </View>
-          <TextInput
-            placeholder="Driver name"
-            maxLength={20}
-            autoCorrect={false}
-            value={name}
-            onChangeText={setName}
-            style={styles.textInput}
-          />
-        </View>
-        <View style={styles.breakPoint}></View>
+
 
         <View
           style={{

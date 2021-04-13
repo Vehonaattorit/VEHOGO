@@ -29,8 +29,8 @@ const NewRideForm = ({
 
   const id = carId
 
-  const uploadCar = () => {
-    const carId = updateCar(
+  const uploadCar = async () => {
+    await updateCar(
       user.id,
       new Car({
         id: id,

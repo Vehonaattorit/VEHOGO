@@ -1,10 +1,10 @@
 import {stopConverter, Stop} from './stop'
 
 export class ScheduledDrive {
-  constructor({id, start, end, workTrip, takenSeats, stops}) {
+  constructor({id, start, end, workTrip, availableSeats, stops}) {
     this.start = start
     this.end = end
-    this.takenSeats = takenSeats
+    this.availableSeats = availableSeats
     this.stops = stops
   }
 }
@@ -19,8 +19,8 @@ export const scheduleDriveConverter = {
     if (scheduledDrive.end != undefined) {
       scheduledDriveObject.end = scheduledDrive.end
     }
-    if (scheduledDrive.takenSeats != undefined) {
-      scheduledDriveObject.takenSeats = scheduledDrive.takenSeats
+    if (scheduledDrive.availableSeats != undefined) {
+      scheduledDriveObject.availableSeats = scheduledDrive.availableSeats
     }
     if (scheduledDrive.stops != undefined && scheduledDrive.stops.length > 0) {
       const stops = []
@@ -44,7 +44,7 @@ export const scheduleDriveConverter = {
       start: data.start,
       end: data.end,
       workTrip: data.workTrip,
-      takenSeats: data.takenSeats,
+      availableSeats: data.availableSeats,
       stops: parsedStops,
     })
   },
@@ -68,7 +68,7 @@ export const scheduleDriveConverter = {
         start: startTime,
         end: endTime,
         workTrip: data.workTrip,
-        takenSeats: data.takenSeats,
+        availableSeats: data.availableSeats,
         stops: parsedStops,
       })
     } else return undefined
