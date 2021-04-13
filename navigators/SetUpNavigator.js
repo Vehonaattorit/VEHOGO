@@ -111,7 +111,7 @@ function SetUpStackNavigator() {
             backgroundColor: 'black',
           }}
         />
-   
+
         <Stack.Screen
           name="WorkingHours"
           component={WorkingHours}
