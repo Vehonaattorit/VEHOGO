@@ -33,7 +33,7 @@ export const Company = ({navigation}) => {
 
 
   return (
-    <KeyboardAvoidingView behavior="position" style={styles.view}>
+    <View behavior="position" style={styles.view}>
       {showBtns && (
         <>
           <View style={styles.poweredContainer}>
@@ -98,7 +98,7 @@ export const Company = ({navigation}) => {
           />
         )
       )}
-    </KeyboardAvoidingView>
+    </View>
   )
 }
 
