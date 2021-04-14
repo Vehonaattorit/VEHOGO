@@ -43,6 +43,8 @@ export const DriverOnRoute = ({navigation, route}) => {
   const [showStop, setShowStop] = useState(false)
   const [chatRooms, setChatRooms] = useState([])
 
+  const [latestMessage, setLatestMessage] = useState('')
+
   const [markers, setMarkers] = useState([
     workTrip.scheduledDrive.stops.map((stop) => (
       <MapView.Marker
@@ -192,16 +194,12 @@ export const DriverOnRoute = ({navigation, route}) => {
   }
 
   const createChatRoom = async (item) => {
-    console.log('item id', item)
-
     const userID = user.travelPreference === 'passenger' ? item.id : item.userID
 
     const chatRoomName =
       user.travelPreference === 'passenger'
         ? workTrip.driverName
         : item.stopName
-
-    console.log('User ID', userID)
 
     const chatRoom = await queryChatRoom(userID, workTrip.driverID)
 
@@ -233,15 +231,22 @@ export const DriverOnRoute = ({navigation, route}) => {
     return () => chatRoomsListener()
   }, [])
 
+  useEffect(() => {
+    // Passenger
+    if (user.travelPreference === 'passenger') {
+      const renderChat = chatRooms.find((chat) => user.id === chat.passengerID)
+
+      if (!renderChat) return
+
+      setLatestMessage(renderChat.latestMessage.text)
+    }
+  }, [chatRooms])
+
   // Render Passenger List at top of the screen
   const renderItem = ({item, index}, parallaxProps) => {
-    // const chat = chatRooms
-
     const renderChat = chatRooms.find(
       (chat) => item.userID === chat.passengerID
     )
-
-    console.log('renderChat', renderChat)
 
     return (
       <View style={{flex: 1, flexDirection: 'row'}}>
@@ -310,7 +315,7 @@ export const DriverOnRoute = ({navigation, route}) => {
                     size={24}
                     color={color.lightBlack}
                   />
-                  Olen etuovella
+                  {latestMessage}
                 </Text>
               </View>
               <View>

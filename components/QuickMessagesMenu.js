@@ -130,7 +130,7 @@ const QuickMessagesMenu = ({user, item, workTrip}) => {
           {messages.map((item, index) => (
             <Picker.Item
               key={index}
-              color="#0087F0"
+              color={color.pickerItem}
               label={item.itemName}
               value={item.itemName}
               index={index}
