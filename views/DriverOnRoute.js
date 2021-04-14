@@ -82,7 +82,7 @@ export const DriverOnRoute = ({navigation, route}) => {
           workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop]
             .location.longitude
         )
-        console.log('distance', distance)
+        // console.log('distance', distance)
 
         //show NextStopBar if distance less than 300m
         if (distance <= 0.3) {
@@ -192,11 +192,16 @@ export const DriverOnRoute = ({navigation, route}) => {
   }
 
   const createChatRoom = async (item) => {
+    console.log('item id', item)
+
     const userID = user.travelPreference === 'passenger' ? item.id : item.userID
+
     const chatRoomName =
       user.travelPreference === 'passenger'
         ? workTrip.driverName
         : item.stopName
+
+    console.log('User ID', userID)
 
     const chatRoom = await queryChatRoom(userID, workTrip.driverID)
 
@@ -215,7 +220,7 @@ export const DriverOnRoute = ({navigation, route}) => {
           return {
             _id: doc.id,
             name: '',
-            lastestMessage: {
+            latestMessage: {
               text: '',
             },
             ...doc.data(),
@@ -230,6 +235,14 @@ export const DriverOnRoute = ({navigation, route}) => {
 
   // Render Passenger List at top of the screen
   const renderItem = ({item, index}, parallaxProps) => {
+    // const chat = chatRooms
+
+    const renderChat = chatRooms.find(
+      (chat) => item.userID === chat.passengerID
+    )
+
+    console.log('renderChat', renderChat)
+
     return (
       <View style={{flex: 1, flexDirection: 'row'}}>
         <View style={styles.leftArrowContainer}>
@@ -247,14 +260,16 @@ export const DriverOnRoute = ({navigation, route}) => {
             </View>
             <View style={styles.listItemMiddleRow}>
               <View>
-                <Text style={styles.latestMessageBottomRow}>
-                  <Ionicons
-                    name="checkmark-done"
-                    size={24}
-                    color={color.lightBlack}
-                  />
-                  Olen etuovella
-                </Text>
+                {renderChat && (
+                  <Text style={styles.latestMessageBottomRow}>
+                    <Ionicons
+                      name="checkmark-done"
+                      size={24}
+                      color={color.lightBlack}
+                    />
+                    {renderChat.latestMessage.text}
+                  </Text>
+                )}
               </View>
               <View>
                 <Text style={styles.clockTimeContainer}>12:53</Text>

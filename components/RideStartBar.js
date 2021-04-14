@@ -33,7 +33,7 @@ export const RideStartBar = ({user, navigation}) => {
     // 13.04. 10:47 BACKUP
     // const currentWeekDay = now.getDay()
     // END
-    const currentWeekDay = 1
+    const currentWeekDay = 3
     // const now = new Date(1970, 0, 2, 6, 30)
     // const currentWeekDay = now.getDay()
     const currentHours = now.getHours()

@@ -1,6 +1,6 @@
 import firebase from 'firebase/app'
 import {v4} from 'uuid/v4'
-import {chatRoomConverter} from '../models/chatRoom'
+import {ChatRoom, chatRoomConverter} from '../models/chatRoom'
 import 'firebase/firestore'
 import {workTripMultiQueryStream} from './workTripController'
 
@@ -76,6 +76,8 @@ export async function getChat(chatId) {
 }
 
 export const queryChatRoom = async (userID, driverID) => {
+  console.log('queryChatRoom', userID, driverID)
+
   const chatRooms = await getChatRoomByIds([
     {
       field: 'passengerID',
@@ -89,18 +91,25 @@ export const queryChatRoom = async (userID, driverID) => {
     },
   ])
 
+  console.log('chatRooms 1', chatRooms)
+
+  console.log(typeof chatRooms !== 'undefined' && chatRooms.length === 0)
+
   // Chatrooms array is empty
   let chatRoom
   if (typeof chatRooms !== 'undefined' && chatRooms.length === 0) {
+    // if array is empty
     chatRoom = await addChat(
       new ChatRoom({
-        driverID: driverId,
+        driverID: driverID,
         passengerID: userID,
       })
     )
   } else {
     chatRoom = chatRooms[0]
   }
+
+  console.log('is there chatroom', chatRoom)
 
   return chatRoom
 }

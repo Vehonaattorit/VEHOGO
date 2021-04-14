@@ -22,27 +22,38 @@ export default ChatRoom = ({navigation, route}) => {
   const [ownerPushToken, setOwnerPushToken] = useState(null)
   const [messages, setMessages] = useState([])
 
+  const onQuickReply = (quickReply) => {
+    console.log(quickReply[0].title)
+
+    handleSend([
+      {
+        text: quickReply[0].title,
+      },
+    ])
+  }
+
   const {user} = useContext(UserContext)
 
+  // AuthState for GiftedChat
   const [chatUser] = useAuthState(auth)
 
   const getOwnerPushToken = async () => {
     const {passengerID, driverID} = chatRoom
 
     // Get opposite user's ID
-    const userId =
+    let currentUser =
       user.travelPreference === 'passenger' ? driverID : passengerID
-    const userDriver = await getUser(userId)
+    currentUser = await getUser(currentUser)
 
-    setOwnerPushToken(userDriver.ownerPushToken)
+    setOwnerPushToken(currentUser.ownerPushToken)
   }
 
   useEffect(() => {
+    getOwnerPushToken()
+
     navigation.setOptions({
       title: chatRoomTitle,
     })
-
-    getOwnerPushToken()
 
     const messagesListener = firebase
       .firestore()
@@ -53,11 +64,43 @@ export default ChatRoom = ({navigation, route}) => {
       .limit(25)
       .orderBy('createdAt', 'desc')
       .onSnapshot((querySnapshot) => {
-        const messages = querySnapshot.docs.map((doc) => {
-          const data = doc.data()
+        let messages = []
 
-          return data
+        querySnapshot.docs.forEach((doc, i, arr) => {
+          let data = doc.data()
+
+          messages.push(data)
         })
+
+        let popMessage = messages[0]
+
+        console.log('popMessage', popMessage)
+        if (popMessage === undefined) return
+
+        if (popMessage.user._id !== user.id) {
+          popMessage = {
+            ...popMessage,
+            quickReplies: {
+              type: 'radio', // or 'checkbox',
+              keepIt: true,
+              values: [
+                {
+                  title: 'Sound good.',
+                },
+                {
+                  title: 'No, sorry.',
+                },
+                {
+                  title: 'What else?',
+                },
+              ],
+            },
+          }
+
+          messages.shift()
+
+          messages.unshift(popMessage)
+        }
 
         setMessages(messages)
       })
@@ -155,6 +198,9 @@ export default ChatRoom = ({navigation, route}) => {
 
   return (
     <GiftedChat
+      // renderQuickReplies={quickReplies}
+      // renderQuickReplies={quickReplies}
+      onQuickReply={(quickReply) => onQuickReply(quickReply)}
       messages={messages}
       onSend={handleSend}
       user={{_id: chatUser.uid}}
