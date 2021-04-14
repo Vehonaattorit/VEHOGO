@@ -41,6 +41,11 @@ import MainPageButtons from '../components/MainPageButtons'
 import {workTripMultiQueryStream} from '../controllers/workTripController'
 import {useCollectionData} from 'react-firebase-hooks/firestore'
 
+import {Ionicons} from '@expo/vector-icons'
+
+import {HeaderButtons, Item} from 'react-navigation-header-buttons'
+import HeaderButton from '../components/CustomHeaderButton'
+
 export const MainPage = ({navigation}) => {
   const {user} = useContext(UserContext)
   const [travelPreference, setTravelPreference] = useState('')
@@ -112,21 +117,24 @@ export const MainPage = ({navigation}) => {
     setTravelPreference(user.travelPreference)
   }
 
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <HeaderButtons HeaderButtonComponent={HeaderButton}>
+          <Item
+            title="Filter"
+            iconComponent={Ionicons}
+            iconName="filter"
+            onPress={() => setOpen(!open)}
+          />
+        </HeaderButtons>
+      ),
+    })
+  }, [])
+
   const displayPassengerList = () => {
     return (
       <Container>
-        <Header style={styles.header}>
-          <Right>
-            <Button
-              onPress={() => {
-                setOpen(!open)
-              }}
-              transparent
-            >
-              <Icon style={styles.sortIcon} name="filter" />
-            </Button>
-          </Right>
-        </Header>
         {/* {activeRide && ( */}
         {/* // DOES NOT WORK PROPERLY. activeRide is not functioning */}
         <DriverIsOnHisWayBar

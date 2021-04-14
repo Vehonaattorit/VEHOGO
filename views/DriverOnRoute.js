@@ -16,7 +16,10 @@ import {updateUserPosition} from '../utils/driverFunctions'
 import {useDocumentData} from 'react-firebase-hooks/firestore'
 import Carousel, {ParallaxImage} from 'react-native-snap-carousel'
 import {ChatRoom} from '../models/chatRoom'
-import {queryChatRoom} from '../controllers/chatRoomController'
+import {
+  queryChatRoom,
+  useChatRoomHooks,
+} from '../controllers/chatRoomController'
 import {AntDesign, Ionicons} from '@expo/vector-icons'
 import {color} from '../constants/colors'
 import {calculateDistance} from '../utils/utils'
@@ -29,6 +32,8 @@ import {getUser} from '../controllers/userController'
 import QuickMessagesMenu from '../components/QuickMessagesMenu'
 
 export const DriverOnRoute = ({navigation, route}) => {
+  const {chatRooms, setChatRooms} = useChatRoomHooks()
+
   const {workTrip} = route.params
   const scrollRef = useRef()
   const mapRef = useRef()
@@ -41,7 +46,7 @@ export const DriverOnRoute = ({navigation, route}) => {
   const [routeCoordinates, setRouteCoordinates] = useState([])
   const [showNextStopBar, setShowNextStopBar] = useState(false)
   const [showStop, setShowStop] = useState(false)
-  const [chatRooms, setChatRooms] = useState([])
+  // const [chatRooms, setChatRooms] = useState([])
 
   const [latestMessage, setLatestMessage] = useState('')
 
@@ -53,9 +58,10 @@ export const DriverOnRoute = ({navigation, route}) => {
             ? stop.stopName == 'Home'
               ? require('../images/home-map-icon-white.png')
               : require('../images/work-map-icon-white.png')
-            : workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop].stopName == stop.stopName
-              ? require('../images/passenger-map-icon-blue.png')
-              : require('../images/passenger-map-icon-white.png')
+            : workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop]
+                .stopName == stop.stopName
+            ? require('../images/passenger-map-icon-blue.png')
+            : require('../images/passenger-map-icon-white.png')
         }
         key={stop.address}
         identifier={stop.address}
@@ -84,10 +90,10 @@ export const DriverOnRoute = ({navigation, route}) => {
     let distance = calculateDistance(
       location.coords.latitude,
       location.coords.longitude,
-      workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop]
-        .location.latitude,
-      workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop]
-        .location.longitude
+      workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop].location
+        .latitude,
+      workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop].location
+        .longitude
     )
 
     //calculate distance between location and end position
@@ -102,10 +108,8 @@ export const DriverOnRoute = ({navigation, route}) => {
 
     console.log('distance', distance)
 
-
     //always show end route if distance under 100m
     if (distanceToEnd >= 0.1) {
-
       //show NextStopBar if distance less than 100m
       if (distance <= 0.1) {
         //if next stop is last show StopBar
@@ -147,14 +151,21 @@ export const DriverOnRoute = ({navigation, route}) => {
           image={
             stop.stopName == 'Home' || stop.stopName == user.company.name
               ? stop.stopName == 'Home'
-                ? workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop].stopName == stop.stopName ? require('../images/home-map-icon-blue.png') : require('../images/home-map-icon-white.png')
-                : workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop].stopName == stop.stopName ? require('../images/work-map-icon-blue.png') : require('../images/work-map-icon-white.png')
-              : workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop].stopName == stop.stopName
-                ? require('../images/passenger-map-icon-blue.png')
-                : require('../images/passenger-map-icon-white.png')
-
+                ? workTrip.scheduledDrive.stops[
+                    workTrip.scheduledDrive.nextStop
+                  ].stopName == stop.stopName
+                  ? require('../images/home-map-icon-blue.png')
+                  : require('../images/home-map-icon-white.png')
+                : workTrip.scheduledDrive.stops[
+                    workTrip.scheduledDrive.nextStop
+                  ].stopName == stop.stopName
+                ? require('../images/work-map-icon-blue.png')
+                : require('../images/work-map-icon-white.png')
+              : workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop]
+                  .stopName == stop.stopName
+              ? require('../images/passenger-map-icon-blue.png')
+              : require('../images/passenger-map-icon-white.png')
           }
-
           /*image={
              stop.stopName == 'Home' || stop.stopName == user.company.name
                ? stop.stopName == 'Home'
@@ -175,7 +186,8 @@ export const DriverOnRoute = ({navigation, route}) => {
           }}
           title={stop.address}
         />
-      )))
+      ))
+    )
   }
 
   const carouselChangeStop = async (index) => {
@@ -186,7 +198,6 @@ export const DriverOnRoute = ({navigation, route}) => {
     setShowNextStopBar(false)
     setShowStop(false)
     showNextStop()
-
   }
 
   const stopDriving = async () => {
@@ -281,28 +292,6 @@ export const DriverOnRoute = ({navigation, route}) => {
   }
 
   useEffect(() => {
-    const chatRoomsListener = firebase
-      .firestore()
-      .collection('chats')
-      .onSnapshot((querySnapshot) => {
-        const chatRooms = querySnapshot.docs.map((doc) => {
-          return {
-            _id: doc.id,
-            name: '',
-            latestMessage: {
-              text: '',
-            },
-            ...doc.data(),
-          }
-        })
-
-        setChatRooms(chatRooms)
-      })
-
-    return () => chatRoomsListener()
-  }, [])
-
-  useEffect(() => {
     // Passenger
     if (user.travelPreference === 'passenger') {
       const renderChat = chatRooms.find((chat) => user.id === chat.passengerID)
@@ -314,7 +303,20 @@ export const DriverOnRoute = ({navigation, route}) => {
   }, [chatRooms])
 
   // Render Passenger List at top of the screen
-  const renderItem = ({item, index}, parallaxProps) => {
+  const renderItem = ({item, index}) => {
+    const {stops} = workTrip.scheduledDrive
+
+    const lastStop =
+      stops[workTrip.scheduledDrive.stops.length - 1].stopName === item.stopName
+
+    console.log('2. lastStop', lastStop)
+    // const lastStop =
+    //   item.stopName === stops[workTrip.scheduledDrive.stops.length].stopName
+    //     ? true
+    //     : false
+
+    // console.log('lastStop', lastStop)
+
     const renderChat = chatRooms.find(
       (chat) => item.userID === chat.passengerID
     )
@@ -334,27 +336,36 @@ export const DriverOnRoute = ({navigation, route}) => {
                 <Text style={styles.distanceTopRow}>2 km</Text>
               </View>
             </View>
-            <View style={styles.listItemMiddleRow}>
-              <View>
-                {renderChat && (
-                  <Text style={styles.latestMessageBottomRow}>
-                    <Ionicons
-                      name="checkmark-done"
-                      size={24}
-                      color={color.lightBlack}
-                    />
-                    {renderChat.latestMessage.text}
-                  </Text>
-                )}
-              </View>
+            <View
+              style={{
+                ...styles.listItemMiddleRow,
+                justifyContent: lastStop ? 'flex-end' : 'space-between',
+              }}
+            >
+              {!lastStop && (
+                <View>
+                  {renderChat && (
+                    <Text style={styles.latestMessageBottomRow}>
+                      <Ionicons
+                        name="checkmark-done"
+                        size={24}
+                        color={color.lightBlack}
+                      />
+                      {renderChat.latestMessage.text}
+                    </Text>
+                  )}
+                </View>
+              )}
               <View>
                 <Text style={styles.clockTimeContainer}>12:53</Text>
               </View>
             </View>
           </TouchableOpacity>
-          <View style={styles.listItemBottomRow}>
-            <QuickMessagesMenu user={user} workTrip={workTrip} item={item} />
-          </View>
+          {!lastStop && (
+            <View style={styles.listItemBottomRow}>
+              <QuickMessagesMenu user={user} workTrip={workTrip} item={item} />
+            </View>
+          )}
         </View>
 
         <View style={styles.leftArrowContainer}>
@@ -413,7 +424,9 @@ export const DriverOnRoute = ({navigation, route}) => {
           renderItem={renderItem}
           hasParallaxImages={true}
           ref={scrollRef}
-          onSnapToItem={index => {carouselChangeStop(index)}}
+          onSnapToItem={(index) => {
+            carouselChangeStop(index)
+          }}
         />
       )}
 
@@ -434,15 +447,13 @@ export const DriverOnRoute = ({navigation, route}) => {
               coordinates={routeCoordinates}
               strokeColor="#26AAE2"
               strokeWidth={4}
-
             />
             {markers}
 
             <DriverMarker workTrip={workTrip} />
-
           </MapView>
         </Container>
-        {user.travelPreference === 'driver' &&
+        {user.travelPreference === 'driver' && (
           <>
             {showNextStopBar && (
               <FullWidthButton
@@ -466,7 +477,7 @@ export const DriverOnRoute = ({navigation, route}) => {
               ></FullWidthButton>
             )}
           </>
-        }
+        )}
       </View>
     </View>
   )

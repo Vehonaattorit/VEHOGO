@@ -3,8 +3,72 @@ import {v4} from 'uuid/v4'
 import {chatMessageConverter} from '../models/chatMessage'
 import 'firebase/firestore'
 import {chatRoomConverter} from '../models/chatRoom'
+import React, {useEffect, useContext, useState} from 'react'
+import {UserContext} from '../contexts'
 
 const db = firebase.firestore()
+
+export const useMessageHooks = (chatRoom) => {
+  const {user} = useContext(UserContext)
+
+  const [messages, setMessages] = useState([])
+
+  useEffect(() => {
+    const messagesListener = db
+      .collection('chats')
+      .doc(chatRoom.id)
+      .collection('chatMessages')
+      .withConverter(chatMessageConverter)
+      .limit(25)
+      .orderBy('createdAt', 'desc')
+      .onSnapshot((querySnapshot) => {
+        let messages = []
+
+        querySnapshot.docs.forEach((doc, i, arr) => {
+          let data = doc.data()
+
+          messages.push(data)
+        })
+
+        let popMessage = messages[0]
+
+        console.log('popMessage', popMessage)
+        if (popMessage === undefined) return
+
+        if (popMessage.user._id !== user.id) {
+          popMessage = {
+            ...popMessage,
+            quickReplies: {
+              type: 'radio', // or 'checkbox',
+              keepIt: true,
+              values: [
+                {
+                  title: 'Sound good.',
+                },
+                {
+                  title: 'No, sorry.',
+                },
+                {
+                  title: 'What else?',
+                },
+              ],
+            },
+          }
+
+          messages.shift()
+
+          messages.unshift(popMessage)
+        }
+
+        setMessages(messages)
+      })
+    return () => messagesListener()
+  }, [])
+
+  return {
+    messages,
+  }
+}
 
 export async function sendMessage(chatRoomID, chatMessage) {
   try {

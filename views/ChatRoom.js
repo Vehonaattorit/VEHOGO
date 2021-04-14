@@ -6,10 +6,13 @@ import {Button, StyleSheet, View, Text, ActivityIndicator} from 'react-native'
 
 import firebase from '../firebase/fire'
 
-import {sendMessage, getMessages} from '../controllers/chatMessageController'
+import {
+  sendMessage,
+  useMessageHooks,
+} from '../controllers/chatMessageController'
 import {UserContext} from '../contexts'
 import {getUser} from '../controllers/userController'
-import {ChatMessage, chatMessageConverter} from '../models/chatMessage'
+import {ChatMessage} from '../models/chatMessage'
 import {useAuthState} from 'react-firebase-hooks/auth'
 
 import 'firebase/firestore'
@@ -17,10 +20,12 @@ import 'firebase/auth'
 
 const auth = firebase.auth()
 
+import {color} from '../constants/colors'
+
 export default ChatRoom = ({navigation, route}) => {
   const {chatRoom, chatRoomTitle} = route.params
   const [ownerPushToken, setOwnerPushToken] = useState(null)
-  const [messages, setMessages] = useState([])
+  const {messages} = useMessageHooks(chatRoom, user)
 
   const onQuickReply = (quickReply) => {
     console.log(quickReply[0].title)
@@ -54,58 +59,6 @@ export default ChatRoom = ({navigation, route}) => {
     navigation.setOptions({
       title: chatRoomTitle,
     })
-
-    const messagesListener = firebase
-      .firestore()
-      .collection('chats')
-      .doc(chatRoom.id)
-      .collection('chatMessages')
-      .withConverter(chatMessageConverter)
-      .limit(25)
-      .orderBy('createdAt', 'desc')
-      .onSnapshot((querySnapshot) => {
-        let messages = []
-
-        querySnapshot.docs.forEach((doc, i, arr) => {
-          let data = doc.data()
-
-          messages.push(data)
-        })
-
-        let popMessage = messages[0]
-
-        console.log('popMessage', popMessage)
-        if (popMessage === undefined) return
-
-        if (popMessage.user._id !== user.id) {
-          popMessage = {
-            ...popMessage,
-            quickReplies: {
-              type: 'radio', // or 'checkbox',
-              keepIt: true,
-              values: [
-                {
-                  title: 'Sound good.',
-                },
-                {
-                  title: 'No, sorry.',
-                },
-                {
-                  title: 'What else?',
-                },
-              ],
-            },
-          }
-
-          messages.shift()
-
-          messages.unshift(popMessage)
-        }
-
-        setMessages(messages)
-      })
-
-    return () => messagesListener()
   }, [])
 
   const renderSystemMessage = (props) => {
@@ -153,7 +106,7 @@ export default ChatRoom = ({navigation, route}) => {
   const renderLoading = () => {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#6646ee" />
+        <ActivityIndicator size="large" color={color.darkBlue} />
       </View>
     )
   }
@@ -161,7 +114,14 @@ export default ChatRoom = ({navigation, route}) => {
   const scrollToBottomComponent = () => {
     return (
       <View style={styles.bottomComponentContainer}>
-        <IconButton icon="chevron-double-down" size={36} color="#6646ee" />
+        <IconButton
+          icon="chevron-double-down"
+          size={26}
+          color="#fff"
+          style={{
+            backgroundColor: color.darkBlue,
+          }}
+        />
       </View>
     )
   }
@@ -170,7 +130,7 @@ export default ChatRoom = ({navigation, route}) => {
     return (
       <Send {...props}>
         <View style={styles.sendingContainer}>
-          <IconButton icon="send-circle" size={36} color="#6646ee" />
+          <IconButton icon="send-circle" size={36} color={color.darkBlue} />
         </View>
       </Send>
     )
@@ -184,7 +144,7 @@ export default ChatRoom = ({navigation, route}) => {
         wrapperStyle={{
           right: {
             // Here is the color change
-            backgroundColor: '#6646ee',
+            backgroundColor: color.darkBlue,
           },
         }}
         textStyle={{

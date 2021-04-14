@@ -4,7 +4,37 @@ import {ChatRoom, chatRoomConverter} from '../models/chatRoom'
 import 'firebase/firestore'
 import {workTripMultiQueryStream} from './workTripController'
 
+import React, {useEffect, useState} from 'react'
+
 const db = firebase.firestore()
+
+export const useChatRoomHooks = () => {
+  const [chatRooms, setChatRooms] = useState([])
+
+  useEffect(() => {
+    const chatRoomsListener = db
+      .collection('chats')
+      .onSnapshot((querySnapshot) => {
+        const chatRooms = querySnapshot.docs.map((doc) => {
+          return {
+            _id: doc.id,
+            name: '',
+            latestMessage: {
+              text: '',
+            },
+            ...doc.data(),
+          }
+        })
+
+        setChatRooms(chatRooms)
+      })
+    return () => chatRoomsListener()
+  }, [])
+
+  return {
+    chatRooms,
+  }
+}
 
 export async function addChat(chat) {
   try {
