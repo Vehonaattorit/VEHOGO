@@ -106,10 +106,10 @@ export const DriverOnRoute = ({navigation, route}) => {
     //always show end route if distance under 100m
     if (distanceToEnd >= 0.1) {
 
-       //show NextStopBar if distance less than 100m
+      //show NextStopBar if distance less than 100m
       if (distance <= 0.1) {
         //if next stop is last show StopBar
-          setShowNextStopBar(true)
+        setShowNextStopBar(true)
       }
     } else {
       setShowStop(true)
@@ -155,18 +155,18 @@ export const DriverOnRoute = ({navigation, route}) => {
 
           }
 
-         /*image={
-            stop.stopName == 'Home' || stop.stopName == user.company.name
-              ? stop.stopName == 'Home'
-                ? require('../images/home-map-icon-white.png')
-                : require('../images/work-map-icon-white.png')
-              ? workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop].stopName == stop.stopName
-                ? stop.stopName == 'Home' || stop.stopName == user.company.name ? stop.stopName == 'Home' ? require('../images/home-map-icon-blue.png') : require('../images/work-map-icon-blue.png')
+          /*image={
+             stop.stopName == 'Home' || stop.stopName == user.company.name
+               ? stop.stopName == 'Home'
+                 ? require('../images/home-map-icon-white.png')
+                 : require('../images/work-map-icon-white.png')
+               ? workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop].stopName == stop.stopName
+                 ? stop.stopName == 'Home' || stop.stopName == user.company.name ? stop.stopName == 'Home' ? require('../images/home-map-icon-blue.png') : require('../images/work-map-icon-blue.png')
 
-              :
-              require('../images/passenger-map-icon-blue.png')
-              require('../images/passenger-map-icon-white.png')
-          }*/
+               :
+               require('../images/passenger-map-icon-blue.png')
+               require('../images/passenger-map-icon-white.png')
+           }*/
           key={stop.address}
           identifier={stop.address}
           coordinate={{
@@ -199,7 +199,12 @@ export const DriverOnRoute = ({navigation, route}) => {
   // }, [mapRef])
 
   useEffect(() => {
-    callUpdateUserPosition()
+    //callUpdateUserPosition()
+    if (user.travelPreference === 'driver') {
+      console.log('updated driver location')
+      updateLocationInterval()
+    }
+
     setTimeout(() => {
       if (mapRef != undefined) {
         mapRef.current.fitToSuppliedMarkers(
@@ -228,7 +233,7 @@ export const DriverOnRoute = ({navigation, route}) => {
       })
     }
     setRouteCoordinates(tempRouteCoordinates)
-    updateLocationInterval()
+
     return () => {
       clearInterval(intervalTimer)
     }
@@ -432,30 +437,36 @@ export const DriverOnRoute = ({navigation, route}) => {
 
             />
             {markers}
+
             <DriverMarker workTrip={workTrip} />
+
           </MapView>
         </Container>
-        {showNextStopBar && (
-          <FullWidthButton
-            title={'Next Stop'}
-            direction={'row'}
-            children={<Text>Picked up passenger?</Text>}
-            onPress={() => {
-              changeNextStop()
-            }}
-          ></FullWidthButton>
-        )}
-        {showStop && (
-          <FullWidthButton
-            title={'Stop Driving'}
-            direction={'row'}
-            color={color.radicalRed}
-            children={<Text>Destination reached</Text>}
-            onPress={() => {
-              stopDriving()
-            }}
-          ></FullWidthButton>
-        )}
+        {user.travelPreference === 'driver' &&
+          <>
+            {showNextStopBar && (
+              <FullWidthButton
+                title={'Next Stop'}
+                direction={'row'}
+                children={<Text>Picked up passenger?</Text>}
+                onPress={() => {
+                  changeNextStop()
+                }}
+              ></FullWidthButton>
+            )}
+            {showStop && (
+              <FullWidthButton
+                title={'Stop Driving'}
+                direction={'row'}
+                color={color.radicalRed}
+                children={<Text>Destination reached</Text>}
+                onPress={() => {
+                  stopDriving()
+                }}
+              ></FullWidthButton>
+            )}
+          </>
+        }
       </View>
     </View>
   )
