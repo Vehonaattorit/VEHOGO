@@ -28,7 +28,6 @@ export {firebaseConfig}
 
 import {Platform} from 'react-native'
 
-import AppAuth from 'expo-app-auth'
 import * as AuthSession from 'expo-auth-session'
 
 export const azureAdAppProps = {

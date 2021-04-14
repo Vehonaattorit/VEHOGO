@@ -9,7 +9,15 @@
     "test": "jest"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*)",
+      "node_modules/(?!react-native|@shoutem/theme|@shoutem/animation|@shoutem/ui|tcomb-form-native)",
+      "/node_modules/@codler/react-native-keyboard-aware-scroll-view/lib/index.js",
+      "/node_modules/@react-native-community/async-storage/(?!(lib))",
+      "/node_modules/native-base-shoutem-theme/index.js",
+      "/node_modules/native-base-shoutem-theme/.*"
+    ]
   },
   "dependencies": {
     "@expo/vector-icons": "^12.0.4",
@@ -65,6 +73,8 @@
     "@testing-library/react-native": "^7.1.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.6.3",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
     "eslint": "^7.22.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^8.1.0",
@@ -72,6 +82,7 @@
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-native": "^3.10.0",
     "jest": "^26.6.3",
+    "jest-enzyme": "^7.1.2",
     "jest-expo": "^40.0.2",
     "prettier": "^2.2.1",
     "react-test-renderer": "^17.0.2"
