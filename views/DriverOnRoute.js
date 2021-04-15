@@ -39,6 +39,12 @@ export const DriverOnRoute = ({navigation, route}) => {
   const mapRef = useRef()
 
   const passengerStops = workTrip.scheduledDrive.stops.slice(1)
+  console.log('passenger Stops', passengerStops)
+  console.log('stopNmbr', workTrip.scheduledDrive.nextStop)
+  console.log(
+    'compare',
+    passengerStops[workTrip.scheduledDrive.nextStop - 1].stopName
+  )
 
   const {user} = useContext(UserContext)
 
@@ -57,7 +63,13 @@ export const DriverOnRoute = ({navigation, route}) => {
         image={
           stop.stopName == 'Home' || stop.stopName == user.company.name
             ? stop.stopName == 'Home'
-              ? require('../images/home-map-icon-white.png')
+              ? passengerStops[workTrip.scheduledDrive.nextStop - 1].stopName ==
+                stop.stopName
+                ? require('../images/home-map-icon-blue.png')
+                : require('../images/home-map-icon-white.png')
+              : passengerStops[workTrip.scheduledDrive.nextStop - 1].stopName ==
+                stop.stopName
+              ? require('../images/work-map-icon-blue.png')
               : require('../images/work-map-icon-white.png')
             : workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop]
                 .stopName == stop.stopName
@@ -74,6 +86,8 @@ export const DriverOnRoute = ({navigation, route}) => {
       />
     )),
   ])
+
+  /**/
 
   const updateLocationInterval = async () => {
     // if user is driver, update location
@@ -148,14 +162,12 @@ export const DriverOnRoute = ({navigation, route}) => {
           image={
             stop.stopName == 'Home' || stop.stopName == user.company.name
               ? stop.stopName == 'Home'
-                ? workTrip.scheduledDrive.stops[
-                    workTrip.scheduledDrive.nextStop
-                  ].stopName == stop.stopName
+                ? passengerStops[workTrip.scheduledDrive.nextStop - 1]
+                    .stopName == stop.stopName
                   ? require('../images/home-map-icon-blue.png')
                   : require('../images/home-map-icon-white.png')
-                : workTrip.scheduledDrive.stops[
-                    workTrip.scheduledDrive.nextStop
-                  ].stopName == stop.stopName
+                : passengerStops[workTrip.scheduledDrive.nextStop - 1]
+                    .stopName == stop.stopName
                 ? require('../images/work-map-icon-blue.png')
                 : require('../images/work-map-icon-white.png')
               : workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop]
@@ -163,18 +175,6 @@ export const DriverOnRoute = ({navigation, route}) => {
               ? require('../images/passenger-map-icon-blue.png')
               : require('../images/passenger-map-icon-white.png')
           }
-          /*image={
-             stop.stopName == 'Home' || stop.stopName == user.company.name
-               ? stop.stopName == 'Home'
-                 ? require('../images/home-map-icon-white.png')
-                 : require('../images/work-map-icon-white.png')
-               ? workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop].stopName == stop.stopName
-                 ? stop.stopName == 'Home' || stop.stopName == user.company.name ? stop.stopName == 'Home' ? require('../images/home-map-icon-blue.png') : require('../images/work-map-icon-blue.png')
-
-               :
-               require('../images/passenger-map-icon-blue.png')
-               require('../images/passenger-map-icon-white.png')
-           }*/
           key={stop.address}
           identifier={stop.address}
           coordinate={{

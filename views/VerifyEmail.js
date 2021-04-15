@@ -16,9 +16,9 @@ export const VerifyEmail = ({navigation}) => {
   }
 
   const checkEmailWithButton = async () => {
-    let user = await firebase.auth().currentUser
+    let user = firebase.auth().currentUser
     await user.reload()
-    user = await firebase.auth().currentUser
+    user = firebase.auth().currentUser
     await checkEmail()
   }
 

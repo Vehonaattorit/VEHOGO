@@ -73,6 +73,7 @@ export const MainPage = ({navigation}) => {
 
     // MUISTA POISTAA !!!
     const currentWeekDay = 5
+
     let ref = workTripMultiQueryStream(user.company.id, [
       {field: 'workDayNum', condition: '==', value: currentWeekDay},
       {field: 'driverID', condition: '==', value: user.id},

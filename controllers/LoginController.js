@@ -34,15 +34,20 @@ export async function subscribeToAuth(authStateChanged) {
   }
   firebase.auth().onAuthStateChanged((user) => {
     if (user != null) {
-      updateUser(new User({id: user.uid}))
+      update(user.uid)
+      //await updateUser(new User({id: user.uid}))
     }
     authStateChanged(user)
   })
 }
 
+const update = async(id) => {
+  await updateUser(new User({id: id}))
+}
+
 export async function checkEmailVerification() {
   try {
-    const response = await firebase.auth().currentUser.emailVerified
+    const response = firebase.auth().currentUser.emailVerified
     return response
   } catch (e) {
     return e.message
