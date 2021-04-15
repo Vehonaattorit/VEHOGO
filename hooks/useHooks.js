@@ -79,10 +79,9 @@ const useWorkTripHooks = (user) => {
       {field: 'goingTo', condition: '==', value: goingTo},
     ])
 
-    setPassengerList(query)
-
     setOpen(!open)
     setIsLoading(false)
+    setPassengerList(query)
   }
 
   const fetchTodayRides = async () => {
@@ -117,18 +116,15 @@ const useWorkTripHooks = (user) => {
       setActiveRide(activeRide[0])
     }
 
-    // setActiveRide(activeRide[0] === undefined ? null : activeRide[0])
-    // if ()
-
     // Passenger List
     const query = await workTripOrderByQuery(user.company.id, [
       {field: 'workDayNum', condition: '==', value: currentWeekDay},
       {field: 'goingTo', condition: '==', value: goingTo},
     ])
 
-    setPassengerList(query)
-
     setIsLoading(false)
+
+    setPassengerList(query)
   }
 
   const slideTime = () => {

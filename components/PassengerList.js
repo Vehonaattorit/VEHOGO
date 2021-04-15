@@ -1,11 +1,11 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {StyleSheet, FlatList, ActivityIndicator} from 'react-native'
 import {View} from 'native-base'
 import PassengerListItem from './PassengerListItem'
 import moment from 'moment'
 import {color} from '../constants/colors'
 
-const PassengerList = ({isLoading, extraDay, navigation, dataArray}) => {
+const PassengerList = ({isLoading, user, extraDay, navigation, dataArray}) => {
   if (isLoading) {
     return (
       <View style={styles.centered}>
@@ -25,6 +25,7 @@ const PassengerList = ({isLoading, extraDay, navigation, dataArray}) => {
         renderItem={({item}) => (
           <PassengerListItem
             navigation={navigation}
+            user={user}
             singleItem={{
               ...item,
               extraDay,

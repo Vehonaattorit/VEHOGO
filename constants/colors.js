@@ -25,6 +25,11 @@ export const color = {
   lightBlack: '#343445',
   // END
 
-  // 14.04.20201 QuickMessage colors
+  // 14.04.2021 QuickMessage colors
   pickerItem: '#0087F0',
+  // END
+
+  // 14.04.2021
+  passenerListItemDark: '#17A140',
+  passenerListItemLight: '#A6F2BB',
 }

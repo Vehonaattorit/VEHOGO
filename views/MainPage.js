@@ -156,6 +156,7 @@ export const MainPage = ({navigation}) => {
 
         <View style={styles.listView}>
           <PassengerList
+            user={user}
             isLoading={isLoading}
             extraDay={extraDay}
             navigation={navigation}

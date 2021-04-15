@@ -8,8 +8,6 @@ import {color} from '../constants/colors'
 import {checkWhatDayItIs} from '../utils/utils'
 
 const DriverTripListItem = ({singleTrip, navigation}) => {
-  console.log('singleTrip', singleTrip.workDayNum)
-
   return (
     <View style={styles.listItem}>
       <View style={styles.rectStack}>
