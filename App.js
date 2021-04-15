@@ -43,8 +43,8 @@ export default function App() {
   }
 
   useEffect(() => {
-    subscribeToAuth(authStateChanged)
-    loadFonts()
+      subscribeToAuth(authStateChanged)
+      loadFonts()
   }, [])
 
   const authStateChanged = (user) => {

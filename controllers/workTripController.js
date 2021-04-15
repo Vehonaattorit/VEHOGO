@@ -150,7 +150,7 @@ export async function workTripOrder(companyId) {
   }
 }
 
-export function workTripMultiQueryStream(companyId, querys) {
+export async function workTripMultiQueryStream(companyId, querys) {
   try {
     // Add a new document in collection "users"
     let queryRef = db

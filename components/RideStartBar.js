@@ -34,10 +34,10 @@ export const RideStartBar = ({user, navigation}) => {
     // const currentWeekDay = now.getDay()
     // END
 
-    // const currentWeekDay = 3
+    const currentWeekDay = 1
     // const now = new Date(1970, 0, 2, 6, 30)
 
-    const currentWeekDay = now.getDay()
+    //const currentWeekDay = now.getDay()
 
     const currentHours = now.getHours()
     const minutes = now.getMinutes()

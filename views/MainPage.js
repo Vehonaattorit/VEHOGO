@@ -52,6 +52,7 @@ export const MainPage = ({navigation}) => {
 
   const [driverTrips, setDriverTrips] = useState(null)
 
+
   const {
     multiSliderValue,
     multiSliderValuesChange,
@@ -67,9 +68,9 @@ export const MainPage = ({navigation}) => {
   } = useWorkTripHooks(user)
 
   //data stream for driver trips
-  const driverTripStream = () => {
+  const driverTripStream = async() => {
     const currentWeekDay = new Date().getDay()
-    let ref = workTripMultiQueryStream(user.company.id, [
+    let ref = await workTripMultiQueryStream(user.company.id, [
       {field: 'workDayNum', condition: '==', value: currentWeekDay},
       {field: 'driverID', condition: '==', value: user.id},
     ])
@@ -82,6 +83,7 @@ export const MainPage = ({navigation}) => {
       setDriverTrips(trips)
     })
   }
+
 
   useEffect(() => {
     checkTravelPreference()
