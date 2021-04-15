@@ -1,7 +1,7 @@
 import React, {useContext} from 'react'
 import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
-import {crea} from '@react-navigation/drawer'
+import {alert} from 'react-native'
 import {MainPage} from '../views/MainPage'
 import {OutlookCalendar} from '../views/OutlookCalendar'
 import {DriverAcceptRefuse} from '../views/DriverAcceptRefuse'
@@ -11,6 +11,7 @@ import {DriverOnRoute} from '../views/DriverOnRoute'
 import {Chat} from '../views/Chat'
 import {DriverRideRequestList} from '../views/DriverRideRequestList'
 import {DriverCarList} from '../views/DriverCarList'
+import {Settings} from '../views/Settings'
 import ChatRoom from '../views/ChatRoom'
 import {UserContext} from '../contexts'
 import {IconButton} from 'react-native-paper'
@@ -38,6 +39,9 @@ function MainStackNavigator() {
 
           headerTitleStyle: {
             fontFamily: 'open-sans-semi-bold',
+            fontSize: 30,
+            justifyContent: 'center',
+            flex: 1,
           },
           headerTintColor: color.primary,
         }}
@@ -59,6 +63,12 @@ function MainStackNavigator() {
             ),
           })}
         />
+        <Stack.Screen
+          name="Settings"
+          component={Settings}
+          options={{title: 'Settings'}}
+        />
+
         <Stack.Screen
           name="OutlookCalendar"
           component={OutlookCalendar}

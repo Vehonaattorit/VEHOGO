@@ -40,6 +40,7 @@ import MainPageButtons from '../components/MainPageButtons'
 
 import {workTripMultiQueryStream} from '../controllers/workTripController'
 import {useCollectionData} from 'react-firebase-hooks/firestore'
+import { IconButton } from 'react-native-paper'
 
 export const MainPage = ({navigation}) => {
   console.log('MainPage rendered')
@@ -131,7 +132,23 @@ export const MainPage = ({navigation}) => {
             >
               <Icon style={styles.sortIcon} name="filter" />
             </Button>
+            <IconButton
+                icon="account-cog"
+                size={28}
+                color={color.darkBlue}
+                onPress={() => navigation.navigate('Settings')}
+              />
           </Right>
+
+          {/*
+          headerRight: () => (
+              <IconButton
+                icon="account-cog"
+                size={28}
+                color={color.darkBlue}
+                onPress={() => navigation.navigate('Settings')}
+              />
+            ), */}
         </Header>
         {/* {activeRide && ( */}
         {/* // DOES NOT WORK PROPERLY. activeRide is not functioning */}
