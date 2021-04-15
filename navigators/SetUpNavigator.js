@@ -18,7 +18,24 @@ function SetUpStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+
         <Stack.Screen
+          name="Company"
+          component={Company}
+          options={{
+            title: 'Create or join',
+            headerTitleStyle: {
+              fontSize: 30,
+              textAlign: 'center',
+              flex: 1,
+            },
+            headerTintColor: '#000000',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
+          }}
+        />
+         <Stack.Screen
           name="VerifyEmail"
           component={VerifyEmail}
           options={() => ({
@@ -40,22 +57,6 @@ function SetUpStackNavigator() {
               />
             ),
           })}
-          headerStyle={{
-            backgroundColor: 'black',
-          }}
-        />
-        <Stack.Screen
-          name="Company"
-          component={Company}
-          options={{
-            title: 'Create or join',
-            headerTitleStyle: {
-              fontSize: 30,
-              textAlign: 'center',
-              flex: 1,
-            },
-            headerTintColor: '#000000',
-          }}
           headerStyle={{
             backgroundColor: 'black',
           }}
@@ -111,7 +112,7 @@ function SetUpStackNavigator() {
             backgroundColor: 'black',
           }}
         />
-   
+
         <Stack.Screen
           name="WorkingHours"
           component={WorkingHours}

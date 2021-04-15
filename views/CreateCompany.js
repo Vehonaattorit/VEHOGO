@@ -1,7 +1,6 @@
 import React, {useState, useContext} from 'react'
 import {KeyboardAvoidingView, TextInput, StyleSheet, View} from 'react-native'
 import {Item} from 'native-base'
-import {Input} from 'react-native-elements'
 import {googleMapsApiKey} from '../secrets/secrets'
 import {updateCompany} from '../controllers/companyController'
 import {Company} from '../models/company'
@@ -200,6 +199,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#E1F5FD',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 
   companyNameTextInput: {
@@ -215,12 +222,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 63,
     marginTop: 15,
-    paddingTop: 8,
-    paddingHorizontal: 13,
-
-    paddingBottom: 2,
-    borderRadius: 10,
-    backgroundColor: '#E1F5FD',
   },
   btnContainer: {
     marginTop: 300,
