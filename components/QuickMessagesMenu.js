@@ -105,13 +105,22 @@ const QuickMessagesMenu = ({user, item, workTrip}) => {
     // itemName: 'Select an option.',
     if (value !== 'Select an option.') {
       setSelectedMessage(value)
+
+      return true
     }
+
+    return false
   }
 
   const onValueChangeCat = async (value) => {
-    handleChangeOption(value)
+    const optionSelected = handleChangeOption(value)
 
-    await quickMessageUser(value)
+    if (optionSelected) {
+      await quickMessageUser(value)
+
+      // Set default option
+      setSelectedMessage(passengerMessages[0])
+    }
   }
 
   return (
@@ -160,8 +169,6 @@ const styles = StyleSheet.create({
   pickerStyle: {
     width: '100%',
     height: 40,
-    color: color.darkBlue,
-    fontSize: 14,
     fontFamily: 'open-sans-semi-bold',
   },
   textStyle: {

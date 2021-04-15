@@ -25,7 +25,6 @@ const PassengerAcceptRefuseButton = (props) => {
   }, [])
 
   const getSenderUser = async () => {
-    console.log('workTrip.senderiD', rideRequest)
     const passengerUser = await getUser(rideRequest.senderID)
     setPassengerUser(passengerUser)
   }
@@ -37,16 +36,12 @@ const PassengerAcceptRefuseButton = (props) => {
           .location
       var waypointsString = ''
       if (waypoints.length > 0) {
-        console.log('waypoint setter')
         waypointsString = '&waypoints='
         waypoints.forEach((waypoint) => {
           waypointsString += `${waypoint.location.latitude},${waypoint.location.longitude}|`
         })
       }
-      console.log(
-        'fetching the stuff',
-        `https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}${waypointsString}&key=${googleMapsApiKey}`
-      )
+
       const response = await fetch(
         `https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}&${waypointsString}&key=${googleMapsApiKey}`,
         {
@@ -59,8 +54,6 @@ const PassengerAcceptRefuseButton = (props) => {
 
       const data = responseJson
 
-      console.log('fetched directions')
-
       return data
     } catch (e) {
       console.error(e)
@@ -69,8 +62,6 @@ const PassengerAcceptRefuseButton = (props) => {
 
   const acceptPassenger = async () => {
     let route
-
-    console.log(`Accepting passenger : ${rideRequest.senderID}`)
 
     let workTripToUpdate = workTrip
     workTripToUpdate.scheduledDrive.availableSeats += 1
@@ -131,7 +122,7 @@ const PassengerAcceptRefuseButton = (props) => {
     }
 
     workTripToUpdate.route = route
-    // console.log('stops to update', workTripToUpdate)
+    //
     await updateWorkTrip(user.company.id, workTripToUpdate)
     await deleteRideRequest(user.company.id, rideRequest.id)
     await fetch('https://exp.host/--/api/v2/push/send', {
@@ -152,10 +143,7 @@ const PassengerAcceptRefuseButton = (props) => {
   }
 
   const refusePassenger = async () => {
-    console.log(`Refusing passenger : ${rideRequest.senderID}`)
     deleteRideRequest(user.company.id, rideRequest.id)
-
-    console.log('refusePassenger', passengerUser.ownerPushToken)
 
     fetch('https://exp.host/--/api/v2/push/send', {
       method: 'POST',

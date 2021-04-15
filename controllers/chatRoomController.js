@@ -106,8 +106,6 @@ export async function getChat(chatId) {
 }
 
 export const queryChatRoom = async (userID, driverID) => {
-  console.log('queryChatRoom', userID, driverID)
-
   const chatRooms = await getChatRoomByIds([
     {
       field: 'passengerID',
@@ -120,10 +118,6 @@ export const queryChatRoom = async (userID, driverID) => {
       value: driverID,
     },
   ])
-
-  console.log('chatRooms 1', chatRooms)
-
-  console.log(typeof chatRooms !== 'undefined' && chatRooms.length === 0)
 
   // Chatrooms array is empty
   let chatRoom
@@ -138,8 +132,6 @@ export const queryChatRoom = async (userID, driverID) => {
   } else {
     chatRoom = chatRooms[0]
   }
-
-  console.log('is there chatroom', chatRoom)
 
   return chatRoom
 }

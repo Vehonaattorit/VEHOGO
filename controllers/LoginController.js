@@ -12,8 +12,6 @@ export async function login(email, password) {
 
 export async function register(email, password) {
   try {
-    console.log('Register success')
-
     const response = await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -47,7 +45,6 @@ export async function checkEmailVerification() {
     const response = await firebase.auth().currentUser.emailVerified
     return response
   } catch (e) {
-    console.log('Verification failed' + e.message)
     return e.message
   }
 }

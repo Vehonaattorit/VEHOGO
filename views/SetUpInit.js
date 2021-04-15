@@ -22,9 +22,6 @@ import {userConverter} from '../models/user'
 export const SetUpInit = ({route}) => {
   const {user} = useContext(UserContext)
 
-  console.log('user company id', user.company.id)
-  console.log('user SetUpInit', user)
-
   const setupWorkTripDocs = async () => {
     const workTripDocuments = user.preferedWorkingHours.reduce(
       (res, current, index, array) => {
@@ -33,10 +30,6 @@ export const SetUpInit = ({route}) => {
       []
     )
 
-    console.log(
-      'fetch call',
-      `https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.location.latitude},${user.company.location.longitude}&key=${googleMapsApiKey}`
-    )
     let userToUpdate = user
     workTripDocuments.forEach(async (item, i) => {
       let preferedWorkHourindex
@@ -50,17 +43,9 @@ export const SetUpInit = ({route}) => {
 
       let index = i + 1
 
-      console.log('WHOLE ITEM', item)
-      console.log('item workDayStart', item.workDayStart.toDate())
-      console.log('item workDayEnd', item.workDayEnd.toDate())
-
       const start =
         index % 2 === 0 ? item.workDayEnd.toDate() : item.workDayStart.toDate()
 
-      console.log(
-        'fetch call',
-        `https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.latitude},${user.company.longitude}&key=${googleMapsApiKey}`
-      )
       const response = await fetch(
         `https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.location.latitude},${user.company.location.longitude}&key=${googleMapsApiKey}`,
         {
@@ -77,7 +62,6 @@ export const SetUpInit = ({route}) => {
         totalTime += leg.duration.value
       })
       totalTime = parseFloat(totalTime.toFixed(0))
-      console.log('total drive time', totalTime)
 
       let end =
         index % 2 === 0
@@ -103,8 +87,6 @@ export const SetUpInit = ({route}) => {
         }),
       ]
 
-      console.log('user.company.id', user.company.id)
-
       let workTripId = await updateWorkTrip(
         user.company.id, // Looks for company ID that user has joined
         new WorkTrip({
@@ -120,11 +102,11 @@ export const SetUpInit = ({route}) => {
             end: new firebase.firestore.Timestamp.fromDate(end),
             availableSeats: 0,
             stops: goingTo == 'work' ? initialStops : initialStops.reverse(),
-            nextStop: 0
+            nextStop: 0,
           }),
         })
       )
-      console.log('worktrip id is', workTripId)
+
       if (goingTo == 'work') {
         userToUpdate.preferedWorkingHours[
           preferedWorkHourindex
@@ -135,16 +117,11 @@ export const SetUpInit = ({route}) => {
         ].toHomeRefID = workTripId
       }
       await updateUser(userToUpdate)
-      console.log(
-        'toFirestore function',
-        userConverter.toFirestore(userToUpdate)
-      )
     })
   }
 
   const finishSetup = async () => {
     if (!user.setupIsCompleted) {
-      console.log('Setup is completed')
       user.setupIsCompleted = true
       await updateUser(user)
 

@@ -28,8 +28,6 @@ export default ChatRoom = ({navigation, route}) => {
   const {messages} = useMessageHooks(chatRoom, user)
 
   const onQuickReply = (quickReply) => {
-    console.log(quickReply[0].title)
-
     handleSend([
       {
         text: quickReply[0].title,

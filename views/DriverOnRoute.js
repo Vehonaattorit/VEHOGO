@@ -106,8 +106,6 @@ export const DriverOnRoute = ({navigation, route}) => {
         .location.longitude
     )
 
-    console.log('distance', distance)
-
     //always show end route if distance under 100m
     if (distanceToEnd >= 0.1) {
       //show NextStopBar if distance less than 100m
@@ -121,7 +119,6 @@ export const DriverOnRoute = ({navigation, route}) => {
   }
 
   const changeNextStop = async () => {
-    console.log('called change NextStop')
     setShowNextStopBar(false)
     if (
       workTrip.scheduledDrive.stops.length - 1 !==
@@ -136,7 +133,6 @@ export const DriverOnRoute = ({navigation, route}) => {
       ) {
         workTrip.isDriving = false
         await updateWorkTrip(user.company.id, workTrip)
-        console.log('Arrived to location')
       } else {
         scrollRef.current.snapToItem(workTrip.scheduledDrive.nextStop - 1)
       }
@@ -191,9 +187,8 @@ export const DriverOnRoute = ({navigation, route}) => {
   }
 
   const carouselChangeStop = async (index) => {
-    console.log('index is now', index)
     workTrip.scheduledDrive.nextStop = index + 1
-    console.log('next Stop', workTrip.scheduledDrive.nextStop)
+
     await updateWorkTrip(user.company.id, workTrip)
     setShowNextStopBar(false)
     setShowStop(false)
@@ -212,7 +207,6 @@ export const DriverOnRoute = ({navigation, route}) => {
   useEffect(() => {
     //callUpdateUserPosition()
     if (user.travelPreference === 'driver') {
-      console.log('updated driver location')
       updateLocationInterval()
     }
 
@@ -309,14 +303,6 @@ export const DriverOnRoute = ({navigation, route}) => {
     const lastStop =
       stops[workTrip.scheduledDrive.stops.length - 1].stopName === item.stopName
 
-    console.log('2. lastStop', lastStop)
-    // const lastStop =
-    //   item.stopName === stops[workTrip.scheduledDrive.stops.length].stopName
-    //     ? true
-    //     : false
-
-    // console.log('lastStop', lastStop)
-
     const renderChat = chatRooms.find(
       (chat) => item.userID === chat.passengerID
     )
@@ -327,7 +313,10 @@ export const DriverOnRoute = ({navigation, route}) => {
           <AntDesign name="caretleft" size={24} color={color.lightBlack} />
         </View>
         <View style={styles.listItemContainer}>
-          <TouchableOpacity onPress={() => createChatRoom(item)}>
+          <TouchableOpacity
+            disabled={lastStop}
+            onPress={() => createChatRoom(item)}
+          >
             <View style={styles.listItemTopRow}>
               <View>
                 <Text style={styles.nameTopRow}>{item.stopName}</Text>

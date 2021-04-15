@@ -13,8 +13,6 @@ const PassengerRideRequestButton = ({user, workTrip}) => {
   const [ownerPushToken, setOwnerPushToken] = useState(null)
   const [isRequested, setIsRequested] = useState(null)
 
-  console.log('ownerPushToken', ownerPushToken)
-
   useEffect(() => {
     const getOwnerPushtoken = async () => {
       const userDriver = await getUser(workTrip.driverID)
@@ -45,11 +43,6 @@ const PassengerRideRequestButton = ({user, workTrip}) => {
 
   const requestRide = async () => {
     if (!isRequested) {
-      console.log(
-        `Requesting ride from company: ${user.company.id} worktrip ${workTrip.id} with user ${user.userName}`
-      )
-      console.log('starting update')
-
       await updateRideRequest(
         user.company.id,
         new RideRequest({
@@ -77,7 +70,6 @@ const PassengerRideRequestButton = ({user, workTrip}) => {
           body: `Request sent from ${user.userName}`,
         }),
       })
-      console.log('finished update')
 
       setIsRequested(true)
     } else {

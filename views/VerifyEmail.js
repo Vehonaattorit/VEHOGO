@@ -8,10 +8,8 @@ import {FontAwesome} from '@expo/vector-icons'
 import firebase from '../firebase/fire'
 
 export const VerifyEmail = ({navigation}) => {
-
   const checkEmail = async () => {
     const result = await checkEmailVerification()
-    console.log('email status', result)
     if (result === true) {
       navigation.navigate('Company')
     }
@@ -22,7 +20,6 @@ export const VerifyEmail = ({navigation}) => {
     await user.reload()
     user = await firebase.auth().currentUser
     await checkEmail()
-
   }
 
   useEffect(() => {
@@ -35,9 +32,7 @@ export const VerifyEmail = ({navigation}) => {
       <Text style={{margin: 5}}>
         Verify your email from link you received to your email.
       </Text>
-      <Text style={{margin: 5}}>
-        Then click continue
-      </Text>
+      <Text style={{margin: 5}}>Then click continue</Text>
 
       <CustomIconButton
         onPress={() => {
@@ -46,7 +41,6 @@ export const VerifyEmail = ({navigation}) => {
         title="Continue"
         iconTwo="keyboard-arrow-right"
       />
-
     </View>
   )
 }

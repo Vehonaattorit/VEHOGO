@@ -88,8 +88,6 @@ const useWorkTripHooks = (user) => {
       {field: 'isDriving', condition: '==', value: true},
     ])
 
-    console.log('activeRide[0]', activeRide[0])
-
     setActiveRide(activeRide[0])
 
     const query = await workTripOrderByQuery(user.company.id, [
