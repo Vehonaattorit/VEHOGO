@@ -67,14 +67,14 @@ export const MainPage = ({navigation}) => {
   } = useWorkTripHooks(user)
 
   //data stream for driver trips
-  const driverTripStream = () => {
+  const driverTripStream = async () => {
     // MUISTA LISÄTÄ !!!
     // const currentWeekDay = new Date().getDay()
 
     // MUISTA POISTAA !!!
     const currentWeekDay = 5
 
-    let ref = workTripMultiQueryStream(user.company.id, [
+    let ref = await workTripMultiQueryStream(user.company.id, [
       {field: 'workDayNum', condition: '==', value: currentWeekDay},
       {field: 'driverID', condition: '==', value: user.id},
     ])
