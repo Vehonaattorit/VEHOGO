@@ -17,6 +17,7 @@ import CustomInput from '../components/CustomInput'
 import GooglePlacesInput from '../components/GooglePlaceInput'
 import {googleMapsApiKey} from '../secrets/secrets'
 import firebase from 'firebase/app'
+import CustomButtonIcon from '../components/CustomIconButton'
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE'
 
@@ -135,56 +136,38 @@ export const Address = ({navigation}) => {
   }
 
   return (
-    <KeyboardAvoidingView behavior="padding" style={styles.container}>
-      <CustomTitle title="Address" />
+    <View style={styles.container}>
       <View style={styles.icon}>
-        {Platform.OS === 'ios' ? (
-          <AntDesign name="home" size={300} color={color.secondaryDark} />
-        ) : (
-          <FontAwesome name="home" size={300} color={color.secondaryDark} />
-        )}
+        <FontAwesome name="home" size={300} color='#26AAE2' />
       </View>
-      <View style={styles.inputContainer}>
-        {/* <CustomInput
-          placeholder="Address"
-          initialValue={user.homeAddress}
-          keyboardType="default"
-          autoCapitalize="sentences"
-          returnKeyType="next"
-          id="address"
-          autoCorrect={false}
-          onInputChange={inputChangeHandler}
-          errorText="Please enter a valid address."
-          minLength={1}
-          required
-        /> */}
-
+      <KeyboardAvoidingView behavior="padding" style={styles.inputContainer}>
         <GooglePlacesInput
           defaultValue={user.homeAddress}
-          style={{alignSelf: 'stretch'}}
           setAddress={setAddress}
         />
+        <View style={styles.customInput}>
+          <CustomInput
+            placeholder="City"
+            initialValue={user.city}
+            keyboardType="default"
+            autoCapitalize="sentences"
+            returnKeyType="next"
+            id="city"
+            autoCorrect={false}
+            onInputChange={inputChangeHandler}
+            errorText="Please enter a valid city name."
+            minLength={1}
+            required
+          />
+        </View>
+      </KeyboardAvoidingView>
 
-        <CustomInput
-          placeholder="City"
-          initialValue={user.city}
-          keyboardType="default"
-          autoCapitalize="sentences"
-          returnKeyType="next"
-          id="city"
-          autoCorrect={false}
-          onInputChange={inputChangeHandler}
-          errorText="Please enter a valid city name."
-          minLength={1}
-          required
-        />
-        <CustomButton
-          style={styles.btns}
-          title="Submit"
-          onPress={submitHandler}
-        />
-      </View>
-    </KeyboardAvoidingView>
+      <CustomButtonIcon
+        style={styles.btn}
+        title="Submit"
+        onPress={submitHandler}
+      />
+    </View>
   )
 }
 
@@ -195,13 +178,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   inputContainer: {
-    position: 'absolute',
-    justifyContent: 'flex-end',
-    bottom: 60,
+    bottom: 20,
     width: '90%',
     color: 'white',
   },
+  customInput: {
+    marginTop: 50,
+    shadowColor: 'rgba(0, 0, 0, 0.4)',
+    shadowOpacity: 0.8,
+    elevation: 6,
+    shadowRadius: 15,
+    shadowOffset: {width: 1, height: 13},
+  },
+  btnContainer: {},
+  btn: {
+    width: '100%',
+  },
   icon: {
-    marginBottom: 100,
+    marginBottom: 200,
   },
 })

@@ -19,23 +19,19 @@ function SetUpStackNavigator() {
     <NavigationContainer>
       <Stack.Navigator>
 
-        <Stack.Screen
-          name="Company"
-          component={Company}
+      <Stack.Screen
+          name="Travel"
+          component={Travel}
           options={{
-            title: 'Create or join',
-            headerTitleStyle: {
-              fontSize: 30,
-              textAlign: 'center',
-              flex: 1,
-            },
+            title: 'Travel',
+            headerTitleStyle: {fontSize: 30, textAlign: 'center', flex: 1},
             headerTintColor: '#000000',
           }}
           headerStyle={{
             backgroundColor: 'black',
           }}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="VerifyEmail"
           component={VerifyEmail}
           options={() => ({
@@ -62,22 +58,10 @@ function SetUpStackNavigator() {
           }}
         />
         <Stack.Screen
-          name="Travel"
-          component={Travel}
+          name="Company"
+          component={Company}
           options={{
-            title: 'Travel',
-            headerTitleStyle: {fontSize: 30, textAlign: 'center', flex: 1},
-            headerTintColor: '#000000',
-          }}
-          headerStyle={{
-            backgroundColor: 'black',
-          }}
-        />
-        <Stack.Screen
-          name="Username"
-          component={Username}
-          options={{
-            title: 'Full Name',
+            title: 'Create or join',
             headerTitleStyle: {
               fontSize: 30,
               textAlign: 'center',
@@ -89,11 +73,33 @@ function SetUpStackNavigator() {
             backgroundColor: 'black',
           }}
         />
+{/* travel */}
+        <Stack.Screen
+          name="Username"
+          component={Username}
+          options={{
+            title: 'Username',
+            headerTitleStyle: {
+              fontSize: 30,
+              textAlign: 'center',
+              flex: 1,
+            },
+            headerTintColor: '#000000',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
+          }}
+        />
+        {/* address */}
         <Stack.Screen
           name="Address"
           component={Address}
           options={{
-            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTitleStyle: {
+              fontSize: 30,
+              textAlign: 'center',
+              flex: 1,
+            },
             headerTintColor: '#000000',
           }}
           headerStyle={{

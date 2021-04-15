@@ -25,7 +25,6 @@ const GooglePlacesInput = ({setAddress, defaultValue}) => {
         textInputContainer: {
           backgroundColor: '#E1F5FD',
           paddingHorizontal: 5,
-          borderRadius: 5,
           shadowColor: '#000',
           borderRadius: 10,
           shadowOffset: {
