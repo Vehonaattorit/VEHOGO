@@ -18,6 +18,7 @@ import {
   workTripOrderByQuery,
 } from '../controllers/workTripController'
 import {color} from '../constants/colors'
+import {getUser} from '../controllers/userController'
 
 export const RideStartBar = ({user, navigation}) => {
   const [showStart, setShowStart] = useState(false)
@@ -26,15 +27,15 @@ export const RideStartBar = ({user, navigation}) => {
   const [driveStartTime, setDriveStartTime] = useState(null)
 
   const getNextRide = async () => {
-    // const now = new Date(1970, 0, 1, 6, 30)
+    const now = new Date(1970, 0, 1, 6, 30)
     // 13.04. 10:47 BACKUP
-    const now = new Date()
+    // const now = new Date()
     // END
     // 13.04. 10:47 BACKUP
-    const currentWeekDay = now.getDay()
+    // const currentWeekDay = now.getDay()
     // END
 
-    // const currentWeekDay = 3
+    const currentWeekDay = 5
     // const now = new Date(1970, 0, 2, 6, 30)
     // const currentWeekDay = now.getDay()
 

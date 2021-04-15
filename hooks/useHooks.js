@@ -6,6 +6,8 @@ import {
   workTripOrderByQuery,
 } from '../controllers/workTripController'
 
+import firebase from 'firebase/app'
+
 const useWorkTripHooks = (user) => {
   const [isLoading, setIsLoading] = useState(false)
 
@@ -24,15 +26,19 @@ const useWorkTripHooks = (user) => {
     {hours: '17', minutes: '00'},
   ])
 
-  const fetchHomeOrWorkTrips = () => {
-    const now = new Date().getDay()
+  const fetchHomeOrWorkTrips = (currentWeekDay) => {
+    // const now = new Date().getDay()
 
     const workDayEnd = user.preferedWorkingHours[0].workDayEnd.toDate()
 
     let goingTo
-    if (moment(now).isBetween(new Date(1970, 0, 1, 0, 0), workDayEnd)) {
+    if (
+      moment(currentWeekDay).isBetween(new Date(1970, 0, 1, 0, 0), workDayEnd)
+    ) {
       goingTo = 'work'
-    } else if (moment(now).isBetween(workDayEnd, new Date(1970, 0, 1, 19, 0))) {
+    } else if (
+      moment(currentWeekDay).isBetween(workDayEnd, new Date(1970, 0, 1, 19, 0))
+    ) {
       goingTo = 'home'
     } else {
       goingTo = 'work'
@@ -52,9 +58,11 @@ const useWorkTripHooks = (user) => {
   const queryWithTime = async () => {
     setIsLoading(true)
 
-    const currentWeekDay = new Date().getDay()
+    // const currentWeekDay = new Date().getDay()fetchHomeOrWorkTrips
 
-    const goingTo = fetchHomeOrWorkTrips()
+    const currentWeekDay = 5
+
+    const goingTo = fetchHomeOrWorkTrips(currentWeekDay)
 
     const query = await workTripMultiQuery(user.company.id, [
       {
@@ -80,16 +88,39 @@ const useWorkTripHooks = (user) => {
   const fetchTodayRides = async () => {
     setIsLoading(true)
 
-    const currentWeekDay = new Date().getDay()
+    // const currentWeekDay = new Date().getDay()
 
-    const goingTo = fetchHomeOrWorkTrips()
+    const currentWeekDay = 5
+
+    const goingTo = fetchHomeOrWorkTrips(currentWeekDay)
 
     const activeRide = await workTripMultiQuery(user.company.id, [
+      {
+        field: 'scheduledDrive.stops',
+        condition: 'array-contains',
+        value: {
+          address: user.homeAddress,
+          location: user.homeLocation,
+          stopName: user.userName,
+          userID: user.id,
+        },
+      },
+      {field: 'workDayNum', condition: '==', value: currentWeekDay},
       {field: 'isDriving', condition: '==', value: true},
     ])
 
-    setActiveRide(activeRide[0])
+    if (activeRide[0] === undefined) {
+      setActiveRide(null)
 
+      setIsLoading(false)
+    } else {
+      setActiveRide(activeRide[0])
+    }
+
+    // setActiveRide(activeRide[0] === undefined ? null : activeRide[0])
+    // if ()
+
+    // Passenger List
     const query = await workTripOrderByQuery(user.company.id, [
       {field: 'workDayNum', condition: '==', value: currentWeekDay},
       {field: 'goingTo', condition: '==', value: goingTo},

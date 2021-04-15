@@ -18,7 +18,7 @@ function SetUpStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen
+        {/* <Stack.Screen
           name="VerifyEmail"
           component={VerifyEmail}
           options={() => ({
@@ -43,7 +43,7 @@ function SetUpStackNavigator() {
           headerStyle={{
             backgroundColor: 'black',
           }}
-        />
+        /> */}
         <Stack.Screen
           name="Company"
           component={Company}

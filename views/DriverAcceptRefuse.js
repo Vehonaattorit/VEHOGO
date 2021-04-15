@@ -6,6 +6,7 @@ import MapView from 'react-native-maps'
 import PassengerRideRequestButton from './passengerRideRequestButton'
 import PassengerAcceptRefuseButton from './passengerAcceptRefuseButton'
 import decodePolyline from 'decode-google-map-polyline'
+import {drivingTime} from '../utils/utils'
 
 export const DriverAcceptRefuse = ({navigation, route}) => {
   const {singleItem, rideRequest} = route.params
@@ -63,7 +64,6 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
     setRouteCoordinates(tempRouteCoordinates)
   }, [])
 
-
   return (
     <View style={styles.view}>
       <Container style={styles.requestMapContent}>
@@ -100,9 +100,13 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
             <Text style={styles.text}>2 km</Text>
           </View>
 
-          <Text style={{...styles.text, margin: 10}}>
-            {rideRequest == undefined ? '' : rideRequest.homeAddress}
-          </Text>
+          <View style={styles.info}>
+            <Text style={styles.text}>
+              {rideRequest == undefined ? '' : rideRequest.homeAddress}
+            </Text>
+            <Text style={styles.text}>{drivingTime(singleItem)} min</Text>
+          </View>
+
           {user.travelPreference == 'passenger' ? (
             <PassengerRideRequestButton
               navigation={navigation}

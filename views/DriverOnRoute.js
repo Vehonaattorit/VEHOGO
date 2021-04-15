@@ -49,7 +49,7 @@ export const DriverOnRoute = ({navigation, route}) => {
   // const [chatRooms, setChatRooms] = useState([])
 
   const [latestMessage, setLatestMessage] = useState('')
-  console.log('workTrip', workTrip.id)
+  // console.log('workTrip', workTrip.id)
 
   const [markers, setMarkers] = useState([
     workTrip.scheduledDrive.stops.map((stop) => (

@@ -16,7 +16,8 @@ export class User {
     preferedWorkingHours,
     setupIsCompleted,
     phoneNumber,
-    fullName
+    fullName,
+    email,
   }) {
     this.id = id
     this.ownerPushToken = ownerPushToken
@@ -33,6 +34,7 @@ export class User {
     this.setupIsCompleted = setupIsCompleted
     this.phoneNumber = phoneNumber
     this.fullName = fullName
+    this.email = email
   }
 }
 
@@ -90,6 +92,9 @@ export const userConverter = {
     if (user.fullName != undefined) {
       userObject.fullName = user.fullName
     }
+    if (user.email != undefined) {
+      userObject.email = user.email
+    }
 
     return userObject
   },
@@ -116,7 +121,8 @@ export const userConverter = {
       preferedWorkingHours: data.preferedWorkingHours,
       setupIsCompleted: data.setupIsCompleted,
       phoneNumber: data.phoneNumber,
-      fullName: data.fullName
+      fullName: data.fullName,
+      email: data.email,
     })
   },
 }

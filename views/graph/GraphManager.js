@@ -84,6 +84,10 @@ export class GraphManager {
       const token = await AsyncStorage.getItem('userToken')
       let graphResponse = null
 
+      console.log('createEvent token', token)
+
+      console.log('eventData', eventData)
+
       await fetch('https://graph.microsoft.com/v1.0/me/events?', {
         method: 'POST',
         headers: {
@@ -94,9 +98,13 @@ export class GraphManager {
       })
         .then((response) => response.json())
         .then((response) => {
+          console.log('response', response)
+
           graphResponse = response
         })
         .catch((error) => {
+          console.log('errorResponse', error)
+
           graphResponse = error
         })
 
@@ -108,6 +116,8 @@ export class GraphManager {
         ...graphResponse,
         type: 'success',
       }
+
+      console.log('finalResponse', finalResponse)
 
       return finalResponse
     } catch (err) {

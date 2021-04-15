@@ -66,11 +66,13 @@ export const MainPage = ({navigation}) => {
     isLoading,
   } = useWorkTripHooks(user)
 
-  console.log('Active Ride', activeRide)
-
   //data stream for driver trips
   const driverTripStream = () => {
-    const currentWeekDay = new Date().getDay()
+    // MUISTA LISÄTÄ !!!
+    // const currentWeekDay = new Date().getDay()
+
+    // MUISTA POISTAA !!!
+    const currentWeekDay = 5
     let ref = workTripMultiQueryStream(user.company.id, [
       {field: 'workDayNum', condition: '==', value: currentWeekDay},
       {field: 'driverID', condition: '==', value: user.id},
@@ -139,11 +141,13 @@ export const MainPage = ({navigation}) => {
       <Container>
         {/* {activeRide && ( */}
         {/* // DOES NOT WORK PROPERLY. activeRide is not functioning */}
-        <DriverIsOnHisWayBar
-          user={user}
-          navigation={navigation}
-          activeRide={activeRide}
-        />
+        {activeRide && (
+          <DriverIsOnHisWayBar
+            user={user}
+            navigation={navigation}
+            activeRide={activeRide}
+          />
+        )}
         {/* )} */}
 
         <View style={styles.availableRidesContainer}>
@@ -173,7 +177,6 @@ export const MainPage = ({navigation}) => {
           <View style={styles.listView}>
             <DriverTripList
               isLoading={isLoading}
-              extraDay={extraDay}
               navigation={navigation}
               driverTrips={driverTrips}
             />

@@ -32,6 +32,7 @@ export const SignUp = () => {
           new User({
             id: result.user.uid,
             userName: name,
+            email: email,
             phoneNumber: phoneNumber,
           })
         )
