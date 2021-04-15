@@ -15,8 +15,6 @@ import moment from 'moment'
 const PassengerListItem = ({navigation, singleItem}) => {
   const {driverName, goingTo, scheduledDrive, workDayNum, extraDay} = singleItem
 
-  console.log('singleItem', driverName)
-
   return (
     <TouchableOpacity
       // style={styles.listItem}

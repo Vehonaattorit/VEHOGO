@@ -66,6 +66,8 @@ export const MainPage = ({navigation}) => {
     isLoading,
   } = useWorkTripHooks(user)
 
+  console.log('Active Ride', activeRide)
+
   //data stream for driver trips
   const driverTripStream = () => {
     const currentWeekDay = new Date().getDay()

@@ -32,7 +32,6 @@ export const useMessageHooks = (chatRoom) => {
 
         let popMessage = messages[0]
 
-        console.log('popMessage', popMessage)
         if (popMessage === undefined) return
 
         if (popMessage.user._id !== user.id) {
