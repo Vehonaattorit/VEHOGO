@@ -301,7 +301,7 @@ export const DriverOnRoute = ({navigation, route}) => {
   const renderItem = ({item, index}) => {
     const {stops} = workTrip.scheduledDrive
 
-    const lastStop =
+    const isLastStop =
       stops[workTrip.scheduledDrive.stops.length - 1].stopName === item.stopName
 
     const renderChat = chatRooms.find(
@@ -315,7 +315,7 @@ export const DriverOnRoute = ({navigation, route}) => {
         </View>
         <View style={styles.listItemContainer}>
           <TouchableOpacity
-            disabled={lastStop}
+            disabled={isLastStop}
             onPress={() => createChatRoom(item)}
           >
             <View style={styles.listItemTopRow}>
@@ -329,10 +329,10 @@ export const DriverOnRoute = ({navigation, route}) => {
             <View
               style={{
                 ...styles.listItemMiddleRow,
-                justifyContent: lastStop ? 'flex-end' : 'space-between',
+                justifyContent: isLastStop ? 'flex-end' : 'space-between',
               }}
             >
-              {!lastStop && (
+              {!isLastStop && (
                 <View>
                   {renderChat && (
                     <Text style={styles.latestMessageBottomRow}>
@@ -351,7 +351,7 @@ export const DriverOnRoute = ({navigation, route}) => {
               </View>
             </View>
           </TouchableOpacity>
-          {!lastStop && (
+          {!isLastStop && (
             <View style={styles.listItemBottomRow}>
               <QuickMessagesMenu user={user} workTrip={workTrip} item={item} />
             </View>

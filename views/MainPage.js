@@ -38,7 +38,10 @@ import DriverTripList from '../components/DriverTripList'
 import DriverIsOnHisWayBar from '../components/DriverIsOnHisWayBar'
 import MainPageButtons from '../components/MainPageButtons'
 
-import {workTripMultiQueryStream} from '../controllers/workTripController'
+import {
+  workTripMultiQueryStream,
+  useWorkTripControllerHooks,
+} from '../controllers/workTripController'
 import {useCollectionData} from 'react-firebase-hooks/firestore'
 
 import {Ionicons} from '@expo/vector-icons'
@@ -51,6 +54,12 @@ export const MainPage = ({navigation}) => {
   const [travelPreference, setTravelPreference] = useState('')
 
   const [driverTrips, setDriverTrips] = useState(null)
+
+  // PASSENGER
+  const {passengerTrips} = useWorkTripControllerHooks(user)
+  // [END]
+
+  // console.log('passengerTrips', passengerTrips[0].hasPassenger)
 
   const {
     multiSliderValue,
@@ -92,13 +101,17 @@ export const MainPage = ({navigation}) => {
     checkTravelPreference()
     checkNotificationsPermissions()
 
+    let passengerRidesListener
+
     if (travelPreference === 'driver') {
       driverTripStream()
     }
     if (travelPreference === 'passenger') {
-      fetchTodayRides()
+      // fetchTodayRides()
     }
-  }, [travelPreference])
+
+    // return () => fetchTodayRides()
+  }, [travelPreference, passengerTrips])
 
   const checkNotificationsPermissions = async () => {
     let pushToken
@@ -161,7 +174,7 @@ export const MainPage = ({navigation}) => {
             isLoading={isLoading}
             extraDay={extraDay}
             navigation={navigation}
-            dataArray={passengerList}
+            dataArray={passengerTrips}
           />
         </View>
       </Container>

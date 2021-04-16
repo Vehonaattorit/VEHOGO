@@ -1,9 +1,88 @@
+import React, {useState, useEffect} from 'react'
 import firebase from 'firebase/app'
 import {v4} from 'uuid/v4'
 import {workTripConverter, WorkTrip} from '../models/workTrip'
 import 'firebase/firestore'
 
 const db = firebase.firestore()
+
+export const useWorkTripControllerHooks = (user) => {
+  const [passengerTrips, setWorkTrips] = useState([])
+
+  useEffect(() => {
+    const fetchWorkTrips = async () => {
+      const workTripsListener = await db
+        .collection('companys')
+        .doc(user.company.id)
+        .collection('workTrips')
+        // DOESN'T WORK WITH WORKTRIPCONTROLLER ON !!!
+        // .withConverter(workTripConverter)
+        .orderBy('workDayNum', 'asc')
+        .orderBy('scheduledDrive.start', 'asc')
+        .onSnapshot((querySnapshot) => {
+          const passengerTrips = querySnapshot.docs.map((doc) => {
+            return {
+              ...doc.data(),
+            }
+          })
+
+          const newPassengerTrips = []
+          for (const passengerTrip of passengerTrips) {
+            const isPassengerIncluded = passengerTrip.scheduledDrive.stops.some(
+              (item) => {
+                console.log(
+                  `passengerTrip ${passengerTrip.workDayNum} user.id: ${user.id}, item.userID: ${item.userID}`
+                )
+
+                console.log('IS IT TRUE?', item.userID === user.id)
+
+                return item.userID === user.id
+              }
+            )
+
+            newPassengerTrips.push({...passengerTrip, isPassengerIncluded})
+          }
+
+          setWorkTrips(newPassengerTrips)
+        })
+
+      return () => workTripsListener()
+    }
+
+    fetchWorkTrips()
+  }, [])
+
+  return {
+    passengerTrips,
+  }
+
+  // export async function workTripOrder(companyId) {
+  //   try {
+
+  //     // Add a new document in collection "users"
+  //     let snapShot = await db
+  //       .collection('companys')
+  //       .doc(companyId)
+  //       .collection('workTrips')
+  //       .withConverter(workTripConverter)
+  //       .orderBy('workDayNum', 'asc')
+  //       .orderBy('scheduledDrive.start', 'asc')
+  //       .get()
+  //     const workTripList = []
+  //     snapShot.forEach((doc) => {
+  //       const data = doc.data()
+
+  //       console.log('workDayNum', data.workDayNum)
+
+  //       workTripList.push(workTripConverter.fromData(data))
+  //     })
+  //     return workTripList
+  //   } catch (error) {
+  //     console.error('Error getting document: ', error)
+  //     return
+  //   }
+  // }
+}
 
 export async function updateWorkTrip(companyId, workTrip) {
   try {
@@ -108,7 +187,7 @@ export async function workTripOrderByQuery(companyId, querys) {
 export async function workTripMultiQuery(companyId, querys) {
   try {
     // Add a new document in collection "users"
-    let queryRef = db
+    let queryRef = await db
       .collection('companys')
       .doc(companyId)
       .collection('workTrips')
@@ -132,16 +211,21 @@ export async function workTripMultiQuery(companyId, querys) {
 export async function workTripOrder(companyId) {
   try {
     // Add a new document in collection "users"
-    let querySnapshot = await db
+    let snapShot = await db
       .collection('companys')
       .doc(companyId)
       .collection('workTrips')
       .withConverter(workTripConverter)
-      .orderBy('start')
-
+      .orderBy('workDayNum', 'asc')
+      .orderBy('scheduledDrive.start', 'asc')
+      .get()
     const workTripList = []
-    querySnapshot.forEach((doc) => {
-      workTripList.push(workTripConverter.fromData(doc.data()))
+    snapShot.forEach((doc) => {
+      const data = doc.data()
+
+      console.log('workDayNum', data.workDayNum)
+
+      workTripList.push(workTripConverter.fromData(data))
     })
     return workTripList
   } catch (error) {

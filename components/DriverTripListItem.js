@@ -5,9 +5,17 @@ import moment from 'moment'
 
 import {color} from '../constants/colors'
 
-import {checkWhatDayItIs} from '../utils/utils'
+import {checkWhatDayItIs, drivingTime} from '../utils/utils'
 
 const DriverTripListItem = ({singleTrip, navigation}) => {
+  const {scheduledDrive} = singleTrip
+
+  const schedStart = new Date(scheduledDrive.start.toDate())
+
+  const totalTime = drivingTime(singleTrip)
+
+  const arrivalTime = schedStart.setMinutes(schedStart.getMinutes() + totalTime)
+
   return (
     <View style={styles.listItem}>
       <View style={styles.rectStack}>
@@ -32,8 +40,7 @@ const DriverTripListItem = ({singleTrip, navigation}) => {
           </View>
           <View style={styles.bottomRow}>
             <Text style={styles.arrivalTimeText}>
-              Arrival time:{' '}
-              {moment(singleTrip.scheduledDrive.end.toDate()).format('HH:mm')}
+              Arrival time: {moment(arrivalTime).format('HH:mm')}
             </Text>
           </View>
         </View>

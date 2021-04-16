@@ -9,7 +9,7 @@ import decodePolyline from 'decode-google-map-polyline'
 import {drivingTime} from '../utils/utils'
 
 export const DriverAcceptRefuse = ({navigation, route}) => {
-  const {singleItem, hasPassenger, rideRequest} = route.params
+  const {singleItem, hasPassenger, arrivalTime, rideRequest} = route.params
   const {user} = useContext(UserContext)
 
   const [mapRef, setMapRef] = useState(null)

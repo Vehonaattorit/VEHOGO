@@ -2,7 +2,10 @@ import React, {useEffect, useContext, useState} from 'react'
 import moment from 'moment'
 
 import {
+  getWorkTrips,
+  useWorkTripControllerHooks,
   workTripMultiQuery,
+  workTripOrder,
   workTripOrderByQuery,
 } from '../controllers/workTripController'
 
@@ -117,10 +120,8 @@ const useWorkTripHooks = (user) => {
     }
 
     // Passenger List
-    const query = await workTripOrderByQuery(user.company.id, [
-      {field: 'workDayNum', condition: '==', value: currentWeekDay},
-      {field: 'goingTo', condition: '==', value: goingTo},
-    ])
+    // BACKUP
+    const query = await workTripOrder(user.company.id)
 
     setIsLoading(false)
 

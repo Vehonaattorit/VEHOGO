@@ -133,6 +133,8 @@ export class AuthManager {
       // Get expiration time - 1 hour
       // If it's <= 5 minutes before expiration, then refresh
 
+      console.log('expireTime')
+
       const expire = moment(expireTime).subtract(5, 'minutes')
 
       const now = moment()
@@ -141,15 +143,21 @@ export class AuthManager {
         // Expired refresh
         response = await AuthManager.signInAsync()
 
+        console.log('    if (now.isSameOrAfter(expire)) {')
+
         return response
       }
       // Token is not expired - use token to fetch Calendar Events
       response = await AuthManager.callMsGraph(userToken)
 
+      console.log('response = await AuthManager.callMsGraph(userToken)')
+
       return response
     }
 
     response = await AuthManager.signInAsync()
+
+    console.log('response = await AuthManager.signInAsync()')
 
     return response
   }

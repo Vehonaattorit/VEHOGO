@@ -132,11 +132,10 @@ const PassengerRideRequestButton = ({
             await updateWorkTrip(user.company.id, workTripUpdate)
 
             setAlreadyRequested(true)
+            navigation.popToTop()
           },
         },
       ])
-
-      navigation.popToStack()
     } else {
       Alert.alert('Ride cancelled.', 'Ride has already been cancelled.', [
         {text: 'Okay'},

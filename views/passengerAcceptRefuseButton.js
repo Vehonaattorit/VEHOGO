@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {StyleSheet} from 'react-native'
+import {Alert, StyleSheet} from 'react-native'
 import {Text, View, Button} from 'native-base'
 import {deleteRideRequest} from '../controllers/rideRequestController'
 import {RideRequest} from '../models/rideRequest'
@@ -68,13 +68,6 @@ const PassengerAcceptRefuseButton = (props) => {
   }
 
   const acceptPassenger = async () => {
-    let route
-
-    const currentYear = new Date().getFullYear()
-    const currentMonth = new Date().getMonth()
-    const currentDate = new Date().getDate()
-    const currentDay = new Date().getDay()
-
     // WORKTRIP WORKDAYNUM
     const {workDayNum} = workTrip
 
@@ -118,44 +111,139 @@ const PassengerAcceptRefuseButton = (props) => {
 
     // await AsyncStorage.removeItem('expireTime')
     // await AsyncStorage.removeItem('userToken')
+    // await AsyncStorage.removeItem('askedOutlook')
+    // await AsyncStorage.removeItem('continueWithCalendar')
 
-    const response = await AuthManager.checkTokenExpiration()
+    const askedOutlook = await AsyncStorage.getItem('askedOutlook')
+    const continueWithCalendar = await AsyncStorage.getItem(
+      'continueWithCalendar'
+    )
 
-    await GraphManager.createEvent({
-      subject: `Pick up ${rideRequest.userName} on your way to ${workTrip.goingTo}`,
-      body: {
-        contentType: 'HTML',
-        content: 'Your request has been accepted.',
-      },
-      start: {
-        dateTime: dateStart,
-        timeZone: 'Pacific Standard Time',
-      },
-      end: {
-        dateTime: dateEnd,
-        timeZone: 'Pacific Standard Time',
-      },
-      location: {
-        displayName: passengerUser.homeAddress,
-      },
-      attendees: [
-        {
-          emailAddress: {
-            address: user.email,
-            name: user.userName,
+    console.log('askedOutlook', askedOutlook)
+    console.log('continueWithCalendar', continueWithCalendar)
+
+    if (!Boolean(askedOutlook)) {
+      Alert.alert(
+        'Would you like to sign in to Outlook?',
+        `You can schedule ride to an event.`,
+        [
+          {
+            text: 'No',
+            style: 'default',
+            onPress: async () => {
+              await AsyncStorage.setItem('askedOutlook', 'true')
+              await AsyncStorage.setItem('continueWithCalendar', 'false')
+
+              await continueAcceptMethod()
+            },
           },
-          emailAddress: {
-            address: passengerUser.email,
-            name: passengerUser.userName,
+          {
+            text: 'Yes',
+            style: 'destructive',
+            onPress: async () => {
+              console.log('PERKELE')
+              await AsyncStorage.setItem('askedOutlook', 'true')
+
+              const response = await AuthManager.checkTokenExpiration()
+
+              console.log('IMPORTANT', response)
+
+              // User cancelled login
+              if (response.type === 'error') {
+                console.log('RESPONSUS.ERROR')
+
+                // continue with creating a ride
+                return
+              }
+
+              console.log('CREATE NEW EVENT FFS')
+
+              await GraphManager.createEvent({
+                subject: `Pick up ${rideRequest.userName} on your way to ${workTrip.goingTo}`,
+                body: {
+                  contentType: 'HTML',
+                  content: 'Your request has been accepted.',
+                },
+                start: {
+                  dateTime: dateStart,
+                  timeZone: 'Pacific Standard Time',
+                },
+                end: {
+                  dateTime: dateEnd,
+                  timeZone: 'Pacific Standard Time',
+                },
+                location: {
+                  displayName: passengerUser.homeAddress,
+                },
+                attendees: [
+                  {
+                    emailAddress: {
+                      address: response.organizer.emailAddress.address,
+                      name: user.userName,
+                    },
+                    emailAddress: {
+                      address: passengerUser.email,
+                      name: passengerUser.userName,
+                    },
+                    type: 'required',
+                  },
+                ],
+              })
+              await AsyncStorage.setItem('continueWithCalendar', 'true')
+
+              await continueAcceptMethod()
+            },
           },
-          type: 'required',
-        },
-      ],
-    })
+        ]
+      )
+    } else if (Boolean(askedOutlook)) {
+      if (Boolean(continueWithCalendar)) {
+        await GraphManager.createEvent({
+          subject: `Pick up ${rideRequest.userName} on your way to ${workTrip.goingTo}`,
+          body: {
+            contentType: 'HTML',
+            content: 'Your request has been accepted.',
+          },
+          start: {
+            dateTime: dateStart,
+            timeZone: 'Pacific Standard Time',
+          },
+          end: {
+            dateTime: dateEnd,
+            timeZone: 'Pacific Standard Time',
+          },
+          location: {
+            displayName: passengerUser.homeAddress,
+          },
+          attendees: [
+            {
+              emailAddress: {
+                address: user.email,
+                name: user.userName,
+              },
+              emailAddress: {
+                address: passengerUser.email,
+                name: passengerUser.userName,
+              },
+              type: 'required',
+            },
+          ],
+        })
+
+        await continueAcceptMethod()
+      } else if (!Boolean(continueWithCalendar)) {
+        await continueAcceptMethod()
+      }
+    }
+  }
+
+  const continueAcceptMethod = async () => {
+    let route
 
     let workTripToUpdate = workTrip
 
     workTripToUpdate.scheduledDrive.availableSeats += 1
+
     if (workTripToUpdate.scheduledDrive.stops.length > 2) {
       var tempStops = workTripToUpdate.scheduledDrive.stops
       var waypoints = tempStops.slice(1, tempStops.length - 1)
@@ -230,6 +318,8 @@ const PassengerAcceptRefuseButton = (props) => {
       }),
     })
     navigation.popToTop()
+
+    console.log('updated work trip')
   }
 
   const refusePassenger = async () => {
@@ -278,7 +368,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     marginHorizontal: 10,
-    borderRadius: 15,
+    borderRadius: 10,
   },
   buttons: {
     flex: 1,
@@ -301,7 +391,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginTop: 10,
     backgroundColor: '#26aae2',
-    borderRadius: 20,
+    borderRadius: 10,
   },
   item: {
     backgroundColor: '#26aae2',
