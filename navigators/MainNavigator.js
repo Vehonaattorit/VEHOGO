@@ -36,7 +36,6 @@ function MainStackNavigator() {
           headerStyle: {
             backgroundColor: color.primaryLight,
           },
-
           headerTitleStyle: {
             fontFamily: 'open-sans-semi-bold',
             fontSize: 30,

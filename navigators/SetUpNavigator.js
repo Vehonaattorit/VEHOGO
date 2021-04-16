@@ -12,26 +12,13 @@ import {VerifyEmail} from '../views/VerifyEmail'
 import {IconButton} from 'react-native-paper'
 import {color} from '../constants/colors'
 import {signOut} from '../controllers/LoginController'
-
+import {Settings} from '../views/Settings'
 const Stack = createStackNavigator()
 function SetUpStackNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-
-      <Stack.Screen
-          name="Travel"
-          component={Travel}
-          options={{
-            title: 'Travel',
-            headerTitleStyle: {fontSize: 30, textAlign: 'center', flex: 1},
-            headerTintColor: '#000000',
-          }}
-          headerStyle={{
-            backgroundColor: 'black',
-          }}
-        />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="VerifyEmail"
           component={VerifyEmail}
           options={() => ({
@@ -56,7 +43,7 @@ function SetUpStackNavigator() {
           headerStyle={{
             backgroundColor: 'black',
           }}
-        />
+        /> */}
         <Stack.Screen
           name="Company"
           component={Company}
@@ -73,7 +60,18 @@ function SetUpStackNavigator() {
             backgroundColor: 'black',
           }}
         />
-{/* travel */}
+        <Stack.Screen
+          name="Travel"
+          component={Travel}
+          options={{
+            title: 'Travel',
+            headerTitleStyle: {fontSize: 30, textAlign: 'center', flex: 1},
+            headerTintColor: '#000000',
+          }}
+          headerStyle={{
+            backgroundColor: 'black',
+          }}
+        />
         <Stack.Screen
           name="Username"
           component={Username}
@@ -136,6 +134,7 @@ function SetUpStackNavigator() {
           }}
         />
         <Stack.Screen name="SetUpInit" component={SetUpInit} />
+        <Stack.Screen name="Settings" component={Settings} />
       </Stack.Navigator>
     </NavigationContainer>
   )
