@@ -51,15 +51,16 @@ export const RideStartBar = ({user, navigation}) => {
     // const now = new Date()
     // END
     // 13.04. 10:47 BACKUP
-    const currentWeekDay = now.getDay()
-    setCurrentWeekDay(currentWeekDay)
+    // const currentWeekDay = now.getDay()
     // END
 
     // MUISTA POISTAA !!!
-    //const currentWeekDay = 5
+    const currentWeekDay = 5
+    setCurrentWeekDay(currentWeekDay)
+
     // const now = new Date(1970, 0, 2, 6, 30)
     // MUISTA LISÄTÄ !!!
-    const currentWeekDay = now.getDay()
+    // const currentWeekDay = now.getDay()
     const currentHours = now.getHours()
     const minutes = now.getMinutes()
     let tomorrowWeekDay

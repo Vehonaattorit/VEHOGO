@@ -71,8 +71,7 @@ const PassengerListItem = ({navigation, user, singleItem}) => {
             >
               <View style={styles.topRow}>
                 <Text style={styles.goingToText}>
-                  To {checkWhatDayItIs(workDayNum)}
-                  {goingTo.charAt(0).toUpperCase() + goingTo.slice(1)}
+                  To {goingTo.charAt(0).toUpperCase() + goingTo.slice(1)}
                 </Text>
               </View>
               <View style={styles.bottomRow}>

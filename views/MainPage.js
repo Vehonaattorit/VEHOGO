@@ -95,12 +95,12 @@ export const MainPage = ({navigation}) => {
   //data stream for driver trips
   const driverTripStream = async () => {
     // MUISTA LISÄTÄ !!!
-    const currentWeekDay = new Date().getDay()
+    // const currentWeekDay = new Date().getDay()
+    const currentWeekDay = 5
 
     setCurrentWeekDay(currentWeekDay)
 
     // MUISTA POISTAA !!!
-    // const currentWeekDay = 5
 
     let ref = await workTripMultiQueryStream(user.company.id, [
       {field: 'workDayNum', condition: '==', value: currentWeekDay},
