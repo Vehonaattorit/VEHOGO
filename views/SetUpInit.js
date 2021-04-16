@@ -43,7 +43,7 @@ export const SetUpInit = ({route}) => {
 
       let index = i + 1
 
-      const start =
+      let start =
         index % 2 === 0 ? item.workDayEnd.toDate() : item.workDayStart.toDate()
 
       const response = await fetch(
@@ -68,8 +68,8 @@ export const SetUpInit = ({route}) => {
           ? new Date(1970, 0, 1, item.workDayEnd.toDate().getHours(), 0)
           : new Date(1970, 0, 1, item.workDayStart.toDate().getHours(), 0)
 
-      //adding ride time to end time
-      end = new Date(end.getTime() + totalTime * 1000)
+      //adding ride time to end time and start depending on the total drive time
+      index % 2 === 0 ? end = new Date(end.getTime() + totalTime * 1000) : start = new Date(start.getTime() - totalTime * 1000)
 
       const goingTo = index % 2 === 0 ? 'home' : 'work'
       let initialStops = [
