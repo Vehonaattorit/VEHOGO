@@ -122,7 +122,7 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={{flex:1,justifyContent:'space-around'}}>
       {!showCode ? (
         <>
           <View style={styles.inputContainer}>
@@ -179,16 +179,18 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
   },
   inputContainer: {
     width: '100%',
-    padding: 20,
+    flexDirection: 'column',
+    flex:1,
+    paddingHorizontal: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
   companyNameInputContainer: {
+    height:50,
     alignSelf: 'stretch',
     width: '100%',
     borderRadius: 10,
@@ -220,20 +222,19 @@ const styles = StyleSheet.create({
   companyAddressInputContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: 63,
+    maxHeight: 152,
     marginTop: 15,
   },
   btnContainer: {
-    marginTop: 300,
-    justifyContent: 'center',
-    alignItems: 'center',
+    flex:1,
+    flexDirection:'column',
+    justifyContent:'center',
     marginLeft: 10,
     marginRight: 10,
-    alignSelf: 'stretch',
   },
   continueBtnContainer: {
     alignSelf: 'stretch',
-    marginBottom: 70,
+    marginBottom: 10,
   },
   cancelBtnContainer: {
     alignSelf: 'stretch',

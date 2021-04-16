@@ -35,7 +35,7 @@ export const Company = ({navigation}) => {
 
 
   return (
-    <KeyboardAvoidingView behavior="position" style={styles.view}>
+    <KeyboardAvoidingView behavior="height" style={styles.container}>
       {showBtns && (
         <>
           <View style={styles.poweredContainer}>
@@ -105,6 +105,11 @@ export const Company = ({navigation}) => {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: 'space-around'
+  },
   view: {
     flex: 1,
     backgroundColor: 'white',
@@ -116,7 +121,6 @@ const styles = StyleSheet.create({
   },
 
   btnContainer: {
-    marginTop: 120,
     marginBottom: 10,
     marginLeft: 10,
     marginRight: 10,

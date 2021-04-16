@@ -145,39 +145,27 @@ export const Address = ({navigation}) => {
           defaultValue={user.homeAddress}
           setAddress={setAddress}
         />
-        <View style={styles.customInput}>
-          <CustomInput
-            placeholder="City"
-            initialValue={user.city}
-            keyboardType="default"
-            autoCapitalize="sentences"
-            returnKeyType="next"
-            id="city"
-            autoCorrect={false}
-            onInputChange={inputChangeHandler}
-            errorText="Please enter a valid city name."
-            minLength={1}
-            required
-          />
-        </View>
+        <CustomButtonIcon
+          style={styles.btn}
+          title="Submit"
+          onPress={submitHandler}
+        />
       </KeyboardAvoidingView>
 
-      <CustomButtonIcon
-        style={styles.btn}
-        title="Submit"
-        onPress={submitHandler}
-      />
+
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'column',
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
   inputContainer: {
+    height: 300,
     bottom: 20,
     width: '90%',
     color: 'white',
@@ -195,6 +183,5 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   icon: {
-    marginBottom: 200,
   },
 })
