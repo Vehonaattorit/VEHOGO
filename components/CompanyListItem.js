@@ -22,11 +22,9 @@ export const CompanyListItem = ({singleItem, navigation}) => {
     if (!singleItem.userIDs.includes(user.id)) {
       const users = singleItem.userIDs
       users.push(user.id)
-      console.log(users)
       const companyId = await updateCompany(
         new Company({id: singleItem.id, userIDs: users})
       )
-      console.log('joined company')
 
       const companyUserData = {
         address: singleItem.address,
@@ -35,13 +33,9 @@ export const CompanyListItem = ({singleItem, navigation}) => {
         id: companyId,
       }
 
-      console.log('data id', companyId)
-
-      console.log('updating user')
       user.company = companyUserData
       updateUser(user)
     } else {
-      console.log('already joined')
     }
     navigation.navigate('Travel')
   }

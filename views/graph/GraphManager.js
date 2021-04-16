@@ -36,8 +36,6 @@ export class GraphManager {
 
       return finalResponse
     } catch (err) {
-      console.log(err)
-
       throw new Error(err)
     }
   }
@@ -46,11 +44,8 @@ export class GraphManager {
     let graphResponse = null
     let finalResponse = null
 
-    console.log('getCalendarView', start, end, timezone)
     try {
       const token = await AsyncStorage.getItem('userToken')
-
-      console.log('Access Token', token)
 
       const response = await fetch(
         `https://graph.microsoft.com/v1.0/me/calendarView?startDateTime=${start.format()}&endDateTime=${end.format()}&$select=subject,organizer,start,end&$orderby=start/dateTime`,
@@ -67,8 +62,6 @@ export class GraphManager {
       )
 
       graphResponse = await response.json()
-
-      console.log('graphResponse calendar', graphResponse)
 
       /* 
       Spread the results of the graph and add a type property with a value of success to indicate
@@ -91,6 +84,10 @@ export class GraphManager {
       const token = await AsyncStorage.getItem('userToken')
       let graphResponse = null
 
+      console.log('createEvent token', token)
+
+      console.log('eventData', eventData)
+
       await fetch('https://graph.microsoft.com/v1.0/me/events?', {
         method: 'POST',
         headers: {
@@ -101,9 +98,13 @@ export class GraphManager {
       })
         .then((response) => response.json())
         .then((response) => {
+          console.log('response', response)
+
           graphResponse = response
         })
         .catch((error) => {
+          console.log('errorResponse', error)
+
           graphResponse = error
         })
 
@@ -116,12 +117,10 @@ export class GraphManager {
         type: 'success',
       }
 
-      console.log('NEW EVENT final response', finalResponse)
+      console.log('finalResponse', finalResponse)
 
       return finalResponse
     } catch (err) {
-      console.log('NEW EVENT', err)
-
       throw new Error(err)
     }
   }

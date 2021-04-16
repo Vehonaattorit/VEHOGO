@@ -18,6 +18,7 @@ import {
   workTripOrderByQuery,
 } from '../controllers/workTripController'
 import {color} from '../constants/colors'
+import {getUser} from '../controllers/userController'
 
 export const RideStartBar = ({user, navigation}) => {
   const [showStart, setShowStart] = useState(false)
@@ -26,9 +27,20 @@ export const RideStartBar = ({user, navigation}) => {
   const [driveStartTime, setDriveStartTime] = useState(null)
 
   const getNextRide = async () => {
-    console.log('fetching')
-    const now = new Date()
-    const currentWeekDay = now.getDay()
+    const now = new Date(1970, 0, 1, 6, 30)
+    // 13.04. 10:47 BACKUP
+    // const now = new Date()
+    // END
+    // 13.04. 10:47 BACKUP
+    // const currentWeekDay = now.getDay()
+    // END
+
+    // MUISTA POISTAA !!!
+    const currentWeekDay = 5
+    // const now = new Date(1970, 0, 2, 6, 30)
+    // MUISTA LISÄTÄ !!!
+    // const currentWeekDay = now.getDay()
+
     const currentHours = now.getHours()
     const minutes = now.getMinutes()
     let tomorrowWeekDay
@@ -92,7 +104,6 @@ export const RideStartBar = ({user, navigation}) => {
           startTime.getHours() * 60 + startTime.getMinutes()
         //now is before workTrip start
         if (nowInMinutes < workTripStartInMinutes) {
-          console.log('next ride today')
           //this workTrip is next, display it on the screen
           setDriveStartTime(workTrip.scheduledDrive.start)
           setStartingRide(workTrip)
@@ -104,7 +115,6 @@ export const RideStartBar = ({user, navigation}) => {
         }
       }
       if (driveStartTime == null) {
-        console.log('next workday morning')
         // next workday morning workTrip is next and displayed on the screen
         if (tomorrowWorkTrips[0].goingTo == 'home') tomorrowWorkTrips.reverse()
         setDriveStartTime(tomorrowWorkTrips[0].scheduledDrive.start)
@@ -116,7 +126,6 @@ export const RideStartBar = ({user, navigation}) => {
         return
       }
     } else {
-      console.log('next day if today no more rides')
       if (tomorrowWorkTrips[0].goingTo == 'home') tomorrowWorkTrips.reverse()
       setDriveStartTime(tomorrowWorkTrips[0].scheduledDrive.start)
       setStartingRide(tomorrowWorkTrips[0])
@@ -130,29 +139,22 @@ export const RideStartBar = ({user, navigation}) => {
 
   function inTime(start, end) {
     var now = new Date()
-    console.log(now)
+
     var time = now.getHours() * 60 + now.getMinutes()
-    console.log(time)
+
     return time >= start && time < end
   }
 
   const checkButtonVisible = (startDate, endDate) => {
-    console.log('checkButton visible')
     var start =
       startDate.toDate().getHours() * 60 + startDate.toDate().getMinutes() - 10
     var end = endDate.toDate().getHours() * 60 + endDate.toDate().getMinutes()
-    console.log('times are set')
 
-    console.log('start', start)
-    console.log('end', end)
     if (inTime(start, end) == true) {
-      console.log('returned true')
       setShowStart(true)
     } else {
-      console.log('returned false')
       setShowStart(false)
     }
-    console.log('end of function')
   }
 
   useEffect(() => {
@@ -171,7 +173,7 @@ export const RideStartBar = ({user, navigation}) => {
             )}
           </Left>
           <Right>
-            {showStart ? (
+            {!showStart ? (
               <Button
                 style={styles.button}
                 onPress={() =>

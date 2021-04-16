@@ -1,43 +1,48 @@
 export class ChatRoom {
-  constructor({driverId, passengerId, latestMessage}) {
-    this.driverId = driverId
-    this.passengerId = passengerId
+  constructor({id, driverID, passengerID, latestMessage}) {
+    this.id = id
+    this.driverID = driverID
+    this.passengerID = passengerID
     this.latestMessage = latestMessage
   }
 }
 
 // Firestore data converter
-export const chatConverter = {
+export const chatRoomConverter = {
   toFirestore: function (chatRoom) {
-    console.log('chatRoom', chatRoom)
     let chatRoomObject = {}
-    if (chatRoom.driverId != undefined) {
-      chatRoomObject.driverId = chatRoom.driverId
+    if (chatRoom.id != undefined) {
+      chatRoomObject.id = chatRoom.id
     }
-    if (chatRoom.passengerId != undefined) {
-      chatRoomObject.passengerId = chatRoom.passengerId
+    if (chatRoom.driverID != undefined) {
+      chatRoomObject.driverID = chatRoom.driverID
+    }
+    if (chatRoom.passengerID != undefined) {
+      chatRoomObject.passengerID = chatRoom.passengerID
     }
     if (chatRoom.latestMessage != undefined) {
-      console.log('chatRoom.latestMessage', chatRoom.latestMessage)
       chatRoomObject.latestMessage = latestMessageConverter.toFirestore(
         chatRoom.latestMessage
       )
     }
 
-    console.log('chatRoomObject', chatRoomObject)
-
     return chatRoomObject
   },
   fromFirestore: function (snapshot, options) {
-    console.log('chatRoom snapshot ', snapshot.data())
-    console.log('chatRoom  options', options)
     const data = snapshot.data(options)
 
-    console.log('data jotain', data)
     return new ChatRoom({
-      driverId: data.driverId,
-      passengerId: data.passengerId,
-      latestMessage: latestMessageConverter.fromFirestore(data.latestMessage),
+      id: data.id,
+      driverID: data.driverID,
+      passengerID: data.passengerID,
+      // latestMessage: latestMessageConverter.fromFirestore(data.latestMessage),
+    })
+  },
+  fromData: function (data) {
+    return new ChatRoom({
+      id: data.id,
+      driverID: data.driverID,
+      passengerID: data.passengerID,
     })
   },
 }
@@ -52,7 +57,6 @@ class LatestMessage {
 // Firestore data converter
 const latestMessageConverter = {
   toFirestore: function (latestMessage) {
-    console.log('latestMessageConverter latestMessage', latestMessage)
     let LatestMessageObject = {}
     if (latestMessage.text != undefined) {
       LatestMessageObject.text = latestMessage.text
@@ -61,17 +65,10 @@ const latestMessageConverter = {
       LatestMessageObject.createdAt = latestMessage.createdAt
     }
 
-    console.log('LatestMessageObject LatestMessageObject', LatestMessageObject)
-
     return LatestMessageObject
   },
-  fromFirestore: function (data) {
-    console.log('fromFirestore jotain')
-    // const data = snapshot.data(options)
-
-    console.log('fromFirestore', data)
-
-    console.log('fromFirestore data jotain', data)
+  fromFirestore: function (options) {
+    const data = snapshot.data(options)
 
     return new LatestMessage({
       createdAt: data.createdAt,

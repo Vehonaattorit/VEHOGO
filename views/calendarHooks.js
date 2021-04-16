@@ -8,7 +8,7 @@ const calendarHooks = () => {
     loadingEvents: true,
     events: [],
   })
-  
+
   const [userState, setUserState] = useState({
     userLoading: true,
     userFirstName: 'Adele',
@@ -43,8 +43,6 @@ const calendarHooks = () => {
   const signInAsync = async () => {
     const response = await AuthManager.signInAsync()
 
-    console.log('calendarHooks response', response)
-
     setCalendarState({
       loadingEvents: response.loadingEvents || false,
       events: response.events,
@@ -55,7 +53,7 @@ const calendarHooks = () => {
 
   const signOutAsync = async () => {
     // Clear storage
-    console.log('Signing out')
+
     await AsyncStorage.removeItem('userToken')
     await AsyncStorage.removeItem('refreshToken')
     await AsyncStorage.removeItem('expireTime')
@@ -70,8 +68,6 @@ const calendarHooks = () => {
 
   const bootstrapAsync = async () => {
     const response = await AuthManager.checkTokenExpiration()
-
-    console.log('response', response)
 
     setCalendarState({
       loadingEvents: response.loadingEvents,

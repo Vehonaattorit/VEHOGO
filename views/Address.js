@@ -45,7 +45,6 @@ const formReducer = (state, action) => {
 }
 
 export const Address = ({navigation}) => {
-  console.log('api key in address', googleMapsApiKey)
   const {user} = useContext(UserContext)
 
   const [address, setAddress] = useState(user.homeAddress || '')
@@ -89,10 +88,9 @@ export const Address = ({navigation}) => {
 
     const data = await getAddressGeoLocation()
 
-    const {city} = formState.inputValues
 
     user.homeAddress = address
-    user.city = city
+    user.city = data.city
     user.homeLocation = data.point
 
     updateUser(user)
@@ -115,7 +113,7 @@ export const Address = ({navigation}) => {
         responseJson.results[0].geometry.location.lat,
         responseJson.results[0].geometry.location.lng
       )
-      console.log(locationPoint)
+
       var city = ''
       responseJson.results[0].address_components.forEach((element) => {
         if (element.types[0] === 'locality') {
@@ -127,7 +125,6 @@ export const Address = ({navigation}) => {
         point: locationPoint,
         city: city,
       }
-      console.log(data)
 
       return data
     } catch (e) {

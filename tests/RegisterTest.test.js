@@ -1,15 +1,15 @@
 import React from 'react'
-import {SignUp} from '../views/SignUp'
+import {SignUp} from '../views/authNavigationStack/SignUp'
 
 import {render, waitFor, fireEvent} from '@testing-library/react-native'
 
 // SignUp with error
 
 it('Should throw an error when trying to log in', async () => {
-  const {getByText, getByPlaceholderText} = render(<SignUp />)
+  const {getByText, getAllByText, getByPlaceholderText} = render(<SignUp />)
 
   // Write only email
-  const emailInput = getByPlaceholderText('email@address.com')
+  const emailInput = getByPlaceholderText('Email')
   const registerBtn = getByText('Register')
 
   // Press 'SignUp' button
@@ -17,11 +17,11 @@ it('Should throw an error when trying to log in', async () => {
   fireEvent.press(registerBtn)
 
   await waitFor(() => {
-    const errorMessage = getByText(
-      'The password must be 6 characters long or more.'
+    const errorMessage = getAllByText(
+      'Name and Phone number must be at least 1 char long'
     )
 
-    expect(errorMessage).not.toBeNull()
+    expect(errorMessage[0]).not.toBeNull()
   })
 })
 

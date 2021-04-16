@@ -1,5 +1,5 @@
 import React from 'react'
-import {LogIn} from '../views/LogIn'
+import {LogIn} from '../views/authNavigationStack/LogIn'
 
 import {render, waitFor, fireEvent} from '@testing-library/react-native'
 
@@ -9,7 +9,7 @@ it('Should throw an error when trying to log in', async () => {
   const {getByText, getByPlaceholderText, queryByText} = render(<LogIn />)
 
   // Write only email
-  const emailInput = getByPlaceholderText('email@address.com')
+  const emailInput = getByPlaceholderText('Email')
   const loginBtn = getByText('Login')
 
   // Press 'Login' button

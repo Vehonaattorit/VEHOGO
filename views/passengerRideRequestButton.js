@@ -7,22 +7,30 @@ import {
 } from '../controllers/rideRequestController'
 import {RideRequest} from '../models/rideRequest'
 import {getUser} from '../controllers/userController'
-import {getWorkTrip, getWorkTrips} from '../controllers/workTripController'
+import {
+  getWorkTrip,
+  getWorkTrips,
+  updateWorkTrip,
+} from '../controllers/workTripController'
+import {color} from '../constants/colors'
 
-const PassengerRideRequestButton = ({user, workTrip}) => {
+const PassengerRideRequestButton = ({
+  user,
+  navigation,
+  hasPassenger,
+  workTrip,
+}) => {
   const [ownerPushToken, setOwnerPushToken] = useState(null)
-  const [isRequested, setIsRequested] = useState(null)
-
-  console.log('ownerPushToken', ownerPushToken)
+  const [alreadyRequested, setAlreadyRequested] = useState(false)
 
   useEffect(() => {
-    const getOwnerPushtoken = async () => {
+    const getOwnerPushToken = async () => {
       const userDriver = await getUser(workTrip.driverID)
 
       setOwnerPushToken(userDriver.ownerPushToken)
     }
 
-    const getDriverWorkTrips = async () => {
+    const getRequests = async () => {
       const isRequested = await rideRequestMultiQuery(user.company.id, [
         {
           field: 'senderID',
@@ -36,20 +44,20 @@ const PassengerRideRequestButton = ({user, workTrip}) => {
         },
       ])
 
-      setIsRequested(isRequested)
+      if (isRequested) {
+        setAlreadyRequested(true)
+        return
+      }
+
+      setAlreadyRequested(false)
     }
 
-    getOwnerPushtoken()
-    getDriverWorkTrips()
+    getRequests()
+    getOwnerPushToken()
   }, [])
 
   const requestRide = async () => {
-    if (!isRequested) {
-      console.log(
-        `Requesting ride from company: ${user.company.id} worktrip ${workTrip.id} with user ${user.userName}`
-      )
-      console.log('starting update')
-
+    if (!hasPassenger && !alreadyRequested) {
       await updateRideRequest(
         user.company.id,
         new RideRequest({
@@ -77,9 +85,14 @@ const PassengerRideRequestButton = ({user, workTrip}) => {
           body: `Request sent from ${user.userName}`,
         }),
       })
-      console.log('finished update')
 
-      setIsRequested(true)
+      Alert.alert(
+        `Request was sent to ${workTrip.driverName}!`,
+        'Please wait for your request approval.',
+        [{text: 'Okay'}]
+      )
+
+      setAlreadyRequested(true)
     } else {
       Alert.alert(
         'Request already sent!',
@@ -89,10 +102,63 @@ const PassengerRideRequestButton = ({user, workTrip}) => {
     }
   }
 
+  const cancelRide = async () => {
+    if (!alreadyRequested) {
+      console.log('cancelRide workTrip', workTrip.scheduledDrive.stops)
+      let workTripUpdate
+
+      // filter all stops that DON'T HAVE passenger ID
+      const stops = workTrip.scheduledDrive.stops.filter(
+        (item) => item.userID !== user.id
+      )
+
+      // new stops array without passenger stop
+      workTripUpdate = {
+        ...workTrip,
+        scheduledDrive: {
+          ...workTrip.scheduledDrive,
+          stops: stops,
+        },
+      }
+      // Remove available seat
+      workTripUpdate.scheduledDrive.availableSeats -= 1
+
+      Alert.alert('Cancel ride', `Are you sure you want to cancel this ride?`, [
+        {text: 'No', style: 'default'},
+        {
+          text: 'Yes',
+          style: 'destructive',
+          onPress: async () => {
+            await updateWorkTrip(user.company.id, workTripUpdate)
+
+            setAlreadyRequested(true)
+          },
+        },
+      ])
+
+      navigation.popToStack()
+    } else {
+      Alert.alert('Ride cancelled.', 'Ride has already been cancelled.', [
+        {text: 'Okay'},
+      ])
+    }
+  }
+
   return (
     <View style={styles.buttons}>
-      <Button onPress={requestRide} large style={styles.button}>
-        <Text style={styles.btntxt}>Request</Text>
+      <Button
+        // disabled={hasPassenger}
+        // If passenger is not ONE of the stops -> request ride, else "cancel ride"
+        onPress={!hasPassenger ? requestRide : cancelRide}
+        large
+        style={{
+          ...styles.button,
+          backgroundColor: hasPassenger ? color.radicalRed : color.darkBlue,
+        }}
+      >
+        <Text style={styles.btntxt}>
+          {hasPassenger ? 'Cancel Ride' : 'Request'}
+        </Text>
       </Button>
     </View>
   )
@@ -100,8 +166,10 @@ const PassengerRideRequestButton = ({user, workTrip}) => {
 
 const styles = StyleSheet.create({
   button: {
+    justifyContent: 'center',
     backgroundColor: '#26aae2',
     borderRadius: 15,
+    width: '100%',
   },
   buttons: {
     flex: 1,
@@ -116,6 +184,8 @@ const styles = StyleSheet.create({
   },
   btntxt: {
     fontFamily: 'open-sans-regular',
+    alignContent: 'center',
+    textAlign: 'center',
     color: 'white',
   },
   list: {

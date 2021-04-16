@@ -73,23 +73,6 @@ function SetUpStackNavigator() {
           }}
         />
         <Stack.Screen
-          name="Username"
-          component={Username}
-          options={{
-            title: 'Username',
-            headerTitleStyle: {
-              fontSize: 30,
-              textAlign: 'center',
-              flex: 1,
-            },
-            headerTintColor: '#000000',
-          }}
-          headerStyle={{
-            backgroundColor: 'black',
-          }}
-        />
-        {/* address */}
-        <Stack.Screen
           name="Address"
           component={Address}
           options={{

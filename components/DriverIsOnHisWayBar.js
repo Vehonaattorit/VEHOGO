@@ -15,6 +15,7 @@ import {color} from '../constants/colors'
 
 export default DriverIsOnHisWayBar = ({user, navigation, activeRide}) => {
   const workTrip = activeRide
+
   return (
     <View>
       <Card>

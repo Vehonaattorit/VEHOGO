@@ -42,8 +42,12 @@ import {workTripMultiQueryStream} from '../controllers/workTripController'
 import {useCollectionData} from 'react-firebase-hooks/firestore'
 import { IconButton } from 'react-native-paper'
 
+import {Ionicons} from '@expo/vector-icons'
+
+import {HeaderButtons, Item} from 'react-navigation-header-buttons'
+import HeaderButton from '../components/CustomHeaderButton'
+
 export const MainPage = ({navigation}) => {
-  console.log('MainPage rendered')
   const {user} = useContext(UserContext)
   const [travelPreference, setTravelPreference] = useState('')
 
@@ -63,18 +67,21 @@ export const MainPage = ({navigation}) => {
     isLoading,
   } = useWorkTripHooks(user)
 
-  console.log('isLoading', isLoading)
-
   //data stream for driver trips
-  const driverTripStream = () => {
-    const currentWeekDay = new Date().getDay()
-    let ref = workTripMultiQueryStream(user.company.id, [
+  const driverTripStream = async () => {
+    // MUISTA LISÄTÄ !!!
+    // const currentWeekDay = new Date().getDay()
+
+    // MUISTA POISTAA !!!
+    const currentWeekDay = 5
+
+    let ref = await workTripMultiQueryStream(user.company.id, [
       {field: 'workDayNum', condition: '==', value: currentWeekDay},
       {field: 'driverID', condition: '==', value: user.id},
     ])
     ref.onSnapshot((querySnapshot) => {
       var trips = []
-      console.log('updating trips in mainPage')
+
       querySnapshot.forEach((doc) => {
         trips.push(doc.data())
       })
@@ -106,18 +113,30 @@ export const MainPage = ({navigation}) => {
       pushToken = (await Notifications.getExpoPushTokenAsync()).data
     }
 
-    console.log('OwnerPushToken', pushToken)
-
     let updatedUser = await getUser(user.id)
     updatedUser.ownerPushToken = pushToken
 
-    console.log('user.ownerPushToken', user.ownerPushToken)
     await updateUser(updatedUser)
   }
 
   const checkTravelPreference = async () => {
     setTravelPreference(user.travelPreference)
   }
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <HeaderButtons HeaderButtonComponent={HeaderButton}>
+          <Item
+            title="Filter"
+            iconComponent={Ionicons}
+            iconName="filter"
+            onPress={() => setOpen(!open)}
+          />
+        </HeaderButtons>
+      ),
+    })
+  }, [])
 
   const displayPassengerList = () => {
     return (
@@ -152,11 +171,13 @@ export const MainPage = ({navigation}) => {
         </Header>
         {/* {activeRide && ( */}
         {/* // DOES NOT WORK PROPERLY. activeRide is not functioning */}
-        <DriverIsOnHisWayBar
-          user={user}
-          navigation={navigation}
-          activeRide={activeRide}
-        />
+        {activeRide && (
+          <DriverIsOnHisWayBar
+            user={user}
+            navigation={navigation}
+            activeRide={activeRide}
+          />
+        )}
         {/* )} */}
 
         <View style={styles.availableRidesContainer}>
@@ -165,6 +186,7 @@ export const MainPage = ({navigation}) => {
 
         <View style={styles.listView}>
           <PassengerList
+            user={user}
             isLoading={isLoading}
             extraDay={extraDay}
             navigation={navigation}
@@ -186,7 +208,6 @@ export const MainPage = ({navigation}) => {
           <View style={styles.listView}>
             <DriverTripList
               isLoading={isLoading}
-              extraDay={extraDay}
               navigation={navigation}
               driverTrips={driverTrips}
             />

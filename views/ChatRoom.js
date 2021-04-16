@@ -1,89 +1,63 @@
-import React, {useState, useEffect, useContext} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 
 import {GiftedChat, Bubble, Send, SystemMessage} from 'react-native-gifted-chat'
 import {IconButton} from 'react-native-paper'
 import {Button, StyleSheet, View, Text, ActivityIndicator} from 'react-native'
 
 import firebase from '../firebase/fire'
+
+import {
+  sendMessage,
+  useMessageHooks,
+} from '../controllers/chatMessageController'
+import {UserContext} from '../contexts'
+import {getUser} from '../controllers/userController'
+import {ChatMessage} from '../models/chatMessage'
 import {useAuthState} from 'react-firebase-hooks/auth'
-import {useCollectionData} from 'react-firebase-hooks/firestore'
 
 import 'firebase/firestore'
 import 'firebase/auth'
 
 const auth = firebase.auth()
-const firestore = firebase.firestore()
 
-export default ChatRoom = ({route}) => {
-  const [user] = useAuthState(auth)
+import {color} from '../constants/colors'
 
-  const messagesRef = firestore.collection('messages')
+export default ChatRoom = ({navigation, route}) => {
+  const {chatRoom, chatRoomTitle} = route.params
+  const [ownerPushToken, setOwnerPushToken] = useState(null)
+  const {messages} = useMessageHooks(chatRoom, user)
+
+  const onQuickReply = (quickReply) => {
+    handleSend([
+      {
+        text: quickReply[0].title,
+      },
+    ])
+  }
+
+  const {user} = useContext(UserContext)
+
+  // AuthState for GiftedChat
+  const [chatUser] = useAuthState(auth)
+
+  const getOwnerPushToken = async () => {
+    const {passengerID, driverID} = chatRoom
+
+    // Get opposite user's ID
+    let currentUser =
+      user.travelPreference === 'passenger' ? driverID : passengerID
+    currentUser = await getUser(currentUser)
+
+    setOwnerPushToken(currentUser.ownerPushToken)
+  }
 
   useEffect(() => {
-    const query = messagesRef
-      .orderBy('createdAt', 'desc')
-      .limit(25)
-      .onSnapshot((querySnapshot) => {
-        console.log('query', querySnapshot)
+    getOwnerPushToken()
 
-        const messages = querySnapshot.docs.map((doc) => {
-          const firebaseData = doc.data()
-
-          console.log('doc', doc)
-          console.log('fireabseData', firebaseData)
-
-          const data = {
-            _id: doc.id,
-            text: '',
-            createdAt: new Date().getTime(),
-            ...firebaseData,
-          }
-
-          if (!firebaseData.system) {
-            data.user = {
-              ...firebaseData.user,
-              name: firebaseData.user.name,
-            }
-          }
-
-          console.log('data', data)
-
-          return data
-        })
-
-        setMessages(messages)
-      })
-
-    return () => query()
+    navigation.setOptions({
+      title: chatRoomTitle,
+    })
   }, [])
-
-  // const [messages] = useCollectionData(query, {idField: '_id'})
-
-  const [messages, setMessages] = useState([
-    /**
-     * Mock message data
-     *
-     */
-
-    // example of system message
-    {
-      _id: 0,
-      text: 'New room created.',
-      createdAt: new Date().getTime(),
-      system: true,
-    },
-    {
-      _id: 1,
-      text: 'Hello !',
-      createdAt: new Date().getTime(),
-      user: {
-        _id: 2,
-        name: 'User Test',
-      },
-    },
-  ])
-
-  // console.log('messages', messages)
 
   const renderSystemMessage = (props) => {
     return (
@@ -95,27 +69,42 @@ export default ChatRoom = ({route}) => {
     )
   }
 
-  console.log('auth', user)
-
   const handleSend = async (messages) => {
     const text = messages[0].text
 
-    const {uid} = user
+    const {uid} = chatUser
 
-    await messagesRef.add({
-      text,
-      createdAt: new Date().getTime(),
-      user: {
-        _id: uid,
-        name: user.email,
+    await sendMessage(
+      chatRoom.id,
+      new ChatMessage({
+        text,
+        createdAt: new Date().getTime(),
+        user: {
+          _id: uid,
+          name: user.userName,
+        },
+      })
+    )
+
+    fetch('https://exp.host/--/api/v2/push/send', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Accept-Encoding': 'gzip, deflate',
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        to: ownerPushToken,
+        title: 'Received new message',
+        body: `Message sent from ${user.userName}`,
+      }),
     })
   }
 
   const renderLoading = () => {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#6646ee" />
+        <ActivityIndicator size="large" color={color.darkBlue} />
       </View>
     )
   }
@@ -123,7 +112,14 @@ export default ChatRoom = ({route}) => {
   const scrollToBottomComponent = () => {
     return (
       <View style={styles.bottomComponentContainer}>
-        <IconButton icon="chevron-double-down" size={36} color="#6646ee" />
+        <IconButton
+          icon="chevron-double-down"
+          size={26}
+          color="#fff"
+          style={{
+            backgroundColor: color.darkBlue,
+          }}
+        />
       </View>
     )
   }
@@ -132,7 +128,7 @@ export default ChatRoom = ({route}) => {
     return (
       <Send {...props}>
         <View style={styles.sendingContainer}>
-          <IconButton icon="send-circle" size={36} color="#6646ee" />
+          <IconButton icon="send-circle" size={36} color={color.darkBlue} />
         </View>
       </Send>
     )
@@ -146,7 +142,7 @@ export default ChatRoom = ({route}) => {
         wrapperStyle={{
           right: {
             // Here is the color change
-            backgroundColor: '#6646ee',
+            backgroundColor: color.darkBlue,
           },
         }}
         textStyle={{
@@ -160,9 +156,12 @@ export default ChatRoom = ({route}) => {
 
   return (
     <GiftedChat
+      // renderQuickReplies={quickReplies}
+      // renderQuickReplies={quickReplies}
+      onQuickReply={(quickReply) => onQuickReply(quickReply)}
       messages={messages}
       onSend={handleSend}
-      user={{_id: user.uid}}
+      user={{_id: chatUser.uid}}
       renderBubble={renderBubble}
       placeholder="Type your message here..."
       showUserAvatar

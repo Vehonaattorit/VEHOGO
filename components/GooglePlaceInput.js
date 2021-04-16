@@ -6,7 +6,6 @@ const GooglePlacesInput = ({setAddress, defaultValue}) => {
 
   useEffect(() => {
     ref.current?.setAddressText('Some Text')
-    console.log(ref.current?.getAddressText())
   }, [])
 
   return (

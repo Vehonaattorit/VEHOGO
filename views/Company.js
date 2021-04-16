@@ -21,10 +21,8 @@ export const Company = ({navigation}) => {
     const companies = await companyQuery('companyCode', '==', companyCode)
 
     if (companies.length === 0) {
-      console.log('did not found companies with code')
       setError(true)
     } else {
-      console.log('found companies with code')
       setCompanyData(companies)
       setShowJoin(true)
       setShowBtns(false)

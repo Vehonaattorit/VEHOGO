@@ -19,7 +19,7 @@ import {CustomTitle} from '../../components/CustomTitle'
 import {login, subscribeToAuth} from '../../controllers/LoginController'
 import {
   Icon
-  } from 'native-base'
+} from 'native-base'
 
 export const LogIn = ({navigation, scrollRef}) => {
   const [email, setEmail] = useState('')
@@ -31,21 +31,30 @@ export const LogIn = ({navigation, scrollRef}) => {
     // const errorMessage = await login(email, password)
 
     // setError(errorMessage)
-    login(email, password)
-      .then((res) => {
-        setError(res)
-      })
-      .catch((err) => {
-        console.log(err.message)
-      })
+
+    try{
+      await login(email, password)
+      // DO NOT CALL STATE AFTER LOGIN
+      // after user logins app will show either setupNavigator or MainNavigator
+      // all state changes here after login will cause update to unmounted component/possible memory leak
+    }catch(e) {
+      console.log(e)
+    }
   }
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setError('')
-    }, 5000)
+    let mounted = true
+    let timeout
+    if (mounted) {
+      timeout = setTimeout(() => {
+        setError('')
+      }, 5000)
 
-    return () => clearTimeout(timeout)
+    }
+    return () => {
+      mounted = false
+      clearTimeout(timeout)
+    }
   }, [error])
 
   return (

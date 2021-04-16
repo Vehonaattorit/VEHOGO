@@ -1,11 +1,12 @@
 import {stopConverter, Stop} from './stop'
 
 export class ScheduledDrive {
-  constructor({id, start, end, workTrip, availableSeats, stops}) {
+  constructor({id, start, end, workTrip, availableSeats, stops, nextStop}) {
     this.start = start
     this.end = end
     this.availableSeats = availableSeats
     this.stops = stops
+    this.nextStop = nextStop
   }
 }
 
@@ -30,6 +31,9 @@ export const scheduleDriveConverter = {
       })
       scheduledDriveObject.stops = stops
     }
+    if (scheduledDrive.nextStop != undefined) {
+      scheduledDriveObject.nextStop = scheduledDrive.nextStop
+    }
     return scheduledDriveObject
   },
   fromFirestore: function (snapshot, options) {
@@ -46,6 +50,7 @@ export const scheduleDriveConverter = {
       workTrip: data.workTrip,
       availableSeats: data.availableSeats,
       stops: parsedStops,
+      nextStop: data.nextStop,
     })
   },
   fromData: function (data) {
@@ -63,15 +68,14 @@ export const scheduleDriveConverter = {
           startTime = data.start
           endTime = data.end
         }
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) {}
       return new ScheduledDrive({
         start: startTime,
         end: endTime,
         workTrip: data.workTrip,
         availableSeats: data.availableSeats,
         stops: parsedStops,
+        nextStop: data.nextStop,
       })
     } else return undefined
   },

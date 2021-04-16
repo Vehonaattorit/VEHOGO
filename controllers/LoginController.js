@@ -4,25 +4,20 @@ import {User} from '../models/user'
 
 export async function login(email, password) {
   try {
-    console.log('Log In success')
-
     await firebase.auth().signInWithEmailAndPassword(email, password)
   } catch (e) {
-    console.log('Login failed' + e.message)
-
     return e.message
   }
 }
 
 export async function register(email, password) {
   try {
-    console.log('Register success')
-
-    const response = await firebase.auth().createUserWithEmailAndPassword(email, password)
+    const response = await firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
     await response.user.sendEmailVerification()
     return response
   } catch (e) {
-    console.log('Register failed' + e.message)
     return e.message
   }
 }
@@ -30,10 +25,7 @@ export async function register(email, password) {
 export async function signOut() {
   try {
     await firebase.auth().signOut()
-    console.log('Logout success')
-  } catch (e) {
-    console.log('Logout failed ' + e)
-  }
+  } catch (e) {}
 }
 
 export async function subscribeToAuth(authStateChanged) {
@@ -42,18 +34,22 @@ export async function subscribeToAuth(authStateChanged) {
   }
   firebase.auth().onAuthStateChanged((user) => {
     if (user != null) {
-      updateUser(new User({id: user.uid}))
+      update(user.uid)
+      //await updateUser(new User({id: user.uid}))
     }
     authStateChanged(user)
   })
 }
 
+const update = async(id) => {
+  await updateUser(new User({id: id}))
+}
+
 export async function checkEmailVerification() {
   try {
-  const response = await firebase.auth().currentUser.emailVerified
-  return response
-  } catch(e) {
-    console.log('Verification failed' + e.message)
+    const response = firebase.auth().currentUser.emailVerified
+    return response
+  } catch (e) {
     return e.message
   }
 }

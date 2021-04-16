@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react'
-import {KeyboardAvoidingView, TextInput, StyleSheet, View} from 'react-native'
+import {KeyboardAvoidingView, StyleSheet, View} from 'react-native'
 import {Item} from 'native-base'
 import {googleMapsApiKey} from '../secrets/secrets'
 import {updateCompany} from '../controllers/companyController'
@@ -46,7 +46,7 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
         responseJson.results[0].geometry.location.lat,
         responseJson.results[0].geometry.location.lng
       )
-      console.log(locationPoint)
+
       var city = ''
       var route = ''
       var streetNumber = ''
@@ -74,7 +74,6 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
         address: address,
         postalCode: postalCode,
       }
-      console.log(data)
 
       return data
     } catch (e) {
@@ -111,13 +110,9 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
 
       updateUser(user)
 
-      console.log('data id', data)
-
-      console.log('updated')
       setCompanyCode(cCode)
       setShowCode(true)
     } else {
-      console.log('inputs empty')
     }
   }
 
@@ -125,20 +120,19 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
     <View style={{flex:1,justifyContent:'space-around'}}>
       {!showCode ? (
         <>
-          <View style={styles.inputContainer}>
-            <View style={styles.companyNameInputContainer}>
-              <TextInput
+          <View>
+            <Item>
+              <Input
                 placeholder="Company name"
                 value={companyName}
                 onChangeText={setName}
-                style={styles.companyNameTextInput}
                 errorMessage={
                   companyName.length < 1 &&
                   'Company name must be at least 1 character long'
                 }
               />
-            </View>
-            <Item style={styles.companyAddressInputContainer}>
+            </Item>
+            <Item>
               <GooglePlacesInput setAddress={setAddress} />
             </Item>
           </View>

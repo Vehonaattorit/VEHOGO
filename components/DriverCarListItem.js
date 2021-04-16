@@ -42,8 +42,6 @@ const DriverCarListItem = ({singleItem, navigation, loadCars}) => {
           text: 'Yes',
           style: 'destructive',
           onPress: async () => {
-            console.log('user.id, singleItem', user.id, singleItem)
-
             await removeCar(user.id, singleItem)
 
             await loadCars()
@@ -55,8 +53,6 @@ const DriverCarListItem = ({singleItem, navigation, loadCars}) => {
 
   const selectCar = async () => {
     user.schoosedCarID = singleItem.id
-
-    console.log('user.schoosedCarID', user.schoosedCarID)
 
     await updateUser(user)
     await updateUserCarToWorkTrips(user)

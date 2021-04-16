@@ -24,4 +24,12 @@ export const color = {
   greyText: '#9797A1',
   lightBlack: '#343445',
   // END
+
+  // 14.04.2021 QuickMessage colors
+  pickerItem: '#0087F0',
+  // END
+
+  // 14.04.2021
+  passenerListItemDark: '#17A140',
+  passenerListItemLight: '#A6F2BB',
 }
