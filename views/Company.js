@@ -4,7 +4,7 @@ import {Text, Icon, Button} from 'native-base'
 import {View, Item, Input} from 'native-base'
 import {JoinCompany} from './JoinCompany'
 import {CreateCompany} from './CreateCompany'
-import {companyQuery} from '../controllers/companyController'
+import {companyQuery, companyMultiQuery} from '../controllers/companyController'
 import CustomIconButton from '../components/CustomIconButton'
 import {FontAwesome} from '@expo/vector-icons'
 import firebase from '../firebase/fire'
@@ -16,9 +16,32 @@ export const Company = ({navigation}) => {
   const [companyCode, setCompanyCode] = useState('')
   const [companyData, setCompanyData] = useState([])
   const [error, setError] = useState(false)
+  const [domain, setDomain] = useState('')
 
-  const getCompanies = async () => {
-    const companies = await companyQuery('companyCode', '==', companyCode)
+  useEffect(() => {
+    getDomain()
+  }, [])
+
+  const getDomain = () => {
+    const userEmail = firebase.auth().currentUser.email
+    const domainString = userEmail.split('@').pop()
+    setDomain(domainString)
+    console.log('email', userEmail)
+  }
+
+  const getCompanies = async (useDomain) => {
+
+    let companies
+    if (useDomain) {
+      companies = await companyMultiQuery([
+        {field: 'domainJoin', condition: '==', value: true},
+        {field: 'domain', condition: '==', value: domain}
+      ])
+      console.log(companies)
+      //companies = await companyMultiQuery('companyCode', '==', companyCode)
+    } else {
+      companies = await companyQuery('companyCode', '==', companyCode)
+    }
 
     if (companies.length === 0) {
       setError(true)
@@ -48,6 +71,14 @@ export const Company = ({navigation}) => {
                 title="Create A Company"
                 iconTwo="keyboard-arrow-right"
               />
+              <Text style={{alignSelf:'center'}}>Or Join with either email domain or company code </Text>
+              <CustomIconButton style={{marginBottom: 5}}
+                onPress={() => {
+                  getCompanies(true)
+                }}
+                title="Use your email domain"
+                iconTwo="keyboard-arrow-right"
+              />
             </View>
             <Item style={styles.inputContainer}>
               <Input
@@ -64,7 +95,7 @@ export const Company = ({navigation}) => {
               <View style={styles.companyCodeBtnContainer}>
                 <Button
                   onPress={() => {
-                    getCompanies()
+                    getCompanies(false)
                   }}
                   backgroundColor="#69CBE8"
                   borderRadius={5}
@@ -77,7 +108,7 @@ export const Company = ({navigation}) => {
                 </Button>
               </View>
             </Item>
-            {error && <Text style={styles.errorText}>Code is not valid</Text>}
+            {error && <Text style={styles.errorText}>Code or domain is not valid</Text>}
           </View>
         </>
       )}
@@ -95,6 +126,7 @@ export const Company = ({navigation}) => {
             setShowCreate={setShowCreate}
             setShowBtns={setShowBtns}
             navigation={navigation}
+            domain={domain}
           />
         )
       )}

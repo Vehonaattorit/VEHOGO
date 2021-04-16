@@ -93,13 +93,14 @@ export const Address = ({navigation}) => {
     user.city = data.city
     user.homeLocation = data.point
 
-    updateUser(user)
+    await updateUser(user)
 
     navigation.navigate('WorkingDays')
   }, [formState])
 
   const getAddressGeoLocation = async () => {
     try {
+      console.log(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&language=fi&key=${googleMapsApiKey}`)
       const response = await fetch(
         `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&language=fi&key=${googleMapsApiKey}`,
         {
