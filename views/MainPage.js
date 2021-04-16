@@ -40,7 +40,7 @@ import MainPageButtons from '../components/MainPageButtons'
 
 import {
   workTripMultiQueryStream,
-  useWorkTripControllerHooks,
+  usePassengerListHook,
 } from '../controllers/workTripController'
 import {useCollectionData} from 'react-firebase-hooks/firestore'
 
@@ -55,11 +55,27 @@ export const MainPage = ({navigation}) => {
 
   const [driverTrips, setDriverTrips] = useState(null)
 
-  // PASSENGER
-  const {passengerTrips} = useWorkTripControllerHooks(user)
-  // [END]
+  // CURRENTWEEKDAY
+  const [currentWeekDay, setCurrentWeekDay] = useState(5)
 
-  // console.log('passengerTrips', passengerTrips[0].hasPassenger)
+  // PASSENGER
+  const {passengerTrips, activeRide, isLoading} = usePassengerListHook(user, [
+    {
+      field: 'scheduledDrive.stops',
+      condition: 'array-contains',
+      value: {
+        address: user.homeAddress,
+        location: user.homeLocation,
+        stopName: user.userName,
+        userID: user.id,
+      },
+    },
+    {field: 'workDayNum', condition: '==', value: currentWeekDay},
+    {field: 'isDriving', condition: '==', value: true},
+  ])
+
+  // console.log('activeRide', activeRide)
+  // [END]
 
   const {
     multiSliderValue,
@@ -70,18 +86,20 @@ export const MainPage = ({navigation}) => {
     open,
     setOpen,
     passengerList,
-    activeRide,
+    // activeRide,
     extraDay,
-    isLoading,
+    // isLoading,
   } = useWorkTripHooks(user)
 
   //data stream for driver trips
   const driverTripStream = async () => {
     // MUISTA LISÄTÄ !!!
-    // const currentWeekDay = new Date().getDay()
+    const currentWeekDay = new Date().getDay()
+
+    setCurrentWeekDay(currentWeekDay)
 
     // MUISTA POISTAA !!!
-    const currentWeekDay = 5
+    // const currentWeekDay = 5
 
     let ref = await workTripMultiQueryStream(user.company.id, [
       {field: 'workDayNum', condition: '==', value: currentWeekDay},
@@ -111,7 +129,7 @@ export const MainPage = ({navigation}) => {
     }
 
     // return () => fetchTodayRides()
-  }, [travelPreference, passengerTrips])
+  }, [travelPreference, passengerTrips, activeRide])
 
   const checkNotificationsPermissions = async () => {
     let pushToken

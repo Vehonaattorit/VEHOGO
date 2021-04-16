@@ -14,6 +14,7 @@ import {StyleSheet} from 'react-native'
 import {CompanyListItem} from '../components/CompanyListItem'
 import moment from 'moment'
 import {
+  useDriverTripListHook,
   workTripMultiQuery,
   workTripOrderByQuery,
 } from '../controllers/workTripController'
@@ -26,17 +27,36 @@ export const RideStartBar = ({user, navigation}) => {
   const [date, setDate] = useState('')
   const [driveStartTime, setDriveStartTime] = useState(null)
 
+  // CURRENTWEEKDAY
+  const [currentWeekDay, setCurrentWeekDay] = useState(5)
+
+  const {driverTrips, isLoading} = useDriverTripListHook(user, [
+    {
+      field: 'workDayNum',
+      condition: '==',
+      value: currentWeekDay,
+    },
+    {
+      field: 'driverID',
+      condition: '==',
+      value: user.id,
+    },
+  ])
+
+  // console.log('DriverTrips', driverTrips[0].id)
+
   const getNextRide = async () => {
     const now = new Date(1970, 0, 1, 6, 30)
     // 13.04. 10:47 BACKUP
     // const now = new Date()
     // END
     // 13.04. 10:47 BACKUP
-    // const currentWeekDay = now.getDay()
+    const currentWeekDay = now.getDay()
+    setCurrentWeekDay(currentWeekDay)
     // END
 
     // MUISTA POISTAA !!!
-    const currentWeekDay = 5
+    // const currentWeekDay = 5
     // const now = new Date(1970, 0, 2, 6, 30)
     // MUISTA LISÄTÄ !!!
     // const currentWeekDay = now.getDay()
@@ -58,18 +78,19 @@ export const RideStartBar = ({user, navigation}) => {
     }
 
     // query tomorrows workTrips with query
-    const todayWorkTrips = await workTripMultiQuery(user.company.id, [
-      {
-        field: 'workDayNum',
-        condition: '==',
-        value: currentWeekDay,
-      },
-      {
-        field: 'driverID',
-        condition: '==',
-        value: user.id,
-      },
-    ])
+    // BACKUP 17.04.2021 Trying out useDriverTripListHook in workTripController.js
+    // const todayWorkTrips = await workTripMultiQuery(user.company.id, [
+    //   {
+    //     field: 'workDayNum',
+    //     condition: '==',
+    //     value: currentWeekDay,
+    //   },
+    //   {
+    //     field: 'driverID',
+    //     condition: '==',
+    //     value: user.id,
+    //   },
+    // ])
     const tomorrowWorkTrips = await workTripMultiQuery(user.company.id, [
       {
         field: 'workDayNum',
@@ -94,10 +115,11 @@ export const RideStartBar = ({user, navigation}) => {
 
     if (found) {
       // sorting the morning ride to start
-      if (todayWorkTrips[0].goingTo == 'home') todayWorkTrips.reverse()
+      // 17.04.2021 replaced todayWorkTrips with driverTrips
+      if (driverTrips[0].goingTo == 'home') driverTrips.reverse()
 
-      for (let i = 0; i < todayWorkTrips.length; i++) {
-        const workTrip = todayWorkTrips[i]
+      for (let i = 0; i < driverTrips.length; i++) {
+        const workTrip = driverTrips[i]
         const nowInMinutes = currentHours * 60 + minutes
         let startTime = workTrip.scheduledDrive.start.toDate()
         const workTripStartInMinutes =
@@ -158,8 +180,8 @@ export const RideStartBar = ({user, navigation}) => {
   }
 
   useEffect(() => {
-    getNextRide()
-  }, [])
+    if (!isLoading) getNextRide()
+  }, [driverTrips, isLoading])
 
   return (
     <View>

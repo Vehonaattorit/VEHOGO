@@ -119,9 +119,6 @@ const PassengerAcceptRefuseButton = (props) => {
       'continueWithCalendar'
     )
 
-    console.log('askedOutlook', askedOutlook)
-    console.log('continueWithCalendar', continueWithCalendar)
-
     if (!Boolean(askedOutlook)) {
       Alert.alert(
         'Would you like to sign in to Outlook?',
@@ -141,22 +138,15 @@ const PassengerAcceptRefuseButton = (props) => {
             text: 'Yes',
             style: 'destructive',
             onPress: async () => {
-              console.log('PERKELE')
               await AsyncStorage.setItem('askedOutlook', 'true')
 
               const response = await AuthManager.checkTokenExpiration()
 
-              console.log('IMPORTANT', response)
-
               // User cancelled login
               if (response.type === 'error') {
-                console.log('RESPONSUS.ERROR')
-
                 // continue with creating a ride
                 return
               }
-
-              console.log('CREATE NEW EVENT FFS')
 
               await GraphManager.createEvent({
                 subject: `Pick up ${rideRequest.userName} on your way to ${workTrip.goingTo}`,
@@ -318,8 +308,6 @@ const PassengerAcceptRefuseButton = (props) => {
       }),
     })
     navigation.popToTop()
-
-    console.log('updated work trip')
   }
 
   const refusePassenger = async () => {

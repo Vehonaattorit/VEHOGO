@@ -24,8 +24,6 @@ const PassengerListItem = ({navigation, user, singleItem}) => {
     isPassengerIncluded,
   } = singleItem
 
-  console.log('PassengerListItem', isPassengerIncluded)
-
   // useEffect(() => {
   //   const isPassengerIncluded = scheduledDrive.stops.find(
   //     (item) => item.userID === user.id

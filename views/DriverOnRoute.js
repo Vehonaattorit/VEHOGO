@@ -9,8 +9,11 @@ import {
 import {Container} from 'native-base'
 import MapView from 'react-native-maps'
 import decodePolyline from 'decode-google-map-polyline'
-import {updateWorkTrip, workTripStream} from '../controllers/workTripController'
-import firebase from 'firebase/app'
+import {
+  updateWorkTrip,
+  useIsDrivingHook,
+  workTripStream,
+} from '../controllers/workTripController'
 import {UserContext} from '../contexts'
 import {updateUserPosition} from '../utils/driverFunctions'
 import {useDocumentData} from 'react-firebase-hooks/firestore'
@@ -31,22 +34,29 @@ import 'firebase/auth'
 import {getUser} from '../controllers/userController'
 import QuickMessagesMenu from '../components/QuickMessagesMenu'
 
-export const DriverOnRoute = ({navigation, route}) => {
-  const {chatRooms, setChatRooms} = useChatRoomHooks()
+// Firebase
 
+import firebase from 'firebase/app'
+import 'firebase/firestore'
+
+const db = firebase.firestore()
+
+export const DriverOnRoute = ({navigation, route}) => {
   const {workTrip} = route.params
   const scrollRef = useRef()
   const mapRef = useRef()
 
   const passengerStops = workTrip.scheduledDrive.stops.slice(1)
-  console.log('passenger Stops', passengerStops)
-  console.log('stopNmbr', workTrip.scheduledDrive.nextStop)
-  console.log(
-    'compare',
-    passengerStops[workTrip.scheduledDrive.nextStop - 1].stopName
-  )
+  // console.log('passenger Stops', passengerStops)
+  // console.log('stopNmbr', workTrip.scheduledDrive.nextStop)
+  // console.log(
+  //   'compare',
+  //   passengerStops[workTrip.scheduledDrive.nextStop - 1].stopName
+  // )
 
   const {user} = useContext(UserContext)
+  const {chatRooms, setChatRooms} = useChatRoomHooks()
+  const {isDriving} = useIsDrivingHook(user, workTrip)
 
   let intervalTimer
   const [routeCoordinates, setRouteCoordinates] = useState([])
@@ -295,7 +305,35 @@ export const DriverOnRoute = ({navigation, route}) => {
 
       setLatestMessage(renderChat.latestMessage.text)
     }
-  }, [chatRooms])
+
+    // const fetchIsDriving = async () => {
+    //   const isDrivingListener = await db
+    //     .collection('companys')
+    //     .doc(user.company.id)
+    //     .collection('workTrips')
+    //     .doc(workTrip.id)
+    //     .onSnapshot((querySnapshot) => {
+    //       const data = querySnapshot.data()
+
+    //       setIsDriving(data.isDriving)
+    //       // const workTrip = querySnapshot.docs.map((doc) => {
+    //       //   return {
+    //       //     ...doc.data(),
+    //       //   }
+    //       // })
+
+    //       // console.log('workTrip', workTrip.isDriving)
+    //     })
+
+    //   return () => isDrivingListener()
+    // }
+
+    if (!isDriving) return navigation.popToTop()
+
+    // console.log('isDriving', isDriving)
+
+    // fetchIsDriving()
+  }, [chatRooms, isDriving])
 
   // Render Passenger List at top of the screen
   const renderItem = ({item, index}) => {

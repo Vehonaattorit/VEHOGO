@@ -35,7 +35,7 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
     rideRequest != undefined && (
       <MapView.Marker
         image={require('../images/passenger-map-icon-green.png')}
-        key={rideRequest.address}
+        key={rideRequest.id}
         coordinate={{
           latitude: rideRequest.homeLocation.latitude,
           longitude: rideRequest.homeLocation.longitude,

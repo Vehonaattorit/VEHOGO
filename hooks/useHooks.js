@@ -61,9 +61,9 @@ const useWorkTripHooks = (user) => {
   const queryWithTime = async () => {
     setIsLoading(true)
 
-    // const currentWeekDay = new Date().getDay()fetchHomeOrWorkTrips
+    const currentWeekDay = new Date().getDay()
 
-    const currentWeekDay = 5
+    // const currentWeekDay = 5
 
     const goingTo = fetchHomeOrWorkTrips(currentWeekDay)
 
@@ -88,44 +88,34 @@ const useWorkTripHooks = (user) => {
   }
 
   const fetchTodayRides = async () => {
-    setIsLoading(true)
-
-    // const currentWeekDay = new Date().getDay()
-
-    const currentWeekDay = 5
-
-    const goingTo = fetchHomeOrWorkTrips(currentWeekDay)
-
-    const activeRide = await workTripMultiQuery(user.company.id, [
-      {
-        field: 'scheduledDrive.stops',
-        condition: 'array-contains',
-        value: {
-          address: user.homeAddress,
-          location: user.homeLocation,
-          stopName: user.userName,
-          userID: user.id,
-        },
-      },
-      {field: 'workDayNum', condition: '==', value: currentWeekDay},
-      {field: 'isDriving', condition: '==', value: true},
-    ])
-
-    if (activeRide[0] === undefined) {
-      setActiveRide(null)
-
-      setIsLoading(false)
-    } else {
-      setActiveRide(activeRide[0])
-    }
-
-    // Passenger List
-    // BACKUP
-    const query = await workTripOrder(user.company.id)
-
-    setIsLoading(false)
-
-    setPassengerList(query)
+    // setIsLoading(true)
+    // // const currentWeekDay = new Date().getDay()
+    // const currentWeekDay = 5
+    // const goingTo = fetchHomeOrWorkTrips(currentWeekDay)
+    // const activeRide = await workTripMultiQuery(user.company.id, [
+    //   {
+    //     field: 'scheduledDrive.stops',
+    //     condition: 'array-contains',
+    //     value: {
+    //       address: user.homeAddress,
+    //       location: user.homeLocation,
+    //       stopName: user.userName,
+    //       userID: user.id,
+    //     },
+    //   },
+    //   {field: 'workDayNum', condition: '==', value: currentWeekDay},
+    //   {field: 'isDriving', condition: '==', value: true},
+    // ])
+    // if (activeRide[0] === undefined) {
+    //   setActiveRide(null)
+    // } else {
+    //   setActiveRide(activeRide[0])
+    // }
+    // // Passenger List
+    // // BACKUP
+    // const query = await workTripOrder(user.company.id)
+    // setIsLoading(false)
+    // setPassengerList(query)
   }
 
   const slideTime = () => {
