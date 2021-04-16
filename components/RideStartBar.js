@@ -27,7 +27,7 @@ export const RideStartBar = ({user, navigation}) => {
   const [driveStartTime, setDriveStartTime] = useState(null)
 
   const getNextRide = async () => {
-    const now = new Date(1970, 0, 1, 6, 30)
+    const now = new Date()
     // 13.04. 10:47 BACKUP
     // const now = new Date()
     // END
@@ -36,11 +36,11 @@ export const RideStartBar = ({user, navigation}) => {
     // END
 
     // MUISTA POISTAA !!!
-    const currentWeekDay = 5
+    //const currentWeekDay = 5
     // const now = new Date(1970, 0, 2, 6, 30)
     // MUISTA LISÄTÄ !!!
-    // const currentWeekDay = now.getDay()
-
+    const currentWeekDay = now.getDay()
+    console.log('today is',currentWeekDay)
     const currentHours = now.getHours()
     const minutes = now.getMinutes()
     let tomorrowWeekDay
@@ -111,6 +111,7 @@ export const RideStartBar = ({user, navigation}) => {
             workTrip.scheduledDrive.start,
             workTrip.scheduledDrive.end
           )
+          console.log('starting ride', startingRide)
           return
         }
       }
@@ -123,6 +124,7 @@ export const RideStartBar = ({user, navigation}) => {
           tomorrowWorkTrips[0].scheduledDrive.start,
           tomorrowWorkTrips[0].scheduledDrive.end
         )
+        console.log('starting ride', startingRide)
         return
       }
     } else {
@@ -133,6 +135,7 @@ export const RideStartBar = ({user, navigation}) => {
         tomorrowWorkTrips[0].scheduledDrive.start,
         tomorrowWorkTrips[0].scheduledDrive.end
       )
+      console.log('starting ride', startingRide)
       return
     }
   }
