@@ -90,8 +90,8 @@ export const Username = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Ionicons name="md-person" size={300} color="#26AAE2" />
-      <View  style={styles.inputContainer}>
-        <View style={styles.poweredInputContainer}>
+      <View style={styles.inputContainer}>
+        <KeyboardAvoidingView behavior="padding" style={styles.poweredInputContainer}>
           <CustomInput
             placeholder="First name"
             initialValue={formState.inputValues.userName}
@@ -105,14 +105,7 @@ export const Username = ({navigation}) => {
             minLength={1}
             required
           />
-          <CustomInput
-            iconName="md-person"
-            autoCorrect={false}
-            errorText="Please enter a valid username."
-            minLength={1}
-            required
-          />
-        </View>
+        </KeyboardAvoidingView>
         <CustomButtonIcon
           style={styles.btns}
           title="Submit"
@@ -134,11 +127,11 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flex: 0.2,
-    width: '90%',
+    width: '100%',
     color: 'white',
   },
   poweredInputContainer: {
-    marginBottom: 40,
+    marginTop: 50,
     marginHorizontal: 20,
   },
   icon: {

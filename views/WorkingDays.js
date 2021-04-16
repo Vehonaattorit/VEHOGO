@@ -23,21 +23,6 @@ export const WorkingDays = ({navigation}) => {
   ])
 
   const [error, setError] = useState('')
-
-  // const updateWorkDays = () => {
-  //   const preferedWorkDays = []
-
-  //   workDays.forEach((element) => {
-  //     if (element.isSelected) {
-  //       preferedWorkDays.push({workDayNum: element.id})
-  //     }
-  //   })
-
-  //   user.workDays = preferedWorkDays
-
-  //   updateUser(user)
-  // }
-
   useEffect(() => {
     let workDayIds = []
 

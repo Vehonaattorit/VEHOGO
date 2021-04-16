@@ -23,12 +23,23 @@ const GooglePlacesInput = ({setAddress, defaultValue}) => {
       styles={{
         textInputContainer: {
           backgroundColor: '#E1F5FD',
-          color: '#E1F5FD',
+          paddingHorizontal: 5,
+          shadowColor: '#000',
+          borderRadius: 10,
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
         },
         textInput: {
-          height: 50,
+          marginHorizontal: 6,
+          marginTop: 5,
           borderRadius: 10,
-          color: '#000',
+          height: 50,
+          color: '#5d5d5d',
           fontSize: 16,
         },
         predefinedPlacesDescription: {

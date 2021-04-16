@@ -12,7 +12,7 @@ import {VerifyEmail} from '../views/VerifyEmail'
 import {IconButton} from 'react-native-paper'
 import {color} from '../constants/colors'
 import {signOut} from '../controllers/LoginController'
-
+import {Settings} from '../views/Settings'
 const Stack = createStackNavigator()
 function SetUpStackNavigator() {
   return (
@@ -72,12 +72,15 @@ function SetUpStackNavigator() {
             backgroundColor: 'black',
           }}
         />
-
         <Stack.Screen
           name="Address"
           component={Address}
           options={{
-            headerTitleStyle: {textAlign: 'center', flex: 1},
+            headerTitleStyle: {
+              fontSize: 30,
+              textAlign: 'center',
+              flex: 1,
+            },
             headerTintColor: '#000000',
           }}
           headerStyle={{
@@ -114,6 +117,7 @@ function SetUpStackNavigator() {
           }}
         />
         <Stack.Screen name="SetUpInit" component={SetUpInit} />
+        <Stack.Screen name="Settings" component={Settings} />
       </Stack.Navigator>
     </NavigationContainer>
   )

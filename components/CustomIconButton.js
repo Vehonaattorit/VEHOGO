@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
   iconTwoContainer: {
     width: 40,
     height: 40,
+    marginLeft: 5,
   },
   text: {
     fontSize: 20,

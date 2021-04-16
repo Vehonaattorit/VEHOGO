@@ -43,6 +43,7 @@ import {
   usePassengerListHook,
 } from '../controllers/workTripController'
 import {useCollectionData} from 'react-firebase-hooks/firestore'
+import {IconButton} from 'react-native-paper'
 
 import {Ionicons} from '@expo/vector-icons'
 
@@ -171,6 +172,34 @@ export const MainPage = ({navigation}) => {
   const displayPassengerList = () => {
     return (
       <Container>
+        <Header style={styles.header}>
+          <Right>
+            <Button
+              onPress={() => {
+                setOpen(!open)
+              }}
+              transparent
+            >
+              <Icon style={styles.sortIcon} name="filter" />
+            </Button>
+            <IconButton
+              icon="account-cog"
+              size={28}
+              color={color.darkBlue}
+              onPress={() => navigation.navigate('Settings')}
+            />
+          </Right>
+
+          {/*
+          headerRight: () => (
+              <IconButton
+                icon="account-cog"
+                size={28}
+                color={color.darkBlue}
+                onPress={() => navigation.navigate('Settings')}
+              />
+            ), */}
+        </Header>
         {/* {activeRide && ( */}
         {/* // DOES NOT WORK PROPERLY. activeRide is not functioning */}
         {activeRide && (

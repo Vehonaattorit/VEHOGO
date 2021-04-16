@@ -3,6 +3,7 @@ import {StyleSheet} from 'react-native'
 import {Text, Icon, Button} from 'native-base'
 import {View} from 'native-base'
 import Clipboard from 'expo-clipboard'
+import CustomButtonIcon from '../components/CustomIconButton'
 
 export const CompanyCode = ({navigation, companyCode}) => {
   return (
@@ -18,14 +19,14 @@ export const CompanyCode = ({navigation, companyCode}) => {
         <Icon active name="copy-outline" />
         <Text>Copy to clipboard</Text>
       </Button>
-      <Button
+      <CustomButtonIcon
         style={{alignSelf: 'center', margin: 5}}
         onPress={() => {
           navigation.navigate('Travel')
         }}
-      >
-        <Text>Continue</Text>
-      </Button>
+        title="Continue"
+        iconTwo="keyboard-arrow-right"
+      />
     </View>
   )
 }

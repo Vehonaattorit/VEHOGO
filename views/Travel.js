@@ -68,8 +68,7 @@ const styles = StyleSheet.create({
   },
   btn: {
     marginTop: 5,
-    marginLeft: 20,
-    marginRight: 20,
+
     alignSelf: 'stretch',
   },
 })

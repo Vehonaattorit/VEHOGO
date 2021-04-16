@@ -61,9 +61,6 @@ const CustomInput = (props) => {
     <>
       <Text style={styles.label}>{props.label}</Text>
       <View style={styles.inputContainer}>
-        <View style={styles.icon}>
-          <Ionicons name={props.iconName} size={30} color="black" />
-        </View>
         <TextInput
           {...props}
           style={styles.input}
@@ -80,27 +77,23 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   inputContainer: {
+    paddingHorizontal: 11,
+    paddingVertical: 4.5,
     alignItems: 'center',
-    alignItems: 'center',
-    shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowOpacity: 0.8,
-    elevation: 6,
-    shadowRadius: 15,
-    shadowOffset: {width: 1, height: 13},
-    flexDirection: 'row',
     backgroundColor: '#E1F5FD',
     borderRadius: 10,
+    marginBottom: 20,
   },
+
   icon: {
     margin: 10,
   },
   input: {
     backgroundColor: '#fff',
-    width: '80%',
-    margin: 5,
-    padding: 15,
+    width: '100%',
+    padding: 15.5,
+    fontSize: 15.5,
     borderRadius: 10,
-    marginBottom: 5,
   },
   errorContainer: {
     marginVertical: 5,
