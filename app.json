@@ -1,5 +1,6 @@
 {
   "expo": {
+    "owner": "vehonaattorit-share-app",
     "scheme": "vehogo",
     "name": "VehoKimppa",
     "slug": "VehoKimppa",
@@ -16,9 +17,13 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
+      "bundleIdentifier": "com.vehonaattorit.shareride",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
     },
     "android": {
+      "package": "com.vehonaattorit.shareride",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
