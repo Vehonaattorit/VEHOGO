@@ -17,9 +17,7 @@ import {CustomButton} from '../../components/CustomButton'
 import {AuthButton} from '../../components/AuthButton'
 import {CustomTitle} from '../../components/CustomTitle'
 import {login, subscribeToAuth} from '../../controllers/LoginController'
-import {
-  Icon
-} from 'native-base'
+import {Icon} from 'native-base'
 
 export const LogIn = ({navigation, scrollRef}) => {
   const [email, setEmail] = useState('')
@@ -32,13 +30,18 @@ export const LogIn = ({navigation, scrollRef}) => {
 
     // setError(errorMessage)
 
-    try{
+    // try {
+    //   await login(email, password)
+    //   // DO NOT CALL STATE AFTER LOGIN
+    //   // after user logins app will show either setupNavigator or MainNavigator
+    //   // all state changes here after login will cause update to unmounted component/possible memory leak
+    // } catch (e) {
+    try {
       await login(email, password)
-      // DO NOT CALL STATE AFTER LOGIN
-      // after user logins app will show either setupNavigator or MainNavigator
-      // all state changes here after login will cause update to unmounted component/possible memory leak
-    }catch(e) {
-      console.log(e)
+    } catch (error) {
+      console.log('error', error.message)
+
+      setError(error.message)
     }
   }
 
@@ -49,7 +52,6 @@ export const LogIn = ({navigation, scrollRef}) => {
       timeout = setTimeout(() => {
         setError('')
       }, 5000)
-
     }
     return () => {
       mounted = false
@@ -67,7 +69,9 @@ export const LogIn = ({navigation, scrollRef}) => {
         <Input
           autoCapitalize="none"
           placeholder="Email"
-          leftIcon={<Icon name="mail-outline" size={24} color={color.primary} />}
+          leftIcon={
+            <Icon name="mail-outline" size={24} color={color.primary} />
+          }
           value={email}
           onChangeText={setEmail}
         />
@@ -78,19 +82,15 @@ export const LogIn = ({navigation, scrollRef}) => {
           value={password}
           onChangeText={setPassword}
           secureTextEntry={true}
-          leftIcon={<Icon name="lock-closed-outline" size={24} color={color.primary} />}
+          leftIcon={
+            <Icon name="lock-closed-outline" size={24} color={color.primary} />
+          }
           errorMessage={error}
         />
       </View>
       <View style={styles.btnContainer}>
         <View style={styles.logInBtn}>
-          <AuthButton
-            style={styles.btns}
-            title="Login"
-            onPress={() => {
-              logIn()
-            }}
-          />
+          <AuthButton style={styles.btns} title="Login" onPress={logIn} />
         </View>
         <AuthButton
           style={styles.btns}

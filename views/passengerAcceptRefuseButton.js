@@ -130,7 +130,6 @@ const PassengerAcceptRefuseButton = (props) => {
             onPress: async () => {
               await AsyncStorage.setItem('askedOutlook', 'true')
               await AsyncStorage.setItem('continueWithCalendar', 'false')
-
               await continueAcceptMethod()
             },
           },
