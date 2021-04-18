@@ -1,10 +1,5 @@
 import React, {useContext, useEffect} from 'react'
 import {StyleSheet, View, Platform} from 'react-native'
-import {CustomButton} from '../components/CustomButton'
-import {signOut} from '../controllers/LoginController'
-import {Ionicons} from '@expo/vector-icons'
-import {color} from '../constants/colors'
-import {CustomTitle} from '../components/CustomTitle'
 import {UserContext} from '../contexts'
 import {updateUser} from '../controllers/userController'
 import CustomButtonIcon from '../components/CustomIconButton'
@@ -59,16 +54,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   iconContainer: {
-    marginBottom: 200,
+   flex: 0.9,
   },
   btnContainer: {
     position: 'absolute',
-    bottom: 50,
+    bottom: 40,
     width: '100%',
   },
   btn: {
     marginTop: 5,
-
     alignSelf: 'stretch',
   },
 })

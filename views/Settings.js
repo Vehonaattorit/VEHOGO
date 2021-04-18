@@ -8,81 +8,51 @@ export const Settings = ({navigation}) => {
       <View style={styles.poweredContainer}>
         <View style={styles.btn}>
           <CustomButtonIcon
-            iconOne="person"
+            iconOne="airline-seat-recline-extra"
             title="Modify Your Travel Info"
             iconTwo="keyboard-arrow-right"
             onPress={() => {
-              navigation.navigate('Company')
+             console.log("Travel")
             }}
           />
         </View>
         <View style={styles.btn}>
           <CustomButtonIcon
             iconOne="person"
-            title="Modify Your Set-Up"
+            title="Modify Your Username"
             iconTwo="keyboard-arrow-right"
             onPress={() => {
-              navigation.navigate('Company')
+              console.log("Username")
             }}
           />
         </View>
         <View style={styles.btn}>
           <CustomButtonIcon
-            iconOne="person"
-            title="Modify Your Set-Up"
+            iconOne="home"
+            title="Modify Your Address"
             iconTwo="keyboard-arrow-right"
             onPress={() => {
-              navigation.navigate('Company')
+              console.log("Address")
             }}
           />
         </View>
         <View style={styles.btn}>
           <CustomButtonIcon
-            iconOne="person"
-            title="Modify Your Set-Up"
+            iconOne="work"
+            title="Modify Your Worling Days"
             iconTwo="keyboard-arrow-right"
             onPress={() => {
-              navigation.navigate('Company')
+              console.log("Worling Days")
             }}
           />
         </View>
         <View style={styles.btn}>
           <CustomButtonIcon
-            iconOne="person"
-            title="Modify Your Set-Up"
+            iconOne="access-time"
+            title="Modify Your Working Hours"
             iconTwo="keyboard-arrow-right"
             onPress={() => {
-              navigation.navigate('Company')
-            }}
-          />
-        </View>
-        <View style={styles.btn}>
-          <CustomButtonIcon
-            iconOne="person"
-            title="Modify Your Set-Up"
-            iconTwo="keyboard-arrow-right"
-            onPress={() => {
-              navigation.navigate('Company')
-            }}
-          />
-        </View>
-        <View style={styles.btn}>
-          <CustomButtonIcon
-            iconOne="person"
-            title="Modify Your Set-Up"
-            iconTwo="keyboard-arrow-right"
-            onPress={() => {
-              navigation.navigate('Company')
-            }}
-          />
-        </View>
-        <View style={styles.btn}>
-          <CustomButtonIcon
-            iconOne="person"
-            title="Modify Your Set-Up"
-            iconTwo="keyboard-arrow-right"
-            onPress={() => {
-              navigation.navigate('Company')
+              console.log("Working Hours")
             }}
           />
         </View>
