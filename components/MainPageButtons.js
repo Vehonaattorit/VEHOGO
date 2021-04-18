@@ -7,8 +7,6 @@ import MainPageButton from './MainPageButton'
 import {color} from '../constants/colors'
 
 const MainPageButtons = ({travelPreference, driverTripList, navigation}) => {
-  console.log('travelPreference', travelPreference)
-
   const mainPageButtons = [
     {
       id: '1',

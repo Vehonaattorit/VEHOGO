@@ -81,8 +81,18 @@ const styles = StyleSheet.create({
     paddingVertical: 4.5,
     alignItems: 'center',
     backgroundColor: '#E1F5FD',
+    width: '100%',
     borderRadius: 10,
-    marginBottom: 20,
+    marginBottom: 10,
+    backgroundColor: '#E1F5FD',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 
   icon: {

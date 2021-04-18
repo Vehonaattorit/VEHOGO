@@ -17,6 +17,7 @@ import moment from 'moment-timezone'
 import {AuthContext} from './contexts/AuthContext'
 import calendarHooks from './calendarHooks'
 import {color} from '../constants/colors'
+import {GraphManager} from './graph/GraphManager'
 
 /**
  *
@@ -115,8 +116,6 @@ export const OutlookCalendar = ({navigation}) => {
     )
   }
 
-  console.log('calendar state events', calendarState.events)
-
   return (
     <View style={styles.AndroidSafeArea}>
       <AuthContext.Provider value={authContext}>
@@ -125,6 +124,65 @@ export const OutlookCalendar = ({navigation}) => {
           title={state.userToken ? 'Sign out' : ' Log in'}
           onPress={state.userToken ? signOutAsync : signInAsync}
         />
+
+        <Button
+          color={color.darkBlue}
+          title="Create Event"
+          onPress={async () => {
+            await GraphManager.createEvent({
+              subject: "Let's go for lunch",
+              body: {
+                contentType: 'HTML',
+                content: 'Does mid month work for you?',
+              },
+              start: {
+                dateTime: '2021-04-15T11:34:51.434Z',
+                timeZone: 'Pacific Standard Time',
+              },
+              end: {
+                dateTime: '2021-04-15T13:34:51.434Z',
+                timeZone: 'Pacific Standard Time',
+              },
+              location: {
+                displayName: "Harry's Bar",
+              },
+              attendees: [
+                {
+                  emailAddress: {
+                    address: 'adelev@contoso.onmicrosoft.com',
+                    name: 'Adele Vance',
+                  },
+                  type: 'required',
+                },
+              ],
+            })
+          }}
+        />
+        {/*  subject: 'Let\'s go for lunch',
+  body: {
+    contentType: 'HTML',
+    content: 'Does mid month work for you?'
+  },
+  start: {
+      dateTime: '2019-03-15T12:00:00',
+      timeZone: 'Pacific Standard Time'
+  },
+  end: {
+      dateTime: '2019-03-15T14:00:00',
+      timeZone: 'Pacific Standard Time'
+  },
+  location: {
+      displayName: 'Harry\'s Bar'
+  },
+  attendees: [
+    {
+      emailAddress: {
+        address: 'adelev@contoso.onmicrosoft.com',
+        name: 'Adele Vance'
+      },
+      type: 'required'
+    }
+  ], */}
 
         <Agenda
           onRefresh={bootstrapAsync}

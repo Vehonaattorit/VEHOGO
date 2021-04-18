@@ -1,30 +1,81 @@
 import firebase from 'firebase/app'
-import {chatConverter} from '../models/chatRoom'
+import {v4} from 'uuid/v4'
+import {ChatRoom, chatRoomConverter} from '../models/chatRoom'
 import 'firebase/firestore'
+import {workTripMultiQueryStream} from './workTripController'
+
+import React, {useEffect, useState} from 'react'
 
 const db = firebase.firestore()
 
-export async function addChat(newChat) {
-  try {
-    // Create a new chat document
-    let chatRef = db.collection('chats')
+export const useChatRoomHooks = () => {
+  const [chatRooms, setChatRooms] = useState([])
 
-    console.log('new Chat', newChat)
-    chatRef.withConverter(chatConverter).add(newChat)
+  useEffect(() => {
+    const chatRoomsListener = db
+      .collection('chats')
+      .onSnapshot((querySnapshot) => {
+        const chatRooms = querySnapshot.docs.map((doc) => {
+          return {
+            _id: doc.id,
+            name: '',
+            latestMessage: {
+              text: '',
+            },
+            ...doc.data(),
+          }
+        })
+
+        setChatRooms(chatRooms)
+      })
+    return () => chatRoomsListener()
+  }, [])
+
+  return {
+    chatRooms,
+  }
+}
+
+export async function addChat(chat) {
+  try {
+    if (chat.id === undefined) {
+      chat.id = v4()
+    }
+
+    // Create a new chat document
+    let chatRef = db.collection('chats').doc(chat.id)
+
+    chatRef.withConverter(chatRoomConverter).set(chat, {
+      merge: true,
+    })
+
+    return chat.id
   } catch (error) {
     console.error('Error writing document: ', error)
 
     return
   }
-  // try {
-  //   db.collection('chats').add({
-  //     name: roomName,
-  //     latestMessage: {
-  //       text: `You have joined the room ${roomName}.`,
-  //       createdAt: new Date().getTime(),
-  //     },
-  //   })
-  // } catch (err) {}
+}
+
+export async function getChatRoomByIds(querys) {
+  try {
+    let queryRef = await db.collection('chats').withConverter(chatRoomConverter)
+
+    querys.forEach((query) => {
+      queryRef = queryRef.where(query.field, query.condition, query.value)
+    })
+
+    let query = await queryRef.get()
+
+    const chatRooms = []
+    query.forEach((doc) => {
+      chatRooms.push(chatRoomConverter.fromData(doc.data()))
+    })
+
+    return chatRooms
+  } catch (error) {
+    console.error('Error writing document: ', error)
+  }
 }
 
 export async function updateChat(chat) {
@@ -40,7 +91,6 @@ export async function updateChat(chat) {
 
 export async function getChat(chatId) {
   try {
-    console.log('chatId', chatId)
     // Add a new document in collection "chats"
     let doc = await db
       .collection('chats')
@@ -48,13 +98,42 @@ export async function getChat(chatId) {
       .withConverter(chatConverter)
       .get()
 
-    console.log('doc.data()', doc.data())
-
     return doc.data()
   } catch (error) {
     console.error('Error writing document: ', error)
     return
   }
+}
+
+export const queryChatRoom = async (userID, driverID) => {
+  const chatRooms = await getChatRoomByIds([
+    {
+      field: 'passengerID',
+      condition: '==',
+      value: userID,
+    },
+    {
+      field: 'driverID',
+      condition: '==',
+      value: driverID,
+    },
+  ])
+
+  // Chatrooms array is empty
+  let chatRoom
+  if (typeof chatRooms !== 'undefined' && chatRooms.length === 0) {
+    // if array is empty
+    chatRoom = await addChat(
+      new ChatRoom({
+        driverID: driverID,
+        passengerID: userID,
+      })
+    )
+  } else {
+    chatRoom = chatRooms[0]
+  }
+
+  return chatRoom
 }
 
 export function chatStream(chatId) {

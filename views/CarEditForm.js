@@ -51,11 +51,8 @@ const CarEditForm = ({navigation, route}) => {
 
   const uploadCar = async () => {
     if (!validateForm()) {
-      console.log('Validation failed')
       return
     }
-
-    console.log('Validation success')
 
     const car = new Car({
       id: editCar !== undefined ? editCar.id : undefined,

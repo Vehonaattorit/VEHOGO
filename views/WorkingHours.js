@@ -122,7 +122,7 @@ export const WorkingHours = ({navigation}) => {
   const {user} = useContext(UserContext)
 
   // If starting and ending time was found in db, set fetched values instead of default
-  console.log('prefered hours', user.preferedWorkingHours)
+
   const [newEventState, setNewEventState] = useState({
     startDate:
       user.preferedWorkingHours[0].workDayStart === undefined

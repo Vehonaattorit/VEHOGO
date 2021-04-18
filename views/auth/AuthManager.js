@@ -35,15 +35,12 @@ export class AuthManager {
             the parameters will be defined if the authorization session continues.
           */
 
-          console.log("authResponse.type === 'success') ")
-
           //Do not proceed with acquiring a token if there is an error. Return the error and the response.
           if (authResponse.params['error']) {
             /*
                 Return error as an added error property value in the object for easier
                 catching of the error in the front end
               */
-            console.log("authResponse.params['error']")
 
             return {
               error: authResponse.params.error,
@@ -52,7 +49,6 @@ export class AuthManager {
           } else {
             //If authentication is successful, pass the authorization code to get the token
 
-            console.log('!!! Authentication was successful !!!', authResponse)
             //If authentication is successful, pass the authorization code to get the token
             return AuthManager.getToken(authResponse.params.code)
             // return getToken(authResponse.params.code, props)
@@ -60,7 +56,6 @@ export class AuthManager {
         } //end if-statement
         //Else statement to catch if the user has decline continuing further with authentication.
         else {
-          console.log('Authorization session cancelled')
           //Return the authResponse which wil include a type of dismissed or cancelled.
           return {
             error: 'Authorization session cancelled',
@@ -114,8 +109,6 @@ export class AuthManager {
       .then((response) => response.json())
       .then((response) => {
         tokenResponse = response
-
-        console.log('getus tokenus', tokenResponse)
       })
       .catch((error) => {
         console.error(error)
@@ -245,8 +238,6 @@ export class AuthManager {
     try {
       const token = await AsyncStorage.getItem('userToken')
 
-      console.log('Access Token', token)
-
       const response = await fetch(
         `https://graph.microsoft.com/v1.0/me/calendarView?startDateTime=${start.format()}&endDateTime=${end.format()}&$select=subject,organizer,start,end&$orderby=start/dateTime`,
         {
@@ -262,8 +253,6 @@ export class AuthManager {
       )
 
       graphResponse = await response.json()
-
-      console.log('graphResponse calendar', graphResponse)
 
       /*
       Spread the results of the graph and add a type property with a value of success to indicate

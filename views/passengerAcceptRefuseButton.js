@@ -6,10 +6,16 @@ import {Stop} from '../models/stop'
 import {updateWorkTrip} from '../controllers/workTripController'
 import {getUser} from '../controllers/userController'
 import {googleMapsApiKey} from '../secrets/secrets'
-import {calculateDistance} from '../utils/utils'
+import {calculateDistance, drivingTime, getNextDayOfWeek} from '../utils/utils'
 import {useWorkTripHooks} from '../hooks/useHooks'
 
 import {color} from '../constants/colors'
+
+// Utils
+import {checkWhatDayItIs} from '../utils/utils'
+import {GraphManager} from './graph/GraphManager'
+import {AuthManager} from './auth/AuthManager'
+import AsyncStorage from '@react-native-community/async-storage'
 
 const PassengerAcceptRefuseButton = (props) => {
   const {user, workTrip, rideRequest, navigation} = props
@@ -23,10 +29,10 @@ const PassengerAcceptRefuseButton = (props) => {
   }, [])
 
   const getSenderUser = async () => {
-    console.log('workTrip.senderiD', rideRequest)
     const passengerUser = await getUser(rideRequest.senderID)
     setPassengerUser(passengerUser)
   }
+
   const getTripRoute = async (waypoints) => {
     try {
       const origin = workTrip.scheduledDrive.stops[0].location
@@ -35,16 +41,12 @@ const PassengerAcceptRefuseButton = (props) => {
           .location
       var waypointsString = ''
       if (waypoints.length > 0) {
-        console.log('waypoint setter')
         waypointsString = '&waypoints='
         waypoints.forEach((waypoint) => {
           waypointsString += `${waypoint.location.latitude},${waypoint.location.longitude}|`
         })
       }
-      console.log(
-        'fetching the stuff',
-        `https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}${waypointsString}&key=${googleMapsApiKey}`
-      )
+
       const response = await fetch(
         `https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}&${waypointsString}&key=${googleMapsApiKey}`,
         {
@@ -57,8 +59,6 @@ const PassengerAcceptRefuseButton = (props) => {
 
       const data = responseJson
 
-      console.log('fetched directions')
-
       return data
     } catch (e) {
       console.error(e)
@@ -68,9 +68,91 @@ const PassengerAcceptRefuseButton = (props) => {
   const acceptPassenger = async () => {
     let route
 
-    console.log(`Accepting passenger : ${rideRequest.senderID}`)
+    const currentYear = new Date().getFullYear()
+    const currentMonth = new Date().getMonth()
+    const currentDate = new Date().getDate()
+    const currentDay = new Date().getDay()
+
+    // WORKTRIP WORKDAYNUM
+    const {workDayNum} = workTrip
+
+    // START
+    const eventStartHours = workTrip.scheduledDrive.start.toDate().getHours()
+
+    const eventStartMinutes = workTrip.scheduledDrive.start
+      .toDate()
+      .getMinutes()
+
+    // END
+    const eventEndHours = workTrip.scheduledDrive.end.toDate().getHours()
+
+    const eventEndMinutes = workTrip.scheduledDrive.end.toDate().getMinutes()
+
+    // [END]
+
+    // 0 monday 1 tuesday 2 wed 3 thurs 4 fri 5 sat 6 sun
+    const dateNextDay = getNextDayOfWeek(new Date(), workDayNum)
+
+    const dateStart = new Date(
+      dateNextDay.getFullYear(),
+      dateNextDay.getMonth(),
+      dateNextDay.getDate(),
+      eventStartHours,
+      eventStartMinutes
+    )
+
+    const dateEnd = new Date(
+      dateNextDay.getFullYear(),
+      dateNextDay.getMonth(),
+      dateNextDay.getDate(),
+      eventEndHours,
+      eventEndMinutes
+    )
+    const totalMinutes = drivingTime(workTrip)
+
+    dateEnd.setMinutes(eventStartMinutes + totalMinutes)
+
+    // new Date().setMinutes(eventEndMinutes + totalMinutes)
+
+    // await AsyncStorage.removeItem('expireTime')
+    // await AsyncStorage.removeItem('userToken')
+
+    const response = await AuthManager.checkTokenExpiration()
+
+    await GraphManager.createEvent({
+      subject: `Pick up ${rideRequest.userName} on your way to ${workTrip.goingTo}`,
+      body: {
+        contentType: 'HTML',
+        content: 'Your request has been accepted.',
+      },
+      start: {
+        dateTime: dateStart,
+        timeZone: 'Pacific Standard Time',
+      },
+      end: {
+        dateTime: dateEnd,
+        timeZone: 'Pacific Standard Time',
+      },
+      location: {
+        displayName: passengerUser.homeAddress,
+      },
+      attendees: [
+        {
+          emailAddress: {
+            address: user.email,
+            name: user.userName,
+          },
+          emailAddress: {
+            address: passengerUser.email,
+            name: passengerUser.userName,
+          },
+          type: 'required',
+        },
+      ],
+    })
 
     let workTripToUpdate = workTrip
+
     workTripToUpdate.scheduledDrive.availableSeats += 1
     if (workTripToUpdate.scheduledDrive.stops.length > 2) {
       var tempStops = workTripToUpdate.scheduledDrive.stops
@@ -129,7 +211,7 @@ const PassengerAcceptRefuseButton = (props) => {
     }
 
     workTripToUpdate.route = route
-    console.log('stops to update', workTripToUpdate)
+
     await updateWorkTrip(user.company.id, workTripToUpdate)
     await deleteRideRequest(user.company.id, rideRequest.id)
     await fetch('https://exp.host/--/api/v2/push/send', {
@@ -145,15 +227,11 @@ const PassengerAcceptRefuseButton = (props) => {
         body: `Request was accepted by ${user.userName}`,
       }),
     })
-
     navigation.popToTop()
   }
 
   const refusePassenger = async () => {
-    console.log(`Refusing passenger : ${rideRequest.senderID}`)
     deleteRideRequest(user.company.id, rideRequest.id)
-
-    console.log('refusePassenger', passengerUser.ownerPushToken)
 
     fetch('https://exp.host/--/api/v2/push/send', {
       method: 'POST',

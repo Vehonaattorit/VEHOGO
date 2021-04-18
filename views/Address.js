@@ -45,7 +45,6 @@ const formReducer = (state, action) => {
 }
 
 export const Address = ({navigation}) => {
-  console.log('api key in address', googleMapsApiKey)
   const {user} = useContext(UserContext)
 
   const [address, setAddress] = useState(user.homeAddress || '')
@@ -89,10 +88,8 @@ export const Address = ({navigation}) => {
 
     const data = await getAddressGeoLocation()
 
-    const {city} = formState.inputValues
-
     user.homeAddress = address
-    user.city = city
+    user.city = data.city
     user.homeLocation = data.point
 
     updateUser(user)
@@ -115,7 +112,7 @@ export const Address = ({navigation}) => {
         responseJson.results[0].geometry.location.lat,
         responseJson.results[0].geometry.location.lng
       )
-      console.log(locationPoint)
+
       var city = ''
       responseJson.results[0].address_components.forEach((element) => {
         if (element.types[0] === 'locality') {
@@ -127,7 +124,6 @@ export const Address = ({navigation}) => {
         point: locationPoint,
         city: city,
       }
-      console.log(data)
 
       return data
     } catch (e) {
@@ -136,24 +132,22 @@ export const Address = ({navigation}) => {
   }
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <View style={styles.icon}>
-        <FontAwesome name="home" size={300} color='#26AAE2' />
+        <FontAwesome name="home" size={300} color="#26AAE2" />
       </View>
-      <KeyboardAvoidingView behavior="padding" style={styles.inputContainer}>
+      <View style={styles.inputContainer}>
         <GooglePlacesInput
           defaultValue={user.homeAddress}
           setAddress={setAddress}
         />
-        <CustomButtonIcon
-          style={styles.btn}
-          title="Submit"
-          onPress={submitHandler}
-        />
-      </KeyboardAvoidingView>
-
-
-    </View>
+      </View>
+      <CustomButtonIcon
+        style={styles.btn}
+        title="Submit"
+        onPress={submitHandler}
+      />
+    </KeyboardAvoidingView>
   )
 }
 
@@ -165,23 +159,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   inputContainer: {
-    height: 300,
-    bottom: 20,
-    width: '90%',
+    maxHeight: 300,
+    minHeight: 80,
+    marginHorizontal: 20,
+    alignSelf: 'stretch',
     color: 'white',
   },
-  customInput: {
-    marginTop: 50,
-    shadowColor: 'rgba(0, 0, 0, 0.4)',
-    shadowOpacity: 0.8,
-    elevation: 6,
-    shadowRadius: 15,
-    shadowOffset: {width: 1, height: 13},
-  },
-  btnContainer: {},
   btn: {
-    width: '100%',
+    alignSelf: 'stretch',
   },
-  icon: {
-  },
+  icon: {flex: 0.9},
 })

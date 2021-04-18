@@ -21,10 +21,8 @@ export const Company = ({navigation}) => {
     const companies = await companyQuery('companyCode', '==', companyCode)
 
     if (companies.length === 0) {
-      console.log('did not found companies with code')
       setError(true)
     } else {
-      console.log('found companies with code')
       setCompanyData(companies)
       setShowJoin(true)
       setShowBtns(false)
@@ -32,15 +30,14 @@ export const Company = ({navigation}) => {
     }
   }
 
-
-
   return (
     <KeyboardAvoidingView behavior="height" style={styles.container}>
       {showBtns && (
         <>
           <View style={styles.poweredContainer}>
-            <FontAwesome name="check-circle-o" size={300} color="#26AAE2" />
-
+            <View style={styles.icon}>
+              <FontAwesome name="check-circle-o" size={300} color="#26AAE2" />
+            </View>
             <View style={styles.btnContainer}>
               <CustomIconButton
                 onPress={() => {
@@ -107,8 +104,8 @@ export const Company = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
-    justifyContent: 'space-around'
+    flexDirection: 'column',
+    justifyContent: 'space-around',
   },
   view: {
     flex: 1,
@@ -119,13 +116,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   btnContainer: {
     marginBottom: 10,
     marginLeft: 10,
     marginRight: 10,
     alignSelf: 'stretch',
   },
+ 
   inputContainer: {
     justifyContent: 'center',
     alignItems: 'center',

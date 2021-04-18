@@ -7,10 +7,10 @@ import {MaterialCommunityIcons} from '@expo/vector-icons'
 export const Travel = ({navigation}) => {
   const {user} = useContext(UserContext)
 
-  const setTravelPreference = (preference) => {
+  const setTravelPreference = async(preference) => {
     user.travelPreference = preference
 
-    updateUser(user)
+    await updateUser(user)
   }
 
   return (
@@ -54,11 +54,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   iconContainer: {
-    marginBottom: 200,
+   flex: 0.9,
   },
   btnContainer: {
     position: 'absolute',
-    bottom: 50,
+    bottom: 40,
     width: '100%',
   },
   btn: {

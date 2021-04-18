@@ -9,15 +9,13 @@ const StopListItem = ({singleItem, route, index}) => {
   const [stopUserInfo, setStopUserInfo] = useState([])
 
   if (index === 0) {
-    console.log('first index', index)
   } else {
-    console.log('index', index)
-    //console.log('leg',index - 1,route.route.routes[0].legs[index - 1]);
+    //
   }
 
   const getStopUserInfo = async () => {
     const user = await getUser(singleItem.userID)
-    console.log(user)
+
     setStopUserInfo(user)
   }
   useEffect(() => {

@@ -63,18 +63,17 @@ function SetUpStackNavigator() {
           }}
         />
         <Stack.Screen
-          name="Username"
-          component={Username}
-          options={{
-            title: 'Username',
-          }}
-        />
-        {/* address */}
-        <Stack.Screen
           name="Address"
           component={Address}
           options={{
             title: 'address',
+          }}
+        />
+        <Stack.Screen
+          name="Username"
+          component={Username}
+          options={{
+            title: 'Username',
           }}
         />
         <Stack.Screen

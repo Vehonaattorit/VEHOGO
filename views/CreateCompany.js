@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react'
-import {KeyboardAvoidingView, TextInput, StyleSheet, View} from 'react-native'
+import {StyleSheet, View} from 'react-native'
 import {Item} from 'native-base'
 import {googleMapsApiKey} from '../secrets/secrets'
 import {updateCompany} from '../controllers/companyController'
@@ -11,6 +11,7 @@ import GooglePlacesInput from '../components/GooglePlaceInput'
 import {updateCompanyCity} from '../controllers/companyCitiesController'
 import {CompanyCode} from './CompanyCode'
 import CustomButtonIcon from '../components/CustomIconButton'
+import CustomInput from '../components/CustomInput'
 
 export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
   const [companyAddress, setAddress] = useState('')
@@ -46,7 +47,7 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
         responseJson.results[0].geometry.location.lat,
         responseJson.results[0].geometry.location.lng
       )
-      console.log(locationPoint)
+
       var city = ''
       var route = ''
       var streetNumber = ''
@@ -74,7 +75,6 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
         address: address,
         postalCode: postalCode,
       }
-      console.log(data)
 
       return data
     } catch (e) {
@@ -111,41 +111,35 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
 
       updateUser(user)
 
-      console.log('data id', data)
-
-      console.log('updated')
       setCompanyCode(cCode)
       setShowCode(true)
     } else {
-      console.log('inputs empty')
     }
   }
 
   return (
-    <View style={{flex:1,justifyContent:'space-around'}}>
+    <View style={styles.container}>
       {!showCode ? (
         <>
           <View style={styles.inputContainer}>
-            <View style={styles.companyNameInputContainer}>
-              <TextInput
+            <Item>
+              <CustomInput
                 placeholder="Company name"
                 value={companyName}
                 onChangeText={setName}
-                style={styles.companyNameTextInput}
                 errorMessage={
                   companyName.length < 1 &&
                   'Company name must be at least 1 character long'
                 }
               />
-            </View>
-            <Item style={styles.companyAddressInputContainer}>
+            </Item>
+            <Item>
               <GooglePlacesInput setAddress={setAddress} />
             </Item>
           </View>
           <View style={styles.btnContainer}>
-            <View style={styles.continueBtnContainer}>
+            <View style={styles.btns}>
               <CustomButtonIcon
-                style={styles.btns}
                 onPress={() => {
                   sendCompanyData()
                 }}
@@ -153,10 +147,9 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
                 iconTwo="keyboard-arrow-right"
               />
             </View>
-            <View style={styles.cancelBtnContainer}>
+            <View style={styles.btns}>
               <CustomButtonIcon
                 iconOne="keyboard-arrow-left"
-                style={styles.btns}
                 onPress={() => {
                   setShowCreate(false)
                   setShowBtns(true)
@@ -179,67 +172,26 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    justifyContent: 'space-around',
   },
   inputContainer: {
-    width: '100%',
     flexDirection: 'column',
-    flex:1,
+    flex: 1.5,
+    width: '100%',
     paddingHorizontal: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  companyNameInputContainer: {
-    height:50,
-    alignSelf: 'stretch',
-    width: '100%',
-    borderRadius: 10,
-    paddingTop: 30,
-    paddingBottom: 30,
-    paddingLeft: 15,
-    paddingRight: 15,
+
+  btnContainer: {
+    flex: 0.5,
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#E1F5FD',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
 
-  companyNameTextInput: {
-    fontSize: 15,
-    paddingHorizontal: 10,
-    borderRadius: 10,
-    backgroundColor: 'white',
-    height: 50,
-    width: '100%',
-  },
-  companyAddressInputContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    maxHeight: 152,
-    marginTop: 15,
-  },
-  btnContainer: {
-    flex:1,
-    flexDirection:'column',
-    justifyContent:'center',
-    marginLeft: 10,
-    marginRight: 10,
-  },
-  continueBtnContainer: {
-    alignSelf: 'stretch',
-    marginBottom: 10,
-  },
-  cancelBtnContainer: {
-    alignSelf: 'stretch',
-  },
   btns: {
+    alignSelf: 'stretch',
     margin: 5,
   },
 })

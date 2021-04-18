@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {
   StyleSheet,
   Dimensions,
@@ -12,10 +12,19 @@ import {MaterialCommunityIcons} from '@expo/vector-icons'
 import {color} from '../constants/colors'
 import moment from 'moment'
 
-const PassengerListItem = ({navigation, singleItem}) => {
+const PassengerListItem = ({navigation, user, singleItem}) => {
+  const [hasPassenger, setHasPassenger] = useState(false)
   const {driverName, goingTo, scheduledDrive, workDayNum, extraDay} = singleItem
 
-  console.log('singleItem', driverName)
+  useEffect(() => {
+    const isPassengerIncluded = scheduledDrive.stops.find(
+      (item) => item.userID === user.id
+    )
+
+    if (isPassengerIncluded === undefined) return
+
+    setHasPassenger(true)
+  }, [hasPassenger])
 
   return (
     <TouchableOpacity
@@ -23,12 +32,20 @@ const PassengerListItem = ({navigation, singleItem}) => {
       onPress={() =>
         navigation.navigate('RequestRide', {
           singleItem,
+          hasPassenger,
         })
       }
     >
       <View style={styles.listItem}>
         <View style={styles.rectStack}>
-          <View style={styles.workBlock}>
+          <View
+            style={{
+              ...styles.workBlock,
+              backgroundColor: hasPassenger
+                ? color.passenerListItemDark
+                : color.darkBlue,
+            }}
+          >
             <View style={styles.topRow}>
               <Text style={styles.goingToText}>
                 To {goingTo.charAt(0).toUpperCase() + goingTo.slice(1)}
@@ -40,18 +57,32 @@ const PassengerListItem = ({navigation, singleItem}) => {
               </Text>
             </View>
           </View>
-          <View style={styles.weekDayBlock}>
+          <View
+            style={{
+              ...styles.weekDayBlock,
+              backgroundColor: hasPassenger
+                ? color.passenerListItemLight
+                : color.lightBlue,
+            }}
+          >
             <View style={styles.topRow}>
               <Text style={styles.driverNameText}>{driverName}</Text>
             </View>
             <View style={styles.bottomRow}>
               <Text style={styles.arrivalTimeText}>
-                Arrival time:{' '}
+                Arrival time: {hasPassenger}
                 {moment(scheduledDrive.end.toDate()).format('HH:mm')}
               </Text>
             </View>
           </View>
-          <View style={styles.availableSeatsBlock}>
+          <View
+            style={{
+              ...styles.availableSeatsBlock,
+              backgroundColor: hasPassenger
+                ? color.passenerListItemDark
+                : color.middleBlue,
+            }}
+          >
             <View style={styles.passengerTextContainer}>
               <MaterialCommunityIcons
                 name="seat-passenger"

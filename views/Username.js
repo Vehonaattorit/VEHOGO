@@ -77,8 +77,6 @@ export const Username = ({navigation}) => {
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
-      console.log('inputIdentifier', inputValue)
-
       dispatchFormState({
         type: FORM_INPUT_UPDATE,
         value: inputValue,
@@ -91,11 +89,13 @@ export const Username = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Ionicons name="md-person" size={300} color="#26AAE2" />
-      <View style={styles.inputContainer}>
-        <KeyboardAvoidingView behavior="padding" style={styles.poweredInputContainer}>
+      <View style={styles.icon}>
+        <Ionicons name="md-person" size={300} color="#26AAE2" />
+      </View>
+      <KeyboardAvoidingView behavior="position" style={styles.buttonAndInput}>
+        <View style={styles.inputContainer}>
           <CustomInput
-            placeholder="First name"
+            placeholder="Please enter your full name..."
             initialValue={formState.inputValues.userName}
             keyboardType="default"
             autoCapitalize="sentences"
@@ -107,7 +107,7 @@ export const Username = ({navigation}) => {
             minLength={1}
             required
           />
-        </KeyboardAvoidingView>
+        </View>
         <CustomButtonIcon
           style={styles.btns}
           title="Submit"
@@ -116,7 +116,7 @@ export const Username = ({navigation}) => {
           }}
           iconTwo="keyboard-arrow-right"
         />
-      </View>
+      </KeyboardAvoidingView>
     </View>
   )
 }
@@ -125,18 +125,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: 'column',
+  },
+  buttonAndInput: {
+    flex: 0.4,
+    alignSelf: 'stretch',
   },
   inputContainer: {
-    flex: 0.2,
-    width: '100%',
+    alignSelf: 'stretch',
     color: 'white',
-  },
-  poweredInputContainer: {
-    marginTop: 50,
     marginHorizontal: 20,
   },
+
   icon: {
-    flex: 0.7,
+    flex: 1.3,
+    paddingTop: 20,
   },
 })
