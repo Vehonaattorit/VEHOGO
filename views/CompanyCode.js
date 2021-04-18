@@ -12,13 +12,12 @@ export const CompanyCode = ({navigation, companyCode}) => {
       <Text style={{margin: 5}}>
         Share this code with members of your company
       </Text>
-      <Button
+      <CustomButtonIcon
         style={{alignSelf: 'center'}}
         onPress={Clipboard.setString(companyCode)}
-      >
-        <Icon active name="copy-outline" />
-        <Text>Copy to clipboard</Text>
-      </Button>
+        iconOne="copy-outline"
+        title="Copy to clipboard"
+      />
       <CustomButtonIcon
         style={{alignSelf: 'center', margin: 5}}
         onPress={() => {
