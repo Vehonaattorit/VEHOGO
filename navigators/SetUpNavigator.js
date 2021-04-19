@@ -17,18 +17,25 @@ const Stack = createStackNavigator()
 function SetUpStackNavigator() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        {/* <Stack.Screen
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: color.primaryLight,
+          },
+          headerTitleStyle: {
+            fontFamily: 'open-sans-semi-bold',
+            fontSize: 30,
+            justifyContent: 'center',
+            flex: 1,
+          },
+          headerTintColor: color.primary,
+        }}
+      >
+        <Stack.Screen
           name="VerifyEmail"
           component={VerifyEmail}
           options={() => ({
             title: 'Verify Email',
-            headerTitleStyle: {
-              fontSize: 30,
-              textAlign: 'center',
-              flex: 1,
-            },
-            headerTintColor: '#000000',
             headerLeft: () => (
               <IconButton
                 icon="logout"
@@ -40,24 +47,12 @@ function SetUpStackNavigator() {
               />
             ),
           })}
-          headerStyle={{
-            backgroundColor: 'black',
-          }}
-        /> */}
+        />
         <Stack.Screen
           name="Company"
           component={Company}
           options={{
             title: 'Create or join',
-            headerTitleStyle: {
-              fontSize: 30,
-              textAlign: 'center',
-              flex: 1,
-            },
-            headerTintColor: '#000000',
-          }}
-          headerStyle={{
-            backgroundColor: 'black',
           }}
         />
         <Stack.Screen
@@ -65,26 +60,20 @@ function SetUpStackNavigator() {
           component={Travel}
           options={{
             title: 'Travel',
-            headerTitleStyle: {fontSize: 30, textAlign: 'center', flex: 1},
-            headerTintColor: '#000000',
-          }}
-          headerStyle={{
-            backgroundColor: 'black',
           }}
         />
         <Stack.Screen
           name="Address"
           component={Address}
           options={{
-            headerTitleStyle: {
-              fontSize: 30,
-              textAlign: 'center',
-              flex: 1,
-            },
-            headerTintColor: '#000000',
+            title: 'address',
           }}
-          headerStyle={{
-            backgroundColor: 'black',
+        />
+        <Stack.Screen
+          name="Username"
+          component={Username}
+          options={{
+            title: 'Username',
           }}
         />
         <Stack.Screen
@@ -92,11 +81,6 @@ function SetUpStackNavigator() {
           component={WorkingDays}
           options={{
             title: 'Working Days',
-            headerTitleStyle: {textAlign: 'center', flex: 1, fontSize: 30},
-            headerTintColor: '#000000',
-          }}
-          headerStyle={{
-            backgroundColor: 'black',
           }}
         />
 
@@ -105,19 +89,9 @@ function SetUpStackNavigator() {
           component={WorkingHours}
           options={{
             title: 'Working Hours',
-            headerTitleStyle: {
-              fontSize: 30,
-              textAlign: 'center',
-              flex: 1,
-            },
-            headerTintColor: '#000000',
-          }}
-          headerStyle={{
-            backgroundColor: 'black',
           }}
         />
         <Stack.Screen name="SetUpInit" component={SetUpInit} />
-        <Stack.Screen name="Settings" component={Settings} />
       </Stack.Navigator>
     </NavigationContainer>
   )

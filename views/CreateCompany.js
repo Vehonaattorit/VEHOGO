@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect} from 'react'
-import {KeyboardAvoidingView, StyleSheet, View} from 'react-native'
+import {StyleSheet, View} from 'react-native'
 import {Item} from 'native-base'
 import {googleMapsApiKey} from '../secrets/secrets'
 import {updateCompany} from '../controllers/companyController'
@@ -11,10 +11,18 @@ import GooglePlacesInput from '../components/GooglePlaceInput'
 import {updateCompanyCity} from '../controllers/companyCitiesController'
 import {CompanyCode} from './CompanyCode'
 import CustomButtonIcon from '../components/CustomIconButton'
-import {Input} from 'react-native-elements'
-import {RadioButton, Text} from 'react-native-paper';
 
-export const CreateCompany = ({navigation, setShowCreate, setShowBtns, domain}) => {
+import {Input} from 'react-native-elements'
+import {RadioButton, Text} from 'react-native-paper'
+
+import CustomInput from '../components/CustomInput'
+
+export const CreateCompany = ({
+  navigation,
+  setShowCreate,
+  setShowBtns,
+  domain,
+}) => {
   const [companyAddress, setAddress] = useState('')
   const [companyName, setName] = useState('')
   const {user} = useContext(UserContext)
@@ -40,7 +48,6 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns, domain}) 
     }
     return result
   }
-
 
   const setCompanyName = (companyName) => {
     setName(companyName)
@@ -98,7 +105,6 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns, domain}) 
   }
   const sendCompanyData = async () => {
     if (companyAddress.length > 0 && companyName.length > 0) {
-
       const data = await getCompanyGeoLocation()
 
       let domainJoin
@@ -107,7 +113,6 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns, domain}) 
       } else {
         domainJoin = false
       }
-
 
       updateCompanyCity(data.city)
       const companyId = await updateCompany(
@@ -120,7 +125,7 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns, domain}) 
           companyCode: companyCode,
           postalCode: data.postalCode,
           domain: domain,
-          domainJoin: domainJoin
+          domainJoin: domainJoin,
         })
       )
 
@@ -144,12 +149,12 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns, domain}) 
     <View style={{flex: 1, justifyContent: 'space-around'}}>
       {!showCode ? (
         <>
-          <View>
+          <View style={styles.inputContainer}>
             <Item>
-              <Input
+              <CustomInput
                 placeholder="Company name"
                 value={companyName}
-                onChangeText={event => setCompanyName(event)}
+                onChangeText={(event) => setCompanyName(event)}
                 errorMessage={
                   companyName.length < 1 &&
                   'Company name must be at least 1 character long'
@@ -157,7 +162,7 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns, domain}) 
               />
             </Item>
             <Item>
-              <Input
+              <CustomInput
                 placeholder="Company join code"
                 value={companyCode}
                 onChangeText={setCompanyCode}
@@ -167,30 +172,39 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns, domain}) 
                 }
               />
             </Item>
-            <RadioButton.Group onValueChange={newValue => setValue(newValue)} value={value}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-
-                  <RadioButton
-                    value="code"
-                  />
-                  <Text>Only code joining</Text>
-                </View>
-                <View style={{flexDirection: 'row',  alignItems: 'center'}}>
-
-                  <RadioButton
-                    value="both"
-                  />
-                  <Text>Allow domain joining</Text>
-                </View>
-              </RadioButton.Group>
             <Item>
               <GooglePlacesInput setAddress={setAddress} />
             </Item>
+            <RadioButton.Group
+              onValueChange={(newValue) => setValue(newValue)}
+              value={value}
+            >
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginLeft: 10,
+                  marginTop: 5,
+                  alignItems: 'center',
+                }}
+              >
+                <RadioButton value="code" backgroundColor="red" />
+                <Text>Only code joining</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  marginLeft: 10,
+                  alignItems: 'center',
+                }}
+              >
+                <RadioButton value="both" />
+                <Text>Allow domain joining</Text>
+              </View>
+            </RadioButton.Group>
           </View>
           <View style={styles.btnContainer}>
-            <View style={styles.continueBtnContainer}>
+            <View style={styles.btns}>
               <CustomButtonIcon
-                style={styles.btns}
                 onPress={() => {
                   sendCompanyData()
                 }}
@@ -198,10 +212,9 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns, domain}) 
                 iconTwo="keyboard-arrow-right"
               />
             </View>
-            <View style={styles.cancelBtnContainer}>
+            <View style={styles.btns}>
               <CustomButtonIcon
                 iconOne="keyboard-arrow-left"
-                style={styles.btns}
                 onPress={() => {
                   setShowCreate(false)
                   setShowBtns(true)
@@ -225,47 +238,19 @@ export const CreateCompany = ({navigation, setShowCreate, setShowBtns, domain}) 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    justifyContent: 'space-around',
   },
   inputContainer: {
-    width: '100%',
     flexDirection: 'column',
-    flex: 1,
+    flex: 1.5,
+    width: '100%',
     paddingHorizontal: 20,
     justifyContent: 'center',
-    alignItems: 'center',
-  },
-  companyNameInputContainer: {
-    height: 50,
-    alignSelf: 'stretch',
-    width: '100%',
-    borderRadius: 10,
-    paddingTop: 30,
-    paddingBottom: 30,
-    paddingLeft: 15,
-    paddingRight: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#E1F5FD',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
 
-  companyNameTextInput: {
-    fontSize: 15,
-    paddingHorizontal: 10,
-    borderRadius: 10,
-    backgroundColor: 'white',
-    height: 50,
-    width: '100%',
-  },
-  companyAddressInputContainer: {
+  btnContainer: {
+    flex: 0.5,
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     maxHeight: 152,
@@ -285,7 +270,9 @@ const styles = StyleSheet.create({
   cancelBtnContainer: {
     alignSelf: 'stretch',
   },
+
   btns: {
+    alignSelf: 'stretch',
     margin: 5,
   },
 })
