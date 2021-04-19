@@ -119,18 +119,19 @@ export const SetUpInit = ({route}) => {
       user.setupIsCompleted = true
       await updateUser(user)
       let token = await fire.auth().currentUser.getIdTokenResult()
-
+      console.log('token is',token.token)
       const response = await fetch(
         `https://us-central1-veho-go.cloudfunctions.net/getBestRoutes`,
         {
+          method: 'POST',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
           },
-          method: 'POST',
-          body: JSON.stringify({idToken: token}),
+          body: JSON.stringify({idToken: token.token}),
         }
       )
+      console.log('response from cloud function', response)
       if (user.travelPreference === 'driver') await setupWorkTripDocs()
     }
   }
