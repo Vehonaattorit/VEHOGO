@@ -24,14 +24,14 @@ export const DriverStartRide = ({navigation, route}) => {
 
   const {user} = useContext(UserContext)
 
-  const [isDriving, setIsDriving] = useState(workTrip.isDriving)
+  // const [isDriving, setIsDriving] = useState(workTrip.isDriving)
 
   const startDriving = async () => {
     let workTripToUpdate = workTrip
 
     workTripToUpdate.isDriving = !workTrip.isDriving
 
-    setIsDriving(workTripToUpdate.isDriving)
+    // setIsDriving(workTripToUpdate.isDriving)
     await updateWorkTrip(user.company.id, workTripToUpdate)
 
     if (workTripToUpdate.isDriving) {
@@ -40,29 +40,29 @@ export const DriverStartRide = ({navigation, route}) => {
       })
     }
 
-    let userIds = workTripToUpdate.scheduledDrive.stops.map(
-      (item) => item.userID
-    )
+    // let userIds = workTripToUpdate.scheduledDrive.stops.map(
+    //   (item) => item.userID
+    // )
 
-    userIds = userIds.filter((item) => item !== user.id)
+    // userIds = userIds.filter((item) => item !== user.id)
 
-    for (const userId of userIds) {
-      const notifyUser = await getUser(userId)
+    // for (const userId of userIds) {
+    //   const notifyUser = await getUser(userId)
 
-      await fetch('https://exp.host/--/api/v2/push/send', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Accept-Encoding': 'gzip, deflate',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          to: notifyUser.ownerPushToken,
-          title: `Driver has started his ride to ${workTripToUpdate.goingTo}.`,
-          body: `${workTripToUpdate.driverName} is coming to pick you up.`,
-        }),
-      })
-    }
+    //   await fetch('https://exp.host/--/api/v2/push/send', {
+    //     method: 'POST',
+    //     headers: {
+    //       Accept: 'application/json',
+    //       'Accept-Encoding': 'gzip, deflate',
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //       to: notifyUser.ownerPushToken,
+    //       title: `Driver has started his ride to ${workTripToUpdate.goingTo}.`,
+    //       body: `${workTripToUpdate.driverName} is coming to pick you up.`,
+    //     }),
+    //   })
+    // }
   }
 
   useEffect(() => {
@@ -92,17 +92,19 @@ export const DriverStartRide = ({navigation, route}) => {
           </Text>
           <Button
             large
-            style={{
-              ...styles.button,
-              backgroundColor: isDriving
-                ? color.radicalRed
-                : color.malachiteGreen,
-            }}
+            style={styles.button}
+            // style={{
+            //   ...styles.button,
+            //   backgroundColor: isDriving
+            //     ? color.radicalRed
+            //     : color.malachiteGreen,
+            // }}
             onPress={startDriving}
           >
-            <Text style={styles.btntxt}>
+            <Text style={styles.btntxt}>Stop Driving</Text>
+            {/* <Text style={styles.btntxt}>
               {isDriving ? 'Stop Driving' : 'Start Driving'}
-            </Text>
+            </Text> */}
           </Button>
         </View>
       </View>
@@ -149,6 +151,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderRadius: 15,
     padding: 20,
+    backgroundColor: color.malachiteGreen,
     alignSelf: 'center',
   },
   btntxt: {
