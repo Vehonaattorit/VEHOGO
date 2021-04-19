@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     justifyContent: 'center',
+    backgroundColor: '#fff',
     alignItems: 'center',
   },
   button: {

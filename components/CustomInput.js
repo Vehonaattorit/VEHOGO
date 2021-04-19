@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#E1F5FD',
     width: '100%',
-    borderRadius: 10,
+    borderRadius: 5,
     marginBottom: 10,
     backgroundColor: '#E1F5FD',
     shadowColor: '#000',
@@ -96,14 +96,14 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    margin: 10,
+    flex: 1
   },
   input: {
     backgroundColor: '#fff',
     width: '100%',
-    padding: 15.5,
-    fontSize: 15.5,
-    borderRadius: 10,
+    padding: 12,
+    fontSize: 15,
+    borderRadius: 5,
   },
   errorContainer: {
     marginVertical: 5,

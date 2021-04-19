@@ -38,7 +38,7 @@ const GooglePlacesInput = ({
           backgroundColor: '#E1F5FD',
           paddingHorizontal: 5,
           shadowColor: '#000',
-          borderRadius: 10,
+          borderRadius: 5,
           shadowOffset: {
             width: 0,
             height: 2,
@@ -50,7 +50,7 @@ const GooglePlacesInput = ({
         textInput: {
           marginHorizontal: 6,
           marginTop: 5,
-          borderRadius: 10,
+          borderRadius: 5,
           height: 50,
           color: '#5d5d5d',
           fontSize: 16,

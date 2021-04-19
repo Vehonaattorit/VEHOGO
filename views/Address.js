@@ -85,15 +85,15 @@ export const Address = ({navigation}) => {
           defaultValue={user.homeAddress}
           setAddress={setAddress}
         />
-        {showSubmit && (
-          <CustomButtonIcon
-            style={styles.btn}
-            title="Submit"
-            onPress={submitHandler}
-            iconTwo="keyboard-arrow-right"
-          />
-        )}
       </KeyboardAvoidingView>
+      {showSubmit && (
+        <CustomButtonIcon
+          style={styles.btn}
+          title="Submit"
+          onPress={submitHandler}
+          iconTwo="keyboard-arrow-right"
+        />
+      )}
     </View>
   )
 }
@@ -104,24 +104,23 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 50,
   },
   inputContainer: {
-    height: 300,
-    bottom: 20,
+    height: 100,
     width: '90%',
     color: 'white',
   },
   customInput: {
-    marginTop: 50,
     shadowColor: 'rgba(0, 0, 0, 0.4)',
     shadowOpacity: 0.8,
     elevation: 6,
     shadowRadius: 15,
     shadowOffset: {width: 1, height: 13},
   },
-  btnContainer: {},
   btn: {
+    height: 100,
     width: '100%',
   },
-  icon: {},
+  icon: {flex: 1},
 })

@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-around',
+    backgroundColor: '#fff',
   },
   view: {
     flex: 1,
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     alignSelf: 'stretch',
   },
- 
+
   inputContainer: {
     justifyContent: 'center',
     alignItems: 'center',
