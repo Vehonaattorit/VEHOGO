@@ -105,14 +105,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   inputContainer: {
-    maxHeight: 300,
-    minHeight: 80,
-    marginHorizontal: 20,
-    alignSelf: 'stretch',
+    height: 300,
+    bottom: 20,
+    width: '90%',
     color: 'white',
   },
-  btn: {
-    alignSelf: 'stretch',
+  customInput: {
+    marginTop: 50,
+    shadowColor: 'rgba(0, 0, 0, 0.4)',
+    shadowOpacity: 0.8,
+    elevation: 6,
+    shadowRadius: 15,
+    shadowOffset: {width: 1, height: 13},
   },
-  icon: {flex: 0.9},
+  btnContainer: {},
+  btn: {
+    width: '100%',
+  },
+  icon: {},
 })
