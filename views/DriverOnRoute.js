@@ -5,9 +5,10 @@ import {
   Text,
   Dimensions,
   TouchableOpacity,
+  Image
 } from 'react-native'
 import {Container} from 'native-base'
-import MapView from 'react-native-maps'
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
 import decodePolyline from 'decode-google-map-polyline'
 import {
   updateWorkTrip,
@@ -39,6 +40,7 @@ import QuickMessagesMenu from '../components/QuickMessagesMenu'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 
+
 const db = firebase.firestore()
 
 export const DriverOnRoute = ({navigation, route}) => {
@@ -69,8 +71,16 @@ export const DriverOnRoute = ({navigation, route}) => {
 
   const [markers, setMarkers] = useState([
     workTrip.scheduledDrive.stops.map((stop) => (
-      <MapView.Marker
-        image={
+
+      <Marker
+        key={stop.address}
+        identifier={stop.address}
+        coordinate={{
+          latitude: stop.location.latitude,
+          longitude: stop.location.longitude,
+        }}
+        title={stop.address}>
+        <Image source={
           stop.stopName == 'Home' || stop.stopName == user.company.name
             ? stop.stopName == 'Home'
               ? passengerStops[workTrip.scheduledDrive.nextStop - 1].stopName ==
@@ -79,21 +89,19 @@ export const DriverOnRoute = ({navigation, route}) => {
                 : require('../images/home-map-icon-white.png')
               : passengerStops[workTrip.scheduledDrive.nextStop - 1].stopName ==
                 stop.stopName
-              ? require('../images/work-map-icon-blue.png')
-              : require('../images/work-map-icon-white.png')
+                ? require('../images/work-map-icon-blue.png')
+                : require('../images/work-map-icon-white.png')
             : workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop]
-                .stopName == stop.stopName
-            ? require('../images/passenger-map-icon-blue.png')
-            : require('../images/passenger-map-icon-white.png')
+              .stopName == stop.stopName
+              ? require('../images/passenger-map-icon-blue.png')
+              : require('../images/passenger-map-icon-white.png')
         }
-        key={stop.address}
-        identifier={stop.address}
-        coordinate={{
-          latitude: stop.location.latitude,
-          longitude: stop.location.longitude,
-        }}
-        title={stop.address}
-      />
+          style={{height: 45, width: 45}}
+        >
+
+        </Image>
+      </Marker>
+
     )),
   ])
 
@@ -175,31 +183,36 @@ export const DriverOnRoute = ({navigation, route}) => {
   const showNextStop = () => {
     setMarkers(
       workTrip.scheduledDrive.stops.map((stop) => (
-        <MapView.Marker
-          image={
-            stop.stopName == 'Home' || stop.stopName == user.company.name
-              ? stop.stopName == 'Home'
-                ? passengerStops[workTrip.scheduledDrive.nextStop - 1]
-                    .stopName == stop.stopName
-                  ? require('../images/home-map-icon-blue.png')
-                  : require('../images/home-map-icon-white.png')
-                : passengerStops[workTrip.scheduledDrive.nextStop - 1]
-                    .stopName == stop.stopName
-                ? require('../images/work-map-icon-blue.png')
-                : require('../images/work-map-icon-white.png')
-              : workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop]
-                  .stopName == stop.stopName
-              ? require('../images/passenger-map-icon-blue.png')
-              : require('../images/passenger-map-icon-white.png')
-          }
+
+        <Marker
           key={stop.address}
           identifier={stop.address}
           coordinate={{
             latitude: stop.location.latitude,
             longitude: stop.location.longitude,
           }}
-          title={stop.address}
-        />
+          title={stop.address}>
+          <Image source={
+            stop.stopName == 'Home' || stop.stopName == user.company.name
+              ? stop.stopName == 'Home'
+                ? passengerStops[workTrip.scheduledDrive.nextStop - 1].stopName ==
+                  stop.stopName
+                  ? require('../images/home-map-icon-blue.png')
+                  : require('../images/home-map-icon-white.png')
+                : passengerStops[workTrip.scheduledDrive.nextStop - 1].stopName ==
+                  stop.stopName
+                  ? require('../images/work-map-icon-blue.png')
+                  : require('../images/work-map-icon-white.png')
+              : workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop]
+                .stopName == stop.stopName
+                ? require('../images/passenger-map-icon-blue.png')
+                : require('../images/passenger-map-icon-white.png')}
+            style={{height: 45, width: 45}}
+          >
+
+          </Image>
+        </Marker>
+
       ))
     )
   }
@@ -270,15 +283,19 @@ export const DriverOnRoute = ({navigation, route}) => {
       return (
         <>
           {doc != undefined && doc.driverCurrentLocation != undefined ? (
-            <MapView.Marker
-              image={require('../images/car-marker.png')}
+
+            <Marker
               key={'driver-car'}
               coordinate={{
                 latitude: doc.driverCurrentLocation.location.latitude,
                 longitude: doc.driverCurrentLocation.location.longitude,
               }}
-              title="car"
-            />
+              title="car">
+              <Image source={require('../images/car-marker.png')}
+                style={{height: 45, width: 45}}
+              >
+              </Image>
+            </Marker>
           ) : (
             <View />
           )}
@@ -470,7 +487,7 @@ export const DriverOnRoute = ({navigation, route}) => {
           <MapView
             ref={mapRef}
             style={styles.mapStyle}
-            provider={MapView.PROVIDER_GOOGLE}
+            provider={PROVIDER_GOOGLE}
             initialRegion={{
               latitude: workTrip.scheduledDrive.stops[0].location.latitude,
               longitude: workTrip.scheduledDrive.stops[0].location.longitude,
