@@ -26,6 +26,8 @@ export const useChatRoomHooks = () => {
           }
         })
 
+        console.log('chatRooms', chatRooms)
+
         setChatRooms(chatRooms)
       })
     return () => chatRoomsListener()

@@ -123,8 +123,6 @@ export const MainPage = ({navigation}) => {
     checkTravelPreference()
     checkNotificationsPermissions()
 
-    let passengerRidesListener
-
     if (travelPreference === 'driver') {
       driverTripStream()
     }
@@ -161,12 +159,14 @@ export const MainPage = ({navigation}) => {
     navigation.setOptions({
       headerRight: () => (
         <HeaderButtons HeaderButtonComponent={HeaderButton}>
-          <Item
-            title="Filter"
-            iconComponent={Ionicons}
-            iconName="filter"
-            onPress={() => setOpen(!open)}
-          />
+          {user.travelPreference === 'passenger' && (
+            <Item
+              title="Filter"
+              iconComponent={Ionicons}
+              iconName="filter"
+              onPress={() => setOpen(!open)}
+            />
+          )}
           <Item
             title="Account Settings"
             iconComponent={MaterialCommunityIcons}
@@ -214,7 +214,11 @@ export const MainPage = ({navigation}) => {
       return (
         <Container>
           {driverTrips && (
-            <RideStartBar user={user} navigation={navigation} drivingTrips={driverTrips}></RideStartBar>
+            <RideStartBar
+              user={user}
+              navigation={navigation}
+              drivingTrips={driverTrips}
+            ></RideStartBar>
           )}
 
           <View style={styles.listView}>
@@ -294,13 +298,17 @@ export const MainPage = ({navigation}) => {
           {travelPreference === 'passenger'
             ? displayPassengerList()
             : displayDriverList()}
-          <View>
-            <MainPageButtons
-              travelPreference={travelPreference}
-              navigation={navigation}
-              driverTripList={driverTrips}
-            />
-          </View>
+
+          {driverTrips && (
+            <View>
+              <MainPageButtons
+                user={user}
+                travelPreference={travelPreference}
+                navigation={navigation}
+                drivingTrips={driverTrips}
+              />
+            </View>
+          )}
         </MenuDrawer>
       </View>
     </>

@@ -88,6 +88,10 @@ export async function sendMessage(chatRoomID, chatMessage) {
 
     let chatRoomRef = db.collection('chats').doc(chatRoomID)
 
+    console.log('chatRoom.id', chatRoom.id)
+    console.log('text: chatMessage.text,', chatMessage.text)
+    console.log('createdAt: chatMessage.createdAt,', chatMessage.createdAt)
+
     chatRoomRef.withConverter(chatRoomConverter).set(
       {
         latestMessage: {
