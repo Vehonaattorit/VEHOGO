@@ -132,9 +132,9 @@ export const DriverOnRoute = ({navigation, route}) => {
     )
 
     //always show end route if distance under 100m
-    if (distanceToEnd >= 0.1) {
+    if (distanceToEnd >= 0.3) {
       //show NextStopBar if distance less than 100m
-      if (distance <= 0.1) {
+      if (distance <= 0.3) {
         //if next stop is last show StopBar
         setShowNextStopBar(true)
       }
@@ -144,22 +144,27 @@ export const DriverOnRoute = ({navigation, route}) => {
   }
 
   const changeNextStop = async () => {
+    console.log('stops.length', workTrip.scheduledDrive.stops.length)
+    console.log('stops.length - 1', workTrip.scheduledDrive.stops.length - 1)
+    console.log(
+      'workTrip.scheduledDrive.nextStop',
+      workTrip.scheduledDrive.nextStop
+    )
     setShowNextStopBar(false)
     if (
-      workTrip.scheduledDrive.stops.length - 1 !==
-      workTrip.scheduledDrive.nextStop
+      workTrip.scheduledDrive.stops.length !== workTrip.scheduledDrive.nextStop
     ) {
       workTrip.scheduledDrive.nextStop += 1
       await updateWorkTrip(user.company.id, workTrip)
       //check if stop is laststop
       if (
-        workTrip.scheduledDrive.stops.length - 1 ===
+        workTrip.scheduledDrive.stops.length ===
         workTrip.scheduledDrive.nextStop
       ) {
         workTrip.isDriving = false
         await updateWorkTrip(user.company.id, workTrip)
       } else {
-        scrollRef.current.snapToItem(workTrip.scheduledDrive.nextStop - 1)
+        scrollRef.current.snapToItem(workTrip.scheduledDrive.nextStop)
       }
     }
     showNextStop()
@@ -222,7 +227,7 @@ export const DriverOnRoute = ({navigation, route}) => {
     }
 
     setTimeout(() => {
-      if (mapRef != undefined) {
+      if (mapRef != undefined || mapRef != null) {
         mapRef.current.fitToSuppliedMarkers(
           workTrip.scheduledDrive.stops.map((stop) => stop.address),
           {

@@ -11,6 +11,7 @@ import {updateWorkTrip} from '../controllers/workTripController'
 import firebase from 'firebase'
 import CustomButtonIcon from '../components/CustomIconButton'
 import {userConverter} from '../models/user'
+import fire from '../firebase/fire'
 
 export const SetUpInit = ({route}) => {
   const {user} = useContext(UserContext)
@@ -117,7 +118,20 @@ export const SetUpInit = ({route}) => {
     if (!user.setupIsCompleted) {
       user.setupIsCompleted = true
       await updateUser(user)
-
+      let token = await fire.auth().currentUser.getIdTokenResult()
+      console.log('token is',token.token)
+      const response = await fetch(
+        `https://us-central1-veho-go.cloudfunctions.net/getBestRoutes`,
+        {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({idToken: token.token}),
+        }
+      )
+      console.log('response from cloud function', response)
       if (user.travelPreference === 'driver') await setupWorkTripDocs()
     }
   }

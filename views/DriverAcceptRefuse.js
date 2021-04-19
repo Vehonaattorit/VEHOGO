@@ -9,8 +9,15 @@ import decodePolyline from 'decode-google-map-polyline'
 import {drivingTime} from '../utils/utils'
 
 export const DriverAcceptRefuse = ({navigation, route}) => {
-  const {singleItem, hasPassenger, arrivalTime, rideRequest} = route.params
+  const {
+    singleItem,
+    isPassengerIncluded,
+    arrivalTime,
+    rideRequest,
+  } = route.params
   const {user} = useContext(UserContext)
+
+  console.log('DriverAcceptRefuse', isPassengerIncluded)
 
   const [mapRef, setMapRef] = useState(null)
   const [routeCoordinates, setRouteCoordinates] = useState([])
@@ -111,7 +118,7 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
             <PassengerRideRequestButton
               navigation={navigation}
               user={user}
-              hasPassenger={hasPassenger}
+              isPassengerIncluded={isPassengerIncluded}
               workTrip={singleItem}
             />
           ) : (

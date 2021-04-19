@@ -1,7 +1,12 @@
 import React, {useEffect, useRef} from 'react'
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete'
 import {googleMapsApiKey} from '../secrets/secrets'
-const GooglePlacesInput = ({setAddress, defaultValue}) => {
+const GooglePlacesInput = ({
+  setAddress,
+  setShowSubmit,
+  showSubmit,
+  defaultValue,
+}) => {
   const ref = useRef()
 
   useEffect(() => {
@@ -10,9 +15,17 @@ const GooglePlacesInput = ({setAddress, defaultValue}) => {
 
   return (
     <GooglePlacesAutocomplete
+      textInputProps={{
+        onFocus: () => {
+          setShowSubmit(!showSubmit)
+        },
+        onEndEditing: () => {
+          setShowSubmit(true)
+        },
+      }}
       placeholder={defaultValue || 'Search address'}
       onPress={(data, details = null) => {
-        // 'details' is provided when fetchDetails = true
+        setShowSubmit(true)
         setAddress(data.description)
       }}
       query={{

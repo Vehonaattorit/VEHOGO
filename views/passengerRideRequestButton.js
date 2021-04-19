@@ -17,7 +17,7 @@ import {color} from '../constants/colors'
 const PassengerRideRequestButton = ({
   user,
   navigation,
-  hasPassenger,
+  isPassengerIncluded,
   workTrip,
 }) => {
   const [ownerPushToken, setOwnerPushToken] = useState(null)
@@ -57,7 +57,7 @@ const PassengerRideRequestButton = ({
   }, [])
 
   const requestRide = async () => {
-    if (!hasPassenger && !alreadyRequested) {
+    if (!isPassengerIncluded && !alreadyRequested) {
       await updateRideRequest(
         user.company.id,
         new RideRequest({
@@ -146,17 +146,19 @@ const PassengerRideRequestButton = ({
   return (
     <View style={styles.buttons}>
       <Button
-        // disabled={hasPassenger}
+        // disabled={isPassengerIncluded}
         // If passenger is not ONE of the stops -> request ride, else "cancel ride"
-        onPress={!hasPassenger ? requestRide : cancelRide}
+        onPress={!isPassengerIncluded ? requestRide : cancelRide}
         large
         style={{
           ...styles.button,
-          backgroundColor: hasPassenger ? color.radicalRed : color.darkBlue,
+          backgroundColor: isPassengerIncluded
+            ? color.radicalRed
+            : color.darkBlue,
         }}
       >
         <Text style={styles.btntxt}>
-          {hasPassenger ? 'Cancel Ride' : 'Request'}
+          {isPassengerIncluded ? 'Cancel Ride' : 'Request'}
         </Text>
       </Button>
     </View>

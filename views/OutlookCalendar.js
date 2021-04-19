@@ -124,7 +124,7 @@ export const OutlookCalendar = ({navigation}) => {
           title={state.userToken ? 'Sign out' : ' Log in'}
           onPress={state.userToken ? signOutAsync : signInAsync}
         />
-
+        {/* 
         <Button
           color={color.darkBlue}
           title="Create Event"
@@ -157,7 +157,7 @@ export const OutlookCalendar = ({navigation}) => {
               ],
             })
           }}
-        />
+        /> */}
         {/*  subject: 'Let\'s go for lunch',
   body: {
     contentType: 'HTML',
