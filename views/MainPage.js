@@ -95,25 +95,28 @@ export const MainPage = ({navigation}) => {
   //data stream for driver trips
   const driverTripStream = async () => {
     // MUISTA LISÄTÄ !!!
-    // const currentWeekDay = new Date().getDay()
-    const currentWeekDay = 5
+    const currentWeekDay = new Date().getDay()
+    //const currentWeekDay = 5
 
     setCurrentWeekDay(currentWeekDay)
 
     // MUISTA POISTAA !!!
+    try {
+      let ref = await workTripMultiQueryStream(user.company.id, [
+        {field: 'workDayNum', condition: '==', value: currentWeekDay},
+        {field: 'driverID', condition: '==', value: user.id},
+      ])
+      ref.onSnapshot((querySnapshot) => {
+        var trips = []
 
-    let ref = await workTripMultiQueryStream(user.company.id, [
-      {field: 'workDayNum', condition: '==', value: currentWeekDay},
-      {field: 'driverID', condition: '==', value: user.id},
-    ])
-    ref.onSnapshot((querySnapshot) => {
-      var trips = []
-
-      querySnapshot.forEach((doc) => {
-        trips.push(doc.data())
+        querySnapshot.forEach((doc) => {
+          trips.push(doc.data())
+        })
+        setDriverTrips(trips)
       })
-      setDriverTrips(trips)
-    })
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   useEffect(() => {
@@ -211,7 +214,7 @@ export const MainPage = ({navigation}) => {
       return (
         <Container>
           {driverTrips && (
-            <RideStartBar user={user} navigation={navigation}></RideStartBar>
+            <RideStartBar user={user} navigation={navigation} drivingTrips={driverTrips}></RideStartBar>
           )}
 
           <View style={styles.listView}>

@@ -109,6 +109,8 @@ export const DriverOnRoute = ({navigation, route}) => {
 
   async function callUpdateUserPosition() {
     //update driver position to firebase
+    console.log('user', user)
+    console.log('id', workTrip.id)
     let location = await updateUserPosition(user, workTrip.id)
 
     //calculate distance between next stop and current position

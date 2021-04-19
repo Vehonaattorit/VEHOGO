@@ -144,7 +144,12 @@ export const useDriverTripListHook = (user, querys) => {
 
         setWorkTrips(driverTrips)
         setIsLoading(false)
+        console.log('loading false')
       })
+
+      return () => {
+        workTripsListener()
+      }
     }
 
     fetchWorkTrips()
