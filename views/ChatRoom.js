@@ -24,11 +24,12 @@ import {color} from '../constants/colors'
 
 export default ChatRoom = ({navigation, route}) => {
   const {chatRoom, chatRoomTitle} = route.params
+
   const [ownerPushToken, setOwnerPushToken] = useState(null)
   const {messages} = useMessageHooks(chatRoom, user)
 
-  const onQuickReply = (quickReply) => {
-    handleSend([
+  const onQuickReply = async (quickReply) => {
+    await handleSend([
       {
         text: quickReply[0].title,
       },
@@ -42,6 +43,9 @@ export default ChatRoom = ({navigation, route}) => {
 
   const getOwnerPushToken = async () => {
     const {passengerID, driverID} = chatRoom
+
+    console.log('passengerID', passengerID)
+    console.log('driverID', driverID)
 
     // Get opposite user's ID
     let currentUser =
@@ -73,6 +77,8 @@ export default ChatRoom = ({navigation, route}) => {
     const text = messages[0].text
 
     const {uid} = chatUser
+
+    console.log('handleSend', chatRoom.id)
 
     await sendMessage(
       chatRoom.id,

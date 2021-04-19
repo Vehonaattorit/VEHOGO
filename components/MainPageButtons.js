@@ -1,5 +1,5 @@
 import React, {useEffect, useContext, useState} from 'react'
-import {Dimensions, FlatList} from 'react-native'
+import {Dimensions, View, Text, ActivityIndicator, FlatList} from 'react-native'
 
 import {Ionicons, FontAwesome5} from '@expo/vector-icons'
 
@@ -102,10 +102,6 @@ const MainPageButtons = ({
     }
   }
 
-  useEffect(() => {
-    getNextRide()
-  }, [])
-
   const mainPageButtons = [
     {
       id: '1',
@@ -164,20 +160,28 @@ const MainPageButtons = ({
     },
   ]
   const renderGridItem = (itemData) => {
+    // If driverTrips have loaded
+
     const travelPref = itemData.item.travelPreference.some((trav) =>
       trav.includes(travelPreference)
     )
 
     if (travelPref)
       return (
-        <MainPageButton
-          title={itemData.item.title}
-          onPress={itemData.item.onPress}
-        >
-          {itemData.item.icon}
-        </MainPageButton>
+        <>
+          <MainPageButton
+            title={itemData.item.title}
+            onPress={itemData.item.onPress}
+          >
+            {itemData.item.icon}
+          </MainPageButton>
+        </>
       )
   }
+
+  useEffect(() => {
+    getNextRide()
+  }, [drivingTrips])
 
   return (
     <FlatList

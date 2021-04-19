@@ -75,6 +75,14 @@ export const MainPage = ({navigation}) => {
     {field: 'isDriving', condition: '==', value: true},
   ])
 
+  console.log(
+    'user',
+    user.homeAddress,
+    user.homeLocation,
+    user.userName,
+    user.id
+  )
+
   // console.log('activeRide', activeRide)
   // [END]
 
@@ -177,6 +185,8 @@ export const MainPage = ({navigation}) => {
       ),
     })
   }, [])
+
+  console.log('WASIS ACTIVERIDE', activeRide)
 
   const displayPassengerList = () => {
     return (
@@ -299,16 +309,14 @@ export const MainPage = ({navigation}) => {
             ? displayPassengerList()
             : displayDriverList()}
 
-          {driverTrips && (
-            <View>
-              <MainPageButtons
-                user={user}
-                travelPreference={travelPreference}
-                navigation={navigation}
-                drivingTrips={driverTrips}
-              />
-            </View>
-          )}
+          <View>
+            <MainPageButtons
+              user={user}
+              travelPreference={travelPreference}
+              navigation={navigation}
+              drivingTrips={driverTrips}
+            />
+          </View>
         </MenuDrawer>
       </View>
     </>

@@ -10,6 +10,7 @@ const db = firebase.firestore()
 
 export const useChatRoomHooks = () => {
   const [chatRooms, setChatRooms] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const chatRoomsListener = db
@@ -28,6 +29,7 @@ export const useChatRoomHooks = () => {
 
         console.log('chatRooms', chatRooms)
 
+        setIsLoading(false)
         setChatRooms(chatRooms)
       })
     return () => chatRoomsListener()
@@ -35,6 +37,7 @@ export const useChatRoomHooks = () => {
 
   return {
     chatRooms,
+    isLoading,
   }
 }
 
@@ -121,10 +124,14 @@ export const queryChatRoom = async (userID, driverID) => {
     },
   ])
 
+  console.log('ARE THERE ANY CHATROOMS ???')
+
   // Chatrooms array is empty
   let chatRoom
   if (typeof chatRooms !== 'undefined' && chatRooms.length === 0) {
     // if array is empty
+
+    console.log('If chatroom array is empty')
     chatRoom = await addChat(
       new ChatRoom({
         driverID: driverID,
@@ -133,6 +140,8 @@ export const queryChatRoom = async (userID, driverID) => {
     )
   } else {
     chatRoom = chatRooms[0]
+
+    console.log('If chat array is NOT EMPTY')
   }
 
   return chatRoom

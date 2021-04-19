@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useContext, useRef} from 'react'
 import {
+  ActivityIndicator,
   StyleSheet,
   View,
   Text,
@@ -56,7 +57,7 @@ export const DriverOnRoute = ({navigation, route}) => {
   // )
 
   const {user} = useContext(UserContext)
-  const {chatRooms} = useChatRoomHooks()
+  const {chatRooms, isLoading} = useChatRoomHooks()
   const {isDriving} = useIsDrivingHook(user, workTrip)
 
   let intervalTimer
@@ -296,22 +297,41 @@ export const DriverOnRoute = ({navigation, route}) => {
   }
 
   const createChatRoom = async (item) => {
+    console.log('THIS IS ITEM', item.stopName)
+
     const userID = user.travelPreference === 'passenger' ? item.id : item.userID
+
+    console.log('userID', userID)
 
     const chatRoomName =
       user.travelPreference === 'passenger'
         ? workTrip.driverName
         : item.stopName
 
-    console.log('userID', userID)
     console.log('workTrip.driverID', workTrip.driverID)
 
     const chatRoom = await queryChatRoom(userID, workTrip.driverID)
+
+    console.log('IS THIS CHATROOM', chatRoom)
 
     navigation.navigate('ChatRoom', {
       chatRoom,
       chatRoomTitle: chatRoomName,
     })
+    // const chatRoomName =
+    //   user.travelPreference === 'passenger'
+    //     ? workTrip.driverName
+    //     : item.stopName
+
+    // console.log('userID', userID)
+    // console.log('workTrip.driverID', workTrip.driverID)
+
+    // const chatRoom = await queryChatRoom(userID, workTrip.driverID)
+
+    // navigation.navigate('ChatRoom', {
+    //   chatRoom,
+    //   chatRoomTitle: chatRoomName,
+    // })
   }
 
   useEffect(() => {
@@ -391,6 +411,14 @@ export const DriverOnRoute = ({navigation, route}) => {
         <View style={styles.leftArrowContainer}>
           <AntDesign name="caretright" size={24} color={color.lightBlack} />
         </View>
+      </View>
+    )
+  }
+
+  if (isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color={color.primary} />
       </View>
     )
   }
@@ -504,6 +532,11 @@ export const DriverOnRoute = ({navigation, route}) => {
 }
 
 const styles = StyleSheet.create({
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   requestMapContent: {
     flex: 5,
     backgroundColor: 'black',
