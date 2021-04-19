@@ -146,6 +146,7 @@ export const Address = ({navigation}) => {
       <CustomButtonIcon
         style={styles.btn}
         title="Submit"
+        iconTwo="keyboard-arrow-right"
         onPress={submitHandler}
       />
     </KeyboardAvoidingView>
