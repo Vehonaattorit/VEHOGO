@@ -38,7 +38,6 @@ function MainStackNavigator() {
           },
           headerTitleStyle: {
             fontFamily: 'open-sans-semi-bold',
-            fontSize: 30,
             justifyContent: 'center',
             flex: 1,
           },

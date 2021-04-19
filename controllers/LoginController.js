@@ -3,11 +3,7 @@ import {updateUser} from '../controllers/userController'
 import {User} from '../models/user'
 
 export async function login(email, password) {
-  try {
-    await firebase.auth().signInWithEmailAndPassword(email, password)
-  } catch (e) {
-    return e.message
-  }
+  await firebase.auth().signInWithEmailAndPassword(email, password)
 }
 
 export async function register(email, password) {
@@ -41,7 +37,7 @@ export async function subscribeToAuth(authStateChanged) {
   })
 }
 
-const update = async(id) => {
+const update = async (id) => {
   await updateUser(new User({id: id}))
 }
 
