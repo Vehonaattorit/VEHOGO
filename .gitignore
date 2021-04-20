@@ -15,3 +15,7 @@ web-build/
 .env
 google-services.json
 *.log
+
+app.json
+
+google-services.json
