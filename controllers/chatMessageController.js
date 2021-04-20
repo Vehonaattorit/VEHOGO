@@ -75,6 +75,10 @@ export async function sendMessage(chatRoomID, chatMessage) {
       chatMessage._id = v4()
     }
 
+    console.log('PERKELE')
+    console.log('sendMessage chatRoomID', chatRoomID)
+    console.log('sendMessage chatMessage', chatMessage)
+
     // Create a new chat document
     let chatMessageRef = db
       .collection('chats')

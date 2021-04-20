@@ -75,6 +75,14 @@ export const MainPage = ({navigation}) => {
     {field: 'isDriving', condition: '==', value: true},
   ])
 
+  console.log(
+    'user',
+    user.homeAddress,
+    user.homeLocation,
+    user.userName,
+    user.id
+  )
+
   // console.log('activeRide', activeRide)
   // [END]
 
@@ -123,8 +131,6 @@ export const MainPage = ({navigation}) => {
     checkTravelPreference()
     checkNotificationsPermissions()
 
-    let passengerRidesListener
-
     if (travelPreference === 'driver') {
       driverTripStream()
     }
@@ -161,12 +167,14 @@ export const MainPage = ({navigation}) => {
     navigation.setOptions({
       headerRight: () => (
         <HeaderButtons HeaderButtonComponent={HeaderButton}>
-          <Item
-            title="Filter"
-            iconComponent={Ionicons}
-            iconName="filter"
-            onPress={() => setOpen(!open)}
-          />
+          {user.travelPreference === 'passenger' && (
+            <Item
+              title="Filter"
+              iconComponent={Ionicons}
+              iconName="filter"
+              onPress={() => setOpen(!open)}
+            />
+          )}
           <Item
             title="Account Settings"
             iconComponent={MaterialCommunityIcons}
@@ -177,6 +185,8 @@ export const MainPage = ({navigation}) => {
       ),
     })
   }, [])
+
+  console.log('WASIS ACTIVERIDE', activeRide)
 
   const displayPassengerList = () => {
     return (
@@ -214,7 +224,11 @@ export const MainPage = ({navigation}) => {
       return (
         <Container>
           {driverTrips && (
-            <RideStartBar user={user} navigation={navigation} drivingTrips={driverTrips}></RideStartBar>
+            <RideStartBar
+              user={user}
+              navigation={navigation}
+              drivingTrips={driverTrips}
+            ></RideStartBar>
           )}
 
           <View style={styles.listView}>
@@ -294,11 +308,13 @@ export const MainPage = ({navigation}) => {
           {travelPreference === 'passenger'
             ? displayPassengerList()
             : displayDriverList()}
+
           <View>
             <MainPageButtons
+              user={user}
               travelPreference={travelPreference}
               navigation={navigation}
-              driverTripList={driverTrips}
+              drivingTrips={driverTrips}
             />
           </View>
         </MenuDrawer>

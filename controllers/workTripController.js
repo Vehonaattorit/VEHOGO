@@ -93,6 +93,8 @@ export const usePassengerListHook = (user, querys) => {
           }
         })
 
+        console.log('how many activeRides', activeRides)
+
         if (activeRides[0] === undefined) {
           setActiveRide(null)
         } else {
