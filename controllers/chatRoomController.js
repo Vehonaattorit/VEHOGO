@@ -27,8 +27,6 @@ export const useChatRoomHooks = () => {
           }
         })
 
-        console.log('chatRooms', chatRooms)
-
         setIsLoading(false)
         setChatRooms(chatRooms)
       })
@@ -54,7 +52,7 @@ export async function addChat(chat) {
       merge: true,
     })
 
-    return chat.id
+    return chat
   } catch (error) {
     console.error('Error writing document: ', error)
 
@@ -124,24 +122,23 @@ export const queryChatRoom = async (userID, driverID) => {
     },
   ])
 
-  console.log('ARE THERE ANY CHATROOMS ???')
-
   // Chatrooms array is empty
   let chatRoom
   if (typeof chatRooms !== 'undefined' && chatRooms.length === 0) {
     // if array is empty
 
-    console.log('If chatroom array is empty')
     chatRoom = await addChat(
       new ChatRoom({
         driverID: driverID,
         passengerID: userID,
+        latestMessage: {
+          text: '',
+          createdAt: '',
+        },
       })
     )
   } else {
     chatRoom = chatRooms[0]
-
-    console.log('If chat array is NOT EMPTY')
   }
 
   return chatRoom
@@ -155,6 +152,17 @@ export function chatStream(chatId) {
     return doc
   } catch (error) {
     console.error('Error writing document: ', error)
+    return
+  }
+}
+
+export async function deleteChatRoom(chatRoomID) {
+  try {
+    await db.collection('chats').doc(chatRoomID).delete()
+
+    return
+  } catch (error) {
+    console.error('Error getting document: ', error)
     return
   }
 }

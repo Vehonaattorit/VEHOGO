@@ -72,7 +72,6 @@ export const usePassengerListHook = (user, querys) => {
     }
 
     const fetchActiveRide = async () => {
-      console.log('fetchActiveRide')
       let activeRideListener = await db
         .collection('companys')
         .doc(user.company.id)
@@ -92,8 +91,6 @@ export const usePassengerListHook = (user, querys) => {
             ...doc.data(),
           }
         })
-
-        console.log('how many activeRides', activeRides)
 
         if (activeRides[0] === undefined) {
           setActiveRide(null)
@@ -146,7 +143,6 @@ export const useDriverTripListHook = (user, querys) => {
 
         setWorkTrips(driverTrips)
         setIsLoading(false)
-        console.log('loading false')
       })
 
       return () => {

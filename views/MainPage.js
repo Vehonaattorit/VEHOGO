@@ -57,7 +57,7 @@ export const MainPage = ({navigation}) => {
   const [driverTrips, setDriverTrips] = useState(null)
 
   // CURRENTWEEKDAY
-  const [currentWeekDay, setCurrentWeekDay] = useState(5)
+  const [currentWeekDay, setCurrentWeekDay] = useState(new Date().getDay())
 
   // PASSENGER
   const {passengerTrips, activeRide, isLoading} = usePassengerListHook(user, [
@@ -187,8 +187,6 @@ export const MainPage = ({navigation}) => {
       ),
     })
   }, [])
-
-  console.log('WASIS ACTIVERIDE', activeRide)
 
   const displayPassengerList = () => {
     return (

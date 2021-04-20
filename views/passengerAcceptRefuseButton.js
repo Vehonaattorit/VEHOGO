@@ -66,171 +66,12 @@ const PassengerAcceptRefuseButton = (props) => {
   }
 
   const acceptPassenger = async () => {
-    // WORKTRIP WORKDAYNUM
-    const {workDayNum} = workTrip
-
-    // START
-    const eventStartHours = workTrip.scheduledDrive.start.toDate().getHours()
-
-    const eventStartMinutes = workTrip.scheduledDrive.start
-      .toDate()
-      .getMinutes()
-
-    // END
-    const eventEndHours = workTrip.scheduledDrive.end.toDate().getHours()
-
-    const eventEndMinutes = workTrip.scheduledDrive.end.toDate().getMinutes()
-
-    // [END]
-
-    // 0 monday 1 tuesday 2 wed 3 thurs 4 fri 5 sat 6 sun
-    const dateNextDay = getNextDayOfWeek(new Date(), workDayNum)
-
-    const dateStart = new Date(
-      dateNextDay.getFullYear(),
-      dateNextDay.getMonth(),
-      dateNextDay.getDate(),
-      eventStartHours,
-      eventStartMinutes
-    )
-
-    const dateEnd = new Date(
-      dateNextDay.getFullYear(),
-      dateNextDay.getMonth(),
-      dateNextDay.getDate(),
-      eventEndHours,
-      eventEndMinutes
-    )
-    const totalMinutes = drivingTime(workTrip)
-
-    dateEnd.setMinutes(eventStartMinutes + totalMinutes)
-
-    // new Date().setMinutes(eventEndMinutes + totalMinutes)
-
-    // await AsyncStorage.removeItem('expireTime')
-    // await AsyncStorage.removeItem('userToken')
-    // await AsyncStorage.removeItem('askedOutlook')
-    // await AsyncStorage.removeItem('continueWithCalendar')
-
-    const askedOutlook = await AsyncStorage.getItem('askedOutlook')
-    const continueWithCalendar = await AsyncStorage.getItem(
-      'continueWithCalendar'
-    )
-
-    if (!Boolean(askedOutlook)) {
-      Alert.alert(
-        'Would you like to sign in to Outlook?',
-        `You can schedule ride to an event.`,
-        [
-          {
-            text: 'No',
-            style: 'default',
-            onPress: async () => {
-              await AsyncStorage.setItem('askedOutlook', 'true')
-              await AsyncStorage.setItem('continueWithCalendar', 'false')
-              await continueAcceptMethod()
-            },
-          },
-          {
-            text: 'Yes',
-            style: 'destructive',
-            onPress: async () => {
-              await AsyncStorage.setItem('askedOutlook', 'true')
-
-              const response = await AuthManager.checkTokenExpiration()
-
-              // User cancelled login
-              if (response.type === 'error') {
-                // continue with creating a ride
-                return
-              }
-
-              await GraphManager.createEvent({
-                subject: `Pick up ${rideRequest.userName} on your way to ${workTrip.goingTo}`,
-                body: {
-                  contentType: 'HTML',
-                  content: 'Your request has been accepted.',
-                },
-                start: {
-                  dateTime: dateStart,
-                  timeZone: 'Pacific Standard Time',
-                },
-                end: {
-                  dateTime: dateEnd,
-                  timeZone: 'Pacific Standard Time',
-                },
-                location: {
-                  displayName: passengerUser.homeAddress,
-                },
-                attendees: [
-                  {
-                    emailAddress: {
-                      address: response.organizer.emailAddress.address,
-                      name: user.userName,
-                    },
-                    emailAddress: {
-                      address: passengerUser.email,
-                      name: passengerUser.userName,
-                    },
-                    type: 'required',
-                  },
-                ],
-              })
-              await AsyncStorage.setItem('continueWithCalendar', 'true')
-
-              await continueAcceptMethod()
-            },
-          },
-        ]
-      )
-    } else if (Boolean(askedOutlook)) {
-      if (Boolean(continueWithCalendar)) {
-        await GraphManager.createEvent({
-          subject: `Pick up ${rideRequest.userName} on your way to ${workTrip.goingTo}`,
-          body: {
-            contentType: 'HTML',
-            content: 'Your request has been accepted.',
-          },
-          start: {
-            dateTime: dateStart,
-            timeZone: 'Pacific Standard Time',
-          },
-          end: {
-            dateTime: dateEnd,
-            timeZone: 'Pacific Standard Time',
-          },
-          location: {
-            displayName: passengerUser.homeAddress,
-          },
-          attendees: [
-            {
-              emailAddress: {
-                address: user.email,
-                name: user.userName,
-              },
-              emailAddress: {
-                address: passengerUser.email,
-                name: passengerUser.userName,
-              },
-              type: 'required',
-            },
-          ],
-        })
-
-        await continueAcceptMethod()
-      } else if (!Boolean(continueWithCalendar)) {
-        await continueAcceptMethod()
-      }
-    }
-  }
-
-  const continueAcceptMethod = async () => {
     let route
 
+    console.log(`Accepting passenger : ${rideRequest.senderID}`)
+
     let workTripToUpdate = workTrip
-
     workTripToUpdate.scheduledDrive.availableSeats += 1
-
     if (workTripToUpdate.scheduledDrive.stops.length > 2) {
       var tempStops = workTripToUpdate.scheduledDrive.stops
       var waypoints = tempStops.slice(1, tempStops.length - 1)
@@ -288,7 +129,6 @@ const PassengerAcceptRefuseButton = (props) => {
     }
 
     workTripToUpdate.route = route
-
     await updateWorkTrip(user.company.id, workTripToUpdate)
     await deleteRideRequest(user.company.id, rideRequest.id)
     await fetch('https://exp.host/--/api/v2/push/send', {
@@ -304,7 +144,6 @@ const PassengerAcceptRefuseButton = (props) => {
         body: `Request was accepted by ${user.userName}`,
       }),
     })
-    console.log('accepted')
     navigation.popToTop()
   }
 

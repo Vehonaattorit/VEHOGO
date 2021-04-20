@@ -32,7 +32,6 @@ export const CreateCompany = ({
   //radio button value
   const [value, setValue] = useState('code')
 
-  console.log('checked', value)
   useEffect(() => {
     setRandom(getRandomString(4))
   }, [])

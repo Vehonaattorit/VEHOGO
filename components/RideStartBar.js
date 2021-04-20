@@ -81,7 +81,6 @@ export const RideStartBar = ({user, navigation, driverTrips}) => {
       // 17.04.2021 replaced todayWorkTrips with driverTrips
       if (driverTrips[0].goingTo == 'home') driverTrips.reverse()
 
-
       for (let i = 0; i < driverTrips.length; i++) {
         const workTrip = driverTrips[i]
         const nowInMinutes = currentHours * 60 + minutes
@@ -144,11 +143,9 @@ export const RideStartBar = ({user, navigation, driverTrips}) => {
   }
 
   useEffect(() => {
-
     if (driverTrips != null) {
-        getNextRide()
+      getNextRide()
     }
-
   }, [driverTrips])
 
   /* useEffect(() => {
@@ -157,40 +154,40 @@ export const RideStartBar = ({user, navigation, driverTrips}) => {
 
   return (
     <View>
-        <Card>
-          <CardItem>
-            <Left>
-              {showStart ? (
-                <Text style={styles.text}>You can start your next ride</Text>
-              ) : (
-                <Text style={styles.text}>Your next ride is at</Text>
-              )}
-            </Left>
-            <Right>
-              {!showStart ? (
-                <Button
-                  style={styles.button}
-                  onPress={() =>
-                    navigation.navigate('DriverStartRide', {
-                      workTrip: startingRide,
-                    })
-                  }
-                >
-                  <Text style={styles.starText}>
-                    Start{' '}
-                    {driveStartTime &&
-                      moment(driveStartTime.toDate()).format('HH:mm')}
-                  </Text>
-                </Button>
-              ) : (
-                <Text style={styles.text}>
+      <Card>
+        <CardItem>
+          <Left>
+            {showStart ? (
+              <Text style={styles.text}>You can start your next ride</Text>
+            ) : (
+              <Text style={styles.text}>Your next ride is at</Text>
+            )}
+          </Left>
+          <Right>
+            {!showStart ? (
+              <Button
+                style={styles.button}
+                onPress={() =>
+                  navigation.navigate('DriverStartRide', {
+                    workTrip: startingRide,
+                  })
+                }
+              >
+                <Text style={styles.starText}>
+                  Start{' '}
                   {driveStartTime &&
                     moment(driveStartTime.toDate()).format('HH:mm')}
                 </Text>
-              )}
-            </Right>
-          </CardItem>
-        </Card>
+              </Button>
+            ) : (
+              <Text style={styles.text}>
+                {driveStartTime &&
+                  moment(driveStartTime.toDate()).format('HH:mm')}
+              </Text>
+            )}
+          </Right>
+        </CardItem>
+      </Card>
     </View>
   )
 }

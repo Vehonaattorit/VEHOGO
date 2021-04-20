@@ -75,10 +75,6 @@ export async function sendMessage(chatRoomID, chatMessage) {
       chatMessage._id = v4()
     }
 
-    console.log('PERKELE')
-    console.log('sendMessage chatRoomID', chatRoomID)
-    console.log('sendMessage chatMessage', chatMessage)
-
     // Create a new chat document
     let chatMessageRef = db
       .collection('chats')
@@ -121,7 +117,10 @@ export async function updateMessage(message) {
   }
 }
 
-export async function getMessages(chatRoomID) {
+/**
+ *
+ */
+export async function deleteMessages(chatRoomID) {
   try {
     // Get all ChatRoom messages
     let messagesRef = await db
@@ -129,19 +128,23 @@ export async function getMessages(chatRoomID) {
       .doc(chatRoomID)
       .collection('chatMessages')
       .withConverter(chatMessageConverter)
-      .limit(25)
-      .orderBy('createdAt', 'desc')
-      .onSnapshot((querySnapshot) => {
-        const newMessages = []
+      .get()
 
-        const messages = querySnapshot.docs.map((doc) => {
-          const firebaseData = doc.data()
+    const messagesList = []
+    messagesRef.forEach((doc) => {
+      messagesList.push(chatMessageConverter.fromData(doc.data()))
+    })
 
-          return firebaseData
-        })
+    for (const message of messagesList) {
+      await db
+        .collection('chats')
+        .doc(chatRoomID)
+        .collection('chatMessages')
+        .doc(message._id)
+        .delete()
+    }
 
-        return messages
-      })
+    await db.collection('chats').doc(chatRoomID).delete()
   } catch (error) {
     console.error('Error writing document: ', error)
     return
