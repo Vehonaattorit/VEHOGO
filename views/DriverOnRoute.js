@@ -22,6 +22,7 @@ import {useDocumentData} from 'react-firebase-hooks/firestore'
 import Carousel, {ParallaxImage} from 'react-native-snap-carousel'
 import {ChatRoom} from '../models/chatRoom'
 import {
+  deleteChatRoom,
   queryChatRoom,
   useChatRoomHooks,
 } from '../controllers/chatRoomController'
@@ -49,12 +50,6 @@ export const DriverOnRoute = ({navigation, route}) => {
   const mapRef = useRef()
 
   const passengerStops = workTrip.scheduledDrive.stops.slice(1)
-  //
-  //
-  //
-  //   'compare',
-  //   passengerStops[workTrip.scheduledDrive.nextStop - 1].stopName
-  // )
 
   const {user} = useContext(UserContext)
   const {chatRooms, isLoading} = useChatRoomHooks()
@@ -218,13 +213,21 @@ export const DriverOnRoute = ({navigation, route}) => {
   }
 
   const stopDriving = async () => {
+    const {stops} = workTrip.scheduledDrive
+
+    const passengerStops = stops.slice(1, stops.length - 1)
+
+    // 20.04.2021 UNFINISHED
+    for (const chatRoom of chatRooms) {
+      await deleteChatRoom(chatRoom.id)
+    }
+
     workTrip.isDriving = false
     await updateWorkTrip(user.company.id, workTrip)
+
     navigation.popToTop()
   }
-  // useEffect(() => {
-
-  // }, [mapRef])
+  useEffect(() => {}, [mapRef])
 
   useEffect(() => {
     //callUpdateUserPosition()
@@ -232,8 +235,8 @@ export const DriverOnRoute = ({navigation, route}) => {
       updateLocationInterval()
     }
 
-    let timeout = setTimeout(() => {
-      if (mapRef != undefined || mapRef != null) {
+    setTimeout(() => {
+      if (mapRef != undefined) {
         mapRef.current.fitToSuppliedMarkers(
           workTrip.scheduledDrive.stops.map((stop) => stop.address),
           {
@@ -242,7 +245,8 @@ export const DriverOnRoute = ({navigation, route}) => {
           }
         )
       }
-    }, 1000)
+    }, 10000)
+    // }, 1000)20.04.2021 initial time
 
     var tempRouteCoordinates = []
     //
@@ -263,7 +267,6 @@ export const DriverOnRoute = ({navigation, route}) => {
 
     return () => {
       clearInterval(intervalTimer)
-      clearTimeout(timeout)
     }
   }, [])
 
@@ -297,41 +300,20 @@ export const DriverOnRoute = ({navigation, route}) => {
   }
 
   const createChatRoom = async (item) => {
-    console.log('THIS IS ITEM', item.stopName)
-
     const userID = user.travelPreference === 'passenger' ? item.id : item.userID
-
-    console.log('userID', userID)
 
     const chatRoomName =
       user.travelPreference === 'passenger'
         ? workTrip.driverName
         : item.stopName
 
-    console.log('workTrip.driverID', workTrip.driverID)
-
     const chatRoom = await queryChatRoom(userID, workTrip.driverID)
 
-    console.log('IS THIS CHATROOM', chatRoom)
-
     navigation.navigate('ChatRoom', {
+      user,
       chatRoom,
       chatRoomTitle: chatRoomName,
     })
-    // const chatRoomName =
-    //   user.travelPreference === 'passenger'
-    //     ? workTrip.driverName
-    //     : item.stopName
-
-    // console.log('userID', userID)
-    // console.log('workTrip.driverID', workTrip.driverID)
-
-    // const chatRoom = await queryChatRoom(userID, workTrip.driverID)
-
-    // navigation.navigate('ChatRoom', {
-    //   chatRoom,
-    //   chatRoomTitle: chatRoomName,
-    // })
   }
 
   useEffect(() => {

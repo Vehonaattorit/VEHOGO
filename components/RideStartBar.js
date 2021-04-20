@@ -145,7 +145,7 @@ export const RideStartBar = ({user, navigation, drivingTrips}) => {
 
   useEffect(() => {
     getNextRide()
-  }, [])
+  }, [drivingTrips])
 
   /* useEffect(() => {
      if (!isLoading) getNextRide()

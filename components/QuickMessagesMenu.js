@@ -63,13 +63,9 @@ const QuickMessagesMenu = ({user, item, workTrip}) => {
   const quickMessageUser = async (value) => {
     const {uid} = chatUser
 
-    console.log('uid chatuser', uid)
-
     const userID = user.travelPreference === 'passenger' ? item.id : item.userID
 
     const chatRoom = await queryChatRoom(userID, workTrip.driverID)
-
-    console.log('chatRoom', chatRoom)
 
     await sendMessage(
       chatRoom.id,
