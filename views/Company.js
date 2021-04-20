@@ -54,7 +54,7 @@ export const Company = ({navigation}) => {
   }
 
   return (
-    <KeyboardAvoidingView behavior="height" style={styles.container}>
+    <KeyboardAvoidingView behavior="padding" style={styles.container}>
       {showBtns && (
         <>
           <View style={styles.poweredContainer}>
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     alignSelf: 'stretch',
   },
- 
+
   inputContainer: {
     justifyContent: 'center',
     alignItems: 'center',
