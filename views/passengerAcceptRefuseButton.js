@@ -304,6 +304,7 @@ const PassengerAcceptRefuseButton = (props) => {
         body: `Request was accepted by ${user.userName}`,
       }),
     })
+    console.log('accepted')
     navigation.popToTop()
   }
 

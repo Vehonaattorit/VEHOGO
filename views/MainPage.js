@@ -102,18 +102,20 @@ export const MainPage = ({navigation}) => {
 
     // MUISTA POISTAA !!!
     try {
+      var trips = []
       let ref = await workTripMultiQueryStream(user.company.id, [
         {field: 'workDayNum', condition: '==', value: currentWeekDay},
         {field: 'driverID', condition: '==', value: user.id},
       ])
       ref.onSnapshot((querySnapshot) => {
-        var trips = []
-
         querySnapshot.forEach((doc) => {
           trips.push(doc.data())
         })
+        console.log('streaming')
+        console.log('state change')
         setDriverTrips(trips)
       })
+
     } catch (e) {
       console.log(e)
     }
@@ -212,19 +214,24 @@ export const MainPage = ({navigation}) => {
   const displayDriverList = () => {
     if (travelPreference === 'driver') {
       return (
-        <Container>
+        <>
           {driverTrips && (
-            <RideStartBar user={user} navigation={navigation} drivingTrips={driverTrips}></RideStartBar>
-          )}
+            <Container>
 
-          <View style={styles.listView}>
-            <DriverTripList
-              isLoading={isLoading}
-              navigation={navigation}
-              driverTrips={driverTrips}
-            />
-          </View>
-        </Container>
+              <RideStartBar user={user} navigation={navigation} driverTrips={driverTrips}></RideStartBar>
+
+
+              <View style={styles.listView}>
+                <DriverTripList
+                  isLoading={isLoading}
+                  navigation={navigation}
+                  driverTrips={driverTrips}
+                />
+              </View>
+
+            </Container>
+          )}
+        </>
       )
     }
   }
