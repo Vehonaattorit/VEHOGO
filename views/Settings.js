@@ -25,7 +25,7 @@ export const Settings = ({navigation}) => {
             title="Modify Your Travel Info"
             iconTwo="keyboard-arrow-right"
             onPress={() => {
-             console.log(" ")
+              console.log('Travel')
             }}
           />
         </View>
@@ -71,7 +71,7 @@ export const Settings = ({navigation}) => {
         </View>
         <View style={styles.btn}>
           <CustomButtonIcon
-          style={styles.deleteBtn}
+            style={styles.deleteBtn}
             iconOne="access-time"
             title="DELETE YOUR ACCOUNT"
             iconTwo="keyboard-arrow-right"
@@ -97,7 +97,5 @@ const styles = StyleSheet.create({
   btn: {
     marginTop: 10,
   },
-  deleteBtn:{
-
-  }
+  deleteBtn: {},
 })

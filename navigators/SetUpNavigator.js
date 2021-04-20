@@ -31,7 +31,7 @@ function SetUpStackNavigator() {
           headerTintColor: color.primary,
         }}
       >
-        {/* <Stack.Screen
+        <Stack.Screen
           name="VerifyEmail"
           component={VerifyEmail}
           options={() => ({
@@ -47,7 +47,7 @@ function SetUpStackNavigator() {
               />
             ),
           })}
-        /> */}
+        />
         <Stack.Screen
           name="Company"
           component={Company}
