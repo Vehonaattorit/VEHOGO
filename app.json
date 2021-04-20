@@ -16,22 +16,43 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": ["**/*"],
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "config": {
+        "firebase": {
+          "authDomain": "veho-go.firebaseapp.com",
+          "appId": "1:61643053056:web:b5a606c0e455b05dc6a0e5",
+          "apiKey": "AIzaSyDSPnv1rd3lYohvcA_t_LnALrLccPdnoCk",
+          "projectId": "veho-go",
+          "storageBucket": "veho-go.appspot.com",
+          "messagingSenderId": "61643053056",
+          "measurementId": "G-S4X0T9KVVH"
+        }
+      }
+    },
     "ios": {
       "bundleIdentifier": "com.vehonaattorit.shareride",
       "buildNumber": "1.0.0",
-      "supportsTablet": true
+      "supportsTablet": false,
+      "config": {
+        "googleMapsApiKey": "AIzaSyAoqMKIm3iIs5pshqmzjwWOOylH8VzlyvM"
+      }
     },
     "android": {
       "package": "com.vehonaattorit.shareride",
+      "googleServicesFile": "./google-services.json",
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
+      "icon": "./assets/icon.png",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAoqMKIm3iIs5pshqmzjwWOOylH8VzlyvM"
+        }
+      },
       "useNextNotificationsApi": true
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
     }
   }
 }
