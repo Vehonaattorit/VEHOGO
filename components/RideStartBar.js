@@ -21,7 +21,7 @@ import {
 import {color} from '../constants/colors'
 import {getUser} from '../controllers/userController'
 
-export const RideStartBar = ({user, navigation, drivingTrips}) => {
+export const RideStartBar = ({user, navigation, driverTrips}) => {
   const [showStart, setShowStart] = useState(false)
   const [startingRide, setStartingRide] = useState([])
   const [date, setDate] = useState('')
@@ -66,7 +66,6 @@ export const RideStartBar = ({user, navigation, drivingTrips}) => {
         value: user.id,
       },
     ])
-
     let found = false
     let nextWorkTrip
     for (let i = 0; i < user.preferedWorkingHours.length; i++) {
@@ -80,10 +79,11 @@ export const RideStartBar = ({user, navigation, drivingTrips}) => {
     if (found) {
       // sorting the morning ride to start
       // 17.04.2021 replaced todayWorkTrips with driverTrips
-      if (drivingTrips[0].goingTo == 'home') drivingTrips.reverse()
+      if (driverTrips[0].goingTo == 'home') driverTrips.reverse()
 
-      for (let i = 0; i < drivingTrips.length; i++) {
-        const workTrip = drivingTrips[i]
+
+      for (let i = 0; i < driverTrips.length; i++) {
+        const workTrip = driverTrips[i]
         const nowInMinutes = currentHours * 60 + minutes
         let startTime = workTrip.scheduledDrive.start.toDate()
         const workTripStartInMinutes =
@@ -144,8 +144,12 @@ export const RideStartBar = ({user, navigation, drivingTrips}) => {
   }
 
   useEffect(() => {
-    getNextRide()
-  }, [])
+
+    if (driverTrips != null) {
+        getNextRide()
+    }
+
+  }, [driverTrips])
 
   /* useEffect(() => {
      if (!isLoading) getNextRide()
@@ -153,40 +157,40 @@ export const RideStartBar = ({user, navigation, drivingTrips}) => {
 
   return (
     <View>
-      <Card>
-        <CardItem>
-          <Left>
-            {showStart ? (
-              <Text style={styles.text}>You can start your next ride</Text>
-            ) : (
-              <Text style={styles.text}>Your next ride is at</Text>
-            )}
-          </Left>
-          <Right>
-            {!showStart ? (
-              <Button
-                style={styles.button}
-                onPress={() =>
-                  navigation.navigate('DriverStartRide', {
-                    workTrip: startingRide,
-                  })
-                }
-              >
-                <Text style={styles.starText}>
-                  Start{' '}
+        <Card>
+          <CardItem>
+            <Left>
+              {showStart ? (
+                <Text style={styles.text}>You can start your next ride</Text>
+              ) : (
+                <Text style={styles.text}>Your next ride is at</Text>
+              )}
+            </Left>
+            <Right>
+              {!showStart ? (
+                <Button
+                  style={styles.button}
+                  onPress={() =>
+                    navigation.navigate('DriverStartRide', {
+                      workTrip: startingRide,
+                    })
+                  }
+                >
+                  <Text style={styles.starText}>
+                    Start{' '}
+                    {driveStartTime &&
+                      moment(driveStartTime.toDate()).format('HH:mm')}
+                  </Text>
+                </Button>
+              ) : (
+                <Text style={styles.text}>
                   {driveStartTime &&
                     moment(driveStartTime.toDate()).format('HH:mm')}
                 </Text>
-              </Button>
-            ) : (
-              <Text style={styles.text}>
-                {driveStartTime &&
-                  moment(driveStartTime.toDate()).format('HH:mm')}
-              </Text>
-            )}
-          </Right>
-        </CardItem>
-      </Card>
+              )}
+            </Right>
+          </CardItem>
+        </Card>
     </View>
   )
 }
