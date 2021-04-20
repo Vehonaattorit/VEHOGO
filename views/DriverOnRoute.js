@@ -41,6 +41,7 @@ import QuickMessagesMenu from '../components/QuickMessagesMenu'
 
 import firebase from 'firebase/app'
 import 'firebase/firestore'
+import {deleteMessages, getMessages} from '../controllers/chatMessageController'
 
 const db = firebase.firestore()
 
@@ -217,9 +218,16 @@ export const DriverOnRoute = ({navigation, route}) => {
 
     const passengerStops = stops.slice(1, stops.length - 1)
 
-    // 20.04.2021 UNFINISHED
-    for (const chatRoom of chatRooms) {
-      await deleteChatRoom(chatRoom.id)
+    // await deleteMessages('0c376027-a378-4ebc-ad8a-2e1absd828b96')
+    for (let i = 0; i < chatRooms.length; i++) {
+      for (let j = 0; j < passengerStops.length; j++) {
+        if (
+          chatRooms[i].driverID === user.id &&
+          passengerStops[j].userID === chatRooms[i].passengerID
+        ) {
+          await deleteMessages(chatRooms[i].id)
+        }
+      }
     }
 
     workTrip.isDriving = false
