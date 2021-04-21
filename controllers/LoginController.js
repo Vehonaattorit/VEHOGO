@@ -1,9 +1,18 @@
 import firebase from '../firebase/fire'
 import {updateUser} from '../controllers/userController'
 import {User} from '../models/user'
+import Constants from 'expo-constants'
+
+import * as Permissions from 'expo-permissions'
+import * as Notifications from 'expo-notifications'
 
 export async function login(email, password) {
-  await firebase.auth().signInWithEmailAndPassword(email, password)
+  await firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .then((user) => {
+      registerForPushNotificationsAsync(user)
+    })
 }
 
 export async function register(email, password) {
@@ -11,6 +20,7 @@ export async function register(email, password) {
     const response = await firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
+
     await response.user.sendEmailVerification()
     return response
   } catch (e) {
@@ -47,5 +57,27 @@ export async function checkEmailVerification() {
     return response
   } catch (e) {
     return e.message
+  }
+}
+
+const registerForPushNotificationsAsync = async ({user}) => {
+  let token
+  if (Constants.isDevice) {
+    const {status: existingStatus} = await Notifications.getPermissionsAsync()
+    let finalStatus = existingStatus
+    if (existingStatus !== 'granted') {
+      const {status} = await Notifications.requestPermissionsAsync()
+      finalStatus = status
+    }
+    if (finalStatus !== 'granted') {
+      alert('Failed to get push token for push notification!')
+      return
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data
+    console.log('user token', token)
+
+    await updateUser(new User({id: user.uid, expoToken: token}))
+  } else {
+    alert('Must use physical device for Push Notifications')
   }
 }

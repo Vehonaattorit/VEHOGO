@@ -3,7 +3,7 @@ import {preferedWorkingHoursConverter} from './preferedWorkingHours'
 export class User {
   constructor({
     id,
-    ownerPushToken,
+    expoToken,
     userName,
     company,
     homeLocation,
@@ -20,7 +20,7 @@ export class User {
     email,
   }) {
     this.id = id
-    this.ownerPushToken = ownerPushToken
+    this.expoToken = expoToken
     this.userName = userName
     this.company = company
     this.homeLocation = homeLocation
@@ -45,8 +45,8 @@ export const userConverter = {
     if (user.id != undefined) {
       userObject.id = user.id
     }
-    if (user.ownerPushToken != undefined) {
-      userObject.ownerPushToken = user.ownerPushToken
+    if (user.expoToken != undefined) {
+      userObject.expoToken = user.expoToken
     }
     if (user.userName != undefined) {
       userObject.userName = user.userName
@@ -109,7 +109,7 @@ export const userConverter = {
     }
     return new User({
       id: data.id,
-      ownerPushToken: data.ownerPushToken,
+      expoToken: data.expoToken,
       userName: data.userName,
       company: data.company,
       homeLocation: data.homeLocation,

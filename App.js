@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 import {View, SafeAreaView, Text} from 'react-native'
 import MainStackNavigator from './navigators/MainNavigator'
 import AuthStackNavigator from './navigators/AuthenticationNavigator'
@@ -17,6 +17,7 @@ import {GOOGLE_API_KEY} from '@env'
 
 import {LogBox} from 'react-native'
 
+import * as Permissions from 'expo-permissions'
 import * as Notifications from 'expo-notifications'
 
 Notifications.setNotificationHandler({
@@ -28,6 +29,10 @@ Notifications.setNotificationHandler({
 export default function App() {
   const [fontReady, setFontReady] = useState(false)
   const [userId, setUserId] = useState(null)
+  const [expoPushToken, setExpoPushToken] = useState(false)
+
+  const notificationListener = useRef()
+  const responseListener = useRef()
 
   LogBox.ignoreLogs(['Setting a timer'])
 
@@ -43,8 +48,8 @@ export default function App() {
   }
 
   useEffect(() => {
-      subscribeToAuth(authStateChanged)
-      loadFonts()
+    subscribeToAuth(authStateChanged)
+    loadFonts()
   }, [])
 
   const authStateChanged = (user) => {
@@ -102,5 +107,4 @@ function Navigation({userId}) {
       return <View></View>
     }
   }
-
 }
