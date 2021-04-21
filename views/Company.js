@@ -52,7 +52,10 @@ export const Company = ({navigation}) => {
   }
 
   return (
-    <KeyboardAvoidingView behavior="padding" style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
       {showBtns && (
         <>
           <View style={styles.poweredContainer}>
@@ -69,7 +72,7 @@ export const Company = ({navigation}) => {
                 iconTwo="keyboard-arrow-right"
               />
               <Text style={{alignSelf: 'center'}}>
-                Or Join with either email domain or company code{' '}
+                Or Join with either email domain or company code
               </Text>
               <CustomIconButton
                 style={{marginBottom: 5}}
@@ -141,11 +144,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-around',
-  },
-  view: {
-    flex: 1,
-    backgroundColor: 'white',
-    justifyContent: 'center',
   },
   poweredContainer: {
     justifyContent: 'center',

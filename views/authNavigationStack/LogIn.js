@@ -9,6 +9,7 @@ import {
   Image,
   Text,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from 'react-native'
 import {color} from '../../constants/colors'
 import {Input} from 'react-native-elements'
@@ -60,7 +61,7 @@ export const LogIn = ({navigation, scrollRef}) => {
   }, [error])
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
       <Image
         source={require('../../images/vehogo_logo_musta_RGB.png')}
         style={{width: 150, height: 170, marginBottom: 30}}
@@ -104,7 +105,7 @@ export const LogIn = ({navigation, scrollRef}) => {
           }}
         />
       </View>
-    </View>
+    </KeyboardAvoidingView>
   )
 }
 
