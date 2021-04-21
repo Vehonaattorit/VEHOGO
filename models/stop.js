@@ -1,21 +1,25 @@
 export class Stop {
-  constructor({location, address, stopName, userID}) {
+  constructor({location, address, stopName, userID, estimatedArrivalTime}) {
     this.location = location
     this.address = address
     this.stopName = stopName
     this.userID = userID
+    this.estimatedArrivalTime = estimatedArrivalTime
   }
 }
 
 // Firestore data converter
 export const stopConverter = {
   toFirestore: function (stop) {
-    return {
-      location: stop.location,
-      address: stop.address,
-      stopName: stop.stopName,
-      userID: stop.userID,
+    stopObject = {}
+    stopObject.location = stop.location
+    stopObject.address = stop.address
+    stopObject.stopName = stop.stopName
+    stopObject.userID = stop.userID
+    if (stop.estimatedArrivalTime != undefined) {
+      stopObject.estimatedArrivalTime = stop.estimatedArrivalTime
     }
+    return stopObject
   },
   fromFirestore: function (snapshot, options) {
     const data = snapshot.data(options)
@@ -24,6 +28,7 @@ export const stopConverter = {
       address: data.address,
       stopName: data.stopName,
       userID: data.userID,
+      estimatedArrivalTime: data.estimatedArrivalTime,
     })
   },
   fromData: function (data) {
@@ -32,6 +37,7 @@ export const stopConverter = {
       address: data.address,
       stopName: data.stopName,
       userID: data.userID,
+      estimatedArrivalTime: data.estimatedArrivalTime,
     })
   },
 }

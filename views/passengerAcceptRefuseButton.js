@@ -101,7 +101,7 @@ const PassengerAcceptRefuseButton = (props) => {
       waypoints.unshift(workTripToUpdate.scheduledDrive.stops[0])
       waypoints.push(
         workTripToUpdate.scheduledDrive.stops[
-          workTripToUpdate.scheduledDrive.stops.length - 1
+        workTripToUpdate.scheduledDrive.stops.length - 1
         ]
       )
 
@@ -129,6 +129,45 @@ const PassengerAcceptRefuseButton = (props) => {
     }
 
     workTripToUpdate.route = route
+
+    let totalTime = 0
+    route.routes[0].legs.map((leg) => {
+      totalTime += leg.duration.value
+    })
+    totalTime = parseFloat(totalTime.toFixed(0))
+
+    const end = workTripToUpdate.scheduledDrive.end.toDate()
+    const start = workTripToUpdate.scheduledDrive.start.toDate()
+
+    //Changing the worktrip start and end time acording to trip length
+    workTripToUpdate.goingTo == 'work'
+      ? (workTripToUpdate.scheduledDrive.start = new Date(end.getTime() - totalTime * 1000))
+      : (workTripToUpdate.scheduledDrive.end = new Date(start.getTime() + totalTime * 1000))
+
+    const newEndTime = workTripToUpdate.goingTo == 'work'
+      ? (workTripToUpdate.scheduledDrive.end.toDate())
+      : (workTripToUpdate.scheduledDrive.end)
+
+    const newStartTime = workTripToUpdate.goingTo == 'work'
+      ? (workTripToUpdate.scheduledDrive.start)
+      : (workTripToUpdate.scheduledDrive.start.toDate())
+
+
+    for (let index = 0; index < workTripToUpdate.scheduledDrive.stops.length - 1; index++) {
+      let minutesToDestination = 0
+      for (let a = 0; a < index; a++) {
+        console.log('adding minutes to destination', route.routes[0].legs[a].duration.text)
+        minutesToDestination += route.routes[0].legs[a].duration.value
+      }
+      minutesToDestination = parseFloat(minutesToDestination.toFixed(0))
+
+
+      workTripToUpdate.scheduledDrive.stops[index].estimatedArrivalTime = new Date(newStartTime.getTime() + minutesToDestination * 1000)
+      console.log('Estimated time to arrive', index, workTripToUpdate.scheduledDrive.stops[index].estimatedArrivalTime)
+    }
+
+
+    console.log('updating worktrip', workTripToUpdate.id)
     await updateWorkTrip(user.company.id, workTripToUpdate)
     await deleteRideRequest(user.company.id, rideRequest.id)
     await fetch('https://exp.host/--/api/v2/push/send', {
