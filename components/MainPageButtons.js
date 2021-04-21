@@ -180,7 +180,9 @@ const MainPageButtons = ({
   }
 
   useEffect(() => {
-    getNextRide()
+    if (drivingTrips != undefined) {
+      getNextRide()
+    }
   }, [drivingTrips])
 
   return (

@@ -7,14 +7,7 @@ import {workTripQuery} from '../controllers/workTripController'
 import {UserContext} from '../contexts'
 import {color} from '../constants/colors'
 
-const DriverTripList = ({isLoading, driverTrips, navigation}) => {
-  if (isLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color={color.primary} />
-      </View>
-    )
-  }
+const DriverTripList = ({driverTrips, navigation}) => {
 
   return (
     <View>

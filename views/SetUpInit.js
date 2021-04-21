@@ -2,7 +2,7 @@ import React, {useContext} from 'react'
 import {StyleSheet, View} from 'react-native'
 import {UserContext} from '../contexts'
 import {CustomTitle} from '../components/CustomTitle'
-import {updateUser} from '../controllers/userController'
+import {updateUser, getUser} from '../controllers/userController'
 import {WorkTrip} from '../models/workTrip'
 import {ScheduledDrive} from '../models/scheduleDrive'
 import {Stop} from '../models/stop'
@@ -112,16 +112,14 @@ export const SetUpInit = ({route}) => {
           preferedWorkHourindex
         ].toHomeRefID = workTripId
       }
-      setTimeout(()=> {
-        updateUser(userToUpdate)
-      },3000)
+
+      await updateUser(userToUpdate)
+
     })
   }
 
   const finishSetup = async () => {
     if (!user.setupIsCompleted) {
-      user.setupIsCompleted = true
-      await updateUser(user)
       let token = await fire.auth().currentUser.getIdTokenResult()
       console.log('token is', token.token)
       const response = await fetch(
@@ -135,8 +133,10 @@ export const SetUpInit = ({route}) => {
           body: JSON.stringify({idToken: token.token}),
         }
       )
-      console.log('response from cloud function', response)
       if (user.travelPreference === 'driver') await setupWorkTripDocs()
+      let updatedUser = await getUser(user.id)
+      updatedUser.setupIsCompleted = true
+      await updateUser(updatedUser)
     }
   }
 
