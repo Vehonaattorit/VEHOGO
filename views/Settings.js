@@ -1,8 +1,21 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import {View, Text, StyleSheet} from 'react-native'
 import CustomButtonIcon from '../components/CustomIconButton'
+import {UserContext} from '../contexts'
+import {updateUser} from '../controllers/userController'
 
 export const Settings = ({navigation}) => {
+  // const {user} = useContext(UserContext)
+
+  // const updateSetup = async ({screen}) => {
+  //   if (user.setupIsCompleted) {
+  //     user.setupIsCompleted = false
+  //     await updateUser(user)
+  //     if (user.travelPreference === 'driver') await setupWorkTripDocs()
+  //     navigation.navigate(screen)
+  //   }
+  // }
+
   return (
     <View style={styles.container}>
       <View style={styles.poweredContainer}>
@@ -12,7 +25,7 @@ export const Settings = ({navigation}) => {
             title="Modify Your Travel Info"
             iconTwo="keyboard-arrow-right"
             onPress={() => {
-             console.log("Travel")
+              console.log('Travel')
             }}
           />
         </View>
@@ -22,7 +35,7 @@ export const Settings = ({navigation}) => {
             title="Modify Your Username"
             iconTwo="keyboard-arrow-right"
             onPress={() => {
-              console.log("Username")
+              console.log('Username')
             }}
           />
         </View>
@@ -32,7 +45,7 @@ export const Settings = ({navigation}) => {
             title="Modify Your Address"
             iconTwo="keyboard-arrow-right"
             onPress={() => {
-              console.log("Address")
+              console.log('Address')
             }}
           />
         </View>
@@ -42,7 +55,7 @@ export const Settings = ({navigation}) => {
             title="Modify Your Worling Days"
             iconTwo="keyboard-arrow-right"
             onPress={() => {
-              console.log("Worling Days")
+              console.log('Worling Days')
             }}
           />
         </View>
@@ -52,7 +65,18 @@ export const Settings = ({navigation}) => {
             title="Modify Your Working Hours"
             iconTwo="keyboard-arrow-right"
             onPress={() => {
-              console.log("Working Hours")
+              console.log('Working Hours')
+            }}
+          />
+        </View>
+        <View style={styles.btn}>
+          <CustomButtonIcon
+            style={styles.deleteBtn}
+            iconOne="access-time"
+            title="DELETE YOUR ACCOUNT"
+            iconTwo="keyboard-arrow-right"
+            onPress={() => {
+              console.log('Working Hours')
             }}
           />
         </View>
@@ -65,6 +89,7 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignContent: 'center',
+    backgroundColor: 'white',
   },
   poweredContainer: {
     margin: 5,
@@ -72,4 +97,5 @@ const styles = StyleSheet.create({
   btn: {
     marginTop: 10,
   },
+  deleteBtn: {},
 })

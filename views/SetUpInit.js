@@ -63,7 +63,9 @@ export const SetUpInit = ({route}) => {
           : new Date(1970, 0, 1, item.workDayStart.toDate().getHours(), 0)
 
       //adding ride time to end time and start depending on the total drive time
-      index % 2 === 0 ? end = new Date(end.getTime() + totalTime * 1000) : start = new Date(start.getTime() - totalTime * 1000)
+      index % 2 === 0
+        ? (end = new Date(end.getTime() + totalTime * 1000))
+        : (start = new Date(start.getTime() - totalTime * 1000))
 
       const goingTo = index % 2 === 0 ? 'home' : 'work'
       let initialStops = [
@@ -110,7 +112,9 @@ export const SetUpInit = ({route}) => {
           preferedWorkHourindex
         ].toHomeRefID = workTripId
       }
-      await updateUser(userToUpdate)
+      setTimeout(()=> {
+        updateUser(userToUpdate)
+      },3000)
     })
   }
 
@@ -119,14 +123,14 @@ export const SetUpInit = ({route}) => {
       user.setupIsCompleted = true
       await updateUser(user)
       let token = await fire.auth().currentUser.getIdTokenResult()
-      console.log('token is',token.token)
+      console.log('token is', token.token)
       const response = await fetch(
         `https://us-central1-veho-go.cloudfunctions.net/getBestRoutes`,
         {
           method: 'POST',
           headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({idToken: token.token}),
         }

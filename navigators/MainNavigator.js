@@ -1,14 +1,12 @@
 import React, {useContext} from 'react'
 import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
-import {alert} from 'react-native'
 import {MainPage} from '../views/MainPage'
 import {OutlookCalendar} from '../views/OutlookCalendar'
 import {DriverAcceptRefuse} from '../views/DriverAcceptRefuse'
 import {NewRide} from '../views/NewRide'
 import {DriverStartRide} from '../views/DriverStartRide'
 import {DriverOnRoute} from '../views/DriverOnRoute'
-import {Chat} from '../views/Chat'
 import {DriverRideRequestList} from '../views/DriverRideRequestList'
 import {DriverCarList} from '../views/DriverCarList'
 import {Settings} from '../views/Settings'
@@ -24,6 +22,7 @@ import {Entypo} from '@expo/vector-icons'
 import {HeaderButtons, Item} from 'react-navigation-header-buttons'
 import HeaderButton from '../components/CustomHeaderButton'
 import CarEditForm from '../views/CarEditForm'
+
 
 const Stack = createStackNavigator()
 const Drawer = createStackNavigator()

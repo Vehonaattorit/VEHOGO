@@ -104,7 +104,6 @@ const PassengerRideRequestButton = ({
 
   const cancelRide = async () => {
     if (!alreadyRequested) {
-      console.log('cancelRide workTrip', workTrip.scheduledDrive.stops)
       let workTripUpdate
 
       // filter all stops that DON'T HAVE passenger ID

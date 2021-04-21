@@ -31,23 +31,7 @@ function SetUpStackNavigator() {
           headerTintColor: color.primary,
         }}
       >
-        {/* <Stack.Screen
-          name="VerifyEmail"
-          component={VerifyEmail}
-          options={() => ({
-            title: 'Verify Email',
-            headerLeft: () => (
-              <IconButton
-                icon="logout"
-                size={28}
-                color={color.darkBlue}
-                onPress={() => {
-                  signOut()
-                }}
-              />
-            ),
-          })}
-        /> */}
+
         <Stack.Screen
           name="Company"
           component={Company}

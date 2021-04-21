@@ -57,7 +57,7 @@ export const MainPage = ({navigation}) => {
   const [driverTrips, setDriverTrips] = useState(null)
 
   // CURRENTWEEKDAY
-  const [currentWeekDay, setCurrentWeekDay] = useState(5)
+  const [currentWeekDay, setCurrentWeekDay] = useState(new Date().getDay())
 
   // PASSENGER
   const {passengerTrips, activeRide, isLoading} = usePassengerListHook(user, [
@@ -74,6 +74,14 @@ export const MainPage = ({navigation}) => {
     {field: 'workDayNum', condition: '==', value: currentWeekDay},
     {field: 'isDriving', condition: '==', value: true},
   ])
+
+  console.log(
+    'user',
+    user.homeAddress,
+    user.homeLocation,
+    user.userName,
+    user.id
+  )
 
   // console.log('activeRide', activeRide)
   // [END]
@@ -95,32 +103,35 @@ export const MainPage = ({navigation}) => {
   //data stream for driver trips
   const driverTripStream = async () => {
     // MUISTA LISÄTÄ !!!
-    // const currentWeekDay = new Date().getDay()
-    const currentWeekDay = 5
+    const currentWeekDay = new Date().getDay()
+    //const currentWeekDay = 5
 
     setCurrentWeekDay(currentWeekDay)
 
     // MUISTA POISTAA !!!
-
-    let ref = await workTripMultiQueryStream(user.company.id, [
-      {field: 'workDayNum', condition: '==', value: currentWeekDay},
-      {field: 'driverID', condition: '==', value: user.id},
-    ])
-    ref.onSnapshot((querySnapshot) => {
+    try {
       var trips = []
-
-      querySnapshot.forEach((doc) => {
-        trips.push(doc.data())
+      let ref = await workTripMultiQueryStream(user.company.id, [
+        {field: 'workDayNum', condition: '==', value: currentWeekDay},
+        {field: 'driverID', condition: '==', value: user.id},
+      ])
+      ref.onSnapshot((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          trips.push(doc.data())
+        })
+        console.log('streaming')
+        console.log('state change')
+        setDriverTrips(trips)
       })
-      setDriverTrips(trips)
-    })
+
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   useEffect(() => {
     checkTravelPreference()
     checkNotificationsPermissions()
-
-    let passengerRidesListener
 
     if (travelPreference === 'driver') {
       driverTripStream()
@@ -158,12 +169,14 @@ export const MainPage = ({navigation}) => {
     navigation.setOptions({
       headerRight: () => (
         <HeaderButtons HeaderButtonComponent={HeaderButton}>
-          <Item
-            title="Filter"
-            iconComponent={Ionicons}
-            iconName="filter"
-            onPress={() => setOpen(!open)}
-          />
+          {user.travelPreference === 'passenger' && (
+            <Item
+              title="Filter"
+              iconComponent={Ionicons}
+              iconName="filter"
+              onPress={() => setOpen(!open)}
+            />
+          )}
           <Item
             title="Account Settings"
             iconComponent={MaterialCommunityIcons}
@@ -215,19 +228,24 @@ export const MainPage = ({navigation}) => {
   const displayDriverList = () => {
     if (travelPreference === 'driver') {
       return (
-        <Container>
+        <>
           {driverTrips && (
-            <RideStartBar user={user} navigation={navigation}></RideStartBar>
-          )}
+            <Container>
 
-          <View style={styles.listView}>
-            <DriverTripList
-              isLoading={isLoading}
-              navigation={navigation}
-              driverTrips={driverTrips}
-            />
-          </View>
-        </Container>
+              <RideStartBar user={user} navigation={navigation} driverTrips={driverTrips}></RideStartBar>
+
+
+              <View style={styles.listView}>
+                <DriverTripList
+                  isLoading={isLoading}
+                  navigation={navigation}
+                  driverTrips={driverTrips}
+                />
+              </View>
+
+            </Container>
+          )}
+        </>
       )
     }
   }
@@ -297,11 +315,13 @@ export const MainPage = ({navigation}) => {
           {travelPreference === 'passenger'
             ? displayPassengerList()
             : displayDriverList()}
+
           <View>
             <MainPageButtons
+              user={user}
               travelPreference={travelPreference}
               navigation={navigation}
-              driverTripList={driverTrips}
+              drivingTrips={driverTrips}
             />
           </View>
         </MenuDrawer>

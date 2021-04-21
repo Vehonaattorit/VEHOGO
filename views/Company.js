@@ -26,18 +26,16 @@ export const Company = ({navigation}) => {
     const userEmail = firebase.auth().currentUser.email
     const domainString = userEmail.split('@').pop()
     setDomain(domainString)
-    console.log('email', userEmail)
   }
 
   const getCompanies = async (useDomain) => {
-
     let companies
     if (useDomain) {
       companies = await companyMultiQuery([
         {field: 'domainJoin', condition: '==', value: true},
-        {field: 'domain', condition: '==', value: domain}
+        {field: 'domain', condition: '==', value: domain},
       ])
-      console.log(companies)
+
       //companies = await companyMultiQuery('companyCode', '==', companyCode)
     } else {
       companies = await companyQuery('companyCode', '==', companyCode)
@@ -54,7 +52,7 @@ export const Company = ({navigation}) => {
   }
 
   return (
-    <KeyboardAvoidingView behavior="height" style={styles.container}>
+    <KeyboardAvoidingView behavior="padding" style={styles.container}>
       {showBtns && (
         <>
           <View style={styles.poweredContainer}>
@@ -70,8 +68,11 @@ export const Company = ({navigation}) => {
                 title="Create A Company"
                 iconTwo="keyboard-arrow-right"
               />
-              <Text style={{alignSelf:'center'}}>Or Join with either email domain or company code </Text>
-              <CustomIconButton style={{marginBottom: 5}}
+              <Text style={{alignSelf: 'center'}}>
+                Or Join with either email domain or company code{' '}
+              </Text>
+              <CustomIconButton
+                style={{marginBottom: 5}}
                 onPress={() => {
                   getCompanies(true)
                 }}
@@ -107,7 +108,9 @@ export const Company = ({navigation}) => {
                 </Button>
               </View>
             </Item>
-            {error && <Text style={styles.errorText}>Code or domain is not valid</Text>}
+            {error && (
+              <Text style={styles.errorText}>Code or domain is not valid</Text>
+            )}
           </View>
         </>
       )}
@@ -154,7 +157,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     alignSelf: 'stretch',
   },
- 
+
   inputContainer: {
     justifyContent: 'center',
     alignItems: 'center',

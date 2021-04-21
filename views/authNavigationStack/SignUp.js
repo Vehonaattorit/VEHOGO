@@ -1,6 +1,6 @@
 import React, {useRef, useEffect} from 'react'
 import {useState} from 'react'
-import {StyleSheet, View, Dimensions, Image} from 'react-native'
+import {StyleSheet, View, Dimensions, Image, KeyboardAvoidingView} from 'react-native'
 import {Input} from 'react-native-elements'
 import {color} from '../../constants/colors'
 import {register} from '../../controllers/LoginController'
@@ -70,7 +70,7 @@ export const SignUp = () => {
   }, [error])
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView behavior="padding" style={styles.container}>
       <Image
         source={require('../../images/vehogo_logo_musta_RGB.png')}
         style={{width: 150, height: 170, marginBottom: 30}}
@@ -81,13 +81,13 @@ export const SignUp = () => {
           leftIcon={
             <Icon name="mail-outline" size={24} color={color.primary} />
           }
-          placeholder="Email"
+          placeholder="Enter your email address"
           value={email}
           onChangeText={setEmail}
         />
 
         <Input
-          placeholder="Phone Number"
+          placeholder="Enter your phone number"
           errorStyle={{color: 'red'}}
           leftIcon={
             <Icon name="call-outline" size={24} color={color.primary} />
@@ -99,7 +99,7 @@ export const SignUp = () => {
         />
 
         <Input
-          placeholder="Full Name"
+          placeholder="Enter your full name"
           errorStyle={{color: 'red'}}
           leftIcon={
             <Icon name="person-outline" size={24} color={color.primary} />
@@ -144,7 +144,7 @@ export const SignUp = () => {
           />
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   )
 }
 

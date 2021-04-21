@@ -85,14 +85,15 @@ export const Address = ({navigation}) => {
           defaultValue={user.homeAddress}
           setAddress={setAddress}
         />
-        {showSubmit && (
-          <CustomButtonIcon
-            style={styles.btn}
-            title="Submit"
-            onPress={submitHandler}
-          />
-        )}
       </KeyboardAvoidingView>
+      {showSubmit && (
+        <CustomButtonIcon
+          style={styles.btn}
+          title="Submit"
+          onPress={submitHandler}
+          iconTwo="keyboard-arrow-right"
+        />
+      )}
     </View>
   )
 }

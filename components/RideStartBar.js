@@ -21,76 +21,39 @@ import {
 import {color} from '../constants/colors'
 import {getUser} from '../controllers/userController'
 
-export const RideStartBar = ({user, navigation}) => {
+export const RideStartBar = ({user, navigation, driverTrips}) => {
   const [showStart, setShowStart] = useState(false)
   const [startingRide, setStartingRide] = useState([])
   const [date, setDate] = useState('')
   const [driveStartTime, setDriveStartTime] = useState(null)
 
-  // CURRENTWEEKDAY
-  const [currentWeekDay, setCurrentWeekDay] = useState(5)
-
-  const {driverTrips, isLoading} = useDriverTripListHook(user, [
-    {
-      field: 'workDayNum',
-      condition: '==',
-      value: currentWeekDay,
-    },
-    {
-      field: 'driverID',
-      condition: '==',
-      value: user.id,
-    },
-  ])
-
-  // console.log('DriverTrips', driverTrips[0].id)
-
   const getNextRide = async () => {
-    // const now = new Date()
-    // 13.04. 10:47 BACKUP
-    // const now = new Date()
-    // END
-    // 13.04. 10:47 BACKUP
-    // const currentWeekDay = now.getDay()
-    // END
+    const now = new Date()
 
-    // MUISTA POISTAA !!!
-    const currentWeekDay = 5
-    setCurrentWeekDay(currentWeekDay)
+    const currentWeekDay = now.getDay() == 0 ? 7 : now.getDay()
 
-    const now = new Date(1970, 0, 2, 6, 30)
-    // MUISTA LISÄTÄ !!!
-    // const currentWeekDay = now.getDay()
     const currentHours = now.getHours()
     const minutes = now.getMinutes()
+
     let tomorrowWeekDay
 
-    for (let i = currentWeekDay; i <= user.preferedWorkingHours.length; i++) {
-      const preferedWorkingHours = user.preferedWorkingHours[i]
-      if (preferedWorkingHours == undefined) {
-        tomorrowWeekDay = user.preferedWorkingHours[0].workDayNum
-        break
-      }
-      if (preferedWorkingHours.workDayNum == i + 1) {
-        tomorrowWeekDay = preferedWorkingHours.workDayNum
-        break
+    for (let i = 0; i < 7; i++) {
+      if (user.preferedWorkingHours[i] != undefined) {
+        const preferedWorkingHours = user.preferedWorkingHours[i]
+
+        if (currentWeekDay <= preferedWorkingHours.workDayNum) {
+          if (currentWeekDay < user.preferedWorkingHours[i].workDayNum) {
+            tomorrowWeekDay = user.preferedWorkingHours[i].workDayNum
+            break
+          } else {
+            tomorrowWeekDay = user.preferedWorkingHours[0].workDayNum
+          }
+        } else {
+          tomorrowWeekDay = user.preferedWorkingHours[0].workDayNum
+        }
       }
     }
 
-    // query tomorrows workTrips with query
-    // BACKUP 17.04.2021 Trying out useDriverTripListHook in workTripController.js
-    // const todayWorkTrips = await workTripMultiQuery(user.company.id, [
-    //   {
-    //     field: 'workDayNum',
-    //     condition: '==',
-    //     value: currentWeekDay,
-    //   },
-    //   {
-    //     field: 'driverID',
-    //     condition: '==',
-    //     value: user.id,
-    //   },
-    // ])
     const tomorrowWorkTrips = await workTripMultiQuery(user.company.id, [
       {
         field: 'workDayNum',
@@ -180,8 +143,14 @@ export const RideStartBar = ({user, navigation}) => {
   }
 
   useEffect(() => {
-    if (!isLoading) getNextRide()
-  }, [driverTrips, isLoading])
+    if (driverTrips != null) {
+      getNextRide()
+    }
+  }, [driverTrips])
+
+  /* useEffect(() => {
+     if (!isLoading) getNextRide()
+   }, [driverTrips, isLoading])*/
 
   return (
     <View>
