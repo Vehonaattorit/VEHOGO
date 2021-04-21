@@ -90,7 +90,7 @@ export const WorkingDays = ({navigation}) => {
     const isValid = workDays.some((item) => item.isSelected === true)
 
     if (!isValid) {
-      Alert.alert('Wrong input!', 'Please select at least one work day.', [
+      Alert.alert('Wrong input!', 'Please select atleast one work day.', [
         {text: 'Okay'},
       ])
       setError('Please select at least one work day.')
@@ -125,7 +125,9 @@ export const WorkingDays = ({navigation}) => {
       <View style={styles.iconContainer}>
         <EvilIcons name="calendar" size={300} color="#26AAE2" />
       </View>
-
+      <Text style={styles.title}>
+        Please enter the days you will be going to work
+      </Text>
       <View style={styles.btnContainer}>
         {workDays.map((item) => (
           <RoundButton
@@ -136,7 +138,6 @@ export const WorkingDays = ({navigation}) => {
           />
         ))}
       </View>
-      <Text style={styles.errorText}>{error}</Text>
       <View style={styles.submitBtn}>
         <CustomButtonIcon
           title="Submit"
@@ -153,21 +154,25 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#fff',
   },
   btnContainer: {
     flexDirection: 'row',
-    margin: 20,
+    flex: 0.6,
   },
   iconContainer: {
     alignItems: 'center',
-    marginBottom: 100,
+
+    flex: 1,
   },
   submitBtn: {
     position: 'absolute',
     bottom: 50,
-    width: '90%',
+    width: '100%',
   },
-  errorText: {
-    color: 'red',
+  title: {
+    margin: 15,
+    fontSize: 24,
+    flex: 0.4,
   },
 })

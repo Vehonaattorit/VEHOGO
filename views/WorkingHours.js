@@ -14,13 +14,12 @@ import {CustomButton} from '../components/CustomButton'
 import {CustomTitle} from '../components/CustomTitle'
 import {UserContext} from '../contexts'
 import {updateUser} from '../controllers/userController'
-import {AntDesign} from '@expo/vector-icons'
+
 import {color} from '../constants/colors'
 
 import {formatTime} from '../utils/utils'
 
 import firebase from 'firebase'
-import CustomButtonIcon from '../components/CustomIconButton'
 
 const DateTimeInput = (props) => {
   const [showTimePicker, setShowTimePicker] = useState(Platform.OS === 'ios')
@@ -62,7 +61,6 @@ const TimeModal = ({
             mode="time"
             is24Hour={true}
             onChange={(e, date) => {
-              console.log('I changed time')
               setIsPickerShow(false)
               if (date) onChange(e, date)
             }}
@@ -125,16 +123,15 @@ export const WorkingHours = ({navigation}) => {
   const {user} = useContext(UserContext)
 
   // If starting and ending time was found in db, set fetched values instead of default
-
   const [newEventState, setNewEventState] = useState({
     startDate:
-      user.preferedWorkingHours[0].workDayStart === undefined
+      user.preferedWorkingHours === undefined
         ? null
         : user.preferedWorkingHours[0].workDayStart.toDate()
         ? user.preferedWorkingHours[0].workDayStart.toDate()
         : user.preferedWorkingHours[0].workDayStart,
     endDate:
-      user.preferedWorkingHours[0].workDayEnd === undefined
+      user.preferedWorkingHours === undefined
         ? null
         : user.preferedWorkingHours[0].workDayEnd.toDate()
         ? user.preferedWorkingHours[0].workDayEnd.toDate()
@@ -176,7 +173,7 @@ export const WorkingHours = ({navigation}) => {
 
     const end = new Date(1970, 0, 1, endDate.getHours(), endDate.getMinutes())
 
-    user.preferedWorkingHours.forEach((element) => {
+    user.workDays.forEach((element) => {
       tempArr.push({
         workDayNum: element.workDayNum,
         workDayStart: new firebase.firestore.Timestamp.fromDate(start),
@@ -208,64 +205,66 @@ export const WorkingHours = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.poweredContainer}>
-        <TimeModal
-          setIsPickerShow={setIsPickerShow}
-          isPickerShow={isPickerShow}
-          modalVisible={modalVisible}
-          handleModal={handleModal}
-          value={newEventState[selectedTime]}
-          onChange={(e, date) => updateValue(date, selectedTime)}
+      <TimeModal
+        setIsPickerShow={setIsPickerShow}
+        isPickerShow={isPickerShow}
+        modalVisible={modalVisible}
+        handleModal={handleModal}
+        value={newEventState[selectedTime]}
+        onChange={(e, date) => updateValue(date, selectedTime)}
+      />
+
+      <CustomTitle style={styles.title} title="Hours" />
+      <View style={styles.icon}>
+        <MaterialCommunityIcons
+          name="clock-fast"
+          size={300}
+          color={color.secondaryDark}
         />
-        <View style={styles.icon}>
-          <AntDesign name="clockcircle" size={200} color="#26AAE2" />
-        </View>
+      </View>
+      <View>
+        <Text>My work hours</Text>
       </View>
       <View
         style={{
           flexDirection: 'column',
-          alignSelf: 'stretch',
+          width: 300,
         }}
       >
         <View style={styles.btnContainer}>
-          <View style={styles.powereBtnContainer}>
-            <CustomButtonIcon
-              iconOne=""
-              title={
-                newEventState.startDate
-                  ? `Start time ${formatTime(newEventState.startDate)}`
-                  : 'Start time'
-              }
-              onPress={() => {
-                setModalVisible(true)
-                setSelectedTime('startDate')
-                setIsPickerShow(true)
-              }}
-            />
-          </View>
-          <View style={styles.powereBtnContainer}>
-            <CustomButtonIcon
-              title={
-                newEventState.endDate
-                  ? `End time ${formatTime(newEventState.endDate)}`
-                  : 'End time'
-              }
-              onPress={() => {
-                setModalVisible(true)
-                setSelectedTime('endDate')
-                setIsPickerShow(true)
-              }}
-            />
-          </View>
-          <View>
-            <Text style={styles.errorText}>{error}</Text>
-          </View>
+          <CustomButton
+            title={
+              newEventState.startDate
+                ? `Start time ${formatTime(newEventState.startDate)}`
+                : 'Start time'
+            }
+            onPress={() => {
+              setModalVisible(true)
+              setSelectedTime('startDate')
+              setIsPickerShow(true)
+            }}
+          />
         </View>
-        <CustomButtonIcon
-          title="Submit"
-          onPress={submitHandler}
-          iconTwo="keyboard-arrow-right"
-        />
+        <View style={styles.btnContainer}>
+          <CustomButton
+            title={
+              newEventState.endDate
+                ? `End time ${formatTime(newEventState.endDate)}`
+                : 'End time'
+            }
+            onPress={() => {
+              setModalVisible(true)
+              setSelectedTime('endDate')
+              setIsPickerShow(true)
+            }}
+          />
+        </View>
+        <View>
+          <Text style={styles.errorText}>{error}</Text>
+        </View>
+      </View>
+      <View style={styles.btnContainer}>
+        <CustomButton title="Submit" onPress={submitHandler} />
       </View>
     </View>
   )
@@ -277,23 +276,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  poweredContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  icon: {
-    marginBottom: 130,
-  },
 
   btnContainer: {
-    margin: 5,
+    margin: 20,
     alignSelf: 'stretch',
   },
-  powereBtnContainer: {
-    width: '100%',
-    margin: 5,
-  },
-
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -315,7 +302,6 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-
   errorText: {
     color: 'red',
   },

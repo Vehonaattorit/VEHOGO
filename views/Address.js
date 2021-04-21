@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   googleInputContainer: {
     maxHeight: 300,
     width: '90%',
-    minHeight: 100,
+    minHeight: 95,
   },
   buttonContainer: {
     width: '100%',

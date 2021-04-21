@@ -38,6 +38,13 @@ function SetUpStackNavigator() {
             title: 'Create or join',
           }}
         />
+           <Stack.Screen
+          name="WorkingHours"
+          component={WorkingHours}
+          options={{
+            title: 'Working Hours',
+          }}
+        />
         <Stack.Screen
           name="Travel"
           component={Travel}
@@ -68,13 +75,7 @@ function SetUpStackNavigator() {
           }}
         />
 
-        <Stack.Screen
-          name="WorkingHours"
-          component={WorkingHours}
-          options={{
-            title: 'Working Hours',
-          }}
-        />
+
         <Stack.Screen name="SetUpInit" component={SetUpInit} />
       </Stack.Navigator>
     </NavigationContainer>

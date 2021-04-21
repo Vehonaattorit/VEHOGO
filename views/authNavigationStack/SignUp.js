@@ -135,6 +135,7 @@ export const SignUp = () => {
           />
           <Input
             placeholder="Confirm Password"
+            
             errorStyle={{color: 'red'}}
             leftIcon={
               <Icon

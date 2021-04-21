@@ -15,6 +15,17 @@ export async function updateUser(user) {
   }
 }
 
+export async function softUpdateUser(user) {
+  try {
+    // Add a new document in collection "users"
+    let userRef = db.collection('users').doc(user.id)
+    let userObject = userConverter.toFirestore(user)
+    await userRef.withConverter(userConverter).update(userObject)
+  } catch (error) {
+    console.error('Error writing document: ', error)
+  }
+}
+
 export async function userDocumentUpdater(user) {
   try {
     // Add a new document in collection "users"
