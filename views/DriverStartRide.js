@@ -122,11 +122,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   iconView: {
-    flex: 2,
+    padding: 20,
     backgroundColor: 'white',
   },
   iconViewBody: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },

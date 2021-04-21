@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useRef, useContext} from 'react'
 import {UserContext} from '../contexts'
-import {StyleSheet, Dimensions} from 'react-native'
+import {StyleSheet, Dimensions, Image} from 'react-native'
 import {Content, Container, Text, View} from 'native-base'
-import MapView from 'react-native-maps'
+import MapView, {Marker} from 'react-native-maps'
 import PassengerRideRequestButton from './passengerRideRequestButton'
 import PassengerAcceptRefuseButton from './passengerAcceptRefuseButton'
 import decodePolyline from 'decode-google-map-polyline'
@@ -17,37 +17,43 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
   } = route.params
   const {user} = useContext(UserContext)
 
-  console.log('DriverAcceptRefuse', isPassengerIncluded)
-
   const [mapRef, setMapRef] = useState(null)
   const [routeCoordinates, setRouteCoordinates] = useState([])
   const [markers, setMarkers] = useState([
     singleItem.scheduledDrive.stops.map((stop) => (
-      <MapView.Marker
-        image={
-          stop.stopName == 'Home' || stop.stopName == user.company.name
-            ? stop.stopName == 'Home'
-              ? require('../images/home-map-icon-white.png')
-              : require('../images/work-map-icon-white.png')
-            : require('../images/passenger-map-icon-white.png')
-        }
+      <Marker
         key={stop.address}
         coordinate={{
           latitude: stop.location.latitude,
           longitude: stop.location.longitude,
         }}
         title={stop.address}
-      />
+      >
+        <Image
+          source={
+            stop.stopName == 'Home' || stop.stopName == user.company.name
+              ? stop.stopName == 'Home'
+                ? require('../images/home-map-icon-white.png')
+                : require('../images/work-map-icon-white.png')
+              : require('../images/passenger-map-icon-white.png')
+          }
+          style={{height: 45, width: 45}}
+        ></Image>
+      </Marker>
     )),
     rideRequest != undefined && (
-      <MapView.Marker
-        image={require('../images/passenger-map-icon-green.png')}
+      <Marker
         key={rideRequest.id}
         coordinate={{
           latitude: rideRequest.homeLocation.latitude,
           longitude: rideRequest.homeLocation.longitude,
         }}
-      />
+      >
+        <Image
+          source={require('../images/passenger-map-icon-green.png')}
+          style={{height: 45, width: 45}}
+        ></Image>
+      </Marker>
     ),
   ])
   //
@@ -89,7 +95,7 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
         >
           <MapView.Polyline
             coordinates={routeCoordinates}
-            strokeColor="#000"
+            strokeColor="#26AAE2"
             strokeWidth={4}
           />
           {markers}

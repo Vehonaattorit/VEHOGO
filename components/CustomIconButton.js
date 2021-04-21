@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     height: 60,
     backgroundColor: '#E1F5FD',
     borderRadius: 5,
+    margin: 5,
     marginHorizontal: 20,
     justifyContent: 'center',
     alignItems: 'center',
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
   iconTwoContainer: {
     width: 40,
     height: 40,
-    marginLeft: 5,
+    marginLeft: 10,
   },
   text: {
     fontSize: 20,

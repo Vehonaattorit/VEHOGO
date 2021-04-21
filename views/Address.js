@@ -1,5 +1,12 @@
 import React, {useContext, useState} from 'react'
-import {StyleSheet, Alert, Text, View, KeyboardAvoidingView} from 'react-native'
+import {
+  StyleSheet,
+  Alert,
+  Text,
+  Platform,
+  View,
+  KeyboardAvoidingView,
+} from 'react-native'
 
 import {FontAwesome} from '@expo/vector-icons'
 import {updateUser} from '../controllers/userController'
@@ -74,53 +81,51 @@ export const Address = ({navigation}) => {
   }
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
       <View style={styles.icon}>
         <FontAwesome name="home" size={300} color="#26AAE2" />
       </View>
-      <KeyboardAvoidingView behavior="padding" style={styles.inputContainer}>
+      <View style={styles.googleInputContainer}>
         <GooglePlacesInput
           setShowSubmit={setShowSubmit}
           showSubmit={showSubmit}
           defaultValue={user.homeAddress}
           setAddress={setAddress}
         />
-      </KeyboardAvoidingView>
-      {showSubmit && (
-        <CustomButtonIcon
-          style={styles.btn}
-          title="Submit"
-          onPress={submitHandler}
-          iconTwo="keyboard-arrow-right"
-        />
-      )}
-    </View>
+      </View>
+      <View style={styles.buttonContainer}>
+        {showSubmit && (
+          <CustomButtonIcon
+            style={styles.btn}
+            title="Submit"
+            onPress={submitHandler}
+            iconTwo="keyboard-arrow-right"
+          />
+        )}
+      </View>
+    </KeyboardAvoidingView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'column',
     flex: 1,
+    justifyContent: 'flex-end',
     alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 50,
   },
-  inputContainer: {
-    height: 100,
+  icon: {
+    flex: 1,
+  },
+  googleInputContainer: {
+    maxHeight: 300,
     width: '90%',
-    color: 'white',
+    minHeight: 95,
   },
-  customInput: {
-    shadowColor: 'rgba(0, 0, 0, 0.4)',
-    shadowOpacity: 0.8,
-    elevation: 6,
-    shadowRadius: 15,
-    shadowOffset: {width: 1, height: 13},
-  },
-  btn: {
-    height: 100,
+  buttonContainer: {
     width: '100%',
+    height: 100,
   },
-  icon: {flex: 1},
 })

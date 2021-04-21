@@ -73,7 +73,7 @@ const QuickMessagesMenu = ({user, item, workTrip}) => {
         text: value,
         createdAt: new Date().getTime(),
         user: {
-          id: uid,
+          _id: uid,
           name: user.userName,
         },
       })

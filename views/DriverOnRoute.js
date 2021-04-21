@@ -1,13 +1,15 @@
 import React, {useState, useEffect, useContext, useRef} from 'react'
 import {
+  ActivityIndicator,
   StyleSheet,
   View,
   Text,
   Dimensions,
   TouchableOpacity,
+  Image,
 } from 'react-native'
 import {Container} from 'native-base'
-import MapView from 'react-native-maps'
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
 import decodePolyline from 'decode-google-map-polyline'
 import {
   updateWorkTrip,
@@ -20,6 +22,7 @@ import {useDocumentData} from 'react-firebase-hooks/firestore'
 import Carousel, {ParallaxImage} from 'react-native-snap-carousel'
 import {ChatRoom} from '../models/chatRoom'
 import {
+  deleteChatRoom,
   queryChatRoom,
   useChatRoomHooks,
 } from '../controllers/chatRoomController'
@@ -38,6 +41,7 @@ import QuickMessagesMenu from '../components/QuickMessagesMenu'
 
 import firebase from 'firebase/app'
 import 'firebase/firestore'
+import {deleteMessages, getMessages} from '../controllers/chatMessageController'
 
 const db = firebase.firestore()
 
@@ -47,15 +51,9 @@ export const DriverOnRoute = ({navigation, route}) => {
   const mapRef = useRef()
 
   const passengerStops = workTrip.scheduledDrive.stops.slice(1)
-  // console.log('passenger Stops', passengerStops)
-  // console.log('stopNmbr', workTrip.scheduledDrive.nextStop)
-  // console.log(
-  //   'compare',
-  //   passengerStops[workTrip.scheduledDrive.nextStop - 1].stopName
-  // )
 
   const {user} = useContext(UserContext)
-  const {chatRooms, setChatRooms} = useChatRoomHooks()
+  const {chatRooms, isLoading} = useChatRoomHooks()
   const {isDriving} = useIsDrivingHook(user, workTrip)
 
   let intervalTimer
@@ -65,27 +63,11 @@ export const DriverOnRoute = ({navigation, route}) => {
   // const [chatRooms, setChatRooms] = useState([])
 
   const [latestMessage, setLatestMessage] = useState('')
-  // console.log('workTrip', workTrip.id)
+  //
 
   const [markers, setMarkers] = useState([
     workTrip.scheduledDrive.stops.map((stop) => (
-      <MapView.Marker
-        image={
-          stop.stopName == 'Home' || stop.stopName == user.company.name
-            ? stop.stopName == 'Home'
-              ? passengerStops[workTrip.scheduledDrive.nextStop - 1].stopName ==
-                stop.stopName
-                ? require('../images/home-map-icon-blue.png')
-                : require('../images/home-map-icon-white.png')
-              : passengerStops[workTrip.scheduledDrive.nextStop - 1].stopName ==
-                stop.stopName
-              ? require('../images/work-map-icon-blue.png')
-              : require('../images/work-map-icon-white.png')
-            : workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop]
-                .stopName == stop.stopName
-            ? require('../images/passenger-map-icon-blue.png')
-            : require('../images/passenger-map-icon-white.png')
-        }
+      <Marker
         key={stop.address}
         identifier={stop.address}
         coordinate={{
@@ -93,7 +75,27 @@ export const DriverOnRoute = ({navigation, route}) => {
           longitude: stop.location.longitude,
         }}
         title={stop.address}
-      />
+      >
+        <Image
+          source={
+            stop.stopName == 'Home' || stop.stopName == user.company.name
+              ? stop.stopName == 'Home'
+                ? passengerStops[workTrip.scheduledDrive.nextStop - 1]
+                    .stopName == stop.stopName
+                  ? require('../images/home-map-icon-blue.png')
+                  : require('../images/home-map-icon-white.png')
+                : passengerStops[workTrip.scheduledDrive.nextStop - 1]
+                    .stopName == stop.stopName
+                ? require('../images/work-map-icon-blue.png')
+                : require('../images/work-map-icon-white.png')
+              : workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop]
+                  .stopName == stop.stopName
+              ? require('../images/passenger-map-icon-blue.png')
+              : require('../images/passenger-map-icon-white.png')
+          }
+          style={{height: 45, width: 45}}
+        ></Image>
+      </Marker>
     )),
   ])
 
@@ -109,6 +111,7 @@ export const DriverOnRoute = ({navigation, route}) => {
 
   async function callUpdateUserPosition() {
     //update driver position to firebase
+
     let location = await updateUserPosition(user, workTrip.id)
 
     //calculate distance between next stop and current position
@@ -144,12 +147,6 @@ export const DriverOnRoute = ({navigation, route}) => {
   }
 
   const changeNextStop = async () => {
-    console.log('stops.length', workTrip.scheduledDrive.stops.length)
-    console.log('stops.length - 1', workTrip.scheduledDrive.stops.length - 1)
-    console.log(
-      'workTrip.scheduledDrive.nextStop',
-      workTrip.scheduledDrive.nextStop
-    )
     setShowNextStopBar(false)
     if (
       workTrip.scheduledDrive.stops.length !== workTrip.scheduledDrive.nextStop
@@ -173,23 +170,7 @@ export const DriverOnRoute = ({navigation, route}) => {
   const showNextStop = () => {
     setMarkers(
       workTrip.scheduledDrive.stops.map((stop) => (
-        <MapView.Marker
-          image={
-            stop.stopName == 'Home' || stop.stopName == user.company.name
-              ? stop.stopName == 'Home'
-                ? passengerStops[workTrip.scheduledDrive.nextStop - 1]
-                    .stopName == stop.stopName
-                  ? require('../images/home-map-icon-blue.png')
-                  : require('../images/home-map-icon-white.png')
-                : passengerStops[workTrip.scheduledDrive.nextStop - 1]
-                    .stopName == stop.stopName
-                ? require('../images/work-map-icon-blue.png')
-                : require('../images/work-map-icon-white.png')
-              : workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop]
-                  .stopName == stop.stopName
-              ? require('../images/passenger-map-icon-blue.png')
-              : require('../images/passenger-map-icon-white.png')
-          }
+        <Marker
           key={stop.address}
           identifier={stop.address}
           coordinate={{
@@ -197,7 +178,28 @@ export const DriverOnRoute = ({navigation, route}) => {
             longitude: stop.location.longitude,
           }}
           title={stop.address}
-        />
+        >
+          <Image
+            source={
+              stop.stopName == 'Home' || stop.stopName == user.company.name
+                ? stop.stopName == 'Home'
+                  ? passengerStops[workTrip.scheduledDrive.nextStop - 1]
+                      .stopName == stop.stopName
+                    ? require('../images/home-map-icon-blue.png')
+                    : require('../images/home-map-icon-white.png')
+                  : passengerStops[workTrip.scheduledDrive.nextStop - 1]
+                      .stopName == stop.stopName
+                  ? require('../images/work-map-icon-blue.png')
+                  : require('../images/work-map-icon-white.png')
+                : workTrip.scheduledDrive.stops[
+                    workTrip.scheduledDrive.nextStop
+                  ].stopName == stop.stopName
+                ? require('../images/passenger-map-icon-blue.png')
+                : require('../images/passenger-map-icon-white.png')
+            }
+            style={{height: 45, width: 45}}
+          ></Image>
+        </Marker>
       ))
     )
   }
@@ -212,13 +214,28 @@ export const DriverOnRoute = ({navigation, route}) => {
   }
 
   const stopDriving = async () => {
+    const {stops} = workTrip.scheduledDrive
+
+    const passengerStops = stops.slice(1, stops.length - 1)
+
+    // await deleteMessages('0c376027-a378-4ebc-ad8a-2e1absd828b96')
+    for (let i = 0; i < chatRooms.length; i++) {
+      for (let j = 0; j < passengerStops.length; j++) {
+        if (
+          chatRooms[i].driverID === user.id &&
+          passengerStops[j].userID === chatRooms[i].passengerID
+        ) {
+          await deleteMessages(chatRooms[i].id)
+        }
+      }
+    }
+
     workTrip.isDriving = false
     await updateWorkTrip(user.company.id, workTrip)
+
     navigation.popToTop()
   }
-  // useEffect(() => {
-
-  // }, [mapRef])
+  useEffect(() => {}, [mapRef])
 
   useEffect(() => {
     //callUpdateUserPosition()
@@ -227,7 +244,7 @@ export const DriverOnRoute = ({navigation, route}) => {
     }
 
     setTimeout(() => {
-      if (mapRef != undefined || mapRef != null) {
+      if (mapRef != undefined) {
         mapRef.current.fitToSuppliedMarkers(
           workTrip.scheduledDrive.stops.map((stop) => stop.address),
           {
@@ -236,7 +253,8 @@ export const DriverOnRoute = ({navigation, route}) => {
           }
         )
       }
-    }, 1000)
+    }, 10000)
+    // }, 1000)20.04.2021 initial time
 
     var tempRouteCoordinates = []
     //
@@ -268,15 +286,19 @@ export const DriverOnRoute = ({navigation, route}) => {
       return (
         <>
           {doc != undefined && doc.driverCurrentLocation != undefined ? (
-            <MapView.Marker
-              image={require('../images/car-marker.png')}
+            <Marker
               key={'driver-car'}
               coordinate={{
                 latitude: doc.driverCurrentLocation.location.latitude,
                 longitude: doc.driverCurrentLocation.location.longitude,
               }}
               title="car"
-            />
+            >
+              <Image
+                source={require('../images/car-marker.png')}
+                style={{height: 45, width: 45}}
+              ></Image>
+            </Marker>
           ) : (
             <View />
           )}
@@ -296,6 +318,7 @@ export const DriverOnRoute = ({navigation, route}) => {
     const chatRoom = await queryChatRoom(userID, workTrip.driverID)
 
     navigation.navigate('ChatRoom', {
+      user,
       chatRoom,
       chatRoomTitle: chatRoomName,
     })
@@ -311,33 +334,7 @@ export const DriverOnRoute = ({navigation, route}) => {
       setLatestMessage(renderChat.latestMessage.text)
     }
 
-    // const fetchIsDriving = async () => {
-    //   const isDrivingListener = await db
-    //     .collection('companys')
-    //     .doc(user.company.id)
-    //     .collection('workTrips')
-    //     .doc(workTrip.id)
-    //     .onSnapshot((querySnapshot) => {
-    //       const data = querySnapshot.data()
-
-    //       setIsDriving(data.isDriving)
-    //       // const workTrip = querySnapshot.docs.map((doc) => {
-    //       //   return {
-    //       //     ...doc.data(),
-    //       //   }
-    //       // })
-
-    //       // console.log('workTrip', workTrip.isDriving)
-    //     })
-
-    //   return () => isDrivingListener()
-    // }
-
     if (!isDriving) return navigation.popToTop()
-
-    // console.log('isDriving', isDriving)
-
-    // fetchIsDriving()
   }, [chatRooms, isDriving])
 
   // Render Passenger List at top of the screen
@@ -359,7 +356,7 @@ export const DriverOnRoute = ({navigation, route}) => {
         <View style={styles.listItemContainer}>
           <TouchableOpacity
             disabled={isLastStop}
-            onPress={() => createChatRoom(item)}
+            onPress={async () => await createChatRoom(item)}
           >
             <View style={styles.listItemTopRow}>
               <View>
@@ -404,6 +401,14 @@ export const DriverOnRoute = ({navigation, route}) => {
         <View style={styles.leftArrowContainer}>
           <AntDesign name="caretright" size={24} color={color.lightBlack} />
         </View>
+      </View>
+    )
+  }
+
+  if (isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color={color.primary} />
       </View>
     )
   }
@@ -468,7 +473,7 @@ export const DriverOnRoute = ({navigation, route}) => {
           <MapView
             ref={mapRef}
             style={styles.mapStyle}
-            provider={MapView.PROVIDER_GOOGLE}
+            provider={PROVIDER_GOOGLE}
             initialRegion={{
               latitude: workTrip.scheduledDrive.stops[0].location.latitude,
               longitude: workTrip.scheduledDrive.stops[0].location.longitude,
@@ -517,6 +522,11 @@ export const DriverOnRoute = ({navigation, route}) => {
 }
 
 const styles = StyleSheet.create({
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   requestMapContent: {
     flex: 5,
     backgroundColor: 'black',

@@ -13,4 +13,9 @@ web-build/
 .DS_Store
 
 .env
+google-services.json
 *.log
+
+app.json
+
+google-services.json

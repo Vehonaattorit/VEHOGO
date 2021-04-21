@@ -9,9 +9,6 @@ import {
   Alert,
 } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import {MaterialCommunityIcons} from '@expo/vector-icons'
-import {CustomButton} from '../components/CustomButton'
-import {CustomTitle} from '../components/CustomTitle'
 import {UserContext} from '../contexts'
 import {updateUser} from '../controllers/userController'
 import {AntDesign} from '@expo/vector-icons'
@@ -205,58 +202,48 @@ export const WorkingHours = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.poweredContainer}>
-        <TimeModal
-          isPickerShow={isPickerShow}
-          modalVisible={modalVisible}
-          handleModal={handleModal}
-          value={newEventState[selectedTime]}
-          onChange={(e, date) => updateValue(date, selectedTime)}
-        />
-        <View style={styles.icon}>
-          <AntDesign name="clockcircle" size={200} color="#26AAE2" />
-        </View>
+      <TimeModal
+        isPickerShow={isPickerShow}
+        modalVisible={modalVisible}
+        handleModal={handleModal}
+        value={newEventState[selectedTime]}
+        onChange={(e, date) => updateValue(date, selectedTime)}
+      />
+      <View style={styles.icon}>
+        <AntDesign name="clockcircle" size={200} color="#26AAE2" />
       </View>
-      <View
-        style={{
-          flexDirection: 'column',
-          alignSelf: 'stretch',
+      <Text style={styles.title}>
+        Please enter the days you will be going to work
+      </Text>
+
+      <CustomButtonIcon
+        iconOne=""
+        title={
+          newEventState.startDate
+            ? formatTime(newEventState.startDate)
+            : 'Start time'
+        }
+        onPress={() => {
+          setModalVisible(true)
+          setSelectedTime('startDate')
+          setIsPickerShow(true)
         }}
-      >
-        <View style={styles.btnContainer}>
-          <View style={styles.powereBtnContainer}>
-            <CustomButtonIcon
-              iconOne=""
-              title={
-                newEventState.startDate
-                  ? formatTime(newEventState.startDate)
-                  : 'Start time'
-              }
-              onPress={() => {
-                setModalVisible(true)
-                setSelectedTime('startDate')
-                setIsPickerShow(true)
-              }}
-            />
-          </View>
-          <View style={styles.powereBtnContainer}>
-            <CustomButtonIcon
-              title={
-                newEventState.endDate
-                  ? formatTime(newEventState.endDate)
-                  : 'End time'
-              }
-              onPress={() => {
-                setModalVisible(true)
-                setSelectedTime('endDate')
-                setIsPickerShow(true)
-              }}
-            />
-          </View>
-          <View>
-            <Text style={styles.errorText}>{error}</Text>
-          </View>
-        </View>
+      />
+      <View styles={styles.btns}></View>
+      <CustomButtonIcon
+        title={
+          newEventState.endDate ? formatTime(newEventState.endDate) : 'End time'
+        }
+        onPress={() => {
+          setModalVisible(true)
+          setSelectedTime('endDate')
+          setIsPickerShow(true)
+        }}
+      />
+
+      <Text style={styles.errorText}>{error}</Text>
+
+      <View style={styles.submitBtnContainer}>
         <CustomButtonIcon
           title="Submit"
           onPress={submitHandler}
@@ -274,23 +261,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
   },
-  poweredContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   icon: {
-    marginBottom: 130,
+    flex: 0.5,
   },
-
-  btnContainer: {
-    margin: 5,
+  title: {
+    margin: 15,
+    fontSize: 24,
+  },
+  submitBtnContainer: {
+    width: '100%',
+    position: 'absolute',
+    bottom: 40,
+  },
+  btns: {
+    height: 100,
+    backgroundColor: 'black',
     alignSelf: 'stretch',
   },
-  powereBtnContainer: {
-    width: '100%',
-    margin: 5,
-  },
-
   centeredView: {
     flex: 1,
     justifyContent: 'center',

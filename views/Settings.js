@@ -5,16 +5,13 @@ import {UserContext} from '../contexts'
 import {updateUser} from '../controllers/userController'
 
 export const Settings = ({navigation}) => {
-  // const {user} = useContext(UserContext)
-
-  // const updateSetup = async ({screen}) => {
-  //   if (user.setupIsCompleted) {
-  //     user.setupIsCompleted = false
-  //     await updateUser(user)
-  //     if (user.travelPreference === 'driver') await setupWorkTripDocs()
-  //     navigation.navigate(screen)
-  //   }
-  // }
+  const [travelModalVisible, SetTravelModalVisible] = useState(false)
+  const [usernameModalVisible, SetUsernameModalVisible] = useState(false)
+  const [homeModalVisible, SetHomeModalVisible] = useState(false)
+  const [workModalVisible, SetWorkModalVisible] = useState(false)
+  const [WorkingHoursModalVisible, SetWorkingHoursModalVisible] = useState(
+    false
+  )
 
   return (
     <View style={styles.container}>
@@ -25,7 +22,7 @@ export const Settings = ({navigation}) => {
             title="Modify Your Travel Info"
             iconTwo="keyboard-arrow-right"
             onPress={() => {
-             console.log(" ")
+              console.log('Travel')
             }}
           />
         </View>
@@ -71,8 +68,8 @@ export const Settings = ({navigation}) => {
         </View>
         <View style={styles.btn}>
           <CustomButtonIcon
-          style={styles.deleteBtn}
-            iconOne="access-time"
+            style={styles.deleteBtn}
+            iconOne="delete"
             title="DELETE YOUR ACCOUNT"
             iconTwo="keyboard-arrow-right"
             onPress={() => {
@@ -97,7 +94,5 @@ const styles = StyleSheet.create({
   btn: {
     marginTop: 10,
   },
-  deleteBtn:{
-
-  }
+  deleteBtn: {},
 })

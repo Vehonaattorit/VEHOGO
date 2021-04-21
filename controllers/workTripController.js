@@ -72,7 +72,6 @@ export const usePassengerListHook = (user, querys) => {
     }
 
     const fetchActiveRide = async () => {
-      console.log('fetchActiveRide')
       let activeRideListener = await db
         .collection('companys')
         .doc(user.company.id)
@@ -145,6 +144,10 @@ export const useDriverTripListHook = (user, querys) => {
         setWorkTrips(driverTrips)
         setIsLoading(false)
       })
+
+      return () => {
+        workTripsListener()
+      }
     }
 
     fetchWorkTrips()

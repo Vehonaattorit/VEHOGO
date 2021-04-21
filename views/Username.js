@@ -88,11 +88,14 @@ export const Username = ({navigation}) => {
   )
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
       <View style={styles.icon}>
         <Ionicons name="md-person" size={300} color="#26AAE2" />
       </View>
-      <KeyboardAvoidingView behavior="position" style={styles.buttonAndInput}>
+      <View style={styles.buttonAndInput}>
         <View style={styles.inputContainer}>
           <CustomInput
             placeholder="Please enter your full name..."
@@ -116,8 +119,8 @@ export const Username = ({navigation}) => {
           }}
           iconTwo="keyboard-arrow-right"
         />
-      </KeyboardAvoidingView>
-    </View>
+      </View>
+    </KeyboardAvoidingView>
   )
 }
 

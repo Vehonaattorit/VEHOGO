@@ -31,28 +31,19 @@ function SetUpStackNavigator() {
           headerTintColor: color.primary,
         }}
       >
-        {/* <Stack.Screen
-          name="VerifyEmail"
-          component={VerifyEmail}
-          options={() => ({
-            title: 'Verify Email',
-            headerLeft: () => (
-              <IconButton
-                icon="logout"
-                size={28}
-                color={color.darkBlue}
-                onPress={() => {
-                  signOut()
-                }}
-              />
-            ),
-          })}
-        /> */}
+
         <Stack.Screen
           name="Company"
           component={Company}
           options={{
             title: 'Create or join',
+          }}
+        />
+           <Stack.Screen
+          name="WorkingHours"
+          component={WorkingHours}
+          options={{
+            title: 'Working Hours',
           }}
         />
         <Stack.Screen
@@ -62,6 +53,7 @@ function SetUpStackNavigator() {
             title: 'Travel',
           }}
         />
+
         <Stack.Screen
           name="Address"
           component={Address}
@@ -84,13 +76,7 @@ function SetUpStackNavigator() {
           }}
         />
 
-        <Stack.Screen
-          name="WorkingHours"
-          component={WorkingHours}
-          options={{
-            title: 'Working Hours',
-          }}
-        />
+
         <Stack.Screen name="SetUpInit" component={SetUpInit} />
       </Stack.Navigator>
     </NavigationContainer>

@@ -15,6 +15,7 @@ const DriverTripList = ({isLoading, driverTrips, navigation}) => {
       </View>
     )
   }
+
   return (
     <View>
       <FlatList
