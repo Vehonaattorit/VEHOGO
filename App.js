@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 import {View, SafeAreaView, Text} from 'react-native'
 import MainStackNavigator from './navigators/MainNavigator'
 import AuthStackNavigator from './navigators/AuthenticationNavigator'
@@ -17,6 +17,7 @@ import {GOOGLE_API_KEY} from '@env'
 
 import {LogBox} from 'react-native'
 
+import * as Permissions from 'expo-permissions'
 import * as Notifications from 'expo-notifications'
 
 Notifications.setNotificationHandler({
@@ -28,6 +29,13 @@ Notifications.setNotificationHandler({
 export default function App() {
   const [fontReady, setFontReady] = useState(false)
   const [userId, setUserId] = useState(null)
+  const [expoPushToken, setExpoPushToken] = useState(false)
+
+  // Notification useState
+  const [notification, setNotification] = useState(null)
+
+  const notificationListener = useRef()
+  const responseListener = useRef()
 
   LogBox.ignoreLogs(['Setting a timer'])
 
@@ -43,8 +51,30 @@ export default function App() {
   }
 
   useEffect(() => {
-      subscribeToAuth(authStateChanged)
-      loadFonts()
+    subscribeToAuth(authStateChanged)
+    loadFonts()
+
+    // // Expo Notificatiosn
+    // registerForPushNotificationsAsync().then((token) => setExpoPushToken(token))
+
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        setNotification(notification)
+      }
+    )
+
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        console.log(response)
+      }
+    )
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener.current)
+      Notifications.removeNotificationSubscription(responseListener.current)
+    }
   }, [])
 
   const authStateChanged = (user) => {
@@ -102,5 +132,4 @@ function Navigation({userId}) {
       return <View></View>
     }
   }
-
 }

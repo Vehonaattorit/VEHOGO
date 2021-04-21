@@ -25,7 +25,7 @@ import {color} from '../constants/colors'
 export default ChatRoom = ({navigation, route}) => {
   const {user, chatRoom, chatRoomTitle} = route.params
 
-  const [ownerPushToken, setOwnerPushToken] = useState(null)
+  const [expoToken, setexpoToken] = useState(null)
   const {messages} = useMessageHooks(chatRoom, user)
 
   const onQuickReply = async (quickReply) => {
@@ -39,7 +39,7 @@ export default ChatRoom = ({navigation, route}) => {
   // AuthState for GiftedChat
   const [chatUser] = useAuthState(auth)
 
-  const getOwnerPushToken = async () => {
+  const getexpoToken = async () => {
     const {passengerID, driverID} = chatRoom
 
     // Get opposite user's ID
@@ -47,11 +47,11 @@ export default ChatRoom = ({navigation, route}) => {
       user.travelPreference === 'passenger' ? driverID : passengerID
     currentUser = await getUser(currentUser)
 
-    setOwnerPushToken(currentUser.ownerPushToken)
+    setexpoToken(currentUser.expoToken)
   }
 
   useEffect(() => {
-    getOwnerPushToken()
+    getexpoToken()
 
     navigation.setOptions({
       title: chatRoomTitle,
@@ -93,7 +93,7 @@ export default ChatRoom = ({navigation, route}) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        to: ownerPushToken,
+        to: expoToken,
         title: 'Received new message',
         body: `Message sent from ${user.userName}`,
       }),

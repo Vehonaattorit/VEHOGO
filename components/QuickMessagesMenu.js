@@ -94,7 +94,7 @@ const QuickMessagesMenu = ({user, item, workTrip}) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        to: userToken.ownerPushToken,
+        to: userToken.expoToken,
         title: 'Received new message',
         body: `Message sent from ${user.userName}`,
       }),

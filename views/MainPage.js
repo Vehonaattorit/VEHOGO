@@ -123,7 +123,6 @@ export const MainPage = ({navigation}) => {
         console.log('state change')
         setDriverTrips(trips)
       })
-
     } catch (e) {
       console.log(e)
     }
@@ -131,7 +130,7 @@ export const MainPage = ({navigation}) => {
 
   useEffect(() => {
     checkTravelPreference()
-    checkNotificationsPermissions()
+    // checkNotificationsPermissions()
 
     if (travelPreference === 'driver') {
       driverTripStream()
@@ -143,23 +142,23 @@ export const MainPage = ({navigation}) => {
     // return () => fetchTodayRides()
   }, [travelPreference, passengerTrips, activeRide])
 
-  const checkNotificationsPermissions = async () => {
-    let pushToken
-    let statusObj = await Permissions.getAsync(Permissions.NOTIFICATIONS)
-    if (statusObj.status !== 'granted') {
-      statusObj = await Permissions.askAsync(Permissions.NOTIFICATIONS)
-    }
-    if (statusObj.status !== 'granted') {
-      pushToken = null
-    } else {
-      pushToken = (await Notifications.getExpoPushTokenAsync()).data
-    }
+  // const checkNotificationsPermissions = async () => {
+  //   let pushToken
+  //   let statusObj = await Permissions.getAsync(Permissions.NOTIFICATIONS)
+  //   if (statusObj.status !== 'granted') {
+  //     statusObj = await Permissions.askAsync(Permissions.NOTIFICATIONS)
+  //   }
+  //   if (statusObj.status !== 'granted') {
+  //     pushToken = null
+  //   } else {
+  //     pushToken = (await Notifications.getExpoPushTokenAsync()).data
+  //   }
 
-    let updatedUser = await getUser(user.id)
-    updatedUser.ownerPushToken = pushToken
+  //   let updatedUser = await getUser(user.id)
+  //   updatedUser.expoToken = pushToken
 
-    await updateUser(updatedUser)
-  }
+  //   await updateUser(updatedUser)
+  // }
 
   const checkTravelPreference = async () => {
     setTravelPreference(user.travelPreference)
@@ -225,9 +224,11 @@ export const MainPage = ({navigation}) => {
         <>
           {driverTrips && (
             <Container>
-
-              <RideStartBar user={user} navigation={navigation} driverTrips={driverTrips}></RideStartBar>
-
+              <RideStartBar
+                user={user}
+                navigation={navigation}
+                driverTrips={driverTrips}
+              ></RideStartBar>
 
               <View style={styles.listView}>
                 <DriverTripList
@@ -236,7 +237,6 @@ export const MainPage = ({navigation}) => {
                   driverTrips={driverTrips}
                 />
               </View>
-
             </Container>
           )}
         </>

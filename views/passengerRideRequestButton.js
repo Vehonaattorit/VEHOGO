@@ -14,20 +14,28 @@ import {
 } from '../controllers/workTripController'
 import {color} from '../constants/colors'
 
+// Env keys
+import {apiKey} from '@env'
+
 const PassengerRideRequestButton = ({
   user,
   navigation,
   isPassengerIncluded,
   workTrip,
 }) => {
-  const [ownerPushToken, setOwnerPushToken] = useState(null)
+  const [expoToken, setExpoToken] = useState(null)
   const [alreadyRequested, setAlreadyRequested] = useState(false)
 
   useEffect(() => {
-    const getOwnerPushToken = async () => {
+    const getExpoToken = async () => {
+      console.log('workTrip.driverID', workTrip.driverID)
+
       const userDriver = await getUser(workTrip.driverID)
 
-      setOwnerPushToken(userDriver.ownerPushToken)
+      console.log("driver's", userDriver.expoToken)
+      console.log('driver data 564', userDriver)
+
+      setExpoToken(userDriver.expoToken)
     }
 
     const getRequests = async () => {
@@ -53,7 +61,7 @@ const PassengerRideRequestButton = ({
     }
 
     getRequests()
-    getOwnerPushToken()
+    getExpoToken()
   }, [])
 
   const requestRide = async () => {
@@ -72,19 +80,39 @@ const PassengerRideRequestButton = ({
         })
       )
 
-      fetch('https://exp.host/--/api/v2/push/send', {
+      console.log('2444, expoToken', expoToken)
+      console.log('2333, apiKey', apiKey)
+
+      await fetch('https://fcm.googleapis.com/fcm/send', {
         method: 'POST',
         headers: {
-          Accept: 'application/json',
-          'Accept-Encoding': 'gzip, deflate',
           'Content-Type': 'application/json',
+          Authorization: `key=${apiKey}`,
         },
         body: JSON.stringify({
-          to: ownerPushToken,
-          title: 'Request was sent',
-          body: `Request sent from ${user.userName}`,
+          to: expoToken,
+          priority: 'normal',
+          data: {
+            experienceId: '@yourExpoUsername/yourProjectSlug',
+            title: "\uD83D\uDCE7 You've got mail",
+            message: 'Hello world! \uD83C\uDF10',
+          },
         }),
       })
+
+      // fetch('https://exp.host/--/api/v2/push/send', {
+      //   method: 'POST',
+      //   headers: {
+      //     Accept: 'application/json',
+      //     'Accept-Encoding': 'gzip, deflate',
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     to: expoToken,
+      //     title: 'Request was sent',
+      //     body: `Request sent from ${user.userName}`,
+      //   }),
+      // })
 
       Alert.alert(
         `Request was sent to ${workTrip.driverName}!`,
