@@ -4,7 +4,7 @@ import {Card, Text} from 'native-base'
 import {View} from 'native-base'
 import Clipboard from 'expo-clipboard'
 import CustomButtonIcon from '../components/CustomIconButton'
-import {colors} from "../constants/colors"
+import {color} from "../constants/colors"
 
 export const CompanyCode = ({navigation, companyCode}) => {
   return (
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     elevation: 6,
     shadowRadius: 15,
     shadowOffset: {width: 1, height: 13},
-    color: colors.platina
+    color: color.platina
   },
   title: {
     margin: 40,
