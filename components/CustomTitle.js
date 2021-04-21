@@ -7,6 +7,6 @@ export const CustomTitle = ({title}) => {
 const styles = StyleSheet.create({
   text: {
     fontSize: 30,
-    color: Platform.OS == 'ios' ? color.sText : color.sText,
+    color: "black",
   },
 })

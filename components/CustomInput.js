@@ -1,6 +1,6 @@
 import React, {useReducer, useState, useEffect} from 'react'
 import {View, Text, TextInput, StyleSheet} from 'react-native'
-import {Ionicons} from '@expo/vector-icons'
+
 
 const INPUT_CHANGE = 'INPUT_CHANGE'
 
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#E1F5FD',
     width: '100%',
-    borderRadius: 10,
+    borderRadius: 5,
     marginBottom: 10,
     backgroundColor: '#E1F5FD',
     shadowColor: '#000',
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 15.5,
     fontSize: 15.5,
-    borderRadius: 10,
+    borderRadius: 5,
   },
   errorContainer: {
     marginVertical: 5,

@@ -1,31 +1,37 @@
 import React from 'react'
 import {StyleSheet} from 'react-native'
-import {Text, Icon, Button} from 'native-base'
+import {Card, Text} from 'native-base'
 import {View} from 'native-base'
 import Clipboard from 'expo-clipboard'
 import CustomButtonIcon from '../components/CustomIconButton'
+import {color} from "../constants/colors"
 
 export const CompanyCode = ({navigation, companyCode}) => {
   return (
     <View style={styles.view}>
-      <Text style={styles.title}>{companyCode}</Text>
-      <Text style={{margin: 5}}>
-        Share this code with members of your company
-      </Text>
-      <CustomButtonIcon
-        style={{alignSelf: 'center'}}
-        onPress={Clipboard.setString(companyCode)}
-        iconOne="copy-outline"
-        title="Copy to clipboard"
-      />
-      <CustomButtonIcon
-        style={{alignSelf: 'center', margin: 5}}
-        onPress={() => {
-          navigation.navigate('Travel')
-        }}
-        title="Continue"
-        iconTwo="keyboard-arrow-right"
-      />
+      <Card style={styles.textContainer}>
+        <Text style={styles.title}>{companyCode}</Text>
+        <Text style={{paddingBottom: 40, textAlign: 'auto'}}>
+          Please copy this code by pressing the "Copy to clipboard button" your
+          team members need it to join your company.
+        </Text>
+      </Card>
+      <View style={styles.btns}>
+        <CustomButtonIcon
+          onPress={Clipboard.setString(companyCode)}
+          iconOne="content-copy"
+          title="Copy to clipboard"
+        />
+      </View>
+      <View View style={styles.btns}>
+        <CustomButtonIcon
+          onPress={() => {
+            navigation.navigate('Travel')
+          }}
+          title="Continue"
+          iconTwo="keyboard-arrow-right"
+        />
+      </View>
     </View>
   )
 }
@@ -35,13 +41,29 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: "white"
   },
-  button: {
-    marginTop: 10,
+  textContainer: {
+    height: '30%',
+    width: '70%',
+    borderRadius: 5,
+    padding:20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOpacity: 0.8,
+    elevation: 6,
+    shadowRadius: 15,
+    shadowOffset: {width: 1, height: 13},
+    color: color.platina
   },
-
   title: {
+    margin: 40,
     fontSize: 30,
-    margin: 10,
+    margin: 40,
+  },
+  btns: {
+    marginTop: 10,
+    width: '100%',
   },
 })

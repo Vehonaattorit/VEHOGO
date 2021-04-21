@@ -27,100 +27,7 @@ export const RideStartBar = ({user, navigation, driverTrips}) => {
   const [date, setDate] = useState('')
   const [driveStartTime, setDriveStartTime] = useState(null)
 
-  const getNextRide = async () => {
-    const now = new Date()
 
-    const currentWeekDay = now.getDay() == 0 ? 7 : now.getDay()
-
-    const currentHours = now.getHours()
-    const minutes = now.getMinutes()
-
-    let tomorrowWeekDay
-
-    for (let i = 0; i < 7; i++) {
-      if (user.preferedWorkingHours[i] != undefined) {
-        const preferedWorkingHours = user.preferedWorkingHours[i]
-
-        if (currentWeekDay <= preferedWorkingHours.workDayNum) {
-          if (currentWeekDay < user.preferedWorkingHours[i].workDayNum) {
-            tomorrowWeekDay = user.preferedWorkingHours[i].workDayNum
-            break
-          } else {
-            tomorrowWeekDay = user.preferedWorkingHours[0].workDayNum
-          }
-        } else {
-          tomorrowWeekDay = user.preferedWorkingHours[0].workDayNum
-        }
-      }
-    }
-
-    const tomorrowWorkTrips = await workTripMultiQuery(user.company.id, [
-      {
-        field: 'workDayNum',
-        condition: '==',
-        value: tomorrowWeekDay,
-      },
-      {
-        field: 'driverID',
-        condition: '==',
-        value: user.id,
-      },
-    ])
-    let found = false
-    let nextWorkTrip
-    for (let i = 0; i < user.preferedWorkingHours.length; i++) {
-      const preferedHours = user.preferedWorkingHours[i]
-      if (preferedHours.workDayNum == currentWeekDay) {
-        found = true
-        break
-      }
-    }
-
-    if (found) {
-      // sorting the morning ride to start
-      // 17.04.2021 replaced todayWorkTrips with driverTrips
-      if (driverTrips[0].goingTo == 'home') driverTrips.reverse()
-
-      for (let i = 0; i < driverTrips.length; i++) {
-        const workTrip = driverTrips[i]
-        const nowInMinutes = currentHours * 60 + minutes
-        let startTime = workTrip.scheduledDrive.start.toDate()
-        const workTripStartInMinutes =
-          startTime.getHours() * 60 + startTime.getMinutes()
-        //now is before workTrip start
-        if (nowInMinutes < workTripStartInMinutes) {
-          //this workTrip is next, display it on the screen
-          setDriveStartTime(workTrip.scheduledDrive.start)
-          setStartingRide(workTrip)
-          checkButtonVisible(
-            workTrip.scheduledDrive.start,
-            workTrip.scheduledDrive.end
-          )
-          return
-        }
-      }
-      if (driveStartTime == null) {
-        // next workday morning workTrip is next and displayed on the screen
-        if (tomorrowWorkTrips[0].goingTo == 'home') tomorrowWorkTrips.reverse()
-        setDriveStartTime(tomorrowWorkTrips[0].scheduledDrive.start)
-        setStartingRide(tomorrowWorkTrips[0])
-        checkButtonVisible(
-          tomorrowWorkTrips[0].scheduledDrive.start,
-          tomorrowWorkTrips[0].scheduledDrive.end
-        )
-        return
-      }
-    } else {
-      if (tomorrowWorkTrips[0].goingTo == 'home') tomorrowWorkTrips.reverse()
-      setDriveStartTime(tomorrowWorkTrips[0].scheduledDrive.start)
-      setStartingRide(tomorrowWorkTrips[0])
-      checkButtonVisible(
-        tomorrowWorkTrips[0].scheduledDrive.start,
-        tomorrowWorkTrips[0].scheduledDrive.end
-      )
-      return
-    }
-  }
 
   function inTime(start, end) {
     var now = new Date()
@@ -143,6 +50,100 @@ export const RideStartBar = ({user, navigation, driverTrips}) => {
   }
 
   useEffect(() => {
+    const getNextRide = async () => {
+      const now = new Date()
+
+      const currentWeekDay = now.getDay() == 0 ? 7 : now.getDay()
+
+      const currentHours = now.getHours()
+      const minutes = now.getMinutes()
+
+      let tomorrowWeekDay
+
+      for (let i = 0; i < 7; i++) {
+        if (user.preferedWorkingHours[i] != undefined) {
+          const preferedWorkingHours = user.preferedWorkingHours[i]
+
+          if (currentWeekDay <= preferedWorkingHours.workDayNum) {
+            if (currentWeekDay < user.preferedWorkingHours[i].workDayNum) {
+              tomorrowWeekDay = user.preferedWorkingHours[i].workDayNum
+              break
+            } else {
+              tomorrowWeekDay = user.preferedWorkingHours[0].workDayNum
+            }
+          } else {
+            tomorrowWeekDay = user.preferedWorkingHours[0].workDayNum
+          }
+        }
+      }
+
+      const tomorrowWorkTrips = await workTripMultiQuery(user.company.id, [
+        {
+          field: 'workDayNum',
+          condition: '==',
+          value: tomorrowWeekDay,
+        },
+        {
+          field: 'driverID',
+          condition: '==',
+          value: user.id,
+        },
+      ])
+      let found = false
+      let nextWorkTrip
+      for (let i = 0; i < user.preferedWorkingHours.length; i++) {
+        const preferedHours = user.preferedWorkingHours[i]
+        if (preferedHours.workDayNum == currentWeekDay) {
+          found = true
+          break
+        }
+      }
+
+      if (found) {
+        // sorting the morning ride to start
+        // 17.04.2021 replaced todayWorkTrips with driverTrips
+        if (driverTrips[0].goingTo == 'home') driverTrips.reverse()
+
+        for (let i = 0; i < driverTrips.length; i++) {
+          const workTrip = driverTrips[i]
+          const nowInMinutes = currentHours * 60 + minutes
+          let startTime = workTrip.scheduledDrive.start.toDate()
+          const workTripStartInMinutes =
+            startTime.getHours() * 60 + startTime.getMinutes()
+          //now is before workTrip start
+          if (nowInMinutes < workTripStartInMinutes) {
+            //this workTrip is next, display it on the screen
+            setDriveStartTime(workTrip.scheduledDrive.start)
+            setStartingRide(workTrip)
+            checkButtonVisible(
+              workTrip.scheduledDrive.start,
+              workTrip.scheduledDrive.end
+            )
+            return
+          }
+        }
+        if (driveStartTime == null) {
+          // next workday morning workTrip is next and displayed on the screen
+          if (tomorrowWorkTrips[0].goingTo == 'home') tomorrowWorkTrips.reverse()
+          setDriveStartTime(tomorrowWorkTrips[0].scheduledDrive.start)
+          setStartingRide(tomorrowWorkTrips[0])
+          checkButtonVisible(
+            tomorrowWorkTrips[0].scheduledDrive.start,
+            tomorrowWorkTrips[0].scheduledDrive.end
+          )
+          return
+        }
+      } else {
+        if (tomorrowWorkTrips[0].goingTo == 'home') tomorrowWorkTrips.reverse()
+        setDriveStartTime(tomorrowWorkTrips[0].scheduledDrive.start)
+        setStartingRide(tomorrowWorkTrips[0])
+        checkButtonVisible(
+          tomorrowWorkTrips[0].scheduledDrive.start,
+          tomorrowWorkTrips[0].scheduledDrive.end
+        )
+        return
+      }
+    }
     if (driverTrips != null) {
       getNextRide()
     }
