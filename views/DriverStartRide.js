@@ -57,7 +57,7 @@ export const DriverStartRide = ({navigation, route}) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          to: notifyUser.ownerPushToken,
+          to: notifyUser.expoToken,
           title: `Driver has started his ride to ${workTripToUpdate.goingTo}.`,
           body: `${workTripToUpdate.driverName} is coming to pick you up.`,
         }),

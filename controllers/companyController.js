@@ -108,27 +108,30 @@ export async function companyQuery(field, condition, value) {
 }
 
 export async function companyMultiQuery(querys) {
-
   try {
     // Add a new document in collection "users"
     let querySnapshot = await db
       .collection('companys')
       .withConverter(companyConverter)
     querys.forEach((query) => {
-      querySnapshot = querySnapshot.where(query.field, query.condition, query.value)
+      querySnapshot = querySnapshot.where(
+        query.field,
+        query.condition,
+        query.value
+      )
     })
     let query = await querySnapshot.get()
-      const companyList = []
-      query.forEach((doc) => {
-        companyList.push(companyConverter.fromData(doc.data()))
-      })
-      return companyList
-    } catch (error) {
-      console.error('Error getting document: ', error)
-      return
-    }
+    const companyList = []
+    query.forEach((doc) => {
+      companyList.push(companyConverter.fromData(doc.data()))
+    })
+    return companyList
+  } catch (error) {
+    console.error('Error getting document: ', error)
+    return
+  }
 
-    /*try {
+  /*try {
       // Add a new document in collection "users"
       let queryRef = db
         .collection('companys')
@@ -149,4 +152,4 @@ export async function companyMultiQuery(querys) {
       console.error('Error getting document: ', error)
       return
     }*/
-  }
+}
