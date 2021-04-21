@@ -112,9 +112,9 @@ export const SetUpInit = ({route}) => {
           preferedWorkHourindex
         ].toHomeRefID = workTripId
       }
-      setTimeout(() => {
-        updateUser(userToUpdate)
-      }, 3000)
+
+      await updateUser(userToUpdate)
+
     })
   }
 
