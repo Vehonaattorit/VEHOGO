@@ -21,53 +21,20 @@ import {
 import {color} from '../constants/colors'
 import {getUser} from '../controllers/userController'
 
-export const RideStartBar = ({user, navigation, drivingTrips}) => {
-  console.log('drivingTrips', drivingTrips)
+export const RideStartBar = ({user, navigation, driverTrips}) => {
   const [showStart, setShowStart] = useState(false)
   const [startingRide, setStartingRide] = useState([])
   const [date, setDate] = useState('')
   const [driveStartTime, setDriveStartTime] = useState(null)
 
-  // CURRENTWEEKDAY
-  //const [currentWeekDay, setCurrentWeekDay] = useState(5)
-
-  /*const {driverTrips, isLoading} = useDriverTripListHook(user, [
-    {
-      field: 'workDayNum',
-      condition: '==',
-      value: currentWeekDay,
-    },
-    {
-      field: 'driverID',
-      condition: '==',
-      value: user.id,
-    },
-  ])*/
-
-  // console.log('DriverTrips', driverTrips[0].id)
-
   const getNextRide = async () => {
-    console.log('called')
     const now = new Date()
-    // 13.04. 10:47 BACKUP
-    // const now = new Date()
-    // END
-    // 13.04. 10:47 BACKUP
+
     const currentWeekDay = now.getDay() == 0 ? 7 : now.getDay()
 
-
-    // END
-
-    // MUISTA POISTAA !!!
-    //const currentWeekDay = 5
-    //setCurrentWeekDay(currentWeekDay)
-
-    //const now = new Date()
-    // MUISTA LISÄTÄ !!!
-    // const currentWeekDay = now.getDay()
     const currentHours = now.getHours()
     const minutes = now.getMinutes()
-    console.log('Current WeekDay', currentWeekDay)
+
     let tomorrowWeekDay
 
     for (let i = 0; i < 7; i++) {
@@ -75,67 +42,18 @@ export const RideStartBar = ({user, navigation, drivingTrips}) => {
         const preferedWorkingHours = user.preferedWorkingHours[i]
 
         if (currentWeekDay <= preferedWorkingHours.workDayNum) {
-          console.log(' preferedWorkingHours.workDayNum', preferedWorkingHours.workDayNum)
-
-
           if (currentWeekDay < user.preferedWorkingHours[i].workDayNum) {
             tomorrowWeekDay = user.preferedWorkingHours[i].workDayNum
             break
           } else {
             tomorrowWeekDay = user.preferedWorkingHours[0].workDayNum
           }
-
-
         } else {
           tomorrowWeekDay = user.preferedWorkingHours[0].workDayNum
         }
       }
     }
 
-
-
-
-
-
-
-    /*for (let i = 0; i <= user.preferedWorkingHours.length; i++) {
-      const preferedWorkingHours = user.preferedWorkingHours[i]
-
-      console.log('preferedWorkingHours', preferedWorkingHours)
-      if (preferedWorkingHours == undefined) {
-        console.log('ylempi')
-        console.log('prefered',user.preferedWorkingHours[0].workDayNum)
-        tomorrowWeekDay = user.preferedWorkingHours[0].workDayNum
-        break
-      }
-      console.log('workDayNum',preferedWorkingHours.workDayNum)
-      console.log('i + 1', i+1)
-      if (preferedWorkingHours.workDayNum == currentWeekDay + 1) {
-        console.log('alempi')
-        console.log('prefered',preferedWorkingHours.workDayNum)
-        tomorrowWeekDay = preferedWorkingHours.workDayNum
-        break
-      }
-    }*/
-
-    // query tomorrows workTrips with query
-    // BACKUP 17.04.2021 Trying out useDriverTripListHook in workTripController.js
-    // const todayWorkTrips = await workTripMultiQuery(user.company.id, [
-    //   {
-    //     field: 'workDayNum',
-    //     condition: '==',
-    //     value: currentWeekDay,
-    //   },
-    //   {
-    //     field: 'driverID',
-    //     condition: '==',
-    //     value: user.id,
-    //   },
-    // ])
-
-    console.log('company id', user.company.id)
-    console.log('tomorrowWeekDay', tomorrowWeekDay)
-    console.log('user id', user.id)
     const tomorrowWorkTrips = await workTripMultiQuery(user.company.id, [
       {
         field: 'workDayNum',
@@ -148,29 +66,23 @@ export const RideStartBar = ({user, navigation, drivingTrips}) => {
         value: user.id,
       },
     ])
-    console.log('tommorow workTrips', tomorrowWorkTrips)
     let found = false
     let nextWorkTrip
     for (let i = 0; i < user.preferedWorkingHours.length; i++) {
       const preferedHours = user.preferedWorkingHours[i]
       if (preferedHours.workDayNum == currentWeekDay) {
-        console.log('found')
         found = true
         break
       }
     }
 
     if (found) {
-      console.log('trips now', drivingTrips)
-
-      console.log('going to', drivingTrips[0].goingTo)
       // sorting the morning ride to start
       // 17.04.2021 replaced todayWorkTrips with driverTrips
-      if (drivingTrips[0].goingTo == 'home') drivingTrips.reverse()
+      if (driverTrips[0].goingTo == 'home') driverTrips.reverse()
 
-
-      for (let i = 0; i < drivingTrips.length; i++) {
-        const workTrip = drivingTrips[i]
+      for (let i = 0; i < driverTrips.length; i++) {
+        const workTrip = driverTrips[i]
         const nowInMinutes = currentHours * 60 + minutes
         let startTime = workTrip.scheduledDrive.start.toDate()
         const workTripStartInMinutes =
@@ -231,9 +143,10 @@ export const RideStartBar = ({user, navigation, drivingTrips}) => {
   }
 
   useEffect(() => {
-    getNextRide()
-  }, [])
-
+    if (driverTrips != null) {
+      getNextRide()
+    }
+  }, [driverTrips])
 
   /* useEffect(() => {
      if (!isLoading) getNextRide()

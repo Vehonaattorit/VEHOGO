@@ -26,7 +26,6 @@ export const Company = ({navigation}) => {
     const userEmail = firebase.auth().currentUser.email
     const domainString = userEmail.split('@').pop()
     setDomain(domainString)
-    console.log('email', userEmail)
   }
 
   const getCompanies = async (useDomain) => {
@@ -36,7 +35,7 @@ export const Company = ({navigation}) => {
         {field: 'domainJoin', condition: '==', value: true},
         {field: 'domain', condition: '==', value: domain},
       ])
-      console.log(companies)
+
       //companies = await companyMultiQuery('companyCode', '==', companyCode)
     } else {
       companies = await companyQuery('companyCode', '==', companyCode)

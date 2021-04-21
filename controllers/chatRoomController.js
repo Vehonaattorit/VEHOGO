@@ -10,6 +10,7 @@ const db = firebase.firestore()
 
 export const useChatRoomHooks = () => {
   const [chatRooms, setChatRooms] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const chatRoomsListener = db
@@ -26,6 +27,7 @@ export const useChatRoomHooks = () => {
           }
         })
 
+        setIsLoading(false)
         setChatRooms(chatRooms)
       })
     return () => chatRoomsListener()
@@ -33,6 +35,7 @@ export const useChatRoomHooks = () => {
 
   return {
     chatRooms,
+    isLoading,
   }
 }
 
@@ -49,7 +52,7 @@ export async function addChat(chat) {
       merge: true,
     })
 
-    return chat.id
+    return chat
   } catch (error) {
     console.error('Error writing document: ', error)
 
@@ -123,10 +126,15 @@ export const queryChatRoom = async (userID, driverID) => {
   let chatRoom
   if (typeof chatRooms !== 'undefined' && chatRooms.length === 0) {
     // if array is empty
+
     chatRoom = await addChat(
       new ChatRoom({
         driverID: driverID,
         passengerID: userID,
+        latestMessage: {
+          text: '',
+          createdAt: '',
+        },
       })
     )
   } else {
@@ -144,6 +152,17 @@ export function chatStream(chatId) {
     return doc
   } catch (error) {
     console.error('Error writing document: ', error)
+    return
+  }
+}
+
+export async function deleteChatRoom(chatRoomID) {
+  try {
+    await db.collection('chats').doc(chatRoomID).delete()
+
+    return
+  } catch (error) {
+    console.error('Error getting document: ', error)
     return
   }
 }

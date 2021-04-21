@@ -10,11 +10,13 @@ import {
 } from 'native-base'
 
 import {StyleSheet} from 'react-native'
-import React from 'react'
+import React, {useEffect} from 'react'
 import {color} from '../constants/colors'
 
 export default DriverIsOnHisWayBar = ({user, navigation, activeRide}) => {
   const workTrip = activeRide
+
+  useEffect(() => {}, [activeRide])
 
   return (
     <View>

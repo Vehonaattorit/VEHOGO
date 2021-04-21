@@ -17,8 +17,6 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
   } = route.params
   const {user} = useContext(UserContext)
 
-  console.log('DriverAcceptRefuse', isPassengerIncluded)
-
   const [mapRef, setMapRef] = useState(null)
   const [routeCoordinates, setRouteCoordinates] = useState([])
   const [markers, setMarkers] = useState([
@@ -29,23 +27,33 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
           latitude: stop.location.latitude,
           longitude: stop.location.longitude,
         }}
-        title={stop.address}><Image source={
-          stop.stopName == 'Home' || stop.stopName == user.company.name
-            ? stop.stopName == 'Home'
-              ? require('../images/home-map-icon-white.png')
-              : require('../images/work-map-icon-white.png')
-            : require('../images/passenger-map-icon-white.png')
-        } style={{height: 45, width: 45}}></Image>
+        title={stop.address}
+      >
+        <Image
+          source={
+            stop.stopName == 'Home' || stop.stopName == user.company.name
+              ? stop.stopName == 'Home'
+                ? require('../images/home-map-icon-white.png')
+                : require('../images/work-map-icon-white.png')
+              : require('../images/passenger-map-icon-white.png')
+          }
+          style={{height: 45, width: 45}}
+        ></Image>
       </Marker>
     )),
     rideRequest != undefined && (
-
       <Marker
         key={rideRequest.id}
         coordinate={{
           latitude: rideRequest.homeLocation.latitude,
           longitude: rideRequest.homeLocation.longitude,
-        }}><Image source={require('../images/passenger-map-icon-green.png')} style={{height: 45, width: 45}}></Image></Marker>
+        }}
+      >
+        <Image
+          source={require('../images/passenger-map-icon-green.png')}
+          style={{height: 45, width: 45}}
+        ></Image>
+      </Marker>
     ),
   ])
   //

@@ -23,19 +23,18 @@ const auth = firebase.auth()
 import {color} from '../constants/colors'
 
 export default ChatRoom = ({navigation, route}) => {
-  const {chatRoom, chatRoomTitle} = route.params
+  const {user, chatRoom, chatRoomTitle} = route.params
+
   const [ownerPushToken, setOwnerPushToken] = useState(null)
   const {messages} = useMessageHooks(chatRoom, user)
 
-  const onQuickReply = (quickReply) => {
-    handleSend([
+  const onQuickReply = async (quickReply) => {
+    await handleSend([
       {
         text: quickReply[0].title,
       },
     ])
   }
-
-  const {user} = useContext(UserContext)
 
   // AuthState for GiftedChat
   const [chatUser] = useAuthState(auth)
