@@ -17,6 +17,8 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
   } = route.params
   const {user} = useContext(UserContext)
 
+  console.log('irdeRequest', singleItem.homeAddress)
+
   const [mapRef, setMapRef] = useState(null)
   const [routeCoordinates, setRouteCoordinates] = useState([])
   const [markers, setMarkers] = useState([
