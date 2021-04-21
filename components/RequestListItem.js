@@ -1,11 +1,34 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {Text, View, Button} from 'native-base'
-import {StyleSheet, Dimensions, Platform} from 'react-native'
+import {StyleSheet, Dimensions, ActivityIndicator, Platform} from 'react-native'
 import {color} from '../constants/colors'
 import {Ionicons} from '@expo/vector-icons'
+import {getWorkTrip} from '../controllers/workTripController'
+import {checkWhatDayItIs} from '../utils/utils'
+import moment from 'moment'
 
-const RequestListItem = ({itemData, viewRequest}) => {
+const RequestListItem = ({user, itemData, viewRequest}) => {
   const {item} = itemData
+
+  const [workTrip, setWorkTrip] = useState(null)
+
+  const getTrip = async () => {
+    const data = await getWorkTrip(user.company.id, item.workTripRefID)
+
+    setWorkTrip(data)
+  }
+
+  useEffect(() => {
+    getTrip()
+  }, [])
+
+  if (!workTrip) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color={color.primary} />
+      </View>
+    )
+  }
 
   return (
     <View style={styles.listItem}>
@@ -19,9 +42,53 @@ const RequestListItem = ({itemData, viewRequest}) => {
 
         <View style={styles.breakPoint}></View>
         <View style={styles.bottomRow}>
-          <Ionicons name="location" size={24} color={color.lightBlack} />
+          <Ionicons
+            name="location-outline"
+            size={24}
+            color={color.lightBlack}
+          />
           <View style={styles.marginLeft}>
             <Text style={styles.homeAddressText}>{item.homeAddress}</Text>
+          </View>
+        </View>
+        <View style={styles.bottomRow}>
+          <Ionicons name="today-outline" size={24} color={color.lightBlack} />
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+            }}
+          >
+            <View style={styles.marginLeft}>
+              <Text style={styles.homeAddressText}>
+                {checkWhatDayItIs(item.workDayNum)}
+              </Text>
+            </View>
+
+            <View style={styles.marginRight}>
+              <Ionicons
+                name="time-outline"
+                size={24}
+                color={color.lightBlack}
+              />
+
+              <View
+                style={{
+                  marginLeft: 10,
+                  justifyContent: 'center',
+                  alignContent: 'center',
+                }}
+              >
+                <Text style={styles.homeAddressText}>
+                  {moment(workTrip.scheduledDrive.start.toDate()).format(
+                    'HH:mm'
+                  )}{' '}
+                  -{' '}
+                  {moment(workTrip.scheduledDrive.end.toDate()).format('HH:mm')}
+                </Text>
+              </View>
+            </View>
           </View>
         </View>
         <View style={styles.bottomRow}>
@@ -37,6 +104,11 @@ const RequestListItem = ({itemData, viewRequest}) => {
 export default RequestListItem
 
 const styles = StyleSheet.create({
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   listItem: {
     flex: 1,
     margin: 15,
@@ -109,7 +181,13 @@ const styles = StyleSheet.create({
     height: 24,
   },
   marginLeft: {
+    flex: 1,
     marginLeft: 10,
+  },
+  marginRight: {
+    flex: 1,
+    marginRight: 10,
+    flexDirection: 'row',
   },
   bottomRow: {
     flex: 1,

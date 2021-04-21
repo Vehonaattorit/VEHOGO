@@ -45,6 +45,7 @@ export const DriverRideRequestList = ({navigation, dataArray}) => {
         keyExtractor={({item}, index) => {
           return item.id
         }}
+        user={user}
         viewRequest={viewRequest}
         itemData={itemData}
       />

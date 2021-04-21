@@ -31,7 +31,6 @@ function SetUpStackNavigator() {
           headerTintColor: color.primary,
         }}
       >
-
         <Stack.Screen
           name="Company"
           component={Company}

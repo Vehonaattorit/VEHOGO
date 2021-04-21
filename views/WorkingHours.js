@@ -47,6 +47,7 @@ const DateTimeInput = (props) => {
 }
 
 const TimeModal = ({
+  setIsPickerShow,
   isPickerShow,
   modalVisible,
   handleModal,
@@ -61,6 +62,8 @@ const TimeModal = ({
             mode="time"
             is24Hour={true}
             onChange={(e, date) => {
+              console.log('I changed time')
+              setIsPickerShow(false)
               if (date) onChange(e, date)
             }}
             value={value || new Date()}
@@ -207,6 +210,7 @@ export const WorkingHours = ({navigation}) => {
     <View style={styles.container}>
       <View style={styles.poweredContainer}>
         <TimeModal
+          setIsPickerShow={setIsPickerShow}
           isPickerShow={isPickerShow}
           modalVisible={modalVisible}
           handleModal={handleModal}
@@ -229,7 +233,7 @@ export const WorkingHours = ({navigation}) => {
               iconOne=""
               title={
                 newEventState.startDate
-                  ? formatTime(newEventState.startDate)
+                  ? `Start time ${formatTime(newEventState.startDate)}`
                   : 'Start time'
               }
               onPress={() => {
@@ -243,7 +247,7 @@ export const WorkingHours = ({navigation}) => {
             <CustomButtonIcon
               title={
                 newEventState.endDate
-                  ? formatTime(newEventState.endDate)
+                  ? `End time ${formatTime(newEventState.endDate)}`
                   : 'End time'
               }
               onPress={() => {

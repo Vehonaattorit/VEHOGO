@@ -253,11 +253,7 @@ export const MainPage = ({navigation}) => {
     return () => {
       console.log('cleaning')
     }
-  }, [])
-
-  /*const checkTravelPreference = async () => {
-    setTravelPreference(user.travelPreference)
-  }*/
+  }, [user])
 
   useEffect(() => {
     navigation.setOptions({
