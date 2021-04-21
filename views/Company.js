@@ -30,12 +30,11 @@ export const Company = ({navigation}) => {
   }
 
   const getCompanies = async (useDomain) => {
-
     let companies
     if (useDomain) {
       companies = await companyMultiQuery([
         {field: 'domainJoin', condition: '==', value: true},
-        {field: 'domain', condition: '==', value: domain}
+        {field: 'domain', condition: '==', value: domain},
       ])
       console.log(companies)
       //companies = await companyMultiQuery('companyCode', '==', companyCode)
@@ -54,7 +53,10 @@ export const Company = ({navigation}) => {
   }
 
   return (
-    <KeyboardAvoidingView behavior="padding" style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
       {showBtns && (
         <>
           <View style={styles.poweredContainer}>
@@ -70,8 +72,11 @@ export const Company = ({navigation}) => {
                 title="Create A Company"
                 iconTwo="keyboard-arrow-right"
               />
-              <Text style={{alignSelf:'center'}}>Or Join with either email domain or company code </Text>
-              <CustomIconButton style={{marginBottom: 5}}
+              <Text style={{alignSelf: 'center'}}>
+                Or Join with either email domain or company code
+              </Text>
+              <CustomIconButton
+                style={{marginBottom: 5}}
                 onPress={() => {
                   getCompanies(true)
                 }}
@@ -107,7 +112,9 @@ export const Company = ({navigation}) => {
                 </Button>
               </View>
             </Item>
-            {error && <Text style={styles.errorText}>Code or domain is not valid</Text>}
+            {error && (
+              <Text style={styles.errorText}>Code or domain is not valid</Text>
+            )}
           </View>
         </>
       )}
@@ -138,11 +145,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-around',
-  },
-  view: {
-    flex: 1,
-    backgroundColor: 'white',
-    justifyContent: 'center',
   },
   poweredContainer: {
     justifyContent: 'center',

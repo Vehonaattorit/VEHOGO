@@ -16,13 +16,9 @@ import {Input} from 'react-native-elements'
 import {RadioButton, Text} from 'react-native-paper'
 
 import CustomInput from '../components/CustomInput'
+import CustomSimpleInput from '../components/CustomSimpleInput'
 
-export const CreateCompany = ({
-  navigation,
-  setShowCreate,
-  setShowBtns,
-  domain,
-}) => {
+export const CreateCompany = ({navigation, setShowCreate, domain}) => {
   const [companyAddress, setAddress] = useState('')
   const [companyName, setName] = useState('')
   const {user} = useContext(UserContext)
@@ -146,13 +142,13 @@ export const CreateCompany = ({
   }
 
   return (
-    <View style={{flex: 1, justifyContent: 'space-around'}}>
+    <View style={styles.container}>
       {!showCode ? (
         <>
           <View style={styles.inputContainer}>
             <Item>
-              <CustomInput
-                placeholder="Company name"
+              <CustomSimpleInput
+                placeholder="Enter your company name ..."
                 value={companyName}
                 onChangeText={(event) => setCompanyName(event)}
                 errorMessage={
@@ -162,8 +158,8 @@ export const CreateCompany = ({
               />
             </Item>
             <Item>
-              <CustomInput
-                placeholder="Company join code"
+              <CustomSimpleInput
+                placeholder="Enter your company join code"
                 value={companyCode}
                 onChangeText={setCompanyCode}
                 errorMessage={
@@ -217,7 +213,6 @@ export const CreateCompany = ({
                 iconOne="keyboard-arrow-left"
                 onPress={() => {
                   setShowCreate(false)
-                  setShowBtns(true)
                 }}
                 title="Cancel"
               />
