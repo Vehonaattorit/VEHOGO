@@ -137,7 +137,7 @@ export const MainPage = ({navigation}) => {
     user.homeAddress,
     user.homeLocation,
     user.userName,
-    user.id'
+    user.id
   )*/
 
   // console.log('activeRide', activeRide)
@@ -253,7 +253,11 @@ export const MainPage = ({navigation}) => {
     return () => {
       console.log('cleaning')
     }
-  }, [user])
+  }, [])
+
+  /*const checkTravelPreference = async () => {
+    setTravelPreference(user.travelPreference)
+  }*/
 
   useEffect(() => {
     navigation.setOptions({
@@ -456,7 +460,6 @@ const styles = StyleSheet.create({
   },
   view: {
     flex: 1,
-    backgroundColor: '#fff',
   },
 
   listView: {
