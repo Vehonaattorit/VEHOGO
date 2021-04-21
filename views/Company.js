@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {StyleSheet, KeyboardAvoidingView} from 'react-native'
+import {StyleSheet,Platform ,KeyboardAvoidingView} from 'react-native'
 import {Text, Icon, Button} from 'native-base'
 import {View, Item, Input} from 'native-base'
 import {JoinCompany} from './JoinCompany'
