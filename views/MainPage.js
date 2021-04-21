@@ -63,7 +63,7 @@ export const MainPage = ({navigation}) => {
   const [driverTrips, setDriverTrips] = useState()
 
   // CURRENTWEEKDAY
-  const [currentWeekDay, setCurrentWeekDay] = useState(5)
+  const [currentWeekDay, setCurrentWeekDay] = useState(new Date().getDay())
 
   // PASSENGER
 
@@ -263,12 +263,14 @@ export const MainPage = ({navigation}) => {
     navigation.setOptions({
       headerRight: () => (
         <HeaderButtons HeaderButtonComponent={HeaderButton}>
-          <Item
-            title="Filter"
-            iconComponent={Ionicons}
-            iconName="filter"
-            onPress={() => setOpen(!open)}
-          />
+          {user.travelPreference === 'passenger' && (
+            <Item
+              title="Filter"
+              iconComponent={Ionicons}
+              iconName="filter"
+              onPress={() => setOpen(!open)}
+            />
+          )}
           <Item
             title="Account Settings"
             iconComponent={MaterialCommunityIcons}
@@ -321,7 +323,7 @@ export const MainPage = ({navigation}) => {
   const displayDriverList = () => {
     if (user.travelPreference === 'driver') {
       return (
-        <Container>
+        <>
           {driverTrips && (
             <Container>
               <RideStartBar
@@ -338,15 +340,7 @@ export const MainPage = ({navigation}) => {
               </View>
             </Container>
           )}
-
-          <View style={styles.listView}>
-            <DriverTripList
-              isLoading={isLoading}
-              navigation={navigation}
-              driverTrips={driverTrips}
-            />
-          </View>
-        </Container>
+        </>
       )
     }
   }
@@ -416,6 +410,7 @@ export const MainPage = ({navigation}) => {
           {user.travelPreference === 'passenger'
             ? displayPassengerList()
             : displayDriverList()}
+
           <View>
             {user.travelPreference === 'passenger' ? (
               <MainPageButtons
