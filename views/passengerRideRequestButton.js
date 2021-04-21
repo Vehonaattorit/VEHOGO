@@ -32,9 +32,6 @@ const PassengerRideRequestButton = ({
 
       const userDriver = await getUser(workTrip.driverID)
 
-      console.log("driver's", userDriver.expoToken)
-      console.log('driver data 564', userDriver)
-
       setExpoToken(userDriver.expoToken)
     }
 
@@ -83,36 +80,19 @@ const PassengerRideRequestButton = ({
       console.log('2444, expoToken', expoToken)
       console.log('2333, apiKey', apiKey)
 
-      await fetch('https://fcm.googleapis.com/fcm/send', {
+      fetch('https://exp.host/--/api/v2/push/send', {
         method: 'POST',
         headers: {
+          Accept: 'application/json',
+          'Accept-Encoding': 'gzip, deflate',
           'Content-Type': 'application/json',
-          Authorization: `key=${apiKey}`,
         },
         body: JSON.stringify({
           to: expoToken,
-          priority: 'normal',
-          data: {
-            experienceId: '@yourExpoUsername/yourProjectSlug',
-            title: "\uD83D\uDCE7 You've got mail",
-            message: 'Hello world! \uD83C\uDF10',
-          },
+          title: 'Request was sent',
+          body: `Request sent from ${user.userName}`,
         }),
       })
-
-      // fetch('https://exp.host/--/api/v2/push/send', {
-      //   method: 'POST',
-      //   headers: {
-      //     Accept: 'application/json',
-      //     'Accept-Encoding': 'gzip, deflate',
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     to: expoToken,
-      //     title: 'Request was sent',
-      //     body: `Request sent from ${user.userName}`,
-      //   }),
-      // })
 
       Alert.alert(
         `Request was sent to ${workTrip.driverName}!`,

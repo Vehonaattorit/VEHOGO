@@ -49,42 +49,104 @@ import {Ionicons, MaterialCommunityIcons} from '@expo/vector-icons'
 
 import {HeaderButtons, Item} from 'react-navigation-header-buttons'
 import HeaderButton from '../components/CustomHeaderButton'
+import firebase from 'firebase/app'
+import 'firebase/firestore'
+
+const db = firebase.firestore()
 
 export const MainPage = ({navigation}) => {
   const {user} = useContext(UserContext)
   const [travelPreference, setTravelPreference] = useState('')
 
   const [driverTrips, setDriverTrips] = useState(null)
+  const [isDriverLoading, setIsDriverLoading] = useState(true)
 
   // CURRENTWEEKDAY
   const [currentWeekDay, setCurrentWeekDay] = useState(new Date().getDay())
 
   // PASSENGER
-  const {passengerTrips, activeRide, isLoading} = usePassengerListHook(user, [
-    {
-      field: 'scheduledDrive.stops',
-      condition: 'array-contains',
-      value: {
-        address: user.homeAddress,
-        location: user.homeLocation,
-        stopName: user.userName,
-        userID: user.id,
+  const [passengerTrips, setPassengerTrips] = useState([])
+  const [activeRide, setActiveRide] = useState([])
+  const [isPassengerLoading, setIsPassengerLoading] = useState(true)
+
+  const fetchWorkTrips = async () => {
+    const workTripsListener = await db
+      .collection('companys')
+      .doc(user.company.id)
+      .collection('workTrips')
+      // DOESN'T WORK WITH onSnapshot
+      // .withConverter(workTripConverter)
+      .orderBy('workDayNum', 'asc')
+      .orderBy('scheduledDrive.start', 'asc')
+      .onSnapshot((querySnapshot) => {
+        const passengerTrips = querySnapshot.docs.map((doc) => {
+          return {
+            ...doc.data(),
+          }
+        })
+
+        const newPassengerTrips = []
+        for (const passengerTrip of passengerTrips) {
+          const isPassengerIncluded = passengerTrip.scheduledDrive.stops.some(
+            (item) => {
+              return item.userID === user.id
+            }
+          )
+
+          newPassengerTrips.push({...passengerTrip, isPassengerIncluded})
+        }
+
+        setPassengerTrips(newPassengerTrips)
+
+        setIsPassengerLoading(false)
+      })
+  }
+
+  const fetchActiveRide = async () => {
+    let activeRideListener = await db
+      .collection('companys')
+      .doc(user.company.id)
+      .collection('workTrips')
+
+    const querys = [
+      {
+        field: 'scheduledDrive.stops',
+        condition: 'array-contains',
+        value: {
+          address: user.homeAddress,
+          location: user.homeLocation,
+          stopName: user.userName,
+          userID: user.id,
+        },
       },
-    },
-    {field: 'workDayNum', condition: '==', value: currentWeekDay},
-    {field: 'isDriving', condition: '==', value: true},
-  ])
+      {field: 'workDayNum', condition: '==', value: currentWeekDay},
+      {field: 'isDriving', condition: '==', value: true},
+    ]
 
-  console.log(
-    'user',
-    user.homeAddress,
-    user.homeLocation,
-    user.userName,
-    user.id
-  )
+    querys.forEach((query) => {
+      activeRideListener = activeRideListener.where(
+        query.field,
+        query.condition,
+        query.value
+      )
+    })
 
-  // console.log('activeRide', activeRide)
-  // [END]
+    activeRideListener.onSnapshot((querySnapshot) => {
+      const activeRides = querySnapshot.docs.map((doc) => {
+        return {
+          ...doc.data(),
+        }
+      })
+
+      if (activeRides[0] === undefined) {
+        setActiveRide(null)
+      } else {
+        setActiveRide(activeRides[0])
+      }
+
+      setIsPassengerLoading(false)
+    })
+  }
 
   const {
     multiSliderValue,
@@ -94,7 +156,7 @@ export const MainPage = ({navigation}) => {
     timeValues,
     open,
     setOpen,
-    passengerList,
+    // passengerList,
     // activeRide,
     extraDay,
     // isLoading,
@@ -121,7 +183,10 @@ export const MainPage = ({navigation}) => {
         })
         console.log('streaming')
         console.log('state change')
+
+        // console.log('driverTrips[0]', driverTrips[0])
         setDriverTrips(trips)
+        setIsDriverLoading(false)
       })
     } catch (e) {
       console.log(e)
@@ -136,29 +201,14 @@ export const MainPage = ({navigation}) => {
       driverTripStream()
     }
     if (travelPreference === 'passenger') {
+      fetchWorkTrips()
+      fetchActiveRide()
       // fetchTodayRides()
     }
 
     // return () => fetchTodayRides()
   }, [travelPreference, passengerTrips, activeRide])
-
-  // const checkNotificationsPermissions = async () => {
-  //   let pushToken
-  //   let statusObj = await Permissions.getAsync(Permissions.NOTIFICATIONS)
-  //   if (statusObj.status !== 'granted') {
-  //     statusObj = await Permissions.askAsync(Permissions.NOTIFICATIONS)
-  //   }
-  //   if (statusObj.status !== 'granted') {
-  //     pushToken = null
-  //   } else {
-  //     pushToken = (await Notifications.getExpoPushTokenAsync()).data
-  //   }
-
-  //   let updatedUser = await getUser(user.id)
-  //   updatedUser.expoToken = pushToken
-
-  //   await updateUser(updatedUser)
-  // }
+  // }, [travelPreference, passengerTrips, activeRide])
 
   const checkTravelPreference = async () => {
     setTravelPreference(user.travelPreference)
@@ -190,8 +240,6 @@ export const MainPage = ({navigation}) => {
   const displayPassengerList = () => {
     return (
       <Container>
-        {/* {activeRide && ( */}
-        {/* // DOES NOT WORK PROPERLY. activeRide is not functioning */}
         {activeRide && (
           <DriverIsOnHisWayBar
             user={user}
@@ -199,7 +247,6 @@ export const MainPage = ({navigation}) => {
             activeRide={activeRide}
           />
         )}
-        {/* )} */}
 
         <View style={styles.availableRidesContainer}>
           <Text style={styles.availableText}>Available Rides</Text>
@@ -208,7 +255,7 @@ export const MainPage = ({navigation}) => {
         <View style={styles.listView}>
           <PassengerList
             user={user}
-            isLoading={isLoading}
+            isLoading={isPassengerLoading}
             extraDay={extraDay}
             navigation={navigation}
             dataArray={passengerTrips}
@@ -232,7 +279,7 @@ export const MainPage = ({navigation}) => {
 
               <View style={styles.listView}>
                 <DriverTripList
-                  isLoading={isLoading}
+                  isLoading={isDriverLoading}
                   navigation={navigation}
                   driverTrips={driverTrips}
                 />

@@ -31,9 +31,6 @@ export default function App() {
   const [userId, setUserId] = useState(null)
   const [expoPushToken, setExpoPushToken] = useState(false)
 
-  // Notification useState
-  const [notification, setNotification] = useState(null)
-
   const notificationListener = useRef()
   const responseListener = useRef()
 

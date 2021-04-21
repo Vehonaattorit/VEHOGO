@@ -6,8 +6,6 @@ import Constants from 'expo-constants'
 import * as Permissions from 'expo-permissions'
 import * as Notifications from 'expo-notifications'
 
-import {PUBLIC_VAPID_KEY} from '@env'
-
 export async function login(email, password) {
   await firebase
     .auth()
@@ -75,30 +73,11 @@ const registerForPushNotificationsAsync = async ({user}) => {
       alert('Failed to get push token for push notification!')
       return
     }
-    token = (await Notifications.getDevicePushTokenAsync()).data
+    token = (await Notifications.getExpoPushTokenAsync()).data
     console.log('user token', token)
 
     await updateUser(new User({id: user.uid, expoToken: token}))
   } else {
     alert('Must use physical device for Push Notifications')
   }
-
-  // await getToken()
-
-  return token
 }
-
-// const getToken = () => {
-//   const messaging = firebase.messaging()
-//   // [START messaging_get_token]
-//   // Get registration token. Initially this makes a network call, once retrieved
-//   // subsequent calls to getToken will return from cache.
-
-//   messaging.getToken({vapidKey: PUBLIC_VAPID_KEY}).then((currentToken) => {
-//     if (currentToken) {
-//       // Send the token to your server
-
-//       console.log('CUR token 234', currentToken)
-//     }
-//   })
-// }
