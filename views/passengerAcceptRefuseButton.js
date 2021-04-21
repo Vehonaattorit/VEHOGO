@@ -150,12 +150,12 @@ const PassengerAcceptRefuseButton = (props) => {
     const newEndTime = workTripToUpdate.goingTo == 'work'
       ? (workTripToUpdate.scheduledDrive.end.toDate())
       : (workTripToUpdate.scheduledDrive.end)
-
+    //Having to do some toDate fuckery because of js is stupid
     const newStartTime = workTripToUpdate.goingTo == 'work'
       ? (workTripToUpdate.scheduledDrive.start)
       : (workTripToUpdate.scheduledDrive.start.toDate())
 
-
+    //looping through stops and calculating the time it takes to get to each stop
     for (let index = 0; index < workTripToUpdate.scheduledDrive.stops.length - 1; index++) {
       let minutesToDestination = 0
       for (let a = 0; a < index; a++) {
