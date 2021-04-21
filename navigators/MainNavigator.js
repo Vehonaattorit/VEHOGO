@@ -12,6 +12,7 @@ import {Chat} from '../views/Chat'
 import {DriverRideRequestList} from '../views/DriverRideRequestList'
 import {DriverCarList} from '../views/DriverCarList'
 import {Settings} from '../views/Settings'
+import {MyRides} from '../views/MyRides'
 import ChatRoom from '../views/ChatRoom'
 import {UserContext} from '../contexts'
 import {IconButton} from 'react-native-paper'
@@ -65,6 +66,11 @@ function MainStackNavigator() {
           name="Settings"
           component={Settings}
           options={{title: 'Settings'}}
+        />
+        <Stack.Screen
+          name="MyRides"
+          component={MyRides}
+          options={{title: 'My rides'}}
         />
 
         <Stack.Screen

@@ -170,6 +170,12 @@ export const MainPage = ({navigation}) => {
             iconName="account-cog"
             onPress={() => navigation.navigate('Settings')}
           />
+          <Item
+            title="Account Settings"
+            iconComponent={MaterialCommunityIcons}
+            iconName="calendar"
+            onPress={() => navigation.navigate('MyRides')}
+          />
         </HeaderButtons>
       ),
     })
