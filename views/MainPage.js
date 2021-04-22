@@ -107,6 +107,7 @@ export const MainPage = ({navigation}) => {
           ...doc.data(),
         }
       })
+      console.log('active rides', activeRides)
 
       if (activeRides[0] === undefined) {
         setActiveRide(null)
@@ -204,6 +205,7 @@ export const MainPage = ({navigation}) => {
 
       try {
         var trips = []
+        console.log(user.company.id)
         let ref = await workTripMultiQueryStream(user.company.id, [
           {field: 'workDayNum', condition: '==', value: currentWeekDay},
           {field: 'driverID', condition: '==', value: user.id},

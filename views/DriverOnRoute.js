@@ -13,7 +13,7 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'
 import decodePolyline from 'decode-google-map-polyline'
 import {
   updateWorkTrip,
-  useIsDrivingHook,
+  //useIsDrivingHook,
   workTripStream,
 } from '../controllers/workTripController'
 import {UserContext} from '../contexts'
@@ -54,7 +54,7 @@ export const DriverOnRoute = ({navigation, route}) => {
 
   const {user} = useContext(UserContext)
   const {chatRooms, isLoading} = useChatRoomHooks()
-  const {isDriving} = useIsDrivingHook(user, workTrip)
+  //const {isDriving} = useIsDrivingHook(user, workTrip)
 
   let intervalTimer
   const [routeCoordinates, setRouteCoordinates] = useState([])
@@ -101,50 +101,7 @@ export const DriverOnRoute = ({navigation, route}) => {
 
   /**/
 
-  const updateLocationInterval = async () => {
-    // if user is driver, update location
-    if (user.travelPreference == 'driver') {
-      // car position updated every 10 seconds
-      intervalTimer = setInterval(callUpdateUserPosition, 10000)
-    }
-  }
 
-  async function callUpdateUserPosition() {
-    //update driver position to firebase
-
-    let location = await updateUserPosition(user, workTrip.id)
-
-    //calculate distance between next stop and current position
-    let distance = calculateDistance(
-      location.coords.latitude,
-      location.coords.longitude,
-      workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop].location
-        .latitude,
-      workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop].location
-        .longitude
-    )
-
-    //calculate distance between location and end position
-    let distanceToEnd = calculateDistance(
-      location.coords.latitude,
-      location.coords.longitude,
-      workTrip.scheduledDrive.stops[workTrip.scheduledDrive.stops.length - 1]
-        .location.latitude,
-      workTrip.scheduledDrive.stops[workTrip.scheduledDrive.stops.length - 1]
-        .location.longitude
-    )
-
-    //always show end route if distance under 100m
-    if (distanceToEnd >= 0.3) {
-      //show NextStopBar if distance less than 100m
-      if (distance <= 0.3) {
-        //if next stop is last show StopBar
-        setShowNextStopBar(true)
-      }
-    } else {
-      setShowStop(true)
-    }
-  }
 
   const changeNextStop = async () => {
     setShowNextStopBar(false)
@@ -233,12 +190,82 @@ export const DriverOnRoute = ({navigation, route}) => {
     workTrip.isDriving = false
     await updateWorkTrip(user.company.id, workTrip)
 
+    let userIds = workTrip.scheduledDrive.stops.map(
+      (item) => item.userID
+    )
+
+    userIds = userIds.filter((item) => item !== user.id)
+
+    for (const userId of userIds) {
+      const notifyUser = await getUser(userId)
+
+      await fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Accept-Encoding': 'gzip, deflate',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          to: notifyUser.expoToken,
+          title: `${workTrip.driverName} has ended driving.`,
+          body: `Route has ended.`,
+        }),
+      })
+    }
+
     navigation.popToTop()
   }
-  useEffect(() => {}, [mapRef])
+  /*useEffect(() => {
+
+  }, [mapRef])*/
 
   useEffect(() => {
-    //callUpdateUserPosition()
+    const updateLocationInterval = async () => {
+      // if user is driver, update location
+      if (user.travelPreference == 'driver') {
+        // car position updated every 10 seconds
+        intervalTimer = setInterval(callUpdateUserPosition, 10000)
+      }
+    }
+
+    async function callUpdateUserPosition() {
+      //update driver position to firebase
+
+      let location = await updateUserPosition(user, workTrip.id)
+
+      //calculate distance between next stop and current position
+      let distance = calculateDistance(
+        location.coords.latitude,
+        location.coords.longitude,
+        workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop].location
+          .latitude,
+        workTrip.scheduledDrive.stops[workTrip.scheduledDrive.nextStop].location
+          .longitude
+      )
+
+      //calculate distance between location and end position
+      let distanceToEnd = calculateDistance(
+        location.coords.latitude,
+        location.coords.longitude,
+        workTrip.scheduledDrive.stops[workTrip.scheduledDrive.stops.length - 1]
+          .location.latitude,
+        workTrip.scheduledDrive.stops[workTrip.scheduledDrive.stops.length - 1]
+          .location.longitude
+      )
+
+      //always show end route if distance under 100m
+      if (distanceToEnd >= 0.3) {
+        //show NextStopBar if distance less than 100m
+        if (distance <= 0.3) {
+          //if next stop is last show StopBar
+          setShowNextStopBar(true)
+        }
+      } else {
+        setShowStop(true)
+      }
+    }
+
     if (user.travelPreference === 'driver') {
       updateLocationInterval()
     }
@@ -253,7 +280,7 @@ export const DriverOnRoute = ({navigation, route}) => {
           }
         )
       }
-    }, 10000)
+    }, 2000)
     // }, 1000)20.04.2021 initial time
 
     var tempRouteCoordinates = []
@@ -274,6 +301,7 @@ export const DriverOnRoute = ({navigation, route}) => {
     setRouteCoordinates(tempRouteCoordinates)
 
     return () => {
+      console.log('cleaning')
       clearInterval(intervalTimer)
     }
   }, [])
@@ -334,8 +362,12 @@ export const DriverOnRoute = ({navigation, route}) => {
       setLatestMessage(renderChat.latestMessage.text)
     }
 
-    if (!isDriving) return navigation.popToTop()
-  }, [chatRooms, isDriving])
+
+    return () => {
+      latestMessage
+    }
+    //if (!isDriving) return navigation.popToTop()
+  }, [chatRooms])
 
   // Render Passenger List at top of the screen
   const renderItem = ({item, index}) => {
