@@ -76,7 +76,7 @@ export const RideStartBar = ({user, navigation, driverTrips}) => {
           }
         }
       }
-
+      console.log('next day',tomorrowWeekDay)
       const tomorrowWorkTrips = await workTripMultiQuery(user.company.id, [
         {
           field: 'workDayNum',
