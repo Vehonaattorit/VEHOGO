@@ -1,6 +1,7 @@
 import moment from 'moment-timezone'
 
 export const formatTime = (dateTime) => {
+  console.log('datus', dateTime)
   return moment(dateTime).format('HH:mm')
 }
 

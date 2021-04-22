@@ -85,11 +85,16 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     marginTop: 10,
-    backgroundColor: 'white',
+    backgroundColor: '#EAEAEA',
     borderRadius: 20,
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOpacity: 0.8,
+    elevation: 6,
+    shadowRadius: 15,
+    shadowOffset: {width: 1, height: 13},
   },
   item: {
-    backgroundColor: 'white',
+    backgroundColor: '#EAEAEA',
   },
 })
 

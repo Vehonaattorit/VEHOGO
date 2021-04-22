@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    margin: 10,
+    flex: 1
   },
   input: {
     backgroundColor: '#fff',

@@ -13,7 +13,7 @@ export const CompanyCode = ({navigation, companyCode}) => {
         <Text style={styles.title}>{companyCode}</Text>
         <Text style={{paddingBottom: 40, textAlign: 'auto'}}>
           Please copy this code by pressing the "Copy to clipboard button" your
-          team members need it to join your company.
+          team members will be needing it to join your company.
         </Text>
       </Card>
       <View style={styles.btns}>
@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     justifyContent: 'center',
+    backgroundColor: '#fff',
     alignItems: 'center',
     backgroundColor: "white"
   },
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
     elevation: 6,
     shadowRadius: 15,
     shadowOffset: {width: 1, height: 13},
-    color: color.platina
+    color: "#EAEAEA"
   },
   title: {
     margin: 40,

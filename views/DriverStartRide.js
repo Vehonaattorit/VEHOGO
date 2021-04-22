@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react'
+import React, {useContext, useState} from 'react'
 import {StyleSheet, View, Text, Dimensions} from 'react-native'
 // import {
 //   Content,
@@ -21,25 +21,64 @@ import * as Location from 'expo-location'
 
 export const DriverStartRide = ({navigation, route}) => {
   let workTrip = route.params.workTrip
-
+  console.log('stops',workTrip.scheduledDrive.stops)
   const {user} = useContext(UserContext)
 
   const [isDriving, setIsDriving] = useState(workTrip.isDriving)
 
   const startDriving = async () => {
-    let workTripToUpdate = workTrip
 
-    workTripToUpdate.isDriving = !workTrip.isDriving
+    let {status} = await Location.requestPermissionsAsync()
+    if (status === 'granted') {
 
-    setIsDriving(workTripToUpdate.isDriving)
-    await updateWorkTrip(user.company.id, workTripToUpdate)
+      let workTripToUpdate = workTrip
 
-    if (workTripToUpdate.isDriving) {
+      workTripToUpdate.isDriving = !workTrip.isDriving
+
+      if (!isDriving) {
+        await updateWorkTrip(user.company.id, workTripToUpdate)
+        setIsDriving(workTripToUpdate.isDriving)
+
+
+        let userIds = workTripToUpdate.scheduledDrive.stops.map(
+          (item) => item.userID
+        )
+
+        userIds = userIds.filter((item) => item !== user.id)
+
+        for (const userId of userIds) {
+          const notifyUser = await getUser(userId)
+
+          await fetch('https://exp.host/--/api/v2/push/send', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Accept-Encoding': 'gzip, deflate',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              to: notifyUser.expoToken,
+              title: `Driver has started his ride to ${workTripToUpdate.goingTo}.`,
+              body: `${workTripToUpdate.driverName} is coming to pick you up.`,
+            }),
+          })
+        }
+      }
+
       navigation.navigate('DriverOnRoute', {
         workTrip: workTrip,
       })
+    } else {
+      alert('Location permission required')
     }
 
+  }
+
+  const stopDriving = async () => {
+    let workTripToUpdate = workTrip
+    workTripToUpdate.isDriving = false
+    navigation.popToTop()
+    await updateWorkTrip(user.company.id, workTripToUpdate)
     let userIds = workTripToUpdate.scheduledDrive.stops.map(
       (item) => item.userID
     )
@@ -58,21 +97,12 @@ export const DriverStartRide = ({navigation, route}) => {
         },
         body: JSON.stringify({
           to: notifyUser.expoToken,
-          title: `Driver has started his ride to ${workTripToUpdate.goingTo}.`,
-          body: `${workTripToUpdate.driverName} is coming to pick you up.`,
+          title: `${workTripToUpdate.driverName} has ended driving.`,
+          body: `Route has ended.`,
         }),
       })
     }
   }
-
-  useEffect(() => {
-    ;(async () => {
-      let {status} = await Location.requestPermissionsAsync()
-      if (status !== 'granted') {
-        return
-      }
-    })()
-  }, [])
 
   const drivingTime = () => {
     let totalTime = 0
@@ -90,20 +120,54 @@ export const DriverStartRide = ({navigation, route}) => {
           <Text style={styles.drivingTime}>
             Driving time: {workTrip.route && drivingTime()} mins
           </Text>
-          <Button
-            large
-            style={{
-              ...styles.button,
-              backgroundColor: isDriving
-                ? color.radicalRed
-                : color.malachiteGreen,
-            }}
-            onPress={startDriving}
-          >
-            <Text style={styles.btntxt}>
-              {isDriving ? 'Stop Driving' : 'Start Driving'}
-            </Text>
-          </Button>
+          <View style={{flexDirection: 'row'}}>
+            {isDriving ? (
+              <>
+                <Button
+                  large
+                  style={{
+                    ...styles.button,
+                    marginRight: 5,
+                    backgroundColor: color.malachiteGreen,
+                  }}
+                  onPress={startDriving}
+                >
+                  <Text style={styles.btntxt}>
+                    Continue
+                  </Text>
+                </Button>
+
+                <Button
+                  large
+                  style={{
+                    ...styles.button,
+                    backgroundColor: color.radicalRed
+                  }}
+                  onPress={stopDriving}
+                >
+                  <Text style={styles.btntxt}>
+                    Stop Driving
+                  </Text>
+                </Button>
+              </>
+            ) : (
+              <Button
+                large
+                style={{
+                  ...styles.button,
+                  backgroundColor: isDriving
+                    ? color.radicalRed
+                    : color.malachiteGreen,
+                }}
+                onPress={startDriving}
+              >
+                <Text style={styles.btntxt}>
+                  {isDriving ? 'Stop Driving' : 'Start Driving'}
+                </Text>
+              </Button>
+            )
+            }
+          </View>
         </View>
       </View>
 

@@ -48,6 +48,7 @@ export const VerifyEmail = ({navigation}) => {
 const styles = StyleSheet.create({
   view: {
     flex: 1,
+    backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -31,12 +31,18 @@ function SetUpStackNavigator() {
           headerTintColor: color.primary,
         }}
       >
-
         <Stack.Screen
           name="Company"
           component={Company}
           options={{
             title: 'Create or join',
+          }}
+        />
+           <Stack.Screen
+          name="WorkingHours"
+          component={WorkingHours}
+          options={{
+            title: 'Working Hours',
           }}
         />
         <Stack.Screen
@@ -69,13 +75,7 @@ function SetUpStackNavigator() {
           }}
         />
 
-        <Stack.Screen
-          name="WorkingHours"
-          component={WorkingHours}
-          options={{
-            title: 'Working Hours',
-          }}
-        />
+
         <Stack.Screen name="SetUpInit" component={SetUpInit} />
       </Stack.Navigator>
     </NavigationContainer>
