@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {Text, View, Button} from 'native-base'
 import {StyleSheet, Dimensions, ActivityIndicator, Platform} from 'react-native'
 import {color} from '../constants/colors'
-import {Ionicons} from '@expo/vector-icons'
+import {Ionicons, MaterialCommunityIcons} from '@expo/vector-icons'
 import {getWorkTrip} from '../controllers/workTripController'
 import {checkWhatDayItIs} from '../utils/utils'
 import moment from 'moment'
@@ -51,6 +51,8 @@ const RequestListItem = ({user, itemData, viewRequest}) => {
             <Text style={styles.homeAddressText}>{item.homeAddress}</Text>
           </View>
         </View>
+        <View style={styles.breakPoint}></View>
+
         <View style={styles.bottomRow}>
           <Ionicons name="today-outline" size={24} color={color.lightBlack} />
           <View
@@ -91,6 +93,31 @@ const RequestListItem = ({user, itemData, viewRequest}) => {
             </View>
           </View>
         </View>
+
+        <View style={styles.breakPoint}></View>
+        <View style={styles.bottomRow}>
+          {/* <Ionicons name="today-outline" size={24} color={color.lightBlack} /> */}
+          <MaterialCommunityIcons
+            name="view-week-outline"
+            size={24}
+            color={color.lightBlack}
+          />
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'space-between',
+              flexDirection: 'row',
+            }}
+          >
+            <View style={styles.marginLeft}>
+              <Text style={styles.homeAddressText}>
+                {workTrip.goingTo.charAt(0).toUpperCase() +
+                  workTrip.goingTo.slice(1)}
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.breakPoint}></View>
         <View style={styles.bottomRow}>
           <Button style={styles.button} onPress={() => viewRequest(item)}>
             <Text style={styles.btntxt}>Show Request</Text>

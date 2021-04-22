@@ -1,10 +1,7 @@
 import React, {useEffect, useRef} from 'react'
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete'
 import {googleMapsApiKey} from '../secrets/secrets'
-const GooglePlacesInput = ({
-  setAddress,
-  defaultValue,
-}) => {
+const GooglePlacesInput = ({setAddress, defaultValue}) => {
   const ref = useRef()
 
   useEffect(() => {
@@ -13,7 +10,6 @@ const GooglePlacesInput = ({
 
   return (
     <GooglePlacesAutocomplete
-
       placeholder={defaultValue || 'Search address'}
       onPress={(data, details = null) => {
         setAddress(data.description)
