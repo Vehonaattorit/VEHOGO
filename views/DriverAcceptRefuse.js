@@ -6,7 +6,9 @@ import MapView, {Marker} from 'react-native-maps'
 import PassengerRideRequestButton from './passengerRideRequestButton'
 import PassengerAcceptRefuseButton from './passengerAcceptRefuseButton'
 import decodePolyline from 'decode-google-map-polyline'
-import {drivingTime} from '../utils/utils'
+import {checkWhatDayItIs, drivingTime} from '../utils/utils'
+import {getWorkTrip} from '../controllers/workTripController'
+import moment from 'moment'
 
 export const DriverAcceptRefuse = ({navigation, route}) => {
   const {
@@ -16,8 +18,6 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
     rideRequest,
   } = route.params
   const {user} = useContext(UserContext)
-
-  console.log('irdeRequest', singleItem.homeAddress)
 
   const [mapRef, setMapRef] = useState(null)
   const [routeCoordinates, setRouteCoordinates] = useState([])
@@ -58,7 +58,17 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
       </Marker>
     ),
   ])
-  //
+
+  const [workTrip, setWorkTrip] = useState(null)
+
+  const getWorkTripData = async (workTripRefID) => {
+    const data = await getWorkTrip(user.company.id, workTripRefID)
+    console.log('data', data)
+
+    setWorkTrip(workTrip)
+  }
+
+  const {stops} = singleItem.scheduledDrive
 
   useEffect(() => {
     var tempRouteCoordinates = []
@@ -77,6 +87,10 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
       })
     }
     setRouteCoordinates(tempRouteCoordinates)
+
+    navigation.setOptions({
+      title: rideRequest === undefined ? 'Request Ride' : rideRequest.userName,
+    })
   }, [])
 
   return (
@@ -117,9 +131,60 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
 
           <View style={styles.info}>
             <Text style={styles.text}>
-              {rideRequest == undefined ? '' : rideRequest.homeAddress}
+              {'Home: ' +
+                (rideRequest == undefined
+                  ? singleItem.goingTo === 'home'
+                    ? stops[stops.length - 1].address
+                    : stops[0].address
+                  : rideRequest.homeAddress)}
             </Text>
             <Text style={styles.text}>{drivingTime(singleItem)} min</Text>
+          </View>
+          <View style={styles.info}>
+            <Text style={styles.text}>
+              {rideRequest == undefined
+                ? checkWhatDayItIs(singleItem.workDayNum)
+                : checkWhatDayItIs(rideRequest.workDayNum)}
+            </Text>
+            <Text style={styles.text}>
+              Going to{' '}
+              {rideRequest == undefined
+                ? singleItem.goingTo.charAt(0).toUpperCase() +
+                  singleItem.goingTo.slice(1)
+                : singleItem.goingTo.charAt(0).toUpperCase() +
+                  singleItem.goingTo.slice(1)}
+            </Text>
+          </View>
+          <View style={styles.info}>
+            <Text style={styles.text}>
+              {/* {rideRequest == undefined
+                ? moment(singleItem.scheduledDrive.start.toDate()).format(
+                    'HH:mm'
+                  ) +
+                  ' - ' +
+                  moment(singleItem.scheduledDrive.end.toDate()).format('HH:mm')
+                : moment(singleItem.scheduledDrive.start.toDate()).format(
+                    'HH:mm'
+                  ) +
+                  ' - ' +
+                  moment(singleItem.scheduledDrive.end.toDate()).format(
+                    'HH:mm'
+                  )} */}
+              {rideRequest == undefined
+                ? singleItem.goingTo === 'home'
+                  ? 'Leaves work at: ' +
+                    moment(singleItem.scheduledDrive.start.toDate()).format(
+                      'HH:mm'
+                    )
+                  : 'Leaves home at: ' +
+                    moment(singleItem.scheduledDrive.start.toDate()).format(
+                      'HH:mm'
+                    )
+                : 'Work times: ' +
+                  moment(rideRequest.start.toDate()).format('HH:mm') +
+                  ' - ' +
+                  moment(rideRequest.end.toDate()).format('HH:mm')}
+            </Text>
           </View>
 
           {user.travelPreference == 'passenger' ? (

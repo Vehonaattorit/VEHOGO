@@ -10,6 +10,8 @@ import moment from 'moment'
 const RequestListItem = ({user, itemData, viewRequest}) => {
   const {item} = itemData
 
+  console.log('itemus', item)
+
   const [workTrip, setWorkTrip] = useState(null)
 
   const getTrip = async () => {
@@ -83,11 +85,8 @@ const RequestListItem = ({user, itemData, viewRequest}) => {
                 }}
               >
                 <Text style={styles.homeAddressText}>
-                  {moment(workTrip.scheduledDrive.start.toDate()).format(
-                    'HH:mm'
-                  )}{' '}
-                  -{' '}
-                  {moment(workTrip.scheduledDrive.end.toDate()).format('HH:mm')}
+                  {moment(item.start.toDate()).format('HH:mm')} -{' '}
+                  {moment(item.end.toDate()).format('HH:mm')}
                 </Text>
               </View>
             </View>

@@ -83,16 +83,7 @@ export const MainPage = ({navigation}) => {
     console.log('isDriving')
 
     const querys = [
-      // {
-      //   field: 'scheduledDrive.stops',
-      //   condition: 'array-contains',
-      //   value: {
-      //     address: user.homeAddress,
-      //     location: user.homeLocation,
-      //     stopName: user.userName,
-      //     userID: user.id,
-      //   },
-      // },
+      /* orderBy time, maybe ?*/
       {field: 'workDayNum', condition: '==', value: currentWeekDay},
       {field: 'isDriving', condition: '==', value: true},
     ]
@@ -117,26 +108,12 @@ export const MainPage = ({navigation}) => {
       for (let i = 0; i < activeRides.length; i++) {
         const {stops} = activeRides[i].scheduledDrive
 
-        // console.log('activeRides[]', activeRides[i].scheduledDrive)
-
         for (let j = 0; j < stops.length; j++) {
           if (stops[j].userID === user.id) {
-            // console.log('FOUND IT !!!')
-
-            // console.log('stops[j]', stops[j])
-            // console.log('stops[j]', activeRides[i])
-
             newActiveRides.push(activeRides[i])
           }
-          // if (sche)
         }
       }
-
-      // const filteredRides = activeRides.scheduledDrive.stops.filter((item) => {
-      //   console.log('item', item)
-      // })
-
-      console.log('activeRides', activeRides[0])
 
       if (activeRides[0] === undefined) {
         setActiveRide(null)

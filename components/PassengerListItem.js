@@ -24,15 +24,8 @@ const PassengerListItem = ({navigation, user, singleItem}) => {
     isPassengerIncluded,
   } = singleItem
 
-  // useEffect(() => {
-  //   const isPassengerIncluded = scheduledDrive.stops.find(
-  //     (item) => item.userID === user.id
-  //   )
-
-  //   if (isPassengerIncluded === undefined) return
-
-  //   setHasPassenger(true)
-  // }, [hasPassenger])
+  console.log('singleItem', singleItem.goingTo)
+  console.log('singleItem', singleItem.workDayNum)
 
   const schedStart = new Date(scheduledDrive.start.toDate())
 
