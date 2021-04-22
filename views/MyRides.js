@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState, useContext} from 'react'
 import {View, StyleSheet, ScrollView, TouchableOpacity, Platform, TouchableNativeFeedback, Dimensions} from 'react-native'
 import {
   Body,
@@ -16,34 +16,59 @@ import {
 import {Ionicons, FontAwesome5} from '@expo/vector-icons'
 import CustomButtonIcon from '../components/CustomIconButton'
 import {color} from '../constants/colors'
+
+import {UserContext} from '../contexts'
 import {checkWhatDayItIs} from '../utils/utils'
 import MyRidesWorkDayButton from '../components/MyRidesWorkDayButton'
 import MyRidesWorkDayEditDialog from '../components/MyRidesWorkDayEditDialog'
 export const MyRides = ({navigation}) => {
+
+  const {user} = useContext(UserContext)
   let TouchableCmp = TouchableOpacity
 
   if (Platform.OS === 'android' && Platform.Version >= 21) {
     TouchableCmp = TouchableNativeFeedback
   }
+  const [myRideElements, setMyRideElements] = useState([])
+
+  useEffect(() => {
+    const tempArray = []
+    for (let i = 1; i < 8; i++) {
+      let foundedIndex = undefined
+      for (let a = 0; a < user.preferedWorkingHours.length; a++) {
+        const element = user.preferedWorkingHours[a];
+        if (i == element.workDayNum) {
+          foundedIndex = a
+          break
+        }
+      }
+      if (foundedIndex != undefined) {
+        tempArray.push(<MyRidesWorkDayButton key={i} props={{workingHour: user.preferedWorkingHours[foundedIndex]}}></MyRidesWorkDayButton>)
+      }
+      else {
+        tempArray.push(<MyRidesWorkDayButton key={i} props={{workingHour: {workDayNum: i, disabled: true}}}></MyRidesWorkDayButton>)
+
+      }
+    }
+    setMyRideElements(tempArray)
+  }, [user])
+
   const workTripActive = true
   const workTripEmpty = false
   const homeTripActive = true
 
+  //<MyRidesWorkDayEditDialog></MyRidesWorkDayEditDialog>
   return (
     <View style={styles.container}>
-      <MyRidesWorkDayEditDialog></MyRidesWorkDayEditDialog>
       <View style={{height: 380, flexDirection: 'column'}}>
         <ScrollView
           horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          decelerationRate="fast"
+          showsHorizontalScrollIndicator={true}
+          decelerationRate='normal'
+          snapToInterval={50}
           pagingEnabled>
 
-          <MyRidesWorkDayButton></MyRidesWorkDayButton>
-          <MyRidesWorkDayButton></MyRidesWorkDayButton>
-          <MyRidesWorkDayButton></MyRidesWorkDayButton>
-          <MyRidesWorkDayButton></MyRidesWorkDayButton>
-          <MyRidesWorkDayButton></MyRidesWorkDayButton>
+          {myRideElements}
 
         </ScrollView>
       </View>

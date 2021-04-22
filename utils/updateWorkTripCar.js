@@ -7,13 +7,19 @@ import {getCar} from '../controllers/carController'
 import firebase from 'firebase/app'
 
 export const updateUserCarToWorkTrips = async (user) => {
-  if(user.schoosedCarID == undefined){
+  if (user.schoosedCarID == undefined) {
     throw Error('no schoosed car id defined when calling updateUserCarToWorkTrips()')
   }
   let car = await getCar(user.id, user.schoosedCarID)
-  user.preferedWorkingHours.forEach(hours => {
-    updateWorkTrip(user.company.id,new WorkTrip({id:hours.toHomeRefID,car:car}))
-    updateWorkTrip(user.company.id,new WorkTrip({id:hours.toWorkRefID,car:car}))
+  user.preferedWorkingHours.forEach(async hours => {
+    if (hours.toHomeRefID != undefined) {
+      const workTrip = await getWorkTrip(user.company.id, hours.toHomeRefID)
+      updateWorkTrip(user.company.id, new WorkTrip({id: hours.toHomeRefID, car: car, scheduledDrive: {availableSeats: (parseInt(car.availableSeats - (workTrip.scheduledDrive.stops.length - 2 > 0 ? workTrip.scheduledDrive.stops.length - 2 : 0)))}}))
+    }
+    if (hours.toWorkRefID != undefined) {
+      const workTrip = await getWorkTrip(user.company.id, hours.toWorkRefID)
+      updateWorkTrip(user.company.id, new WorkTrip({id: hours.toWorkRefID, car: car, scheduledDrive: {availableSeats: parseInt(car.availableSeats - (workTrip.scheduledDrive.stops.length - 2 > 0 ? workTrip.scheduledDrive.stops.length - 2 : 0))}}))
+    }
   });
   return
 }

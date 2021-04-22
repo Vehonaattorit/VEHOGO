@@ -8,7 +8,7 @@ import {getUser} from '../controllers/userController'
 import {googleMapsApiKey} from '../secrets/secrets'
 import {calculateDistance, drivingTime, getNextDayOfWeek} from '../utils/utils'
 import {useWorkTripHooks} from '../hooks/useHooks'
-
+import fire from '../firebase/fire'
 import {color} from '../constants/colors'
 
 // Env keys
@@ -74,7 +74,7 @@ const PassengerAcceptRefuseButton = (props) => {
     console.log(`Accepting passenger : ${rideRequest.senderID}`)
 
     let workTripToUpdate = workTrip
-    workTripToUpdate.scheduledDrive.availableSeats += 1
+    workTripToUpdate.scheduledDrive.availableSeats -= 1
     if (workTripToUpdate.scheduledDrive.stops.length > 2) {
       var tempStops = workTripToUpdate.scheduledDrive.stops
       var waypoints = tempStops.slice(1, tempStops.length - 1)
@@ -168,7 +168,22 @@ const PassengerAcceptRefuseButton = (props) => {
       workTripToUpdate.scheduledDrive.stops[index].estimatedArrivalTime = new Date(newStartTime.getTime() + minutesToDestination * 1000)
       console.log('Estimated time to arrive', index, workTripToUpdate.scheduledDrive.stops[index].estimatedArrivalTime)
     }
-
+    let token = await fire.auth().currentUser.getIdTokenResult()
+    const response = await fetch(
+      `https://us-central1-veho-go.cloudfunctions.net/addWorkTripToUser`,
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: rideRequest.senderID,
+          idToken: token.token,
+          workTrip: workTripToUpdate,
+        }),
+      }
+    )
 
     console.log('updating worktrip', workTripToUpdate.id)
     await updateWorkTrip(user.company.id, workTripToUpdate)
