@@ -23,16 +23,25 @@ export const SignUp = () => {
   const [name, setName] = useState('')
 
   const [error, setError] = useState('')
-  const [confirmError, setConfirmError] = useState('')
-  const [additionalError, setAdditionalError] = useState('')
 
   const mountedRef = useRef(true)
 
   const registerUser = async () => {
-    setAdditionalError('')
-    if (phoneNumber.length > 0 && name.length > 0) {
-      if (password === confirmPassword) {
-        setConfirmError('')
+    let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/
+    let passwordRegex = /^(?=.*\d)(?=.*[A-Z])[a-zA-Z0-9]{8,}$/
+
+    if (!emailReg.test(email)) {
+      setError('Email must be email type.')
+    } else if (phoneNumber.length < 1) {
+      setError('Phonenumber must be min 1 number long.')
+    } else if (name.length < 1) {
+      setError('Fullname must be min 1 character long')
+    } else if (!passwordRegex.test(password)) {
+      setError('Password must have 8 characters, one upper case and one digit.')
+    } else if (password != confirmPassword) {
+      setError('Passwords do not match')
+    } else {
+      try {
         const result = await register(email, password)
 
         if (result.type === 'error') {
@@ -49,22 +58,9 @@ export const SignUp = () => {
             phoneNumber: phoneNumber,
           })
         )
-          .then((res) => {
-            if (!mountedRef.current) return null
-
-            setError(res)
-          })
-          .catch((err) => {
-            if (!mountedRef.current) return null
-            setError(err)
-
-            throw err
-          })
-      } else {
-        setConfirmError('Passwords do not match')
+      } catch (error) {
+        setError('Register failed. Account with this email may already exist.')
       }
-    } else {
-      setAdditionalError('Name and Phone number must be at least 1 char long')
     }
   }
 
@@ -77,7 +73,7 @@ export const SignUp = () => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setError('')
-    }, 5000)
+    }, 7500)
 
     return () => clearTimeout(timeout)
   }, [error])
@@ -112,7 +108,6 @@ export const SignUp = () => {
             value={phoneNumber}
             keyboardType="numeric"
             onChangeText={setPhoneNumber}
-            errorMessage={additionalError}
           />
 
           <Input
@@ -123,7 +118,6 @@ export const SignUp = () => {
             }
             value={name}
             onChangeText={setName}
-            errorMessage={additionalError}
           />
           <Input
             placeholder="Password"
@@ -139,7 +133,6 @@ export const SignUp = () => {
             secureTextEntry={true}
             value={password}
             onChangeText={setPassword}
-            errorMessage={error}
           />
           <Input
             placeholder="Confirm Password"
@@ -154,7 +147,7 @@ export const SignUp = () => {
             secureTextEntry={true}
             value={confirmPassword}
             onChangeText={setConfirmPassword}
-            errorMessage={confirmError}
+            errorMessage={error}
           />
         </View>
 
