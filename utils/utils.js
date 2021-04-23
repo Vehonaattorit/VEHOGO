@@ -3,7 +3,6 @@ import {googleMapsApiKey} from '../secrets/secrets'
 
 // Firebase
 import firebase from 'firebase'
-import fire from '../firebase/fire'
 import {updateUser, getUser} from '../controllers/userController'
 import {updateWorkTrip} from '../controllers/workTripController'
 import {ScheduledDrive} from '../models/scheduleDrive'
