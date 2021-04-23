@@ -5,6 +5,8 @@ import Modal from 'react-native-modal'
 import CustomSingleIconButton from '../components/CustomSingleIconButton'
 import {UserContext} from '../contexts'
 import {updateUser} from '../controllers/userController'
+import {workTripMultiQuery} from '../controllers/workTripController'
+import {setupWorkTripDocs} from '../utils/utils'
 
 export const Settings = () => {
   const {user} = useContext(UserContext)
@@ -57,7 +59,24 @@ export const Settings = () => {
 
             toggleModal('Travel')
 
-            await updateUser(user)
+            if (user.travelPreference === 'driver') {
+              const response = await workTripMultiQuery(user.company.id, [
+                {
+                  field: 'driverID',
+                  condition: '==',
+                  value: user.id,
+                },
+              ])
+
+              if (typeof response !== 'undefined' && response.length === 0) {
+                // the array is defined and has no elements
+                setupWorkTripDocs(user)
+              }
+            }
+
+            // if (newTravPref === 'driver' )
+
+            // await updateUser(user)
           },
         },
       ]

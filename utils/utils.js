@@ -1,4 +1,15 @@
 import moment from 'moment-timezone'
+import {googleMapsApiKey} from '../secrets/secrets'
+
+// Firebase
+import firebase from 'firebase'
+import fire from '../firebase/fire'
+import {updateUser, getUser} from '../controllers/userController'
+import {updateWorkTrip} from '../controllers/workTripController'
+import {ScheduledDrive} from '../models/scheduleDrive'
+import {Stop} from '../models/stop'
+import {WorkTrip} from '../models/workTrip'
+// [END]
 
 export const formatTime = (dateTime) => {
   console.log('datus', dateTime)
@@ -61,4 +72,105 @@ export const calculateDistance = (lat1, lon1, lat2, lon2) => {
 
 const degreesToRadius = (deg) => {
   return deg * (Math.PI / 180)
+}
+
+export const setupWorkTripDocs = async (user) => {
+  const workTripDocuments = user.preferedWorkingHours.reduce(
+    (res, current, index, array) => {
+      return res.concat([current, current])
+    },
+    []
+  )
+
+  let userToUpdate = user
+  workTripDocuments.forEach(async (item, i) => {
+    let preferedWorkHourindex
+    // Find the
+    for (let i = 0; i < user.preferedWorkingHours.length; i++) {
+      const element = user.preferedWorkingHours[i]
+      if (element.workDayNum == item.workDayNum) {
+        preferedWorkHourindex = i
+      }
+    }
+
+    let index = i + 1
+
+    let start =
+      index % 2 === 0 ? item.workDayEnd.toDate() : item.workDayStart.toDate()
+
+    const response = await fetch(
+      `https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.location.latitude},${user.company.location.longitude}&key=${googleMapsApiKey}`,
+      {
+        method: 'GET',
+        //Request Type
+      }
+    )
+
+    const responseJson = await response.json()
+
+    const data = responseJson
+    let totalTime = 0
+    data.routes[0].legs.map((leg) => {
+      totalTime += leg.duration.value
+    })
+    totalTime = parseFloat(totalTime.toFixed(0))
+
+    let end =
+      index % 2 === 0
+        ? new Date(1970, 0, 1, item.workDayEnd.toDate().getHours(), 0)
+        : new Date(1970, 0, 1, item.workDayStart.toDate().getHours(), 0)
+
+    //adding ride time to end time and start depending on the total drive time
+    index % 2 === 0
+      ? (end = new Date(end.getTime() + totalTime * 1000))
+      : (start = new Date(start.getTime() - totalTime * 1000))
+
+    const goingTo = index % 2 === 0 ? 'home' : 'work'
+    let initialStops = [
+      new Stop({
+        address: user.homeAddress,
+        stopName: 'Home',
+        userID: user.id,
+        location: user.homeLocation,
+      }),
+      new Stop({
+        location: user.company.location,
+        address: user.company.address,
+        stopName: user.company.name,
+        userID: user.id,
+      }),
+    ]
+
+    let workTripId = await updateWorkTrip(
+      user.company.id, // Looks for company ID that user has joined
+      new WorkTrip({
+        driverName: user.userName,
+        driverID: user.id,
+        goingTo: goingTo,
+        isDriving: false,
+        route: data,
+        currentLocation: user.homeAddress,
+        workDayNum: item.workDayNum,
+        scheduledDrive: new ScheduledDrive({
+          start: new firebase.firestore.Timestamp.fromDate(start),
+          end: new firebase.firestore.Timestamp.fromDate(end),
+          availableSeats: 0,
+          stops: goingTo == 'work' ? initialStops : initialStops.reverse(),
+          nextStop: 1,
+        }),
+      })
+    )
+
+    if (goingTo == 'work') {
+      userToUpdate.preferedWorkingHours[
+        preferedWorkHourindex
+      ].toWorkRefID = workTripId
+    } else {
+      userToUpdate.preferedWorkingHours[
+        preferedWorkHourindex
+      ].toHomeRefID = workTripId
+    }
+
+    await updateUser(userToUpdate)
+  })
 }
