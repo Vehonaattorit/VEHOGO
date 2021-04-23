@@ -10,34 +10,65 @@ import {updateUser, userStream} from '../controllers/userController'
 import {UserContext} from '../contexts'
 import CustomButtonIcon from '../components/CustomIconButton'
 
+const workStates = [
+  {id: 1, weekDay: 'Mon', isSelected: false},
+  {id: 2, weekDay: 'Tue', isSelected: false},
+  {id: 3, weekDay: 'Wed', isSelected: false},
+  {id: 4, weekDay: 'Thu', isSelected: false},
+  {id: 5, weekDay: 'Fri', isSelected: false},
+  {id: 6, weekDay: 'Sat', isSelected: false},
+  {id: 7, weekDay: 'Sun', isSelected: false},
+]
+
 export const WorkingDays = ({navigation}) => {
   const {user} = useContext(UserContext)
-  const [workDays, setWorkDays] = useState([
-    {id: 1, weekDay: 'Mon', isSelected: false},
-    {id: 2, weekDay: 'Tue', isSelected: false},
-    {id: 3, weekDay: 'Wed', isSelected: false},
-    {id: 4, weekDay: 'Thu', isSelected: false},
-    {id: 5, weekDay: 'Fri', isSelected: false},
-    {id: 6, weekDay: 'Sat', isSelected: false},
-    {id: 7, weekDay: 'Sun', isSelected: false},
-  ])
+
+  // const [workDays, setWorkDays] = useState(workStates)
+  const [workDays, setWorkDays] = useState(
+    user.preferedWorkingHours !== undefined
+      ? workStates.map((item) => {
+          return item.id == user.preferedWorkingHours[item.id - 1]
+            ? {...item, isSelected: true}
+            : item
+        })
+      : workStates
+  )
 
   const [error, setError] = useState('')
   useEffect(() => {
     let workDayIds = []
 
-    if (!user.workDays) return
+    const {preferedWorkingHours} = user
+
+    if (!preferedWorkingHours) return
+
     for (const workDay of workDays) {
-      for (const userWorkDay of user.workDays) {
-        if (workDay.id === userWorkDay.workDayNum) {
+      console.log('Every preferedWorkingHours item')
+      for (const day of preferedWorkingHours) {
+        console.log('Every workDayNum')
+
+        if (workDay.id === day.workDayNum) {
+          console.log('found a workday !!!')
+
+          console.log('workDayNum', workDay)
           workDayIds.push(workDay.id)
         }
       }
     }
-    const newArr = workDays.map((item) =>
-      item.id == workDayIds[item.id] ? {...item, isSelected: true} : item
-    )
-    setWorkDays(newArr)
+
+    // let setWorkDays = []
+    let updatedWorkDays = workStates
+
+    for (let i = 0; i < workDayIds.length; i++) {
+      for (let j = 0; j < workDays.length; j++) {
+        if (workDays[j].id === workDayIds[i]) {
+          updatedWorkDays[j].isSelected = true
+          console.log('IS TRUE', workDays[j])
+        }
+      }
+    }
+
+    setWorkDays(updatedWorkDays)
   }, [])
 
   const toggleHandler = (selectedItem, isSelected) => {

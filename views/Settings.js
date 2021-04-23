@@ -30,6 +30,33 @@ export const Settings = () => {
       : console.log('ERROR')
   }
 
+  const {user} = useContext(UserContext)
+
+  const changeTravelPreference = () => {
+    Alert.alert(
+      'Change travel preference',
+      `Would you like to change your travel preference to ${
+        user.travelPreference === 'passenger' ? 'driver' : 'passenger'
+      }?`,
+      [
+        {text: 'No', style: 'default'},
+        {
+          text: 'Yes',
+          style: 'destructive',
+          onPress: async () => {
+            const newTravelPref =
+              user.travelPreference === 'passenger' ? 'driver' : 'passenger'
+            user.travelPreference = newTravelPref
+
+            console.log('new user trav pref', user.travelPreference)
+
+            await updateUser(user)
+          },
+        },
+      ]
+    )
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.poweredContainer}>

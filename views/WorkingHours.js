@@ -9,15 +9,17 @@ import {
   Alert,
 } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
+import {MaterialCommunityIcons} from '@expo/vector-icons'
+import {CustomButton} from '../components/CustomButton'
+import {CustomTitle} from '../components/CustomTitle'
 import {UserContext} from '../contexts'
 import {updateUser} from '../controllers/userController'
-import {AntDesign} from '@expo/vector-icons'
+
 import {color} from '../constants/colors'
 
 import {formatTime} from '../utils/utils'
 
 import firebase from 'firebase'
-import CustomButtonIcon from '../components/CustomIconButton'
 
 const DateTimeInput = (props) => {
   const [showTimePicker, setShowTimePicker] = useState(Platform.OS === 'ios')
@@ -44,6 +46,7 @@ const DateTimeInput = (props) => {
 }
 
 const TimeModal = ({
+  setIsPickerShow,
   isPickerShow,
   modalVisible,
   handleModal,
@@ -58,6 +61,7 @@ const TimeModal = ({
             mode="time"
             is24Hour={true}
             onChange={(e, date) => {
+              setIsPickerShow(false)
               if (date) onChange(e, date)
             }}
             value={value || new Date()}
@@ -118,8 +122,9 @@ const TimeModal = ({
 export const WorkingHours = ({navigation}) => {
   const {user} = useContext(UserContext)
 
-  // If starting and ending time was found in db, set fetched values instead of default
+  console.log('user', user.preferedWorkingHours)
 
+  // If starting and ending time was found in db, set fetched values instead of default
   const [newEventState, setNewEventState] = useState({
     startDate:
       user.preferedWorkingHours[0].workDayStart === undefined
@@ -203,14 +208,21 @@ export const WorkingHours = ({navigation}) => {
   return (
     <View style={styles.container}>
       <TimeModal
+        setIsPickerShow={setIsPickerShow}
         isPickerShow={isPickerShow}
         modalVisible={modalVisible}
         handleModal={handleModal}
         value={newEventState[selectedTime]}
         onChange={(e, date) => updateValue(date, selectedTime)}
       />
+
+      <CustomTitle style={styles.title} title="Hours" />
       <View style={styles.icon}>
-        <AntDesign name="clockcircle" size={200} color="#26AAE2" />
+        <MaterialCommunityIcons
+          name="clock-fast"
+          size={300}
+          color={color.secondaryDark}
+        />
       </View>
       <Text style={styles.title}>
         Please enter the time your work starts and ends
@@ -240,15 +252,39 @@ export const WorkingHours = ({navigation}) => {
           setIsPickerShow(true)
         }}
       />
-
-      <Text style={styles.errorText}>{error}</Text>
-
-      <View style={styles.submitBtnContainer}>
-        <CustomButtonIcon
-          title="Submit"
-          onPress={submitHandler}
-          iconTwo="keyboard-arrow-right"
-        />
+        <View style={styles.btnContainer}>
+          <CustomButton
+            title={
+              newEventState.startDate
+                ? `Start time ${formatTime(newEventState.startDate)}`
+                : 'Start time'
+            }
+            onPress={() => {
+              setModalVisible(true)
+              setSelectedTime('startDate')
+              setIsPickerShow(true)
+            }}
+          />
+        </View>
+        <View style={styles.btnContainer}>
+          <CustomButton
+            title={
+              newEventState.endDate
+                ? `End time ${formatTime(newEventState.endDate)}`
+                : 'End time'
+            }
+            onPress={() => {
+              setModalVisible(true)
+              setSelectedTime('endDate')
+              setIsPickerShow(true)
+            }}
+          />
+        </View>
+        <View>
+          <Text style={styles.errorText}>{error}</Text>
+        </View>
+      <View style={styles.btnContainer}>
+        <CustomButton title="Submit" onPress={submitHandler} />
       </View>
     </View>
   )
@@ -259,7 +295,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
   },
   icon: {
     flex: 0.5,
@@ -300,7 +335,6 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-
   errorText: {
     color: 'red',
   },
