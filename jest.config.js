@@ -1,6 +1,6 @@
 module.exports = {
   preset: 'jest-expo',
-  collectCoverage: true,
+  collectCoverage: false,
   moduleDirectories: ['node_modules', 'src'],
   transform: {
     '^.+\\.js$': '<rootDir>/node_modules/react-native/jest/preprocessor.js',

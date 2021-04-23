@@ -30,14 +30,6 @@ import {Platform} from 'react-native'
 
 import * as AuthSession from 'expo-auth-session'
 
-console.log(
-  'AuthSession ANDROID perkele',
-  AuthSession.makeRedirectUri({
-    path: 'com.vehonaattorit.shareride',
-    scheme: 'vehogo',
-  })
-)
-
 export const azureAdAppProps = {
   redirectUri:
     Platform.OS === 'android'
