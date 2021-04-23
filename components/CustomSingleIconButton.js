@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
   textContainer: {
     flex: 1,
     justifyContent: 'center',
-    paddingLeft: 10,
   },
   iconContainer: {
     justifyContent: 'center',
