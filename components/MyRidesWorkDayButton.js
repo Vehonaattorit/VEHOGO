@@ -1,5 +1,6 @@
 import React, {useEffect, useContext, useState} from 'react'
 import {useDocumentDataOnce} from 'react-firebase-hooks/firestore'
+import {updateUser} from '../controllers/userController'
 import {
   TouchableOpacity,
   View,
@@ -53,6 +54,32 @@ const MyRidesWorkDayButton = ({props}) => {
     }
   }
 
+  const addNewWorkTrip = async () => {
+    if (user.preferedWorkingHours.length > 0) {
+      for (let i = 0; i < user.preferedWorkingHours.length; i++) {
+        const workingHour = user.preferedWorkingHours[i];
+        if (props.workingHour.workDayNum < workingHour.workDayNum) {
+          user.preferedWorkingHours.splice(i, 0, {workDayNum: props.workingHour.workDayNum, workDayEnd: workingHour.workDayEnd, workDayStart: workingHour.workDayStart})
+          break
+        }
+      }
+    } else {
+      user.preferedWorkingHours = [{workDayNum: props.workingHour.workDayNum}]
+    }
+
+    updateUser(user)
+  }
+
+  const clearWorkTrip = async () => {
+    for (let i = 0; i < user.preferedWorkingHours.length; i++) {
+      if (props.workingHour.workDayNum == user.preferedWorkingHours[i].workDayNum) {
+        user.preferedWorkingHours.splice(i, 1)
+        break
+      }
+    }
+    updateUser(user)
+  }
+
   return (
     <View style={[styles.workDayCardSmall, {backgroundColor: disabled ? 'lightgrey' : color.lightBlue}]}>
       <View style={styles.workDayTitle}>
@@ -79,7 +106,7 @@ const MyRidesWorkDayButton = ({props}) => {
           : <WorkTripCard key={`${props.workingHour.workDayNum}2`} props={{workTrip: homeTrip}}></WorkTripCard>}
       </View>
       <View style={styles.workTripInfoBottomRow}>
-        <TouchableCmp onPress={() => {console.log('disable / enable')}}>
+        <TouchableCmp onPress={() => disabled ? addNewWorkTrip() : clearWorkTrip()}>
           <View style={[styles.workTripButton, {flex: 1, backgroundColor: disabled ? color.malachiteGreen : color.radicalRed}]}>
             <View style={styles.workTripInfoBottomRow}>
               <Text style={{paddingTop: 8}}>
