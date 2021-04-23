@@ -129,14 +129,32 @@ export const WorkingDays = ({navigation}) => {
         Please enter the days you will be going to work
       </Text>
       <View style={styles.btnContainer}>
-        {workDays.map((item) => (
-          <RoundButton
-            key={item.id}
-            item={item}
-            isSelected={item.isSelected}
-            toggleHandler={toggleHandler}
-          />
-        ))}
+        <View style={styles.poweredBtnContainer}>
+          {workDays.map(
+            (item) =>
+              item.id <= 5 && (
+                <RoundButton
+                  key={item.id}
+                  item={item}
+                  isSelected={item.isSelected}
+                  toggleHandler={toggleHandler}
+                />
+              )
+          )}
+        </View>
+        <View style={styles.poweredBtnContainer}>
+          {workDays.map(
+            (item) =>
+              item.id > 5 && (
+                <RoundButton
+                  key={item.id}
+                  item={item}
+                  isSelected={item.isSelected}
+                  toggleHandler={toggleHandler}
+                />
+              )
+          )}
+        </View>
       </View>
       <View style={styles.submitBtn}>
         <CustomButtonIcon
@@ -158,7 +176,6 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     flexDirection: 'row',
-    flex: 0.6,
   },
   iconContainer: {
     alignItems: 'center',
@@ -175,5 +192,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     flex: 0.3,
     textAlign: 'center',
+  },
+  poweredBtnContainer: {
+    flexDirection: 'row',
+  },
+  btnContainer: {
+    flexDirection: 'column',
+    flex: 0.8,
   },
 })

@@ -12,10 +12,8 @@ import {updateCompanyCity} from '../controllers/companyCitiesController'
 import {CompanyCode} from './CompanyCode'
 import CustomButtonIcon from '../components/CustomIconButton'
 
-import {Input} from 'react-native-elements'
 import {RadioButton, Text} from 'react-native-paper'
 
-import CustomInput from '../components/CustomInput'
 import CustomSimpleInput from '../components/CustomSimpleInput'
 
 export const CreateCompany = ({navigation, setShowCreate, domain}) => {
