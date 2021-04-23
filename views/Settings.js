@@ -1,89 +1,536 @@
-import React, {useState, useContext} from 'react'
-import {View, Text, StyleSheet} from 'react-native'
+import React, {useState} from 'react'
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'
 import CustomButtonIcon from '../components/CustomIconButton'
-import {UserContext} from '../contexts'
-import {updateUser} from '../controllers/userController'
+import Modal from 'react-native-modal'
+import CustomSingleIconButton from '../components/CustomSingleIconButton'
 
-export const Settings = ({navigation}) => {
-  const [travelModalVisible, SetTravelModalVisible] = useState(false)
-  const [usernameModalVisible, SetUsernameModalVisible] = useState(false)
-  const [homeModalVisible, SetHomeModalVisible] = useState(false)
-  const [workModalVisible, SetWorkModalVisible] = useState(false)
-  const [WorkingHoursModalVisible, SetWorkingHoursModalVisible] = useState(
-    false
-  )
+export const Settings = () => {
+  const [isComapnyVisible, setCompanyVisible] = useState(false)
+  const [isTravelVisible, setTravelVisible] = useState(false)
+  const [isUsernameVisible, setIsUsernameVisible] = useState(false)
+  const [isAddressVisible, setAddressVisible] = useState(false)
+  const [isWorkDaysVisible, setIsWorkDaysVisible] = useState(false)
+  const [isWorkingHoursVisible, setIsWorkingHoursVisible] = useState(false)
+  const [isDeleteVisible, setIsDeleteVisible] = useState(false)
+  const toggleModal = (view) => {
+    view == 'Company'
+      ? setCompanyVisible(true)
+      : view === 'Travel'
+      ? setTravelVisible(!isTravelVisible)
+      : view === 'Username'
+      ? setIsUsernameVisible(!isUsernameVisible)
+      : view === 'Address'
+      ? setAddressVisible(!isAddressVisible)
+      : view === 'Working Days'
+      ? setIsWorkDaysVisible(!isWorkDaysVisible)
+      : view === 'Working Hours'
+      ? setIsWorkingHoursVisible(!isWorkingHoursVisible)
+      : view === 'Delete'
+      ? setIsDeleteVisible(!isDeleteVisible)
+      : console.log('ERROR')
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.poweredContainer}>
         <View style={styles.btn}>
-          <CustomButtonIcon
-            iconOne="airline-seat-recline-extra"
-            title="Modify Your Travel Info"
-            iconTwo="keyboard-arrow-right"
+          <CustomSingleIconButton
+            iconOne="account-balance"
+            title="Modify Your Company"
             onPress={() => {
-              console.log('Travel')
+              toggleModal('Company')
             }}
           />
         </View>
         <View style={styles.btn}>
-          <CustomButtonIcon
+          <CustomSingleIconButton
+            iconOne="airline-seat-recline-extra"
+            title="Modify Your Travel Preference"
+            onPress={() => {
+              toggleModal('Travel')
+            }}
+          />
+        </View>
+        <View style={styles.btn}>
+          <CustomSingleIconButton
             iconOne="person"
             title="Modify Your Username"
-            iconTwo="keyboard-arrow-right"
             onPress={() => {
-              console.log('Username')
+              toggleModal('Username')
             }}
           />
         </View>
         <View style={styles.btn}>
-          <CustomButtonIcon
+          <CustomSingleIconButton
             iconOne="home"
-            title="Modify Your Address"
-            iconTwo="keyboard-arrow-right"
+            title="Modify Your Home Address"
             onPress={() => {
-              console.log('Address')
+              toggleModal('Address')
             }}
           />
         </View>
         <View style={styles.btn}>
-          <CustomButtonIcon
+          <CustomSingleIconButton
             iconOne="work"
-            title="Modify Your Worling Days"
-            iconTwo="keyboard-arrow-right"
+            title="Modify Your Working Days"
             onPress={() => {
-              console.log('Worling Days')
+              toggleModal('Working Days')
             }}
           />
         </View>
         <View style={styles.btn}>
-          <CustomButtonIcon
+          <CustomSingleIconButton
             iconOne="access-time"
             title="Modify Your Working Hours"
-            iconTwo="keyboard-arrow-right"
             onPress={() => {
-              console.log('Working Hours')
+              toggleModal('Working Hours')
             }}
           />
         </View>
         <View style={styles.btn}>
-          <CustomButtonIcon
+          <CustomSingleIconButton
             style={styles.deleteBtn}
             iconOne="delete"
-            title="DELETE YOUR ACCOUNT"
-            iconTwo="keyboard-arrow-right"
+            title="Delete Your Account"
             onPress={() => {
-              console.log('Working Hours')
+              toggleModal('Delete')
             }}
           />
         </View>
       </View>
+      {/* company */}
+      <Modal
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.')
+        }}
+        isVisible={isComapnyVisible}
+      >
+        <View style={styles.modalView}>
+          <View
+            style={{
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={styles.title}>Modify your Company information</Text>
+            <CustomButtonIcon
+              iconOne="directions-car"
+              title="Share My Car"
+              onPress={() => {
+                setTravelPreference('driver')
+              }}
+            />
+
+            <CustomButtonIcon
+              iconOne="airline-seat-recline-extra"
+              title="Get A Ride"
+              onPress={() => {
+                setTravelPreference('passenger')
+              }}
+            />
+
+            <View style={styles.btns}>
+              <View style={styles.poweredBtns}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setCompanyVisible(false)
+                  }}
+                >
+                  <Text>CANCEL</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.poweredBtns}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setCompanyVisible(false)
+                  }}
+                >
+                  <Text>OK</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* travel modal */}
+
+      <Modal
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.')
+        }}
+        isVisible={isTravelVisible}
+      >
+        <View style={styles.modalView}>
+          <View
+            style={{
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={styles.title}>Modify your travel information</Text>
+            <CustomButtonIcon
+              iconOne="directions-car"
+              title="Share My Car"
+              onPress={() => {
+                setTravelPreference('driver')
+              }}
+            />
+
+            <CustomButtonIcon
+              iconOne="airline-seat-recline-extra"
+              title="Get A Ride"
+              onPress={() => {
+                setTravelPreference('passenger')
+              }}
+            />
+
+            <View style={styles.btns}>
+              <View style={styles.poweredBtns}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setTravelVisible(false)
+                  }}
+                >
+                  <Text>CANCEL</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.poweredBtns}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setTravelVisible(false)
+                  }}
+                >
+                  <Text>OK</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Modify Your Username */}
+
+      <Modal
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.')
+        }}
+        isVisible={isUsernameVisible}
+      >
+        <View style={styles.modalView}>
+          <View
+            style={{
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={styles.title}>Modify Your Username</Text>
+            <CustomButtonIcon
+              iconOne="directions-car"
+              title="Share My Car"
+              onPress={() => {
+                setTravelPreference('driver')
+              }}
+            />
+
+            <CustomButtonIcon
+              iconOne="airline-seat-recline-extra"
+              title="Get A Ride"
+              onPress={() => {
+                setTravelPreference('passenger')
+              }}
+            />
+
+            <View style={styles.btns}>
+              <View style={styles.poweredBtns}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setIsUsernameVisible(false)
+                  }}
+                >
+                  <Text>CANCEL</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.poweredBtns}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setIsUsernameVisible(false)
+                  }}
+                >
+                  <Text>OK</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Modify Your address */}
+
+      <Modal
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.')
+        }}
+        isVisible={isAddressVisible}
+      >
+        <View style={styles.modalView}>
+          <View
+            style={{
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={styles.title}>Modify Your Home Address</Text>
+            <CustomButtonIcon
+              iconOne="directions-car"
+              title="Share My Car"
+              onPress={() => {
+                setTravelPreference('driver')
+              }}
+            />
+
+            <CustomButtonIcon
+              iconOne="airline-seat-recline-extra"
+              title="Get A Ride"
+              onPress={() => {
+                setTravelPreference('passenger')
+              }}
+            />
+
+            <View style={styles.btns}>
+              <View style={styles.poweredBtns}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setAddressVisible(false)
+                  }}
+                >
+                  <Text>CANCEL</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.poweredBtns}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setAddressVisible(false)
+                  }}
+                >
+                  <Text>OK</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Modify Your Working Days */}
+
+      <Modal
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.')
+        }}
+        isVisible={isWorkDaysVisible}
+      >
+        <View style={styles.modalView}>
+          <View
+            style={{
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={styles.title}>Modify Your Working Days</Text>
+            <CustomButtonIcon
+              iconOne="directions-car"
+              title="Share My Car"
+              onPress={() => {
+                setTravelPreference('driver')
+              }}
+            />
+
+            <CustomButtonIcon
+              iconOne="airline-seat-recline-extra"
+              title="Get A Ride"
+              onPress={() => {
+                setTravelPreference('passenger')
+              }}
+            />
+
+            <View style={styles.btns}>
+              <View style={styles.poweredBtns}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setIsWorkDaysVisible(false)
+                  }}
+                >
+                  <Text>CANCEL</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.poweredBtns}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setIsWorkDaysVisible(false)
+                  }}
+                >
+                  <Text>OK</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Modify Your Working Hours */}
+
+      <Modal
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.')
+        }}
+        isVisible={isWorkingHoursVisible}
+      >
+        <View style={styles.modalView}>
+          <View
+            style={{
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={styles.title}>Modify Your Working Hours</Text>
+            <CustomButtonIcon
+              iconOne="directions-car"
+              title="Share My Car"
+              onPress={() => {
+                setTravelPreference('driver')
+              }}
+            />
+
+            <CustomButtonIcon
+              iconOne="airline-seat-recline-extra"
+              title="Get A Ride"
+              onPress={() => {
+                setTravelPreference('passenger')
+              }}
+            />
+
+            <View style={styles.btns}>
+              <View style={styles.poweredBtns}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setIsWorkingHoursVisible(false)
+                  }}
+                >
+                  <Text>CANCEL</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.poweredBtns}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setIsWorkingHoursVisible(false)
+                  }}
+                >
+                  <Text>OK</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Delete your account */}
+
+      <Modal
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.')
+        }}
+        isVisible={isDeleteVisible}
+      >
+        <View style={styles.modalView}>
+          <View
+            style={{
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={styles.title}>
+              Are You Sure You Want To Delete Your Account?
+            </Text>
+
+            <View style={styles.btns}>
+              <View style={styles.poweredBtns}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setIsDeleteVisible(false)
+                  }}
+                >
+                  <Text>CANCEL</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.poweredBtns}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setIsDeleteVisible(false)
+                  }}
+                >
+                  <Text>OK</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     justifyContent: 'center',
     alignContent: 'center',
     backgroundColor: 'white',
@@ -94,5 +541,34 @@ const styles = StyleSheet.create({
   btn: {
     marginTop: 10,
   },
-  deleteBtn: {},
+
+  modalView: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    width: '90%',
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  btns: {
+    paddingTop: 20,
+    paddingBottom: 20,
+
+    flexDirection: 'row',
+  },
+  poweredBtns: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 18,
+    margin: 20,
+  },
 })

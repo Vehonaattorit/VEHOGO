@@ -213,7 +213,7 @@ export const WorkingHours = ({navigation}) => {
         <AntDesign name="clockcircle" size={200} color="#26AAE2" />
       </View>
       <Text style={styles.title}>
-        Please enter the days you will be going to work
+        Please enter the time your work starts and ends
       </Text>
 
       <CustomButtonIcon
@@ -229,7 +229,7 @@ export const WorkingHours = ({navigation}) => {
           setIsPickerShow(true)
         }}
       />
-      <View styles={styles.btns}></View>
+
       <CustomButtonIcon
         title={
           newEventState.endDate ? formatTime(newEventState.endDate) : 'End time'
@@ -266,7 +266,8 @@ const styles = StyleSheet.create({
   },
   title: {
     margin: 15,
-    fontSize: 24,
+    fontSize: 20,
+    textAlign: 'center',
   },
   submitBtnContainer: {
     width: '100%',

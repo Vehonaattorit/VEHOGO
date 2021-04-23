@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     alignItems: 'center',
-   
+
     flex: 1,
   },
   submitBtn: {
@@ -142,6 +142,7 @@ const styles = StyleSheet.create({
   title: {
     margin: 15,
     fontSize: 24,
-    flex: 0.4,
+    flex: 0.3,
+    textAlign: 'center',
   },
 })
