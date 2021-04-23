@@ -24,9 +24,6 @@ const PassengerListItem = ({navigation, user, singleItem}) => {
     isPassengerIncluded,
   } = singleItem
 
-  console.log('singleItem', singleItem.goingTo)
-  console.log('singleItem', singleItem.workDayNum)
-
   const schedStart = new Date(scheduledDrive.start.toDate())
 
   const totalTime = drivingTime(singleItem)

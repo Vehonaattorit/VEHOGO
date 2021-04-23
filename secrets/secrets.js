@@ -40,3 +40,33 @@ export const azureAdAppProps = {
   prompt: prompt,
   scope: scope,
 }
+
+/**
+ * export const azureAdAppProps = {
+  redirectUri:
+    Platform.OS === 'android'
+      ? AuthSession.makeRedirectUri()
+      : `host.exp.exponent://expo.io/@user-name/slug`,
+  clientId: clientId,
+  tenantId: tenantId,
+  prompt: prompt,
+  scope: scope,
+}
+ */
+
+/**
+ * export const azureAdAppProps = {
+  redirectUri:
+    Platform.OS === 'android'
+      ? __DEV__
+        ? AuthSession.makeRedirectUri()
+        : 'com.vehonaattorit.shareride'
+      : __DEV__
+      ? `host.exp.exponent://expo.io/@user-name/slug`
+      : 'com.vehonaattorit.shareride',
+  clientId: clientId,
+  tenantId: tenantId,
+  prompt: prompt,
+  scope: scope,
+}
+ */

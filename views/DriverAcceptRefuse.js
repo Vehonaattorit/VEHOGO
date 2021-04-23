@@ -147,7 +147,7 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
                 : checkWhatDayItIs(rideRequest.workDayNum)}
             </Text>
             <Text style={styles.text}>
-              Going to{' '}
+              {singleItem.goingTo === 'home' ? 'Going ' : 'Going to'}
               {rideRequest == undefined
                 ? singleItem.goingTo.charAt(0).toUpperCase() +
                   singleItem.goingTo.slice(1)
@@ -157,19 +157,6 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
           </View>
           <View style={styles.info}>
             <Text style={styles.text}>
-              {/* {rideRequest == undefined
-                ? moment(singleItem.scheduledDrive.start.toDate()).format(
-                    'HH:mm'
-                  ) +
-                  ' - ' +
-                  moment(singleItem.scheduledDrive.end.toDate()).format('HH:mm')
-                : moment(singleItem.scheduledDrive.start.toDate()).format(
-                    'HH:mm'
-                  ) +
-                  ' - ' +
-                  moment(singleItem.scheduledDrive.end.toDate()).format(
-                    'HH:mm'
-                  )} */}
               {rideRequest == undefined
                 ? singleItem.goingTo === 'home'
                   ? 'Leaves work at: ' +

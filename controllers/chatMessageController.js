@@ -42,7 +42,7 @@ export const useMessageHooks = (chatRoom) => {
               keepIt: true,
               values: [
                 {
-                  title: 'Sound good.',
+                  title: 'Sounds good.',
                 },
                 {
                   title: 'No, sorry.',

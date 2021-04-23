@@ -58,6 +58,9 @@ export const MainPage = ({navigation}) => {
   const db = firebase.firestore()
   console.log('Inside MainPage')
   const {user} = useContext(UserContext)
+
+  console.log('999', user.travelPreference)
+
   const [travelPreference, setTravelPreference] = useState('')
 
   const [driverTrips, setDriverTrips] = useState()
@@ -203,9 +206,6 @@ export const MainPage = ({navigation}) => {
 
     const driverTripStream = async () => {
       const currentWeekDay = new Date().getDay()
-      //const currentWeekDay = 5
-
-      //setCurrentWeekDay(currentWeekDay)
 
       try {
         var trips = []
@@ -294,7 +294,7 @@ export const MainPage = ({navigation}) => {
         </HeaderButtons>
       ),
     })
-  }, [])
+  }, [user])
 
   const displayPassengerList = () => {
     console.log('show passenger list')

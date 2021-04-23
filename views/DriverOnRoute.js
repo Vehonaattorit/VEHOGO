@@ -54,7 +54,7 @@ export const DriverOnRoute = ({navigation, route}) => {
 
   const {user} = useContext(UserContext)
   const {chatRooms, isLoading} = useChatRoomHooks()
-  const {isDriving} = useIsDrivingHook(user, workTrip)
+  // const {isDriving} = useIsDrivingHook(user, workTrip)
 
   let intervalTimer
   const [routeCoordinates, setRouteCoordinates] = useState([])
@@ -334,8 +334,9 @@ export const DriverOnRoute = ({navigation, route}) => {
       setLatestMessage(renderChat.latestMessage.text)
     }
 
-    if (!isDriving) return navigation.popToTop()
-  }, [chatRooms, isDriving])
+    if (!workTrip.isDriving) return navigation.popToTop()
+    // if (!isDriving) return navigation.popToTop()
+  }, [chatRooms, workTrip.isDriving])
 
   // Render Passenger List at top of the screen
   const renderItem = ({item, index}) => {

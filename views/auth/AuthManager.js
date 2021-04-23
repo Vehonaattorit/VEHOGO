@@ -10,6 +10,10 @@ import * as Localization from 'expo-localization'
 
 WebBrowser.maybeCompleteAuthSession()
 
+console.log('PERKELE 1', azureAdAppProps.redirectUri)
+
+console.log('PERKELE 2', 'com.vehonaattorit.shareride://oauthredirect')
+
 export class AuthManager {
   static signInAsync = async () => {
     const authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${
@@ -17,16 +21,25 @@ export class AuthManager {
     }&response_type=code&scope=${encodeURIComponent(
       azureAdAppProps.scope
     )}&prompt=login&redirect_uri=${encodeURIComponent(
-      azureAdAppProps.redirectUri
+      // 'vehogo://com.vehonaattorit.shareride' 23.04.2021 10.55
+      azureAdAppProps.redirectUri // 23.04.2021 10.55
+
+      // AuthSession.makeRedirectUri({
+      //   scheme: 'com.vehonaattorit.shareride',
+      // }) 23.04.2021 11.17
     )}`
 
     const authUrls = {
       authUrl: authUrl,
-      returnUrl: azureAdAppProps.redirectUri || AuthSession.makeRedirectUri(),
+      // returnUrl: 'com.vehonaattorit.shareride://oauthredirect',
+      returnUrl: azureAdAppProps.redirectUri || AuthSession.makeRedirectUri(), // 23.04.2021 10.55
     }
+
+    console.log('auhUrls 1', authUrls)
 
     let authResponse = await AuthSession.startAsync(authUrls)
       .then((authResponse) => {
+        console.log('authResponse-2314', authResponse)
         //Conditional if the user proceeds with the authentication process
         if (authResponse.type === 'success') {
           /*
@@ -205,34 +218,38 @@ export class AuthManager {
 
       let events = await AuthManager.getCalendarView(startOfWeek, endOfWeek, tz)
 
-      events = events.value
+      if (events.value !== undefined && events.value !== null) {
+        events = events.value
 
-      if (events.undefined) return
+        if (events.undefined) return
 
-      let mappedData = events.map((event, index) => {
+        let mappedData = events.map((event, index) => {
+          return {
+            start: moment(event.start.dateTime).format('HH:mm'),
+            end: moment(event.end.dateTime).format('HH:mm'),
+            // id: event.id,
+            subject: event.subject,
+            date: moment(event.start.dateTime).format('yyyy-MM-DD'),
+          }
+        })
+
+        const reduced = mappedData.reduce((acc, currentItem) => {
+          const {date, ...allTheRest} = currentItem
+
+          acc[date] !== undefined
+            ? acc[date].push(allTheRest)
+            : (acc[date] = [allTheRest])
+
+          return acc
+        }, {})
+
         return {
-          start: moment(event.start.dateTime).format('HH:mm'),
-          end: moment(event.end.dateTime).format('HH:mm'),
-          // id: event.id,
-          subject: event.subject,
-          date: moment(event.start.dateTime).format('yyyy-MM-DD'),
+          userToken: token,
+          loadingEvents: false,
+          events: reduced,
         }
-      })
-
-      const reduced = mappedData.reduce((acc, currentItem) => {
-        const {date, ...allTheRest} = currentItem
-
-        acc[date] !== undefined
-          ? acc[date].push(allTheRest)
-          : (acc[date] = [allTheRest])
-
-        return acc
-      }, {})
-
-      return {
-        userToken: token,
-        loadingEvents: false,
-        events: reduced,
+      } else {
+        console.log('events is undefined')
       }
     } catch (err) {
       throw new Error(err)

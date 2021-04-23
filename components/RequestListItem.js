@@ -10,8 +10,6 @@ import moment from 'moment'
 const RequestListItem = ({user, itemData, viewRequest}) => {
   const {item} = itemData
 
-  console.log('itemus', item)
-
   const [workTrip, setWorkTrip] = useState(null)
 
   const getTrip = async () => {

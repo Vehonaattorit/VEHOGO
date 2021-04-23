@@ -43,12 +43,19 @@ const calendarHooks = () => {
   const signInAsync = async () => {
     const response = await AuthManager.signInAsync()
 
-    setCalendarState({
-      loadingEvents: response.loadingEvents || false,
-      events: response.events,
-    })
+    if (
+      response.loadingEvents !== null &&
+      response.loadingEvents !== undefined
+    ) {
+      if (response.events !== null && response.events !== undefined) {
+        setCalendarState({
+          loadingEvents: response.loadingEvents || false,
+          events: response.events,
+        })
 
-    dispatch({type: 'SIGN_IN', token: response.userToken})
+        dispatch({type: 'SIGN_IN', token: response.userToken})
+      }
+    }
   }
 
   const signOutAsync = async () => {
@@ -69,12 +76,19 @@ const calendarHooks = () => {
   const bootstrapAsync = async () => {
     const response = await AuthManager.checkTokenExpiration()
 
-    setCalendarState({
-      loadingEvents: response.loadingEvents,
-      events: response.events,
-    })
+    if (
+      response.loadingEvents !== null &&
+      response.loadingEvents !== undefined
+    ) {
+      if (response.events !== null && response.events !== undefined) {
+        setCalendarState({
+          loadingEvents: response.loadingEvents,
+          events: response.events,
+        })
 
-    dispatch({type: 'SIGN_IN', token: response.userToken})
+        dispatch({type: 'SIGN_IN', token: response.userToken})
+      }
+    }
   }
 
   return {
