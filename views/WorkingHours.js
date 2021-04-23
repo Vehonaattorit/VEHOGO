@@ -10,11 +10,9 @@ import {
 } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import {MaterialCommunityIcons} from '@expo/vector-icons'
-import {CustomButton} from '../components/CustomButton'
-import {CustomTitle} from '../components/CustomTitle'
 import {UserContext} from '../contexts'
 import {updateUser} from '../controllers/userController'
-
+import CustomButtonIcon from '../components/CustomIconButton'
 import {color} from '../constants/colors'
 
 import {formatTime} from '../utils/utils'
@@ -215,21 +213,14 @@ export const WorkingHours = ({navigation}) => {
         value={newEventState[selectedTime]}
         onChange={(e, date) => updateValue(date, selectedTime)}
       />
-
-      <CustomTitle style={styles.title} title="Hours" />
       <View style={styles.icon}>
-        <MaterialCommunityIcons
-          name="clock-fast"
-          size={300}
-          color={color.secondaryDark}
-        />
+        <MaterialCommunityIcons name="clock" size={300} color={color.cyan} />
       </View>
       <Text style={styles.title}>
         Please enter the time your work starts and ends
       </Text>
 
       <CustomButtonIcon
-        iconOne=""
         title={
           newEventState.startDate
             ? formatTime(newEventState.startDate)
@@ -252,39 +243,11 @@ export const WorkingHours = ({navigation}) => {
           setIsPickerShow(true)
         }}
       />
-        <View style={styles.btnContainer}>
-          <CustomButton
-            title={
-              newEventState.startDate
-                ? `Start time ${formatTime(newEventState.startDate)}`
-                : 'Start time'
-            }
-            onPress={() => {
-              setModalVisible(true)
-              setSelectedTime('startDate')
-              setIsPickerShow(true)
-            }}
-          />
-        </View>
-        <View style={styles.btnContainer}>
-          <CustomButton
-            title={
-              newEventState.endDate
-                ? `End time ${formatTime(newEventState.endDate)}`
-                : 'End time'
-            }
-            onPress={() => {
-              setModalVisible(true)
-              setSelectedTime('endDate')
-              setIsPickerShow(true)
-            }}
-          />
-        </View>
-        <View>
-          <Text style={styles.errorText}>{error}</Text>
-        </View>
-      <View style={styles.btnContainer}>
-        <CustomButton title="Submit" onPress={submitHandler} />
+      <View>
+        <Text style={styles.errorText}>{error}</Text>
+      </View>
+      <View style={styles.submitBtnContainer}>
+        <CustomButtonIcon title="Submit" onPress={submitHandler} />
       </View>
     </View>
   )
@@ -298,8 +261,10 @@ const styles = StyleSheet.create({
   },
   icon: {
     flex: 0.5,
+    marginBottom: 20,
   },
   title: {
+    flex: 0.1,
     margin: 15,
     fontSize: 20,
     textAlign: 'center',
