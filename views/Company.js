@@ -62,27 +62,10 @@ export const Company = ({navigation}) => {
             <View style={styles.icon}>
               <FontAwesome name="check-circle-o" size={300} color="#26AAE2" />
             </View>
-            <View style={styles.btnContainer}>
-              <CustomIconButton
-                onPress={() => {
-                  setShowCreate(true)
-                  setShowBtns(false)
-                }}
-                title="Create A Company"
-                iconTwo="keyboard-arrow-right"
-              />
-              <Text style={{alignSelf: 'center'}}>
-                Or Join with either email domain or company code
-              </Text>
-              <CustomIconButton
-                style={{marginBottom: 5}}
-                onPress={() => {
-                  getCompanies(true)
-                }}
-                title="Use your email domain"
-                iconTwo="keyboard-arrow-right"
-              />
-            </View>
+
+            {error && (
+              <Text style={styles.errorText}>Code or domain is not valid</Text>
+            )}
             <Item style={styles.inputContainer}>
               <Input
                 backgroundColor="white"
@@ -111,9 +94,24 @@ export const Company = ({navigation}) => {
                 </Button>
               </View>
             </Item>
-            {error && (
-              <Text style={styles.errorText}>Code or domain is not valid</Text>
-            )}
+            <View style={styles.btnContainer}>
+              <CustomIconButton
+                style={{marginBottom: 5}}
+                onPress={() => {
+                  getCompanies(true)
+                }}
+                title="Join With Email Domain"
+                iconTwo="keyboard-arrow-right"
+              />
+              <CustomIconButton
+                onPress={() => {
+                  setShowCreate(true)
+                  setShowBtns(false)
+                }}
+                title="Create A Company"
+                iconTwo="keyboard-arrow-right"
+              />
+            </View>
           </View>
         </>
       )}
@@ -179,5 +177,6 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
     alignSelf: 'center',
+    padding: 10,
   },
 })

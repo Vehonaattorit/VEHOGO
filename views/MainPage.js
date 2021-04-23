@@ -66,8 +66,10 @@ export const MainPage = ({navigation}) => {
   const [driverTrips, setDriverTrips] = useState()
 
   // CURRENTWEEKDAY
-
-  const [currentWeekDay, setCurrentWeekDay] = useState(new Date().getDay())
+  const now = new Date()
+  const [currentWeekDay, setCurrentWeekDay] = useState(
+    now.getDay() == 0 ? 7 : now.getDay()
+  )
 
   // PASSENGER
 
@@ -106,6 +108,7 @@ export const MainPage = ({navigation}) => {
           ...doc.data(),
         }
       })
+      console.log('active rides', activeRides)
 
       let newActiveRides = []
       for (let i = 0; i < activeRides.length; i++) {
@@ -205,10 +208,16 @@ export const MainPage = ({navigation}) => {
     }
 
     const driverTripStream = async () => {
-      const currentWeekDay = new Date().getDay()
+      const now = new Date()
+      const currentWeekDay = now.getDay() == 0 ? 7 : now.getDay()
+      console.log('driver stream', currentWeekDay)
+      //const currentWeekDay = 5
+
+      //setCurrentWeekDay(currentWeekDay)
 
       try {
         var trips = []
+        console.log(user.company.id)
         let ref = await workTripMultiQueryStream(user.company.id, [
           {field: 'workDayNum', condition: '==', value: currentWeekDay},
           {field: 'driverID', condition: '==', value: user.id},

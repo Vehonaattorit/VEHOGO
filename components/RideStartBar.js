@@ -16,6 +16,7 @@ import moment from 'moment'
 import {
   useDriverTripListHook,
   workTripMultiQuery,
+  workTripMultiQueryStream,
   workTripOrderByQuery,
 } from '../controllers/workTripController'
 import {color} from '../constants/colors'
@@ -26,7 +27,7 @@ export const RideStartBar = ({user, navigation, driverTrips}) => {
   const [startingRide, setStartingRide] = useState([])
   const [date, setDate] = useState('')
   const [driveStartTime, setDriveStartTime] = useState(null)
-
+  let nextDayTrips = []
 
 
   function inTime(start, end) {
@@ -76,8 +77,8 @@ export const RideStartBar = ({user, navigation, driverTrips}) => {
           }
         }
       }
-
-      const tomorrowWorkTrips = await workTripMultiQuery(user.company.id, [
+      console.log('next day', tomorrowWeekDay)
+      /*const nextDayTrips = await workTripMultiQuery(user.company.id, [
         {
           field: 'workDayNum',
           condition: '==',
@@ -88,70 +89,93 @@ export const RideStartBar = ({user, navigation, driverTrips}) => {
           condition: '==',
           value: user.id,
         },
-      ])
-      let found = false
-      let nextWorkTrip
-      for (let i = 0; i < user.preferedWorkingHours.length; i++) {
-        const preferedHours = user.preferedWorkingHours[i]
-        if (preferedHours.workDayNum == currentWeekDay) {
-          found = true
-          break
-        }
-      }
+      ])*/
 
-      if (found) {
-        // sorting the morning ride to start
-        // 17.04.2021 replaced todayWorkTrips with driverTrips
-        if (driverTrips[0].goingTo == 'home') driverTrips.reverse()
+      try {
+        //var trips = []
+        const ref = await workTripMultiQueryStream(user.company.id, [
+          {field: 'workDayNum', condition: '==', value: tomorrowWeekDay, },
+          {field: 'driverID', condition: '==', value: user.id, },
+        ])
 
-        for (let i = 0; i < driverTrips.length; i++) {
-          const workTrip = driverTrips[i]
-          const nowInMinutes = currentHours * 60 + minutes
-          let startTime = workTrip.scheduledDrive.start.toDate()
-          const workTripStartInMinutes =
-            startTime.getHours() * 60 + startTime.getMinutes()
-          //now is before workTrip start
-          if (nowInMinutes < workTripStartInMinutes) {
-            //this workTrip is next, display it on the screen
-            setDriveStartTime(workTrip.scheduledDrive.start)
-            setStartingRide(workTrip)
-            checkButtonVisible(
-              workTrip.scheduledDrive.start,
-              workTrip.scheduledDrive.end
-            )
-            return
+        ref.onSnapshot((querySnapshot) => {
+          nextDayTrips = []
+          querySnapshot.forEach((doc) => {
+            nextDayTrips.push(doc.data())
+          })
+          console.log('length of next day trips',nextDayTrips.length)
+
+
+          if (nextDayTrips.length != 0) {
+            console.log('trips length', nextDayTrips.length)
+            let found = false
+            let nextWorkTrip
+            for (let i = 0; i < user.preferedWorkingHours.length; i++) {
+              const preferedHours = user.preferedWorkingHours[i]
+              if (preferedHours.workDayNum == currentWeekDay) {
+                found = true
+                break
+              }
+            }
+
+            console.log('found')
+
+            if (found) {
+              // sorting the morning ride to start
+              // 17.04.2021 replaced todayWorkTrips with driverTrips
+              if (driverTrips[0].goingTo == 'home') driverTrips.reverse()
+
+              for (let i = 0; i < driverTrips.length; i++) {
+                const workTrip = driverTrips[i]
+                const nowInMinutes = currentHours * 60 + minutes
+                let startTime = workTrip.scheduledDrive.start.toDate()
+                const workTripStartInMinutes =
+                  startTime.getHours() * 60 + startTime.getMinutes()
+                //now is before workTrip start
+                if (nowInMinutes < workTripStartInMinutes) {
+                  //this workTrip is next, display it on the screen
+                  setDriveStartTime(workTrip.scheduledDrive.start)
+                  setStartingRide(workTrip)
+                  checkButtonVisible(
+                    workTrip.scheduledDrive.start,
+                    workTrip.scheduledDrive.end
+                  )
+                  return
+                }
+              }
+              if (driveStartTime == null) {
+                // next workday morning workTrip is next and displayed on the screen
+                if (nextDayTrips[0].goingTo == 'home') nextDayTrips.reverse()
+                setDriveStartTime(nextDayTrips[0].scheduledDrive.start)
+                setStartingRide(nextDayTrips[0])
+                checkButtonVisible(
+                  nextDayTrips[0].scheduledDrive.start,
+                  nextDayTrips[0].scheduledDrive.end
+                )
+                return
+              }
+            } else {
+              if (nextDayTrips[0].goingTo == 'home') nextDayTrips.reverse()
+              setDriveStartTime(nextDayTrips[0].scheduledDrive.start)
+              setStartingRide(nextDayTrips[0])
+              checkButtonVisible(
+                nextDayTrips[0].scheduledDrive.start,
+                nextDayTrips[0].scheduledDrive.end
+              )
+              return
+            }
           }
-        }
-        if (driveStartTime == null) {
-          // next workday morning workTrip is next and displayed on the screen
-          if (tomorrowWorkTrips[0].goingTo == 'home') tomorrowWorkTrips.reverse()
-          setDriveStartTime(tomorrowWorkTrips[0].scheduledDrive.start)
-          setStartingRide(tomorrowWorkTrips[0])
-          checkButtonVisible(
-            tomorrowWorkTrips[0].scheduledDrive.start,
-            tomorrowWorkTrips[0].scheduledDrive.end
-          )
-          return
-        }
-      } else {
-        if (tomorrowWorkTrips[0].goingTo == 'home') tomorrowWorkTrips.reverse()
-        setDriveStartTime(tomorrowWorkTrips[0].scheduledDrive.start)
-        setStartingRide(tomorrowWorkTrips[0])
-        checkButtonVisible(
-          tomorrowWorkTrips[0].scheduledDrive.start,
-          tomorrowWorkTrips[0].scheduledDrive.end
-        )
-        return
+        })
+      } catch (e) {
+        console.log('stream failed', e)
       }
     }
+
     if (driverTrips != null) {
+      console.log('calling next ride')
       getNextRide()
     }
   }, [driverTrips])
-
-  /* useEffect(() => {
-     if (!isLoading) getNextRide()
-   }, [driverTrips, isLoading])*/
 
   return (
     <View>

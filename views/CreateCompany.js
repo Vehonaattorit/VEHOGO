@@ -158,7 +158,7 @@ export const CreateCompany = ({navigation, setShowCreate, domain}) => {
             </Item>
             <Item>
               <CustomSimpleInput
-                placeholder="Enter your company join code"
+                placeholder="Enter your company join code ..."
                 value={companyCode}
                 onChangeText={setCompanyCode}
                 errorMessage={

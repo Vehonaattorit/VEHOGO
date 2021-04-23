@@ -60,8 +60,8 @@ const useWorkTripHooks = (user) => {
 
   const queryWithTime = async () => {
     setIsLoading(true)
-
-    const currentWeekDay = new Date().getDay()
+    const now = new Date()
+    const currentWeekDay = now.getDay() == 0 ? 7 : now.getDay()
 
     // const currentWeekDay = 5
 

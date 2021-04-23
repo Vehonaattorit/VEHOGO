@@ -10,7 +10,7 @@ const GooglePlacesInput = ({setAddress, defaultValue}) => {
 
   return (
     <GooglePlacesAutocomplete
-      placeholder={defaultValue || 'Search address'}
+      placeholder={defaultValue || 'Search address ...'}
       onPress={(data, details = null) => {
         setAddress(data.description)
       }}

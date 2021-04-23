@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import {NavigationContainer} from '@react-navigation/native'
 import {createStackNavigator} from '@react-navigation/stack'
 import {Travel} from '../views/Travel'
@@ -8,11 +8,10 @@ import {WorkingDays} from '../views/WorkingDays'
 import {Username} from '../views/Username'
 import {SetUpInit} from '../views/SetUpInit'
 import {Company} from '../views/Company'
-import {VerifyEmail} from '../views/VerifyEmail'
-import {IconButton} from 'react-native-paper'
 import {color} from '../constants/colors'
+import {VerifyEmail} from '../views/VerifyEmail'
+import { IconButton } from 'react-native-paper'
 import {signOut} from '../controllers/LoginController'
-import {Settings} from '../views/Settings'
 const Stack = createStackNavigator()
 function SetUpStackNavigator() {
   return (
@@ -24,13 +23,28 @@ function SetUpStackNavigator() {
           },
           headerTitleStyle: {
             fontFamily: 'open-sans-semi-bold',
-            fontSize: 30,
             justifyContent: 'center',
-            flex: 1,
           },
           headerTintColor: color.primary,
         }}
       >
+        <Stack.Screen
+          name="VerifyEmail"
+          component={VerifyEmail}
+          options={() => ({
+            title: 'Verify Email',
+            headerLeft: () => (
+              <IconButton
+                icon="logout"
+                size={28}
+                color={color.darkBlue}
+                onPress={() => {
+                  signOut()
+                }}
+              />
+            ),
+          })}
+        />
         <Stack.Screen
           name="Company"
           component={Company}
@@ -38,7 +52,7 @@ function SetUpStackNavigator() {
             title: 'Create or join',
           }}
         />
-           <Stack.Screen
+        <Stack.Screen
           name="WorkingHours"
           component={WorkingHours}
           options={{
@@ -74,8 +88,6 @@ function SetUpStackNavigator() {
             title: 'Working Days',
           }}
         />
-
-
         <Stack.Screen name="SetUpInit" component={SetUpInit} />
       </Stack.Navigator>
     </NavigationContainer>
