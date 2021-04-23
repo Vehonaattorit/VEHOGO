@@ -184,13 +184,20 @@ export const MainPage = ({navigation}) => {
         .orderBy('workDayNum', 'asc')
         .orderBy('scheduledDrive.start', 'asc')
         .onSnapshot((querySnapshot) => {
-          const passengerTrips = querySnapshot.docs.map((doc) => {
+          let passengerTrips = querySnapshot.docs.map((doc) => {
             return {
               ...doc.data(),
             }
           })
 
+          // Filter passenger trips in which driver is NOT current user
+          passengerTrips = passengerTrips.filter(
+            (item) => item.driverID !== user.id
+          )
+
           const newPassengerTrips = []
+
+          // Check if user is included in the rides
           for (const passengerTrip of passengerTrips) {
             const isPassengerIncluded = passengerTrip.scheduledDrive.stops.some(
               (item) => {
@@ -270,7 +277,7 @@ export const MainPage = ({navigation}) => {
     return () => {
       console.log('cleaning')
     }
-  }, [])
+  }, [user.travelPreference])
 
   /*const checkTravelPreference = async () => {
     setTravelPreference(user.travelPreference)
@@ -303,7 +310,7 @@ export const MainPage = ({navigation}) => {
         </HeaderButtons>
       ),
     })
-  }, [user])
+  }, [])
 
   const displayPassengerList = () => {
     console.log('show passenger list')

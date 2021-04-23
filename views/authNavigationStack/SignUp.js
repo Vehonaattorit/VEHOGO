@@ -34,6 +34,13 @@ export const SignUp = () => {
       if (password === confirmPassword) {
         setConfirmError('')
         const result = await register(email, password)
+
+        if (result.type === 'error') {
+          setConfirmError(result.message)
+
+          return
+        }
+
         await updateUser(
           new User({
             id: result.user.uid,
@@ -77,7 +84,7 @@ export const SignUp = () => {
 
   return (
     <KeyboardAvoidingView
-    behavior={Platform.OS === 'ios' ? 'position' : 'height'}
+      behavior={Platform.OS === 'ios' ? 'position' : 'height'}
       style={styles.container}
     >
       <View style={styles.poweredContainer}>
@@ -128,6 +135,7 @@ export const SignUp = () => {
                 color={color.primary}
               />
             }
+            keyboardType="default"
             secureTextEntry={true}
             value={password}
             onChangeText={setPassword}
@@ -135,7 +143,6 @@ export const SignUp = () => {
           />
           <Input
             placeholder="Confirm Password"
-            
             errorStyle={{color: 'red'}}
             leftIcon={
               <Icon

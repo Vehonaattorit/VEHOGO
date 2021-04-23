@@ -1,10 +1,14 @@
-import React, {useState} from 'react'
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'
+import React, {useState, useContext} from 'react'
+import {View, Text, Alert, StyleSheet, TouchableOpacity} from 'react-native'
 import CustomButtonIcon from '../components/CustomIconButton'
 import Modal from 'react-native-modal'
 import CustomSingleIconButton from '../components/CustomSingleIconButton'
+import {UserContext} from '../contexts'
+import {updateUser} from '../controllers/userController'
 
 export const Settings = () => {
+  const {user} = useContext(UserContext)
+
   const [isComapnyVisible, setCompanyVisible] = useState(false)
   const [isTravelVisible, setTravelVisible] = useState(false)
   const [isUsernameVisible, setIsUsernameVisible] = useState(false)
@@ -12,6 +16,11 @@ export const Settings = () => {
   const [isWorkDaysVisible, setIsWorkDaysVisible] = useState(false)
   const [isWorkingHoursVisible, setIsWorkingHoursVisible] = useState(false)
   const [isDeleteVisible, setIsDeleteVisible] = useState(false)
+
+  const [travelPreference, setTravelPreference] = useState(
+    user.travelPreference
+  )
+
   const toggleModal = (view) => {
     view == 'Company'
       ? setCompanyVisible(true)
@@ -30,25 +39,23 @@ export const Settings = () => {
       : console.log('ERROR')
   }
 
-  const {user} = useContext(UserContext)
-
-  const changeTravelPreference = () => {
+  const changeTravelPreference = async (newTravPref) => {
     Alert.alert(
       'Change travel preference',
-      `Would you like to change your travel preference to ${
-        user.travelPreference === 'passenger' ? 'driver' : 'passenger'
-      }?`,
+      `Would you like to change your travel preference to ${newTravPref}?`,
       [
         {text: 'No', style: 'default'},
         {
           text: 'Yes',
           style: 'destructive',
           onPress: async () => {
-            const newTravelPref =
-              user.travelPreference === 'passenger' ? 'driver' : 'passenger'
-            user.travelPreference = newTravelPref
+            user.travelPreference = newTravPref
 
             console.log('new user trav pref', user.travelPreference)
+
+            setTravelPreference(newTravPref)
+
+            toggleModal('Travel')
 
             await updateUser(user)
           },
@@ -211,19 +218,17 @@ export const Settings = () => {
           >
             <Text style={styles.title}>Modify your travel information</Text>
             <CustomButtonIcon
+              disabled={travelPreference === 'driver'}
               iconOne="directions-car"
               title="Share My Car"
-              onPress={() => {
-                setTravelPreference('driver')
-              }}
+              onPress={() => changeTravelPreference('driver')}
             />
 
             <CustomButtonIcon
+              disabled={travelPreference === 'passenger'}
               iconOne="airline-seat-recline-extra"
               title="Get A Ride"
-              onPress={() => {
-                setTravelPreference('passenger')
-              }}
+              onPress={() => changeTravelPreference('passenger')}
             />
 
             <View style={styles.btns}>

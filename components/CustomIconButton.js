@@ -1,9 +1,16 @@
 import React from 'react'
 import {Text, View, TouchableOpacity, StyleSheet} from 'react-native'
 import {Ionicons, MaterialIcons} from '@expo/vector-icons'
-const CustomButtonIcon = ({onPress, title, iconOne, iconTwo}) => {
+const CustomButtonIcon = ({onPress, disabled, title, iconOne, iconTwo}) => {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.button}>
+    <TouchableOpacity
+      disabled={disabled}
+      onPress={onPress}
+      style={{
+        ...styles.button,
+        backgroundColor: disabled ? 'white' : '#E1F5FD',
+      }}
+    >
       <View style={styles.iconTwoContainer}>
         <MaterialIcons name={iconOne} size={40} color="black" />
       </View>

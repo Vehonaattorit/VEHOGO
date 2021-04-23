@@ -30,16 +30,49 @@ import {Platform} from 'react-native'
 
 import * as AuthSession from 'expo-auth-session'
 
+console.log(
+  'AuthSession ANDROID perkele',
+  AuthSession.makeRedirectUri({
+    path: 'com.vehonaattorit.shareride',
+    scheme: 'vehogo',
+  })
+)
+
 export const azureAdAppProps = {
   redirectUri:
     Platform.OS === 'android'
-      ? AuthSession.makeRedirectUri()
+      ? AuthSession.makeRedirectUri({
+          scheme: 'vehogo',
+        })
       : `host.exp.exponent://expo.io/@user-name/slug`,
   clientId: clientId,
   tenantId: tenantId,
   prompt: prompt,
   scope: scope,
 }
+
+// 23.04.2021 DOES NOT WORK !!!
+// export const azureAdAppProps = {
+//   redirectUri:
+//     Platform.OS === 'android'
+//       ? 'com.vehonaattorit.shareride://oauthredirect'
+//       : `host.exp.exponent://expo.io/@user-name/slug`,
+//   clientId: clientId,
+//   tenantId: tenantId,
+//   prompt: prompt,
+//   scope: scope,
+// }
+
+// export const azureAdAppProps = {
+//   redirectUri:
+//     Platform.OS === 'android'
+//       ? AuthSession.makeRedirectUri()
+//       : `host.exp.exponent://expo.io/@user-name/slug`,
+//   clientId: clientId,
+//   tenantId: tenantId,
+//   prompt: prompt,
+//   scope: scope,
+// }
 
 /**
  * export const azureAdAppProps = {
