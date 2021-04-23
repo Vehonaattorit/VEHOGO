@@ -59,8 +59,6 @@ export const MainPage = ({navigation}) => {
   console.log('Inside MainPage')
   const {user} = useContext(UserContext)
 
-  console.log('999', user.travelPreference)
-
   const [travelPreference, setTravelPreference] = useState('')
 
   const [driverTrips, setDriverTrips] = useState()
@@ -83,10 +81,6 @@ export const MainPage = ({navigation}) => {
       .doc(user.company.id)
       .collection('workTrips')
 
-    console.log(user.homeAddress, user.homeLocation, user.userName, user.id)
-    console.log('workDayNum', currentWeekDay)
-    console.log('isDriving')
-
     const querys = [
       /* orderBy time, maybe ?*/
       {field: 'workDayNum', condition: '==', value: currentWeekDay},
@@ -101,14 +95,12 @@ export const MainPage = ({navigation}) => {
       )
     })
 
-    let activeRides
     activeRideListener.onSnapshot((querySnapshot) => {
       let activeRides = querySnapshot.docs.map((doc) => {
         return {
           ...doc.data(),
         }
       })
-      console.log('active rides', activeRides)
 
       let newActiveRides = []
       for (let i = 0; i < activeRides.length; i++) {
@@ -121,41 +113,23 @@ export const MainPage = ({navigation}) => {
         }
       }
 
-      if (activeRides[0] === undefined) {
+      const isDefined = typeof newActiveRides !== 'undefined'
+
+      if (isDefined && newActiveRides.length === 0) {
+        // array is null
         setActiveRide(null)
-      } else {
-        setActiveRide(activeRides[0])
+      } else if (isDefined && newActiveRides.length === 1) {
+        // array length is 1 and use state to
+        // assign it as object
+        setActiveRide(newActiveRides[0])
+      } else if (isDefined && newActiveRides.length > 1) {
+        // array length is more than 1, set as array
+        setActiveRide(newActiveRides)
       }
 
       setIsPassengerLoading(false)
     })
   }
-
-  /*const {passengerTrips, activeRide, isLoading} = usePassengerListHook(user, [
-    {
-      field: 'scheduledDrive.stops',
-      condition: 'array-contains',
-      value: {
-        address: user.homeAddress,
-        location: user.homeLocation,
-        stopName: user.userName,
-        userID: user.id,
-      },
-    },
-    {field: 'workDayNum', condition: '==', value: currentWeekDay},
-    {field: 'isDriving', condition: '==', value: true},
-  ])*/
-
-  /*console.log(
-    'user',
-    user.homeAddress,
-    user.homeLocation,
-    user.userName,
-    user.id
-  )*/
-
-  // console.log('activeRide', activeRide)
-  // [END]
 
   const {
     multiSliderValue,
@@ -217,14 +191,14 @@ export const MainPage = ({navigation}) => {
     const driverTripStream = async () => {
       const now = new Date()
       const currentWeekDay = now.getDay() == 0 ? 7 : now.getDay()
-      console.log('driver stream', currentWeekDay)
+
       //const currentWeekDay = 5
 
       //setCurrentWeekDay(currentWeekDay)
 
       try {
         var trips = []
-        console.log(user.company.id)
+
         let ref = await workTripMultiQueryStream(user.company.id, [
           {field: 'workDayNum', condition: '==', value: currentWeekDay},
           {field: 'driverID', condition: '==', value: user.id},
@@ -235,8 +209,7 @@ export const MainPage = ({navigation}) => {
           querySnapshot.forEach((doc) => {
             trips.push(doc.data())
           })
-          console.log('state change')
-          console.log('trips length', trips.length)
+
           setDriverTrips(trips)
         })
       } catch (e) {
@@ -265,7 +238,6 @@ export const MainPage = ({navigation}) => {
     //checkTravelPreference()
     checkNotificationsPermissions()
 
-    console.log(user.travelPreference)
     if (user.travelPreference === 'driver') {
       driverTripStream()
     }
@@ -274,14 +246,8 @@ export const MainPage = ({navigation}) => {
       fetchActiveRide()
       // fetchTodayRides()
     }
-    return () => {
-      console.log('cleaning')
-    }
+    return () => {}
   }, [user.travelPreference])
-
-  /*const checkTravelPreference = async () => {
-    setTravelPreference(user.travelPreference)
-  }*/
 
   useEffect(() => {
     navigation.setOptions({
@@ -313,7 +279,6 @@ export const MainPage = ({navigation}) => {
   }, [])
 
   const displayPassengerList = () => {
-    console.log('show passenger list')
     return (
       <Container>
         {/* {activeRide && ( */}

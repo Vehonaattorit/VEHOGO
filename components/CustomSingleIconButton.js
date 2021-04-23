@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   text: {
+    fontFamily: 'open-sans-regular',
     fontSize: 20,
   },
 })

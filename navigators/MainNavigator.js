@@ -9,6 +9,7 @@ import {DriverStartRide} from '../views/DriverStartRide'
 import {DriverOnRoute} from '../views/DriverOnRoute'
 import {DriverRideRequestList} from '../views/DriverRideRequestList'
 import {DriverCarList} from '../views/DriverCarList'
+import {ActiveRidesList} from '../views/ActiveRidesList'
 import {Settings} from '../views/Settings'
 import {MyRides} from '../views/MyRides'
 import ChatRoom from '../views/ChatRoom'
@@ -22,7 +23,6 @@ import {Entypo} from '@expo/vector-icons'
 import {HeaderButtons, Item} from 'react-navigation-header-buttons'
 import HeaderButton from '../components/CustomHeaderButton'
 import CarEditForm from '../views/CarEditForm'
-
 
 const Stack = createStackNavigator()
 const Drawer = createStackNavigator()
@@ -138,6 +138,13 @@ function MainStackNavigator() {
                 />
               </HeaderButtons>
             ),
+          })}
+        />
+        <Stack.Screen
+          name="ActiveRidesList"
+          component={ActiveRidesList}
+          options={({navigation}) => ({
+            title: 'Drivers',
           })}
         />
         <Stack.Screen name="CarEditForm" component={CarEditForm} />

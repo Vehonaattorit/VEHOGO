@@ -69,14 +69,12 @@ export const Settings = () => {
               ])
 
               if (typeof response !== 'undefined' && response.length === 0) {
-                // the array is defined and has no elements
+                // the workTrip is defined and has no elements
                 setupWorkTripDocs(user)
               }
             }
-
             // if (newTravPref === 'driver' )
-
-            // await updateUser(user)
+            await updateUser(user)
           },
         },
       ]
@@ -619,7 +617,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontSize: 18,
+    color: 'black',
+    fontSize: 24,
     margin: 20,
   },
 })
