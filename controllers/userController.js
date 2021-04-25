@@ -1,6 +1,11 @@
 import firebase from 'firebase/app'
 import {userConverter} from '../models/user'
 import 'firebase/firestore'
+import {firebaseConfig} from '../secrets/secrets'
+
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(firebaseConfig)
+}
 
 const db = firebase.firestore()
 
@@ -44,6 +49,8 @@ export async function getUser(userId) {
       .doc(userId)
       .withConverter(userConverter)
       .get()
+
+    console.log('getUser', doc.data())
 
     return doc.data()
   } catch (error) {

@@ -4,7 +4,7 @@ import MainStackNavigator from './navigators/MainNavigator'
 import AuthStackNavigator from './navigators/AuthenticationNavigator'
 import SetUpStackNavigator from './navigators/SetUpNavigator'
 import AppLoading from 'expo-app-loading'
-import {UserContext, UserProvider} from './contexts'
+import {UserContext} from './contexts'
 import {getUser, userStream} from './controllers/userController'
 import {signOut, subscribeToAuth} from './controllers/LoginController'
 import * as Font from 'expo-font'
@@ -29,10 +29,6 @@ Notifications.setNotificationHandler({
 export default function App() {
   const [fontReady, setFontReady] = useState(false)
   const [userId, setUserId] = useState(null)
-  const [expoPushToken, setExpoPushToken] = useState(false)
-
-  const notificationListener = useRef()
-  const responseListener = useRef()
 
   LogBox.ignoreLogs(['Setting a timer'])
 

@@ -23,10 +23,10 @@ export const Address = ({navigation}) => {
   const [showSubmit, setShowSubmit] = useState(true)
 
   const submitHandler = async () => {
-    if (address.length < 1) {
+    if (address.trim().length <= 1) {
       Alert.alert(
         'Wrong input!',
-        'Please write an address which has at least 1 letter.',
+        'Please write an address which has more than one letter.',
         [{text: 'Okay'}]
       )
       return

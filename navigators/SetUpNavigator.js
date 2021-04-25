@@ -10,7 +10,7 @@ import {SetUpInit} from '../views/SetUpInit'
 import {Company} from '../views/Company'
 import {color} from '../constants/colors'
 import {VerifyEmail} from '../views/VerifyEmail'
-import { IconButton } from 'react-native-paper'
+import {IconButton} from 'react-native-paper'
 import {signOut} from '../controllers/LoginController'
 const Stack = createStackNavigator()
 function SetUpStackNavigator() {
@@ -28,7 +28,7 @@ function SetUpStackNavigator() {
           headerTintColor: color.primary,
         }}
       >
-        <Stack.Screen
+        {/* <Stack.Screen
           name="VerifyEmail"
           component={VerifyEmail}
           options={() => ({
@@ -44,7 +44,7 @@ function SetUpStackNavigator() {
               />
             ),
           })}
-        />
+        /> */}
         <Stack.Screen
           name="Company"
           component={Company}

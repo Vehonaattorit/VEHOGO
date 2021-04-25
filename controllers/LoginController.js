@@ -60,7 +60,7 @@ export async function checkEmailVerification() {
   }
 }
 
-const registerForPushNotificationsAsync = async ({user}) => {
+export const registerForPushNotificationsAsync = async ({user}) => {
   let token
   if (Constants.isDevice) {
     const {status: existingStatus} = await Notifications.getPermissionsAsync()
