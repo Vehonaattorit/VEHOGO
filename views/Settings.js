@@ -692,12 +692,11 @@ export const Settings = () => {
             <Item>
               <GooglePlacesInput setAddress={setAddress} />
             </Item>
-            //TODO: set showcreate is missing fix later
+
             <View style={styles.btns}>
               <TouchableOpacity
                 style={styles.poweredBtns}
                 onPress={() => {
-                  setShowCreate(false)
                   setCompanyVisible(false)
                 }}
               >
