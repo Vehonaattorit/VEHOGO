@@ -189,9 +189,9 @@ export const Settings = () => {
   //-------------------COMPANY----------------------
   const [companyAddress, setAddress] = useState('')
   const [companyName, setName] = useState('')
-  const [showCode, setShowCode] = useState(false)
   const [companyCode, setCompanyCode] = useState('')
   const [random, setRandom] = useState('')
+
 
   useEffect(() => {
     setRandom(getRandomString(4))
@@ -208,7 +208,6 @@ export const Settings = () => {
     }
     return result
   }
-
   const setCompanyName = (companyName) => {
     setName(companyName)
     setCompanyCode(companyName.replace(/\s+/g, '') + '-' + random)
@@ -250,14 +249,12 @@ export const Settings = () => {
       })
 
       const address = route + ' ' + streetNumber
-
       const data = {
         point: locationPoint,
         city: city,
         address: address,
         postalCode: postalCode,
       }
-
       return data
     } catch (e) {
       console.error(e)
@@ -266,13 +263,6 @@ export const Settings = () => {
   const sendCompanyData = async () => {
     if (companyAddress.length > 0 && companyName.length > 0) {
       const data = await getCompanyGeoLocation()
-
-      let domainJoin
-      if (value === 'both') {
-        domainJoin = true
-      } else {
-        domainJoin = false
-      }
 
       updateCompanyCity(data.city)
       const companyId = await updateCompany(
@@ -297,9 +287,7 @@ export const Settings = () => {
       }
 
       user.company = companyUserData
-
       await updateUser(user)
-      setShowCode(true)
     } else {
     }
   }
