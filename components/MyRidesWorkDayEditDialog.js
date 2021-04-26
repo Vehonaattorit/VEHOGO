@@ -129,7 +129,7 @@ const MyRidesWorkDayEditDialog = ({props}) => {
             <View style={[styles.workTripButton, {alignItems: 'stretch', minWidth: 120}]}>
               <View style={[styles.workTripInfoBottomRow, {alignItems: 'center', borderRadius: 10}]}>
                 <Text >
-                  {timeFormat(workTripType =='work' )}
+                  {timeFormat(workTripType =='work' ?workingHours.workDayStart.toDate() :workingHours.workDayEnd.toDate())}
                   </Text>
                 <FontAwesome5
                   name='clock'
