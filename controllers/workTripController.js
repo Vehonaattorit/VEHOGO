@@ -326,3 +326,20 @@ export async function workTripMultiQueryStream(companyId, querys) {
     return
   }
 }
+
+export async function deleteWorkTrip(companyId, workTripId) {
+  try {
+    // Add a new document in collection "users"
+    await db
+      .collection('companys')
+      .doc(companyId)
+      .collection('workTrips')
+      .doc(workTripId)
+      .delete()
+
+    return
+  } catch (error) {
+    console.error('Error getting document: ', error)
+    return
+  }
+}

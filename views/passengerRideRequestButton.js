@@ -7,16 +7,10 @@ import {
 } from '../controllers/rideRequestController'
 import {RideRequest} from '../models/rideRequest'
 import {getUser} from '../controllers/userController'
-import {
-  getWorkTrip,
-  getWorkTrips,
-  updateWorkTrip,
-} from '../controllers/workTripController'
 import {color} from '../constants/colors'
-import {googleMapsApiKey} from '../secrets/secrets'
 // Env keys
 import {apiKey} from '@env'
-import {calculateDistance} from '../utils/utils'
+import {removePassengerFromRoute} from '../utils/passengerRemove'
 
 const PassengerRideRequestButton = ({
   user,
@@ -95,6 +89,8 @@ const PassengerRideRequestButton = ({
         }),
       })
 
+      navigation.popToTop()
+
       Alert.alert(
         `Request was sent to ${workTrip.driverName}!`,
         'Please wait for your request approval.',
@@ -111,7 +107,7 @@ const PassengerRideRequestButton = ({
     }
   }
 
-  const getTripRoute = async (waypoints) => {
+  /*const getTripRoute = async (waypoints) => {
     try {
       const origin = workTrip.scheduledDrive.stops[0].location
       const destination =
@@ -144,6 +140,50 @@ const PassengerRideRequestButton = ({
   }
 
 
+  const removePassengerFromRoute = async(workTripUpdate, companyId) => {
+    let route = []
+    if (workTripUpdate.scheduledDrive.stops.length > 2) {
+      console.log('more than 2 stops still left')
+      var tempStops = workTripUpdate.scheduledDrive.stops
+      var waypoints = tempStops.slice(1, tempStops.length - 1)
+
+      //calculates distances between origin and stop locations
+      waypoints.forEach((waypoint) => {
+        var firstStop = workTripUpdate.scheduledDrive.stops[0]
+        waypoint.distanceFromOrigin = calculateDistance(
+          firstStop.location.latitude,
+          firstStop.location.longitude,
+          waypoint.location.latitude,
+          waypoint.location.longitude
+        )
+      })
+      //waypoints sorted by distance between origin
+      waypoints.sort(function (origin, stop) {
+        return origin.distanceFromOrigin - stop.distanceFromOrigin
+      })
+
+      route = await getTripRoute(waypoints)
+      //add old first and last stops to the new array
+      waypoints.unshift(workTripUpdate.scheduledDrive.stops[0])
+      waypoints.push(
+        workTripUpdate.scheduledDrive.stops[
+        workTripUpdate.scheduledDrive.stops.length - 1
+        ]
+      )
+
+    } else {
+      //if there is only driver home and work just get route between those places
+      //getTripRoute function has driver locations already defined
+      route = await getTripRoute([])
+
+    }
+    workTripUpdate.route = route
+
+    await updateWorkTrip(companyId, workTripUpdate)
+    //setAlreadyRequested(true)
+  }*/
+
+
   const cancelRide = async () => {
     if (!alreadyRequested) {
       let workTripUpdate
@@ -163,54 +203,13 @@ const PassengerRideRequestButton = ({
       }
       // add available seat
       workTripUpdate.scheduledDrive.availableSeats += 1
-
       Alert.alert('Cancel ride', `Are you sure you want to cancel this ride?`, [
         {text: 'No', style: 'default'},
         {
           text: 'Yes',
           style: 'destructive',
           onPress: async () => {
-            let route = []
-            if (workTripUpdate.scheduledDrive.stops.length > 2) {
-              console.log('more than 2 stops still left')
-              var tempStops = workTripUpdate.scheduledDrive.stops
-              var waypoints = tempStops.slice(1, tempStops.length - 1)
-
-              //calculates distances between origin and stop locations
-              waypoints.forEach((waypoint) => {
-                var firstStop = workTripUpdate.scheduledDrive.stops[0]
-                waypoint.distanceFromOrigin = calculateDistance(
-                  firstStop.location.latitude,
-                  firstStop.location.longitude,
-                  waypoint.location.latitude,
-                  waypoint.location.longitude
-                )
-              })
-              //waypoints sorted by distance between origin
-              waypoints.sort(function (origin, stop) {
-                return origin.distanceFromOrigin - stop.distanceFromOrigin
-              })
-
-              route = await getTripRoute(waypoints)
-              //add old first and last stops to the new array
-              waypoints.unshift(workTripUpdate.scheduledDrive.stops[0])
-              waypoints.push(
-                workTripUpdate.scheduledDrive.stops[
-                  workTripUpdate.scheduledDrive.stops.length - 1
-                ]
-              )
-
-            } else {
-              //if there is only driver home and work just get route between those places
-              //getTripRoute function has driver locations already defined
-              route = await getTripRoute([])
-
-            }
-            workTripUpdate.route = route
-
-            await updateWorkTrip(user.company.id, workTripUpdate)
-
-            setAlreadyRequested(true)
+            await removePassengerFromRoute(workTripUpdate, user.company.id, workTrip)
             navigation.popToTop()
           },
         },
