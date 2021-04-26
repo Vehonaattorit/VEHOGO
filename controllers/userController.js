@@ -41,12 +41,12 @@ export async function userDocumentUpdater(user) {
   }
 }
 
-export async function getUser(userId) {
+export async function getUser(user) {
   try {
     // Add a new document in collection "users"
     let doc = await db
       .collection('users')
-      .doc(userId)
+      .doc(user)
       .withConverter(userConverter)
       .get()
 
@@ -56,6 +56,19 @@ export async function getUser(userId) {
   } catch (error) {
     console.error('Error writing document: ', error)
     return
+  }
+}
+
+export async function deleteUser(userId) {
+  try {
+    db.collection('users')
+      .doc(userId)
+      .delete()
+      .then(() => {
+        console.log('User successfully deleted!')
+      })
+  } catch (error) {
+    console.error('Error removing document: ', error)
   }
 }
 
