@@ -64,6 +64,8 @@ const MyRidesWorkDayButton = ({props}) => {
           break
         }
       }
+      const exampleWorkingHour = user.preferedWorkingHours[0];
+      user.preferedWorkingHours.push({workDayNum: props.workingHour.workDayNum, workDayEnd: exampleWorkingHour.workDayEnd, workDayStart: exampleWorkingHour.workDayStart})
     } else {
       user.preferedWorkingHours = [{workDayNum: props.workingHour.workDayNum}]
     }

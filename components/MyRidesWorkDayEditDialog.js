@@ -24,14 +24,45 @@ import {Ionicons, FontAwesome5} from '@expo/vector-icons'
 import {color} from '../constants/colors'
 import {UserContext} from '../contexts'
 import {checkWhatDayItIs, timeFormat} from '../utils/utils'
+import {TimeModal} from '../views/WorkingHours'
 
 
 const MyRidesWorkDayEditDialog = ({props}) => {
   const workTrip = props.selectedWorkTrip
   const workingHours = props.selectedPreferedHours
   const workTripType = props.workTripType
+  const [modalVisible, setModalVisible] = useState(false)
+  const [selectedTime, setSelectedTime] = useState('startDate')
+  const [isPickerShow, setIsPickerShow] = useState(false)
   const {user} = useContext(UserContext)
   let TouchableCmp = TouchableOpacity
+
+  const [newEventState, setNewEventState] = useState({
+    startDate:
+      user.preferedWorkingHours[0].workDayStart === undefined
+        ? null
+        : user.preferedWorkingHours[0].workDayStart.toDate()
+        ? user.preferedWorkingHours[0].workDayStart.toDate()
+        : user.preferedWorkingHours[0].workDayStart,
+    endDate:
+      user.preferedWorkingHours[0].workDayEnd === undefined
+        ? null
+        : user.preferedWorkingHours[0].workDayEnd.toDate()
+        ? user.preferedWorkingHours[0].workDayEnd.toDate()
+        : user.preferedWorkingHours[0].workDayEnd,
+  })
+
+  const updateValue = (newValue, fieldName) => {
+    setIsPickerShow(false)
+    setNewEventState({
+      ...newEventState,
+      [fieldName]: newValue,
+    })
+  }
+
+  const handleModal = (visibility) => {
+    setModalVisible(visibility)
+  }
 
   if (Platform.OS === 'android' && Platform.Version >= 21) {
     TouchableCmp = TouchableNativeFeedback
@@ -64,6 +95,14 @@ const MyRidesWorkDayEditDialog = ({props}) => {
 
   return (
     <View style={styles.workDayCard}>
+      <TimeModal
+        setIsPickerShow={setIsPickerShow}
+        isPickerShow={isPickerShow}
+        modalVisible={modalVisible}
+        handleModal={handleModal}
+        value={newEventState[selectedTime]}
+        onChange={(e, date) => updateValue(date, selectedTime)}
+      />
       <View style={styles.workDayTitle}>
         <Text>{checkWhatDayItIs(workingHours && workingHours.workDayNum)}</Text><Text>To {workTripType}</Text>
       </View>
@@ -82,11 +121,16 @@ const MyRidesWorkDayEditDialog = ({props}) => {
               </View>
             </View>
           </TouchableCmp>
-          <TouchableCmp onPress={() => {console.log('disable / enable')}}>
+          <TouchableCmp onPress={() => {
+          setModalVisible(true)
+          setSelectedTime('endDate')
+          setIsPickerShow(true)
+        }}>
             <View style={[styles.workTripButton, {alignItems: 'stretch', minWidth: 120}]}>
               <View style={[styles.workTripInfoBottomRow, {alignItems: 'center', borderRadius: 10}]}>
                 <Text >
-                  08:00</Text>
+                  {timeFormat(workTripType =='work' )}
+                  </Text>
                 <FontAwesome5
                   name='clock'
                   size={25}

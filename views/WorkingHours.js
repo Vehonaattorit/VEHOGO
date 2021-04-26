@@ -43,7 +43,7 @@ const DateTimeInput = (props) => {
   )
 }
 
-const TimeModal = ({
+export const TimeModal = ({
   setIsPickerShow,
   isPickerShow,
   modalVisible,
