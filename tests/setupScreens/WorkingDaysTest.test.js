@@ -35,8 +35,6 @@ jest.mock('react-native', () => {
 
 describe('Address', () => {
   it('Select Mon - Fri', async () => {
-    console.log('firebaseConfig', firebaseConfig)
-
     // Test user
     let user
     if (!firebase.apps.length) {
