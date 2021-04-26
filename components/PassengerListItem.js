@@ -24,16 +24,6 @@ const PassengerListItem = ({navigation, user, singleItem}) => {
     isPassengerIncluded,
   } = singleItem
 
-  // useEffect(() => {
-  //   const isPassengerIncluded = scheduledDrive.stops.find(
-  //     (item) => item.userID === user.id
-  //   )
-
-  //   if (isPassengerIncluded === undefined) return
-
-  //   setHasPassenger(true)
-  // }, [hasPassenger])
-
   const schedStart = new Date(scheduledDrive.start.toDate())
 
   const totalTime = drivingTime(singleItem)

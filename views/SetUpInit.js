@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React, {useContext, useState} from 'react'
 import {StyleSheet, View} from 'react-native'
 import {UserContext} from '../contexts'
 import {CustomTitle} from '../components/CustomTitle'
@@ -15,6 +15,8 @@ import fire from '../firebase/fire'
 
 export const SetUpInit = ({route}) => {
   const {user} = useContext(UserContext)
+
+  const [alreadySetUp, setAlreadySetUp] = useState(false)
 
   const setupWorkTripDocs = async () => {
     const workTripDocuments = user.preferedWorkingHours.reduce(
@@ -114,29 +116,32 @@ export const SetUpInit = ({route}) => {
       }
 
       await updateUser(userToUpdate)
-
     })
   }
 
   const finishSetup = async () => {
-    if (!user.setupIsCompleted) {
-      let token = await fire.auth().currentUser.getIdTokenResult()
-      console.log('token is', token.token)
-      const response = await fetch(
-        `https://us-central1-veho-go.cloudfunctions.net/getBestRoutes`,
-        {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({idToken: token.token}),
-        }
-      )
-      if (user.travelPreference === 'driver') await setupWorkTripDocs()
-      let updatedUser = await getUser(user.id)
-      updatedUser.setupIsCompleted = true
-      await updateUser(updatedUser)
+    if (!alreadySetUp) {
+      setAlreadySetUp(true)
+
+      if (!user.setupIsCompleted) {
+        let token = await fire.auth().currentUser.getIdTokenResult()
+        console.log('token is', token.token)
+        const response = await fetch(
+          `https://us-central1-veho-go.cloudfunctions.net/getBestRoutes`,
+          {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({idToken: token.token}),
+          }
+        )
+        if (user.travelPreference === 'driver') await setupWorkTripDocs()
+        let updatedUser = await getUser(user.id)
+        updatedUser.setupIsCompleted = true
+        await updateUser(updatedUser)
+      }
     }
   }
 
@@ -145,11 +150,10 @@ export const SetUpInit = ({route}) => {
       <CustomTitle title="You are done." />
       <View style={styles.btnContainer}>
         <CustomButtonIcon
+          disabled={alreadySetUp}
           style={styles.poweredBtnContainer}
           title="Finish setup"
-          onPress={() => {
-            finishSetup()
-          }}
+          onPress={finishSetup}
         />
       </View>
     </View>

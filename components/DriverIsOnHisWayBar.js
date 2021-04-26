@@ -14,6 +14,14 @@ import React, {useEffect} from 'react'
 import {color} from '../constants/colors'
 
 export default DriverIsOnHisWayBar = ({user, navigation, activeRide}) => {
+  const checkVariable = (variable) => {
+    if (Array.isArray(variable)) {
+      return true
+    } else {
+      return false
+    }
+  }
+
   const workTrip = activeRide
 
   useEffect(() => {}, [activeRide])
@@ -23,20 +31,40 @@ export default DriverIsOnHisWayBar = ({user, navigation, activeRide}) => {
       <Card>
         <CardItem>
           <Left>
-            <Text style={styles.text}>Your driver is on its way.</Text>
+            {checkVariable(activeRide) ? (
+              <Text style={styles.text}>
+                {activeRide.length} drivers are on their way.
+              </Text>
+            ) : (
+              <Text style={styles.text}>
+                Your driver {activeRide.driverName} is on its way.
+              </Text>
+            )}
           </Left>
-
           <Right>
-            <Button
-              style={styles.button}
-              onPress={() =>
-                navigation.navigate('DriverOnRoute', {
-                  workTrip,
-                })
-              }
-            >
-              <Text>Show</Text>
-            </Button>
+            {checkVariable(activeRide) ? (
+              <Button
+                style={styles.button}
+                onPress={() =>
+                  navigation.navigate('ActiveRidesList', {
+                    workTrip,
+                  })
+                }
+              >
+                <Text>Show</Text>
+              </Button>
+            ) : (
+              <Button
+                style={styles.button}
+                onPress={() =>
+                  navigation.navigate('DriverOnRoute', {
+                    workTrip,
+                  })
+                }
+              >
+                <Text>Show</Text>
+              </Button>
+            )}
           </Right>
         </CardItem>
       </Card>

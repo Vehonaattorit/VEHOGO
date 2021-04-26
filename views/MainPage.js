@@ -58,13 +58,16 @@ export const MainPage = ({navigation}) => {
   const db = firebase.firestore()
   console.log('Inside MainPage')
   const {user} = useContext(UserContext)
+
   const [travelPreference, setTravelPreference] = useState('')
 
   const [driverTrips, setDriverTrips] = useState()
 
   // CURRENTWEEKDAY
   const now = new Date()
-  const [currentWeekDay, setCurrentWeekDay] = useState(now.getDay() == 0 ? 7 : now.getDay())
+  const [currentWeekDay, setCurrentWeekDay] = useState(
+    now.getDay() == 0 ? 7 : now.getDay()
+  )
 
   // PASSENGER
 
@@ -79,16 +82,7 @@ export const MainPage = ({navigation}) => {
       .collection('workTrips')
 
     const querys = [
-      {
-        field: 'scheduledDrive.stops',
-        condition: 'array-contains',
-        value: {
-          address: user.homeAddress,
-          location: user.homeLocation,
-          stopName: user.userName,
-          userID: user.id,
-        },
-      },
+      /* orderBy time, maybe ?*/
       {field: 'workDayNum', condition: '==', value: currentWeekDay},
       {field: 'isDriving', condition: '==', value: true},
     ]
@@ -102,48 +96,40 @@ export const MainPage = ({navigation}) => {
     })
 
     activeRideListener.onSnapshot((querySnapshot) => {
-      const activeRides = querySnapshot.docs.map((doc) => {
+      let activeRides = querySnapshot.docs.map((doc) => {
         return {
           ...doc.data(),
         }
       })
-      console.log('active rides', activeRides)
 
-      if (activeRides[0] === undefined) {
+      let newActiveRides = []
+      for (let i = 0; i < activeRides.length; i++) {
+        const {stops} = activeRides[i].scheduledDrive
+
+        for (let j = 0; j < stops.length; j++) {
+          if (stops[j].userID === user.id) {
+            newActiveRides.push(activeRides[i])
+          }
+        }
+      }
+
+      const isDefined = typeof newActiveRides !== 'undefined'
+
+      if (isDefined && newActiveRides.length === 0) {
+        // array is null
         setActiveRide(null)
-      } else {
-        setActiveRide(activeRides[0])
+      } else if (isDefined && newActiveRides.length === 1) {
+        // array length is 1 and use state to
+        // assign it as object
+        setActiveRide(newActiveRides[0])
+      } else if (isDefined && newActiveRides.length > 1) {
+        // array length is more than 1, set as array
+        setActiveRide(newActiveRides)
       }
 
       setIsPassengerLoading(false)
     })
   }
-
-  /*const {passengerTrips, activeRide, isLoading} = usePassengerListHook(user, [
-    {
-      field: 'scheduledDrive.stops',
-      condition: 'array-contains',
-      value: {
-        address: user.homeAddress,
-        location: user.homeLocation,
-        stopName: user.userName,
-        userID: user.id,
-      },
-    },
-    {field: 'workDayNum', condition: '==', value: currentWeekDay},
-    {field: 'isDriving', condition: '==', value: true},
-  ])*/
-
-  /*console.log(
-    'user',
-    user.homeAddress,
-    user.homeLocation,
-    user.userName,
-    user.id
-  )*/
-
-  // console.log('activeRide', activeRide)
-  // [END]
 
   const {
     multiSliderValue,
@@ -172,13 +158,20 @@ export const MainPage = ({navigation}) => {
         .orderBy('workDayNum', 'asc')
         .orderBy('scheduledDrive.start', 'asc')
         .onSnapshot((querySnapshot) => {
-          const passengerTrips = querySnapshot.docs.map((doc) => {
+          let passengerTrips = querySnapshot.docs.map((doc) => {
             return {
               ...doc.data(),
             }
           })
 
+          // Filter passenger trips in which driver is NOT current user
+          passengerTrips = passengerTrips.filter(
+            (item) => item.driverID !== user.id
+          )
+
           const newPassengerTrips = []
+
+          // Check if user is included in the rides
           for (const passengerTrip of passengerTrips) {
             const isPassengerIncluded = passengerTrip.scheduledDrive.stops.some(
               (item) => {
@@ -198,14 +191,14 @@ export const MainPage = ({navigation}) => {
     const driverTripStream = async () => {
       const now = new Date()
       const currentWeekDay = now.getDay() == 0 ? 7 : now.getDay()
-      console.log('driver stream',currentWeekDay)
+
       //const currentWeekDay = 5
 
       //setCurrentWeekDay(currentWeekDay)
 
       try {
         var trips = []
-        console.log(user.company.id)
+
         let ref = await workTripMultiQueryStream(user.company.id, [
           {field: 'workDayNum', condition: '==', value: currentWeekDay},
           {field: 'driverID', condition: '==', value: user.id},
@@ -216,8 +209,7 @@ export const MainPage = ({navigation}) => {
           querySnapshot.forEach((doc) => {
             trips.push(doc.data())
           })
-          console.log('state change')
-          console.log('trips length', trips.length)
+
           setDriverTrips(trips)
         })
       } catch (e) {
@@ -246,7 +238,6 @@ export const MainPage = ({navigation}) => {
     //checkTravelPreference()
     checkNotificationsPermissions()
 
-    console.log(user.travelPreference)
     if (user.travelPreference === 'driver') {
       driverTripStream()
     }
@@ -255,14 +246,8 @@ export const MainPage = ({navigation}) => {
       fetchActiveRide()
       // fetchTodayRides()
     }
-    return () => {
-      console.log('cleaning')
-    }
-  }, [])
-
-  /*const checkTravelPreference = async () => {
-    setTravelPreference(user.travelPreference)
-  }*/
+    return () => {}
+  }, [user.travelPreference])
 
   useEffect(() => {
     navigation.setOptions({
@@ -294,7 +279,6 @@ export const MainPage = ({navigation}) => {
   }, [])
 
   const displayPassengerList = () => {
-    console.log('show passenger list')
     return (
       <Container>
         {/* {activeRide && ( */}

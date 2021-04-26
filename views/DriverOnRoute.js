@@ -101,8 +101,6 @@ export const DriverOnRoute = ({navigation, route}) => {
 
   /**/
 
-
-
   const changeNextStop = async () => {
     setShowNextStopBar(false)
     if (
@@ -190,9 +188,7 @@ export const DriverOnRoute = ({navigation, route}) => {
     workTrip.isDriving = false
     await updateWorkTrip(user.company.id, workTrip)
 
-    let userIds = workTrip.scheduledDrive.stops.map(
-      (item) => item.userID
-    )
+    let userIds = workTrip.scheduledDrive.stops.map((item) => item.userID)
 
     userIds = userIds.filter((item) => item !== user.id)
 
@@ -361,7 +357,6 @@ export const DriverOnRoute = ({navigation, route}) => {
 
       setLatestMessage(renderChat.latestMessage.text)
     }
-
 
     return () => {
       latestMessage

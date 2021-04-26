@@ -1,0 +1,179 @@
+import React, {useContext, useState, useEffect} from 'react'
+import {
+  StyleSheet,
+  Alert,
+  View,
+  TouchableOpacity,
+  TouchableNativeFeedback,
+  Platform,
+  Text,
+} from 'react-native'
+import {Icon, Button} from 'native-base'
+import {color} from '../constants/colors'
+import {AntDesign, MaterialCommunityIcons} from '@expo/vector-icons'
+import {removeCar} from '../controllers/carController'
+import {UserContext} from '../contexts'
+import {updateUser} from '../controllers/userController'
+import {updateUserCarToWorkTrips} from '../utils/updateWorkTripCar'
+
+const DriverCarListItem = ({workTrip, navigation}) => {
+  let TouchableCmp = TouchableOpacity
+
+  if (Platform.OS === 'android' && Platform.Version >= 21) {
+    TouchableCmp = TouchableNativeFeedback
+  }
+  // const [selectCarShown, setSelectCarShown] = useState(false)
+
+  // const {user} = useContext(UserContext)
+
+  // const isCarSelected = user.schoosedCarID === singleItem.id
+
+  // const editItem = () => {
+  //   navigation.navigate('CarEditForm', {editCar: singleItem})
+  // }
+
+  // const deleteItem = () => {
+  //   Alert.alert(
+  //     'Delete car',
+  //     `Are you sure you want to remove this car with the registration plate ${singleItem.registerNumber}?`,
+  //     [
+  //       {text: 'No', style: 'default'},
+  //       {
+  //         text: 'Yes',
+  //         style: 'destructive',
+  //         onPress: async () => {
+  //           await removeCar(user.id, singleItem)
+
+  //           await loadCars()
+  //         },
+  //       },
+  //     ]
+  //   )
+  // }
+
+  // const selectCar = async () => {
+  //   user.schoosedCarID = singleItem.id
+
+  //   await updateUser(user)
+  //   await updateUserCarToWorkTrips(user)
+  // }
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.formItem}>
+        <View style={styles.iconContainer}>
+          <Icon active name="car-outline" />
+        </View>
+        <View style={{flex: 1}}>
+          <Text style={styles.text}>{workTrip.driverName}</Text>
+        </View>
+
+        <View style={styles.listItemButtons}>
+          <View>
+            <Button
+              style={styles.listItemButton}
+              onPress={() =>
+                navigation.navigate('DriverOnRoute', {
+                  workTrip,
+                })
+              }
+            >
+              <Text style={styles.showText}>Show Route</Text>
+            </Button>
+          </View>
+        </View>
+      </View>
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 10,
+  },
+  listItemButton: {
+    backgroundColor: color.middleBlue,
+    padding: 10,
+    margin: 10,
+    borderRadius: 10,
+  },
+  selectedCarContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    width: '100%',
+    borderRadius: 10,
+  },
+  selectCarButton: {
+    backgroundColor: color.darkBlue,
+    justifyContent: 'center',
+    width: '100%',
+    borderRadius: 10,
+  },
+  listItemButtons: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  button: {
+    marginTop: 20,
+    width: '100%',
+    justifyContent: 'center',
+    borderRadius: 15,
+  },
+  form: {
+    margin: 10,
+  },
+  formItem: {
+    borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: color.lightBlue,
+    flex: 1,
+  },
+
+  bottomRow: {
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconContainer: {
+    padding: 10,
+    margin: 10,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+
+  textInput: {
+    color: color.lightBlack,
+    marginLeft: 15,
+    height: 40,
+    fontSize: 20,
+  },
+  text: {
+    fontSize: 18,
+    fontFamily: 'open-sans-regular',
+    color: color.lightBlack,
+  },
+  showText: {
+    fontSize: 18,
+    fontFamily: 'open-sans-regular',
+    color: color.lightBlack,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'black',
+  },
+  list: {
+    marginBottom: 0,
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 10,
+    backgroundColor: 'white',
+  },
+})
+
+export default DriverCarListItem

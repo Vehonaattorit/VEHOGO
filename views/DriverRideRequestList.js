@@ -8,10 +8,12 @@ import {getWorkTrip} from '../controllers/workTripController'
 import {color} from '../constants/colors'
 import moment from 'moment'
 import RequestListItem from '../components/RequestListItem'
+import {getUser} from '../controllers/userController'
 
 export const DriverRideRequestList = ({navigation, dataArray}) => {
   const {user} = useContext(UserContext)
   const [rideRequests, setRideRequests] = useState(null)
+  const [passengerTripData, setPassengerTripData] = useState(null)
 
   const getRideRequests = async () => {
     let requests = await rideRequestQuery(
@@ -21,7 +23,22 @@ export const DriverRideRequestList = ({navigation, dataArray}) => {
       user.id
     )
 
-    setRideRequests(requests)
+    let newRideRequests = []
+    for (let i = 0; i < requests.length; i++) {
+      let passengerData = await getUser(requests[i].senderID)
+
+      newRideRequests.push({
+        ...requests[i],
+        start: passengerData.preferedWorkingHours[0].workDayStart,
+        end: passengerData.preferedWorkingHours[0].workDayEnd,
+      })
+
+      console.log('passengerData', passengerData)
+    }
+
+    setPassengerTripData()
+
+    setRideRequests(newRideRequests)
   }
   useEffect(() => {
     getRideRequests()
@@ -32,6 +49,7 @@ export const DriverRideRequestList = ({navigation, dataArray}) => {
       user.company.id,
       rideRequest.workTripRefID
     )
+
     if (singleItem == undefined) return
     navigation.navigate('RequestRide', {
       singleItem: singleItem,

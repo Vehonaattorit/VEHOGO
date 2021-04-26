@@ -104,7 +104,7 @@ const PassengerAcceptRefuseButton = (props) => {
       waypoints.unshift(workTripToUpdate.scheduledDrive.stops[0])
       waypoints.push(
         workTripToUpdate.scheduledDrive.stops[
-        workTripToUpdate.scheduledDrive.stops.length - 1
+          workTripToUpdate.scheduledDrive.stops.length - 1
         ]
       )
 
@@ -144,29 +144,49 @@ const PassengerAcceptRefuseButton = (props) => {
 
     //Changing the worktrip start and end time acording to trip length
     workTripToUpdate.goingTo == 'work'
-      ? (workTripToUpdate.scheduledDrive.start = new Date(end.getTime() - totalTime * 1000))
-      : (workTripToUpdate.scheduledDrive.end = new Date(start.getTime() + totalTime * 1000))
+      ? (workTripToUpdate.scheduledDrive.start = new Date(
+          end.getTime() - totalTime * 1000
+        ))
+      : (workTripToUpdate.scheduledDrive.end = new Date(
+          start.getTime() + totalTime * 1000
+        ))
 
-    const newEndTime = workTripToUpdate.goingTo == 'work'
-      ? (workTripToUpdate.scheduledDrive.end.toDate())
-      : (workTripToUpdate.scheduledDrive.end)
+    const newEndTime =
+      workTripToUpdate.goingTo == 'work'
+        ? workTripToUpdate.scheduledDrive.end.toDate()
+        : workTripToUpdate.scheduledDrive.end
     //Having to do some toDate fuckery because of js is stupid
-    const newStartTime = workTripToUpdate.goingTo == 'work'
-      ? (workTripToUpdate.scheduledDrive.start)
-      : (workTripToUpdate.scheduledDrive.start.toDate())
+    const newStartTime =
+      workTripToUpdate.goingTo == 'work'
+        ? workTripToUpdate.scheduledDrive.start
+        : workTripToUpdate.scheduledDrive.start.toDate()
 
     //looping through stops and calculating the time it takes to get to each stop
-    for (let index = 0; index < workTripToUpdate.scheduledDrive.stops.length - 1; index++) {
+    for (
+      let index = 0;
+      index < workTripToUpdate.scheduledDrive.stops.length - 1;
+      index++
+    ) {
       let minutesToDestination = 0
       for (let a = 0; a < index; a++) {
-        console.log('adding minutes to destination', route.routes[0].legs[a].duration.text)
+        console.log(
+          'adding minutes to destination',
+          route.routes[0].legs[a].duration.text
+        )
         minutesToDestination += route.routes[0].legs[a].duration.value
       }
       minutesToDestination = parseFloat(minutesToDestination.toFixed(0))
 
-
-      workTripToUpdate.scheduledDrive.stops[index].estimatedArrivalTime = new Date(newStartTime.getTime() + minutesToDestination * 1000)
-      console.log('Estimated time to arrive', index, workTripToUpdate.scheduledDrive.stops[index].estimatedArrivalTime)
+      workTripToUpdate.scheduledDrive.stops[
+        index
+      ].estimatedArrivalTime = new Date(
+        newStartTime.getTime() + minutesToDestination * 1000
+      )
+      console.log(
+        'Estimated time to arrive',
+        index,
+        workTripToUpdate.scheduledDrive.stops[index].estimatedArrivalTime
+      )
     }
     let token = await fire.auth().currentUser.getIdTokenResult()
     const response = await fetch(

@@ -27,21 +27,11 @@ export const LogIn = ({navigation, scrollRef}) => {
   const [error, setError] = useState('')
 
   const logIn = async () => {
-    // const errorMessage = await login(email, password)
-
-    // setError(errorMessage)
-
-    // try {
-    //   await login(email, password)
-    //   // DO NOT CALL STATE AFTER LOGIN
-    //   // after user logins app will show either setupNavigator or MainNavigator
-    //   // all state changes here after login will cause update to unmounted component/possible memory leak
-    // } catch (e) {
     try {
       await login(email, password)
     } catch (error) {
       console.log('error', error.message)
-
+      //error in login, safe to setError
       setError(error.message)
     }
   }

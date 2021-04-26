@@ -24,7 +24,7 @@ export async function register(email, password) {
     await response.user.sendEmailVerification()
     return response
   } catch (e) {
-    return e.message
+    return {type: 'error', message: e.message}
   }
 }
 

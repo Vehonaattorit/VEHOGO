@@ -1,20 +1,12 @@
 import React, {
-  useEffect,
   useReducer,
   useCallback,
   useContext,
-  useState,
 } from 'react'
 import {StyleSheet, Alert, View, KeyboardAvoidingView} from 'react-native'
-import {color} from '../constants/colors'
-import {Input} from 'react-native-elements'
-import {CustomButton} from '../components/CustomButton'
-import {CustomTitle} from '../components/CustomTitle'
-import {AntDesign, FontAwesome} from '@expo/vector-icons'
 import {updateUser} from '../controllers/userController'
 import {UserContext} from '../contexts'
 import CustomInput from '../components/CustomInput'
-import {LongPressGestureHandler} from 'react-native-gesture-handler'
 import CustomButtonIcon from '../components/CustomIconButton'
 import {Ionicons} from '@expo/vector-icons'
 

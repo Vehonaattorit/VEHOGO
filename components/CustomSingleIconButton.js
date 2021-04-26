@@ -1,24 +1,14 @@
 import React from 'react'
 import {Text, View, TouchableOpacity, StyleSheet} from 'react-native'
-import {Ionicons, MaterialIcons} from '@expo/vector-icons'
-const CustomButtonIcon = ({onPress, disabled, title, iconOne, iconTwo}) => {
+import {MaterialIcons} from '@expo/vector-icons'
+const CustomSingleIconButton = ({onPress, title, iconOne}) => {
   return (
-    <TouchableOpacity
-      disabled={disabled}
-      onPress={onPress}
-      style={{
-        ...styles.button,
-        backgroundColor: disabled ? 'white' : '#E1F5FD',
-      }}
-    >
-      <View style={styles.iconTwoContainer}>
+    <TouchableOpacity onPress={onPress} style={styles.button}>
+      <View style={styles.iconContainer}>
         <MaterialIcons name={iconOne} size={40} color="black" />
       </View>
       <View style={styles.textContainer}>
         <Text style={styles.text}>{title}</Text>
-      </View>
-      <View style={styles.iconTwoContainer}>
-        <MaterialIcons name={iconTwo} size={40} color="black" />
       </View>
     </TouchableOpacity>
   )
@@ -31,8 +21,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     margin: 5,
     marginHorizontal: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
     alignSelf: 'stretch',
     shadowColor: 'rgba(0, 0, 0, 0.1)',
     shadowOpacity: 0.8,
@@ -43,18 +31,18 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
-    alignSelf: 'stretch',
     justifyContent: 'center',
-    alignItems: 'center',
+    padding: 5,
   },
-  iconTwoContainer: {
-    width: 40,
-    height: 40,
-    marginLeft: 10,
+  iconContainer: {
+    justifyContent: 'center',
+    alignContent: 'center',
+    paddingHorizontal: 5,
   },
   text: {
+    fontFamily: 'open-sans-regular',
     fontSize: 20,
   },
 })
 
-export default CustomButtonIcon
+export default CustomSingleIconButton
