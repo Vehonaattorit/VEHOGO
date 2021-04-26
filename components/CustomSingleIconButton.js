@@ -32,11 +32,12 @@ const styles = StyleSheet.create({
   textContainer: {
     flex: 1,
     justifyContent: 'center',
+    padding: 5,
   },
   iconContainer: {
     justifyContent: 'center',
     alignContent: 'center',
-    paddingHorizontal: 10,
+    paddingHorizontal: 5,
   },
   text: {
     fontFamily: 'open-sans-regular',

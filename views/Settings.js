@@ -1,4 +1,10 @@
-import React, {useState, useContext, useEffect} from 'react'
+import React, {
+  useState,
+  useContext,
+  useEffect,
+  useReducer,
+  useCallback,
+} from 'react'
 import {
   View,
   Text,
@@ -22,16 +28,6 @@ import firebase from 'firebase'
 import {formatTime} from '../utils/utils'
 import {workTripMultiQuery} from '../controllers/workTripController'
 import {setupWorkTripDocs} from '../utils/utils'
-
-const workStates = [
-  {id: 1, weekDay: 'Mon', isSelected: false},
-  {id: 2, weekDay: 'Tue', isSelected: false},
-  {id: 3, weekDay: 'Wed', isSelected: false},
-  {id: 4, weekDay: 'Thu', isSelected: false},
-  {id: 5, weekDay: 'Fri', isSelected: false},
-  {id: 6, weekDay: 'Sat', isSelected: false},
-  {id: 7, weekDay: 'Sun', isSelected: false},
-]
 
 //Working hours
 
@@ -132,6 +128,32 @@ const TimeModal = ({
     </Modal>
   )
 }
+//Username
+
+const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE'
+
+const formReducer = (state, action) => {
+  if (action.type === FORM_INPUT_UPDATE) {
+    const updatedValues = {
+      ...state.inputValues,
+      [action.input]: action.value,
+    }
+    const updatedValidities = {
+      ...state.inputValidities,
+      [action.input]: action.isValid,
+    }
+    let updatedFormIsValid = true
+    for (const key in updatedValidities) {
+      updatedFormIsValid = updatedFormIsValid && updatedValidities[key]
+    }
+    return {
+      formIsValid: updatedFormIsValid,
+      inputValidities: updatedValidities,
+      inputValues: updatedValues,
+    }
+  }
+  return state
+}
 
 export const Settings = () => {
   const {user} = useContext(UserContext)
@@ -144,10 +166,6 @@ export const Settings = () => {
   const [isWorkDaysVisible, setIsWorkDaysVisible] = useState(false)
   const [isWorkingHoursVisible, setIsWorkHoursVisible] = useState(false)
   const [isDeleteVisible, setIsDeleteVisible] = useState(false)
-
-  const [travelPreference, setTravelPreference] = useState(
-    user.travelPreference
-  )
 
   const toggleModal = (view) => {
     view == 'Company'
@@ -167,7 +185,184 @@ export const Settings = () => {
       : console.log('ERROR: views/Settings.js/toggleModel')
   }
 
+  //Company
+  const [companyAddress, setAddress] = useState('')
+  const [companyName, setName] = useState('')
+  const [showCode, setShowCode] = useState(false)
+  const [companyCode, setCompanyCode] = useState('')
+  const [random, setRandom] = useState('')
+
+  useEffect(() => {
+    setRandom(getRandomString(4))
+  }, [])
+
+  function getRandomString(length) {
+    var randomChars =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    var result = ''
+    for (var i = 0; i < length; i++) {
+      result += randomChars.charAt(
+        Math.floor(Math.random() * randomChars.length)
+      )
+    }
+    return result
+  }
+
+  const setCompanyName = (companyName) => {
+    setName(companyName)
+    setCompanyCode(companyName.replace(/\s+/g, '') + '-' + random)
+  }
+
+  const getCompanyGeoLocation = async () => {
+    try {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${companyAddress}&language=fi&key=${googleMapsApiKey}`,
+        {
+          method: 'GET',
+          //Request Type
+        }
+      )
+      const responseJson = await response.json()
+
+      const locationPoint = new firebase.firestore.GeoPoint(
+        responseJson.results[0].geometry.location.lat,
+        responseJson.results[0].geometry.location.lng
+      )
+
+      var city = ''
+      var route = ''
+      var streetNumber = ''
+      var postalCode = ''
+      responseJson.results[0].address_components.forEach((element) => {
+        if (element.types[0] === 'locality') {
+          city = element.long_name
+        }
+        if (element.types[0] === 'route') {
+          route = element.long_name
+        }
+        if (element.types[0] === 'street_number') {
+          streetNumber = element.long_name
+        }
+        if (element.types[0] === 'postal_code') {
+          postalCode = element.long_name
+        }
+      })
+
+      const address = route + ' ' + streetNumber
+
+      const data = {
+        point: locationPoint,
+        city: city,
+        address: address,
+        postalCode: postalCode,
+      }
+
+      return data
+    } catch (e) {
+      console.error(e)
+    }
+  }
+  const sendCompanyData = async () => {
+    if (companyAddress.length > 0 && companyName.length > 0) {
+      const data = await getCompanyGeoLocation()
+
+      let domainJoin
+      if (value === 'both') {
+        domainJoin = true
+      } else {
+        domainJoin = false
+      }
+
+      updateCompanyCity(data.city)
+      const companyId = await updateCompany(
+        new Company({
+          address: data.address,
+          displayName: companyName,
+          userIDs: [user.id],
+          location: data.point,
+          city: data.city,
+          companyCode: companyCode,
+          postalCode: data.postalCode,
+          domain: domain,
+          domainJoin: domainJoin,
+        })
+      )
+
+      const companyUserData = {
+        address: data.address,
+        name: companyName,
+        location: data.point,
+        id: companyId,
+      }
+
+      user.company = companyUserData
+
+      await updateUser(user)
+
+      setShowCode(true)
+    } else {
+    }
+  }
+  //Travel
+  const [buttonPressed, setButtonPressed] = useState(false)
+
+  const setTravelPreference = async (preference) => {
+    user.travelPreference = preference
+
+    await updateUser(user)
+  }
+
+  //Username
+  const usernameSubmitHandler = () => {
+    if (!formState.formIsValid && formState.inputValues.userName === '') {
+      Alert.alert(
+        'Wrong input!',
+        'Please create a username that has at least 1 letter.',
+        [{text: 'Okay'}]
+      )
+      return
+    }
+
+    const {userName} = formState.inputValues
+
+    user.userName = userName
+
+    updateUser(user)
+  }
+
+  const [formState, dispatchFormState] = useReducer(formReducer, {
+    inputValues: {
+      userName: user.userName ? user.userName : '',
+    },
+    inputValidities: {
+      userName: user.userName ? true : false,
+    },
+    formIsValid: user.userName ? true : false,
+  })
+
+  const inputChangeHandler = useCallback(
+    (inputIdentifier, inputValue, inputValidity) => {
+      dispatchFormState({
+        type: FORM_INPUT_UPDATE,
+        value: inputValue,
+        isValid: inputValidity,
+        input: inputIdentifier,
+      })
+    },
+    [dispatchFormState, user]
+  )
+
   // Working days
+  const workStates = [
+    {id: 1, weekDay: 'Mon', isSelected: false},
+    {id: 2, weekDay: 'Tue', isSelected: false},
+    {id: 3, weekDay: 'Wed', isSelected: false},
+    {id: 4, weekDay: 'Thu', isSelected: false},
+    {id: 5, weekDay: 'Fri', isSelected: false},
+    {id: 6, weekDay: 'Sat', isSelected: false},
+    {id: 7, weekDay: 'Sun', isSelected: false},
+  ]
+
   const [workDays, setWorkDays] = useState(
     user.preferedWorkingHours !== undefined
       ? workStates.map((item) => {
@@ -473,14 +668,29 @@ export const Settings = () => {
           >
             <Text style={styles.title}>Modify your Company information</Text>
             <Item>
-              <CustomSimpleInput placeholder="Enter your company name ..." />
+              <CustomSimpleInput
+                placeholder="Enter your company name ..."
+                value={companyName}
+                onChangeText={(event) => setCompanyName(event)}
+                errorMessage={
+                  companyName.length < 1 &&
+                  'Company name must be at least 1 character long'
+                }
+              />
             </Item>
             <Item>
-              <CustomSimpleInput placeholder="Enter your company join code ..." />
+              <CustomSimpleInput
+                placeholder="Enter your company join code ..."
+                value={companyCode}
+                onChangeText={setCompanyCode}
+                errorMessage={
+                  companyCode.length < 4 &&
+                  'Company code must be at least 4 character long'
+                }
+              />
             </Item>
-
             <Item>
-              <GooglePlacesInput />
+              <GooglePlacesInput setAddress={setAddress} />
             </Item>
 
             <View style={styles.btns}>
@@ -496,6 +706,7 @@ export const Settings = () => {
               <TouchableOpacity
                 style={styles.poweredBtns}
                 onPress={() => {
+                  sendCompanyData()
                   setCompanyVisible(false)
                 }}
               >
@@ -530,17 +741,23 @@ export const Settings = () => {
           >
             <Text style={styles.title}>Modify your travel information</Text>
             <CustomButtonIcon
-              disabled={travelPreference === 'driver'}
+              disabled={user.travelPreference === 'driver'}
               iconOne="directions-car"
               title="Share My Car"
-              onPress={() => changeTravelPreference('driver')}
+              onPress={() => {
+                setButtonPressed(!buttonPressed)
+                setTravelPreference('driver')
+              }}
             />
 
             <CustomButtonIcon
-              disabled={travelPreference === 'passenger'}
+              disabled={user.travelPreference === 'passenger'}
               iconOne="airline-seat-recline-extra"
               title="Get A Ride"
-              onPress={() => changeTravelPreference('passenger')}
+              onPress={() => {
+                setButtonPressed(!buttonPressed)
+                setTravelPreference('passenger')
+              }}
             />
             <View style={styles.btns}>
               <TouchableOpacity
@@ -566,7 +783,6 @@ export const Settings = () => {
       </Modal>
 
       {/* Modify Your Username */}
-
       <Modal
         style={{
           alignItems: 'center',
@@ -589,7 +805,18 @@ export const Settings = () => {
           >
             <Text style={styles.title}>Modify Your Username</Text>
             <Item>
-              <CustomSimpleInput placeholder="Enter your full name..." />
+              <CustomSimpleInput
+                placeholder="Please enter your full name..."
+                initialValue={formState.inputValues.userName}
+                keyboardType="default"
+                autoCapitalize="sentences"
+                id="userName"
+                autoCorrect={false}
+                onInputChange={inputChangeHandler}
+                errorText="Please enter a valid username."
+                minLength={1}
+                required
+              />
             </Item>
             <View style={styles.btns}>
               <TouchableOpacity
@@ -604,6 +831,7 @@ export const Settings = () => {
               <TouchableOpacity
                 style={styles.poweredBtns}
                 onPress={() => {
+                  submitHandler()
                   setIsUsernameVisible(false)
                 }}
               >
@@ -615,7 +843,6 @@ export const Settings = () => {
       </Modal>
 
       {/* Modify Your address */}
-
       <Modal
         style={{
           alignItems: 'center',

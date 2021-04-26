@@ -30,6 +30,11 @@ export const MyRides = ({navigation}) => {
     TouchableCmp = TouchableNativeFeedback
   }
   const [myRideElements, setMyRideElements] = useState([])
+  const [showOwerlay, setShowOwerlay] = useState(false)
+  const [selectedWorkTrip, setSelectedWorkingHour] = useState()
+  const [selectedPreferedHours, setSelectedPreferedHours] = useState()
+  const [workTripType, setWorkTripType] = useState()
+
 
   useEffect(() => {
     const tempArray = []
@@ -43,11 +48,21 @@ export const MyRides = ({navigation}) => {
         }
       }
       if (foundedIndex != undefined) {
-        tempArray.push(<MyRidesWorkDayButton key={i} props={{workingHour: user.preferedWorkingHours[foundedIndex]}}></MyRidesWorkDayButton>)
+        tempArray.push(
+          <MyRidesWorkDayButton key={i}
+            props={{
+              workingHour: user.preferedWorkingHours[foundedIndex],
+              onClick:
+                (workTrip, preferedWorkingHours, workTripType) => {setShowOwerlay(true); setSelectedWorkingHour(workTrip); setSelectedPreferedHours(preferedWorkingHours); setWorkTripType(workTripType)}
+            }}></MyRidesWorkDayButton>)
       }
       else {
-        tempArray.push(<MyRidesWorkDayButton key={i} props={{workingHour: {workDayNum: i, disabled: true}}}></MyRidesWorkDayButton>)
-
+        tempArray.push(
+          <MyRidesWorkDayButton key={i}
+            props={{
+              workingHour: {workDayNum: i, disabled: true},
+              onClick: (workTrip, preferedWorkingHours, workTripType) => {setShowOwerlay(true); setSelectedWorkingHour(workTrip); setSelectedPreferedHours(preferedWorkingHours); setWorkTripType(workTripType)}
+            }}></MyRidesWorkDayButton>)
       }
     }
     setMyRideElements(tempArray)
@@ -57,9 +72,9 @@ export const MyRides = ({navigation}) => {
   const workTripEmpty = false
   const homeTripActive = true
 
-  //<MyRidesWorkDayEditDialog></MyRidesWorkDayEditDialog>
   return (
     <View style={styles.container}>
+      {showOwerlay == true ? <MyRidesWorkDayEditDialog props={{workTripType: workTripType, selectedPreferedHours: selectedPreferedHours, selectedWorkTrip: selectedWorkTrip, onCancel: () => setShowOwerlay(false)}}></MyRidesWorkDayEditDialog> : <View />}
       <View style={{height: 380, flexDirection: 'column'}}>
         <ScrollView
           horizontal={true}

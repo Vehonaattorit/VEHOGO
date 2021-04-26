@@ -36,6 +36,17 @@ export const checkWhatDayItIs = (dayNum) => {
   }
 }
 
+export function timeFormat(d) {
+  let hours = format_two_digits(d.getHours());
+  let minutes = format_two_digits(d.getMinutes());
+  let seconds = format_two_digits(d.getSeconds());
+  return hours + ":" + minutes;
+}
+
+function format_two_digits(n) {
+  return n < 10 ? '0' + n : n;
+}
+
 export const getNextDayOfWeek = (date, dayOfWeek) => {
   // Code to check that date and dayOfWeek are valid left as an exercise ;)
 
@@ -61,9 +72,9 @@ export const calculateDistance = (lat1, lon1, lat2, lon2) => {
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(degreesToRadius(lat1)) *
-      Math.cos(degreesToRadius(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2)
+    Math.cos(degreesToRadius(lat2)) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2)
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
   const d = R * c // Distance in km
   return d
