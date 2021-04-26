@@ -13,10 +13,12 @@ import {
   Alert,
   Platform,
 } from 'react-native'
+import {googleMapsApiKey} from '../secrets/secrets'
 import CustomButtonIcon from '../components/CustomIconButton'
 import Modal from 'react-native-modal'
 import CustomSingleIconButton from '../components/CustomSingleIconButton'
 import CustomSimpleInput from '../components/CustomSimpleInput'
+import CustomCompanyInput from '../components/CustomCompanyInput'
 import {Item} from 'native-base'
 import GooglePlacesInput from '../components/GooglePlaceInput'
 import {UserContext} from '../contexts'
@@ -30,7 +32,8 @@ import {formatTime} from '../utils/utils'
 import {workTripMultiQuery} from '../controllers/workTripController'
 import {setupWorkTripDocs} from '../utils/utils'
 import {signOut} from '../controllers/LoginController'
-
+import {updateCompanyCity} from '../controllers/companyCitiesController'
+import {updateCompany} from '../controllers/companyController'
 //--------------------WORKING HOURS-----------------------
 
 const DateTimeInput = (props) => {
@@ -192,7 +195,6 @@ export const Settings = () => {
   const [companyCode, setCompanyCode] = useState('')
   const [random, setRandom] = useState('')
 
-
   useEffect(() => {
     setRandom(getRandomString(4))
   }, [])
@@ -272,6 +274,7 @@ export const Settings = () => {
           userIDs: [user.id],
           location: data.point,
           city: data.city,
+
           companyCode: companyCode,
           postalCode: data.postalCode,
           domain: domain,
@@ -653,7 +656,7 @@ export const Settings = () => {
           >
             <Text style={styles.title}>Modify your Company information</Text>
             <Item>
-              <CustomSimpleInput
+              <CustomCompanyInput
                 placeholder="Enter your company name ..."
                 value={companyName}
                 onChangeText={(event) => setCompanyName(event)}
@@ -664,7 +667,7 @@ export const Settings = () => {
               />
             </Item>
             <Item>
-              <CustomSimpleInput
+              <CustomCompanyInput
                 placeholder="Enter your company join code ..."
                 value={companyCode}
                 onChangeText={setCompanyCode}

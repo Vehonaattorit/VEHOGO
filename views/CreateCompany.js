@@ -61,7 +61,7 @@ export const CreateCompany = ({navigation, setShowCreate, domain}) => {
       const locationPoint = new firebase.firestore.GeoPoint(
         responseJson.results[0].geometry.location.lat,
         responseJson.results[0].geometry.location.lng
-      )
+      ) 
 
       var city = ''
       var route = ''
