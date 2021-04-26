@@ -10,10 +10,6 @@ import * as Localization from 'expo-localization'
 
 WebBrowser.maybeCompleteAuthSession()
 
-console.log('PERKELE 1', azureAdAppProps.redirectUri)
-
-console.log('PERKELE 2', 'com.vehonaattorit.shareride://oauthredirect')
-
 export class AuthManager {
   static signInAsync = async () => {
     const authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${
@@ -34,8 +30,6 @@ export class AuthManager {
       // returnUrl: 'com.vehonaattorit.shareride://oauthredirect',
       returnUrl: azureAdAppProps.redirectUri || AuthSession.makeRedirectUri(), // 23.04.2021 10.55
     }
-
-    console.log('auhUrls 1', authUrls)
 
     let authResponse = await AuthSession.startAsync(authUrls)
       .then((authResponse) => {

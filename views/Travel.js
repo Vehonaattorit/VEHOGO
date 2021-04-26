@@ -4,10 +4,11 @@ import {UserContext} from '../contexts'
 import {updateUser} from '../controllers/userController'
 import CustomButtonIcon from '../components/CustomIconButton'
 import {MaterialCommunityIcons} from '@expo/vector-icons'
+
 export const Travel = ({navigation}) => {
   const {user} = useContext(UserContext)
 
-  const setTravelPreference = async(preference) => {
+  const setTravelPreference = async (preference) => {
     user.travelPreference = preference
 
     await updateUser(user)
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   iconContainer: {
-   flex: 0.9,
+    flex: 0.9,
   },
   btnContainer: {
     position: 'absolute',

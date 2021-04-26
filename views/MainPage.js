@@ -145,7 +145,7 @@ export const MainPage = ({navigation}) => {
     // isLoading,
   } = useWorkTripHooks(user)
 
-  //data stream for driver trips
+
 
   useEffect(() => {
     const fetchWorkTrips = async () => {
@@ -187,7 +187,7 @@ export const MainPage = ({navigation}) => {
           setIsPassengerLoading(false)
         })
     }
-
+    //data stream for driver trips
     const driverTripStream = async () => {
       const now = new Date()
       const currentWeekDay = now.getDay() == 0 ? 7 : now.getDay()
@@ -198,12 +198,11 @@ export const MainPage = ({navigation}) => {
 
       try {
         var trips = []
-
         let ref = await workTripMultiQueryStream(user.company.id, [
           {field: 'workDayNum', condition: '==', value: currentWeekDay},
           {field: 'driverID', condition: '==', value: user.id},
         ])
-
+        console.log('main page stream')
         ref.onSnapshot((querySnapshot) => {
           trips = []
           querySnapshot.forEach((doc) => {

@@ -5,6 +5,7 @@ import {
   View,
   Dimensions,
   Image,
+  Platform,
   KeyboardAvoidingView,
 } from 'react-native'
 import {Input} from 'react-native-elements'
@@ -33,7 +34,7 @@ export const SignUp = () => {
     if (!emailReg.test(email)) {
       setError('Email must be email type.')
     } else if (phoneNumber.length < 1) {
-      setError('Phonenumber must be min 1 number long.')
+      setError('Phone number must be min 1 number long.')
     } else if (name.length < 1) {
       setError('Fullname must be min 1 character long')
     } else if (!passwordRegex.test(password)) {

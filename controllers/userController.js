@@ -1,6 +1,11 @@
 import firebase from 'firebase/app'
 import {userConverter} from '../models/user'
 import 'firebase/firestore'
+import {firebaseConfig} from '../secrets/secrets'
+
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(firebaseConfig)
+}
 
 const db = firebase.firestore()
 
@@ -36,19 +41,34 @@ export async function userDocumentUpdater(user) {
   }
 }
 
-export async function getUser(userId) {
+export async function getUser(user) {
   try {
     // Add a new document in collection "users"
     let doc = await db
       .collection('users')
-      .doc(userId)
+      .doc(user)
       .withConverter(userConverter)
       .get()
+
+    console.log('getUser', doc.data())
 
     return doc.data()
   } catch (error) {
     console.error('Error writing document: ', error)
     return
+  }
+}
+
+export async function deleteUser(userId) {
+  try {
+    db.collection('users')
+      .doc(userId)
+      .delete()
+      .then(() => {
+        console.log('User successfully deleted!')
+      })
+  } catch (error) {
+    console.error('Error removing document: ', error)
   }
 }
 

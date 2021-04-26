@@ -23,10 +23,10 @@ export const Address = ({navigation}) => {
   const [showSubmit, setShowSubmit] = useState(true)
 
   const submitHandler = async () => {
-    if (address.length < 1) {
+    if (address.trim().length <= 1) {
       Alert.alert(
         'Wrong input!',
-        'Please write an address which has at least 1 letter.',
+        'Please write an address which has more than one letter.',
         [{text: 'Okay'}]
       )
       return
@@ -88,6 +88,11 @@ export const Address = ({navigation}) => {
       <View style={styles.icon}>
         <FontAwesome name="home" size={300} color="#26AAE2" />
       </View>
+      <View style={styles.textContainer}>
+        <Text style={{fontSize: 24, justifyContent: 'center'}}>
+          Please enter your home address
+        </Text>
+      </View>
       <View style={styles.googleInputContainer}>
         <GooglePlacesInput
           setShowSubmit={setShowSubmit}
@@ -115,9 +120,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     alignItems: 'center',
+    backgroundColor: 'white',
   },
   icon: {
     flex: 1,
+  },
+  textContainer: {
+    flex: 0.2,
   },
   googleInputContainer: {
     maxHeight: 300,

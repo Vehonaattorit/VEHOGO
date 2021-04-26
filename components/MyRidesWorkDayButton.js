@@ -25,9 +25,10 @@ import {
 } from 'native-base'
 import {Ionicons, FontAwesome5} from '@expo/vector-icons'
 import {color} from '../constants/colors'
-import {getWorkTrip} from '../controllers/workTripController'
+import {getWorkTrip, deleteWorkTrip} from '../controllers/workTripController'
 import {checkWhatDayItIs, timeFormat} from '../utils/utils'
 import {format} from 'prettier'
+import {removePassengerFromRoute} from '../utils/passengerRemove'
 
 const MyRidesWorkDayButton = ({props}) => {
   const {user} = useContext(UserContext)
@@ -76,6 +77,51 @@ const MyRidesWorkDayButton = ({props}) => {
   const clearWorkTrip = async () => {
     for (let i = 0; i < user.preferedWorkingHours.length; i++) {
       if (props.workingHour.workDayNum == user.preferedWorkingHours[i].workDayNum) {
+
+        if (workTrip != undefined) {
+          if (user.id == workTrip.driverID) {
+            await deleteWorkTrip(user.company.id, workTrip.id)
+          } else {
+
+            let workTripUpdate
+            // filter all stops that DON'T HAVE passenger ID
+            const stops = workTrip.scheduledDrive.stops.filter(
+              (item) => item.userID !== user.id
+            )
+
+            // new stops array without passenger stop
+            workTripUpdate = {
+              ...workTrip,
+              scheduledDrive: {
+                ...workTrip.scheduledDrive,
+                stops: stops,
+              },
+            }
+            await removePassengerFromRoute(workTripUpdate, user.company.id, workTrip)
+          }
+        }
+        if (homeTrip != undefined) {
+          if (user.id == homeTrip.driverID) {
+            await deleteWorkTrip(user.company.id, homeTrip.id)
+          } else {
+
+            let homeTripUpdate
+            // filter all stops that DON'T HAVE passenger ID
+            const stops = homeTrip.scheduledDrive.stops.filter(
+              (item) => item.userID !== user.id
+            )
+
+            // new stops array without passenger stop
+            homeTripUpdate = {
+              ...homeTrip,
+              scheduledDrive: {
+                ...homeTrip.scheduledDrive,
+                stops: stops,
+              },
+            }
+            await removePassengerFromRoute(homeTripUpdate, user.company.id, homeTrip)
+          }
+        }
         user.preferedWorkingHours.splice(i, 1)
         break
       }

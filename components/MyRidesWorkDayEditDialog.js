@@ -80,7 +80,7 @@ const MyRidesWorkDayEditDialog = ({props}) => {
       setDriverText('You are the driver')
       else
       setDriverText(`Driver name: ${workTrip.driverName}`)
-    
+
 
       if (workTrip.driverID != user.id && workTrip.scheduledDrive != undefined) {
         for (let i = 0; i < workTrip.scheduledDrive.stops.length; i++) {

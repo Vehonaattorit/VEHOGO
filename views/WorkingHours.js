@@ -256,16 +256,16 @@ export const WorkingHours = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+
     alignItems: 'center',
   },
   icon: {
-    flex: 0.5,
+    flex: 0.6,
     marginBottom: 20,
   },
   title: {
     flex: 0.1,
-    margin: 15,
+    margin: 20,
     fontSize: 20,
     textAlign: 'center',
   },

@@ -9,7 +9,7 @@ it('Should throw an error when trying to log in', async () => {
   const {getByText, getAllByText, getByPlaceholderText} = render(<SignUp />)
 
   // Write only email
-  const emailInput = getByPlaceholderText('Email')
+  const emailInput = getByPlaceholderText('Enter your email address')
   const registerBtn = getByText('Register')
 
   // Press 'SignUp' button
@@ -17,9 +17,7 @@ it('Should throw an error when trying to log in', async () => {
   fireEvent.press(registerBtn)
 
   await waitFor(() => {
-    const errorMessage = getAllByText(
-      'Name and Phone number must be at least 1 char long'
-    )
+    const errorMessage = getAllByText('Phone number must be min 1 number long.')
 
     expect(errorMessage[0]).not.toBeNull()
   })
