@@ -340,6 +340,60 @@ export const Settings = () => {
     [dispatchFormState, user]
   )
 
+  //--------------------HOME ADDRESS------------------
+  const [hAddress, setHAddress] = useState(user.homeAddress || '')
+  const homeAddressSubmitHandler = async () => {
+    if (hAddress.trim().length <= 1) {
+      Alert.alert(
+        'Wrong input!',
+        'Please write an address which has more than one letter.',
+        [{text: 'Okay'}]
+      )
+      return
+    }
+
+    const data = await getHAddressGeoLocation()
+
+    user.homeAddress = hAddress
+    user.city = data.city
+    user.homeLocation = data.point
+
+    await updateUser(user)
+  }
+
+  const getHAddressGeoLocation = async () => {
+    try {
+      console.log(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${hAddress}&language=fi&key=${googleMapsApiKey}`
+      )
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${hAddress}&language=fi&key=${googleMapsApiKey}`,
+        {
+          method: 'GET',
+          //Request Type
+        }
+      )
+      const responseJson = await response.json()
+      const locationPoint = new firebase.firestore.GeoPoint(
+        responseJson.results[0].geometry.location.lat,
+        responseJson.results[0].geometry.location.lng
+      )
+      var city = ''
+      responseJson.results[0].address_components.forEach((element) => {
+        if (element.types[0] === 'locality') {
+          city = element.long_name
+        }
+      })
+      const data = {
+        point: locationPoint,
+        city: city,
+      }
+      return data
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   // ----------------WORKING DAYS-------------------------
   const workStates = [
     {id: 1, weekDay: 'Mon', isSelected: false},
@@ -853,7 +907,10 @@ export const Settings = () => {
           >
             <Text style={styles.title}>Modify Your Home Address</Text>
             <Item>
-              <GooglePlacesInput />
+              <GooglePlacesInput
+                defaultValue={user.homeAddress}
+                setAddress={setHAddress}
+              />
             </Item>
             <View style={styles.btns}>
               <TouchableOpacity
@@ -868,6 +925,7 @@ export const Settings = () => {
               <TouchableOpacity
                 style={styles.poweredBtns}
                 onPress={() => {
+                  homeAddressSubmitHandler
                   setIsAddressVisible(false)
                 }}
               >
@@ -1145,5 +1203,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 15,
     margin: 20,
+    fontFamily: 'open-sans-regular',
   },
 })

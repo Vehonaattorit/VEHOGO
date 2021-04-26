@@ -63,7 +63,7 @@ export const JoinCompany = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
   },
   button: {
     flex: 1,

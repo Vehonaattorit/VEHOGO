@@ -61,7 +61,7 @@ export const CreateCompany = ({navigation, setShowCreate, domain}) => {
       const locationPoint = new firebase.firestore.GeoPoint(
         responseJson.results[0].geometry.location.lat,
         responseJson.results[0].geometry.location.lng
-      ) 
+      )
 
       var city = ''
       var route = ''
@@ -181,7 +181,9 @@ export const CreateCompany = ({navigation, setShowCreate, domain}) => {
                 }}
               >
                 <RadioButton value="code" backgroundColor="red" />
-                <Text>Only code joining</Text>
+                <Text style={{fontFamily: 'open-sans-regular'}}>
+                  Only code joining
+                </Text>
               </View>
               <View
                 style={{
@@ -253,8 +255,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
-    marginLeft: 10,
-    marginRight: 10,
+    marginHorizontal: 10
   },
   continueBtnContainer: {
     alignSelf: 'stretch',
