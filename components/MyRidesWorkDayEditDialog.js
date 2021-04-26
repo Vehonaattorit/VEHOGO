@@ -26,6 +26,9 @@ import {UserContext} from '../contexts'
 import {checkWhatDayItIs, timeFormat} from '../utils/utils'
 import {TimeModal} from '../views/WorkingHours'
 
+import {getWorkTrip, deleteWorkTrip} from '../controllers/workTripController'
+import {removePassengerFromRoute} from '../utils/passengerRemove'
+import {softUpdateUser, updateUser} from '../controllers/userController'
 
 const MyRidesWorkDayEditDialog = ({props}) => {
   const workTrip = props.selectedWorkTrip
@@ -93,6 +96,51 @@ const MyRidesWorkDayEditDialog = ({props}) => {
     }
   }, [])
 
+  const deleteWorkTrip = async () => {
+    if (workTrip != undefined) {
+      if (user.id == workTrip.driverID) {
+        await deleteWorkTrip(user.company.id, workTrip.id)
+      } else {
+        let workTripUpdate
+        // filter all stops that DON'T HAVE passenger ID
+        const stops = workTrip.scheduledDrive.stops.filter(
+          (item) => item.userID !== user.id
+        )
+
+        // new stops array without passenger stop
+        workTripUpdate = {
+          ...workTrip,
+          scheduledDrive: {
+            ...workTrip.scheduledDrive,
+            stops: stops,
+          },
+        }
+        workTripUpdate.scheduledDrive.availableSeats += 1
+
+        await removePassengerFromRoute(workTripUpdate, user.company.id, workTrip)
+      }
+    }
+
+
+    user.preferedWorkingHours.forEach(element => {
+
+    if (element.toWorkRefID != undefined && element.toWorkRefID != null) {
+      if (element.toWorkRefID == workTrip.id) {
+        element.toWorkRefID = null
+      }
+    }
+    if (element.toHomeRefID != undefined && element.toHomeRefID != null) {
+      if (element.toHomeRefID == workTrip.id) {
+        element.toHomeRefID = null
+      }
+    }
+    });
+    user.preferedWorkingHours
+    updateUser(user)
+    props.onCancel()
+  }
+
+
   return (
     <View style={styles.workDayCard}>
       <TimeModal
@@ -158,7 +206,10 @@ const MyRidesWorkDayEditDialog = ({props}) => {
 
           {workTrip == undefined
             ? <View />
-            : <TouchableCmp onPress={() => {console.log('disable / enable')}}>
+            : <TouchableCmp onPress={() => {
+            console.log('disable / enable')
+            deleteWorkTrip()
+            }}>
               <View style={[styles.workTripButton, {width: 45, height: 45, backgroundColor: workTripEmpty ? color.platina : color.radicalRed}]}>
                 <FontAwesome5
                   name='calendar-times'
