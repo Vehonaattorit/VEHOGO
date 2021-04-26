@@ -286,16 +286,16 @@ const PassengerAcceptRefuseButton = (props) => {
 
 const styles = StyleSheet.create({
   button: {
+    marginBottom: 10,
     flex: 1,
     justifyContent: 'center',
     marginHorizontal: 10,
     borderRadius: 10,
   },
   buttons: {
-    flex: 1,
+    backgroundColor: color.lightBlue,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 20,
   },
   title: {
     fontSize: 18,
@@ -305,14 +305,6 @@ const styles = StyleSheet.create({
   btntxt: {
     fontFamily: 'open-sans-regular',
     color: 'white',
-  },
-  list: {
-    marginBottom: 0,
-    marginLeft: 10,
-    marginRight: 10,
-    marginTop: 10,
-    backgroundColor: '#26aae2',
-    borderRadius: 10,
   },
   item: {
     backgroundColor: '#26aae2',

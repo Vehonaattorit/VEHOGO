@@ -53,8 +53,6 @@ const workStates = [
 // export const WorkingDays = (props, {navigation}) => {
 
 export const WorkingDays = (props) => {
-  console.log('navigation-241', props.navigation)
-
   const {user} = useContext(UserContext)
 
   // const [workDays, setWorkDays] = useState(workStates)

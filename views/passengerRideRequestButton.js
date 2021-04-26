@@ -143,7 +143,6 @@ const PassengerRideRequestButton = ({
     }
   }
 
-
   const cancelRide = async () => {
     if (!alreadyRequested) {
       let workTripUpdate
@@ -199,12 +198,10 @@ const PassengerRideRequestButton = ({
                   workTripUpdate.scheduledDrive.stops.length - 1
                 ]
               )
-
             } else {
               //if there is only driver home and work just get route between those places
               //getTripRoute function has driver locations already defined
               route = await getTripRoute([])
-
             }
             workTripUpdate.route = route
 
@@ -246,16 +243,16 @@ const PassengerRideRequestButton = ({
 
 const styles = StyleSheet.create({
   button: {
+    marginBottom: 10,
     justifyContent: 'center',
     backgroundColor: '#26aae2',
     borderRadius: 15,
     width: '100%',
   },
   buttons: {
-    flex: 1,
+    backgroundColor: color.lightBlue,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: 20,
   },
   title: {
     fontSize: 18,

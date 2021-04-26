@@ -20,7 +20,11 @@ const MainPageButton = (props) => {
 
   return (
     <View style={styles.gridItem}>
-      <TouchableCmp style={{flex: 1}} onPress={props.onPress}>
+      <TouchableCmp
+        testID={props.testID}
+        style={{flex: 1}}
+        onPress={props.onPress}
+      >
         <View style={styles.container}>
           {props.children}
           <View style={styles.titleContainer}>

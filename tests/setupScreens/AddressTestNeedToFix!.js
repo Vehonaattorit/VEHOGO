@@ -56,7 +56,7 @@ describe('Address', () => {
       user = newUser
     })
 
-    user = getUser(user.uid)
+    user = await getUser(user.uid)
 
     const {queryByText, getByText, getByPlaceholderText, getAllByText} = render(
       <UserContext.Provider value={{user}}>

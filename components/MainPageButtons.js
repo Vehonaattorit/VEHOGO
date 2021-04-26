@@ -9,12 +9,15 @@ import {workTripMultiQuery} from '../controllers/workTripController'
 
 const MainPageButtons = ({
   user,
+  testIDs,
   travelPreference,
   drivingTrips,
   navigation,
 }) => {
   const [startingRide, setStartingRide] = useState([])
   const [driveStartTime, setDriveStartTime] = useState(null)
+
+  console.log('testIDs', testIDs)
 
   const getNextRide = async () => {
     const now = new Date()
@@ -105,6 +108,7 @@ const MainPageButtons = ({
   const mainPageButtons = [
     {
       id: '1',
+      testID: testIDs[0],
       travelPreference: ['passenger', 'driver'],
       title: 'Calendar',
       icon: (
@@ -118,6 +122,7 @@ const MainPageButtons = ({
     },
     {
       id: '2',
+      testID: testIDs[1],
       travelPreference: ['driver'],
       title: 'Requests',
       icon: (
@@ -131,6 +136,7 @@ const MainPageButtons = ({
     },
     {
       id: '3',
+      testID: testIDs[2],
       travelPreference: ['driver'],
       title: 'Start Ride',
       icon: (
@@ -147,6 +153,7 @@ const MainPageButtons = ({
     },
     {
       id: '4',
+      testID: testIDs[3],
       travelPreference: ['driver'],
       title: 'Cars',
       icon: (
@@ -162,6 +169,8 @@ const MainPageButtons = ({
   const renderGridItem = (itemData) => {
     // If driverTrips have loaded
 
+    const {item} = itemData
+
     const travelPref = itemData.item.travelPreference.some((trav) =>
       trav.includes(travelPreference)
     )
@@ -170,8 +179,9 @@ const MainPageButtons = ({
       return (
         <>
           <MainPageButton
-            title={itemData.item.title}
-            onPress={itemData.item.onPress}
+            testID={item.testID}
+            title={item.title}
+            onPress={item.onPress}
           >
             {itemData.item.icon}
           </MainPageButton>

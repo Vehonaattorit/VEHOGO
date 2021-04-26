@@ -13,7 +13,7 @@ import {StyleSheet} from 'react-native'
 import React, {useEffect} from 'react'
 import {color} from '../constants/colors'
 
-export default DriverIsOnHisWayBar = ({user, navigation, activeRide}) => {
+const DriverIsOnHisWayBar = ({navigation, activeRide}) => {
   const checkVariable = (variable) => {
     if (Array.isArray(variable)) {
       return true
@@ -71,6 +71,8 @@ export default DriverIsOnHisWayBar = ({user, navigation, activeRide}) => {
     </View>
   )
 }
+
+export default DriverIsOnHisWayBar
 
 const styles = StyleSheet.create({
   text: {

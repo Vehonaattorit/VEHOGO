@@ -33,7 +33,7 @@ jest.mock('react-native', () => {
   )
 })
 
-describe('Address', () => {
+describe('Working', () => {
   it('Select Mon - Fri', async () => {
     // Test user
     let user
@@ -52,7 +52,7 @@ describe('Address', () => {
       user = newUser
     })
 
-    user = getUser(user.uid)
+    user = await getUser(user.uid)
 
     const onPress = jest.fn()
     const navigate = jest.fn()
@@ -86,6 +86,8 @@ describe('Address', () => {
     expect(onPress).toHaveBeenCalledTimes(5)
 
     expect(hintText).not.toBeNull()
+
+    console.log('PERKELE', onPress.mock.calls[0][0].isSelected)
 
     expect(onPress.mock.calls[0][0]).toEqual(
       {
@@ -168,7 +170,7 @@ describe('Address', () => {
       user = newUser
     })
 
-    user = getUser(user.uid)
+    user = await getUser(user.uid)
 
     const onPress = jest.fn()
     const navigate = jest.fn()
