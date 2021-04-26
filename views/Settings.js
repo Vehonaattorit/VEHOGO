@@ -13,14 +13,17 @@ import {
   Alert,
   Platform,
 } from 'react-native'
+import {googleMapsApiKey} from '../secrets/secrets'
 import CustomButtonIcon from '../components/CustomIconButton'
 import Modal from 'react-native-modal'
 import CustomSingleIconButton from '../components/CustomSingleIconButton'
 import CustomSimpleInput from '../components/CustomSimpleInput'
+import CustomCompanyInput from '../components/CustomCompanyInput'
 import {Item} from 'native-base'
 import GooglePlacesInput from '../components/GooglePlaceInput'
 import {UserContext} from '../contexts'
 import {updateUser} from '../controllers/userController'
+import {deleteUser} from '../controllers/userController'
 import {RoundButton} from '../components/RoundButton'
 import {color} from '../constants/colors'
 import DateTimePicker from '@react-native-community/datetimepicker'
@@ -28,12 +31,13 @@ import firebase from 'firebase'
 import {formatTime} from '../utils/utils'
 import {workTripMultiQuery} from '../controllers/workTripController'
 import {setupWorkTripDocs} from '../utils/utils'
-
-//Working hours
+import {signOut} from '../controllers/LoginController'
+import {updateCompanyCity} from '../controllers/companyCitiesController'
+import {updateCompany} from '../controllers/companyController'
+//--------------------WORKING HOURS-----------------------
 
 const DateTimeInput = (props) => {
   const [showTimePicker, setShowTimePicker] = useState(Platform.OS === 'ios')
-
   useEffect(() => {
     props.onChange('', new Date())
   }, [])
@@ -120,7 +124,7 @@ const TimeModal = ({
                 handleModal(!modalVisible)
               }}
             >
-              <Text style={{color: color.secondary}}>OK</Text>
+              <Text style={{color: color.secondary}}>SAVE</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -128,8 +132,8 @@ const TimeModal = ({
     </Modal>
   )
 }
-//Username
 
+//--------------------------USERNAME----------------------------
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE'
 
 const formReducer = (state, action) => {
@@ -185,10 +189,9 @@ export const Settings = () => {
       : console.log('ERROR: views/Settings.js/toggleModel')
   }
 
-  //Company
+  //-------------------COMPANY----------------------
   const [companyAddress, setAddress] = useState('')
   const [companyName, setName] = useState('')
-  const [showCode, setShowCode] = useState(false)
   const [companyCode, setCompanyCode] = useState('')
   const [random, setRandom] = useState('')
 
@@ -207,7 +210,6 @@ export const Settings = () => {
     }
     return result
   }
-
   const setCompanyName = (companyName) => {
     setName(companyName)
     setCompanyCode(companyName.replace(/\s+/g, '') + '-' + random)
@@ -249,14 +251,12 @@ export const Settings = () => {
       })
 
       const address = route + ' ' + streetNumber
-
       const data = {
         point: locationPoint,
         city: city,
         address: address,
         postalCode: postalCode,
       }
-
       return data
     } catch (e) {
       console.error(e)
@@ -266,13 +266,6 @@ export const Settings = () => {
     if (companyAddress.length > 0 && companyName.length > 0) {
       const data = await getCompanyGeoLocation()
 
-      let domainJoin
-      if (value === 'both') {
-        domainJoin = true
-      } else {
-        domainJoin = false
-      }
-
       updateCompanyCity(data.city)
       const companyId = await updateCompany(
         new Company({
@@ -281,6 +274,7 @@ export const Settings = () => {
           userIDs: [user.id],
           location: data.point,
           city: data.city,
+
           companyCode: companyCode,
           postalCode: data.postalCode,
           domain: domain,
@@ -296,23 +290,19 @@ export const Settings = () => {
       }
 
       user.company = companyUserData
-
       await updateUser(user)
-
-      setShowCode(true)
     } else {
     }
   }
-  //Travel
-  const [buttonPressed, setButtonPressed] = useState(false)
 
+  //------------------TRAVEL---------------------
+  const [buttonPressed, setButtonPressed] = useState(false)
   const setTravelPreference = async (preference) => {
     user.travelPreference = preference
-
     await updateUser(user)
   }
 
-  //Username
+  //-----------------USERNAME------------------
   const usernameSubmitHandler = () => {
     if (!formState.formIsValid && formState.inputValues.userName === '') {
       Alert.alert(
@@ -324,9 +314,7 @@ export const Settings = () => {
     }
 
     const {userName} = formState.inputValues
-
     user.userName = userName
-
     updateUser(user)
   }
 
@@ -352,7 +340,62 @@ export const Settings = () => {
     [dispatchFormState, user]
   )
 
-  // Working days
+  //--------------------HOME ADDRESS------------------
+
+  const [hAddress, setHAddress] = useState(user.homeAddress || '')
+  const homeAddressSubmitHandler = async () => {
+    if (hAddress.trim().length <= 1) {
+      Alert.alert(
+        'Wrong input!',
+        'Please write an address which has more than one letter.',
+        [{text: 'Okay'}]
+      )
+      return
+    }
+
+    const data = await getHAddressGeoLocation()
+
+    user.homeAddress = hAddress
+    user.city = data.city
+    user.homeLocation = data.point
+
+    await updateUser(user)
+  }
+
+  const getHAddressGeoLocation = async () => {
+    try {
+      console.log(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${hAddress}&language=fi&key=${googleMapsApiKey}`
+      )
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${hAddress}&language=fi&key=${googleMapsApiKey}`,
+        {
+          method: 'GET',
+          //Request Type
+        }
+      )
+      const responseJson = await response.json()
+      const locationPoint = new firebase.firestore.GeoPoint(
+        responseJson.results[0].geometry.location.lat,
+        responseJson.results[0].geometry.location.lng
+      )
+      var city = ''
+      responseJson.results[0].address_components.forEach((element) => {
+        if (element.types[0] === 'locality') {
+          city = element.long_name
+        }
+      })
+      const data = {
+        point: locationPoint,
+        city: city,
+      }
+      return data
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  // ----------------WORKING DAYS-------------------------
   const workStates = [
     {id: 1, weekDay: 'Mon', isSelected: false},
     {id: 2, weekDay: 'Tue', isSelected: false},
@@ -396,7 +439,6 @@ export const Settings = () => {
     }
 
     let updatedWorkDays = workStates
-
     for (let i = 0; i < workDayIds.length; i++) {
       for (let j = 0; j < workDays.length; j++) {
         if (workDays[j].id === workDayIds[i]) {
@@ -405,7 +447,6 @@ export const Settings = () => {
         }
       }
     }
-
     setWorkDays(updatedWorkDays)
   }, [])
 
@@ -420,7 +461,6 @@ export const Settings = () => {
         return item
       }
     })
-
     setWorkDays(newArr)
   }
 
@@ -437,7 +477,6 @@ export const Settings = () => {
     }
 
     const preferedWorkDays = []
-
     workDays.forEach((element) => {
       if (element.isSelected) {
         preferedWorkDays.push({workDayNum: element.id})
@@ -495,7 +534,7 @@ export const Settings = () => {
     )
   }
 
-  //Working hours
+  //------------------WORKING HOURS---------------------
 
   // If starting and ending time was found in db, set fetched values instead of default
   const [newEventState, setNewEventState] = useState({
@@ -522,7 +561,6 @@ export const Settings = () => {
   }
 
   const [modalVisible, setModalVisible] = useState(false)
-
   const [timeError, setTimeError] = useState(false)
 
   const timeSubmitHandler = () => {
@@ -557,14 +595,12 @@ export const Settings = () => {
     })
 
     user.preferedWorkingHours = tempArr
-
     updateUser(user)
   }
 
   const handleModal = (visibility) => {
     setTimeModalVisible(visibility)
   }
-
   const [selectedTime, setSelectedTime] = useState('startDate')
   const [isPickerShow, setIsPickerShow] = useState(false)
 
@@ -575,6 +611,13 @@ export const Settings = () => {
 
     return () => clearTimeout(timeout)
   }, [timeError])
+
+  // ------------------DELETE USER------------------
+
+  const deleteUserHandler = () => {
+    deleteUser(user.id)
+    signOut()
+  }
 
   return (
     <View style={styles.container}>
@@ -668,7 +711,7 @@ export const Settings = () => {
           >
             <Text style={styles.title}>Modify your Company information</Text>
             <Item>
-              <CustomSimpleInput
+              <CustomCompanyInput
                 placeholder="Enter your company name ..."
                 value={companyName}
                 onChangeText={(event) => setCompanyName(event)}
@@ -679,7 +722,7 @@ export const Settings = () => {
               />
             </Item>
             <Item>
-              <CustomSimpleInput
+              <CustomCompanyInput
                 placeholder="Enter your company join code ..."
                 value={companyCode}
                 onChangeText={setCompanyCode}
@@ -710,7 +753,7 @@ export const Settings = () => {
                   setCompanyVisible(false)
                 }}
               >
-                <Text>PROCEED</Text>
+                <Text>SAVE</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -775,7 +818,7 @@ export const Settings = () => {
                   setIsTravelVisible(false)
                 }}
               >
-                <Text>PROCEED</Text>
+                <Text>SAVE</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -831,11 +874,11 @@ export const Settings = () => {
               <TouchableOpacity
                 style={styles.poweredBtns}
                 onPress={() => {
-                  submitHandler()
+                  usernameSubmitHandler()
                   setIsUsernameVisible(false)
                 }}
               >
-                <Text>PROCEED</Text>
+                <Text>SAVE</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -865,7 +908,10 @@ export const Settings = () => {
           >
             <Text style={styles.title}>Modify Your Home Address</Text>
             <Item>
-              <GooglePlacesInput />
+              <GooglePlacesInput
+                defaultValue={user.homeAddress}
+                setAddress={setHAddress}
+              />
             </Item>
             <View style={styles.btns}>
               <TouchableOpacity
@@ -880,10 +926,11 @@ export const Settings = () => {
               <TouchableOpacity
                 style={styles.poweredBtns}
                 onPress={() => {
+                  homeAddressSubmitHandler
                   setIsAddressVisible(false)
                 }}
               >
-                <Text>PROCEED</Text>
+                <Text>SAVE</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -958,7 +1005,7 @@ export const Settings = () => {
                   setIsWorkDaysVisible(false)
                 }}
               >
-                <Text>PROCEED</Text>
+                <Text>SAVE</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -1039,7 +1086,7 @@ export const Settings = () => {
                   setIsWorkHoursVisible(false)
                 }}
               >
-                <Text>PROCEED</Text>
+                <Text>SAVE</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -1085,6 +1132,7 @@ export const Settings = () => {
               <TouchableOpacity
                 style={styles.poweredBtns}
                 onPress={() => {
+                  deleteUserHandler()
                   setIsDeleteVisible(false)
                 }}
               >
@@ -1156,5 +1204,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 15,
     margin: 20,
+    fontFamily: 'open-sans-regular',
   },
 })

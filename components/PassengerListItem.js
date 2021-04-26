@@ -27,7 +27,6 @@ const PassengerListItem = ({navigation, user, singleItem}) => {
   const schedStart = new Date(scheduledDrive.start.toDate())
 
   const totalTime = drivingTime(singleItem)
-
   const arrivalTime = schedStart.setMinutes(schedStart.getMinutes() + totalTime)
 
   return (

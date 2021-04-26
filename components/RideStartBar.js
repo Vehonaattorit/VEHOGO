@@ -103,7 +103,7 @@ export const RideStartBar = ({user, navigation, driverTrips}) => {
           querySnapshot.forEach((doc) => {
             nextDayTrips.push(doc.data())
           })
-          console.log('length of next day trips',nextDayTrips.length)
+          console.log('length of next day trips', nextDayTrips.length)
 
 
           if (nextDayTrips.length != 0) {
@@ -171,8 +171,8 @@ export const RideStartBar = ({user, navigation, driverTrips}) => {
       }
     }
 
-    if (driverTrips != null) {
-      console.log('calling next ride')
+    if (driverTrips != undefined && driverTrips.length > 0) {
+      console.log('driver Trips', driverTrips)
       getNextRide()
     }
   }, [driverTrips])
@@ -189,26 +189,32 @@ export const RideStartBar = ({user, navigation, driverTrips}) => {
             )}
           </Left>
           <Right>
-            {!showStart ? (
-              <Button
-                style={styles.button}
-                onPress={() =>
-                  navigation.navigate('DriverStartRide', {
-                    workTrip: startingRide,
-                  })
-                }
-              >
-                <Text style={styles.starText}>
-                  Start{' '}
-                  {driveStartTime &&
-                    moment(driveStartTime.toDate()).format('HH:mm')}
-                </Text>
-              </Button>
+            {driverTrips.length > 0 ? (
+              <>
+                {!showStart ? (
+                  <Button
+                    style={styles.button}
+                    onPress={() =>
+                      navigation.navigate('DriverStartRide', {
+                        workTrip: startingRide,
+                      })
+                    }
+                  >
+                    <Text style={styles.starText}>
+                      Start{' '}
+                      {driveStartTime &&
+                        moment(driveStartTime.toDate()).format('HH:mm')}
+                    </Text>
+                  </Button>
+                ) : (
+                  <Text style={styles.text}>
+                    {driveStartTime &&
+                      moment(driveStartTime.toDate()).format('HH:mm')}
+                  </Text>
+                )}
+              </>
             ) : (
-              <Text style={styles.text}>
-                {driveStartTime &&
-                  moment(driveStartTime.toDate()).format('HH:mm')}
-              </Text>
+              <Text>No trips</Text>
             )}
           </Right>
         </CardItem>

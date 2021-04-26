@@ -3,14 +3,11 @@ import React, {useState, useContext, useEffect} from 'react'
 import {GiftedChat, Bubble, Send, SystemMessage} from 'react-native-gifted-chat'
 import {IconButton} from 'react-native-paper'
 import {Button, StyleSheet, View, Text, ActivityIndicator} from 'react-native'
-
 import firebase from '../firebase/fire'
-
 import {
   sendMessage,
   useMessageHooks,
 } from '../controllers/chatMessageController'
-import {UserContext} from '../contexts'
 import {getUser} from '../controllers/userController'
 import {ChatMessage} from '../models/chatMessage'
 import {useAuthState} from 'react-firebase-hooks/auth'

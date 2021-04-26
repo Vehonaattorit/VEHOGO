@@ -215,16 +215,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
   },
   btnContainer: {
     flexDirection: 'row',
   },
   iconContainer: {
     alignItems: 'center',
-
-    flex: 1,
+    flex: 0.7,
   },
   submitBtn: {
     position: 'absolute',
@@ -233,7 +231,7 @@ const styles = StyleSheet.create({
   },
   title: {
     margin: 15,
-    fontSize: 24,
+    fontSize: 20,
     flex: 0.3,
     textAlign: 'center',
   },

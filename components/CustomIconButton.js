@@ -16,7 +16,7 @@ const CustomButtonIcon = ({
       onPress={onPress}
       style={{
         ...styles.button,
-        backgroundColor: disabled ? 'white' : '#E1F5FD',
+        backgroundColor: disabled ? '#26AAE2' : '#E1F5FD',
       }}
     >
       <View style={styles.iconTwoContainer}>
@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
+    fontFamily: 'open-sans-regular',
   },
 })
 

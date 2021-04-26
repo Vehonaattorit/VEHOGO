@@ -130,26 +130,4 @@ export async function companyMultiQuery(querys) {
     console.error('Error getting document: ', error)
     return
   }
-
-  /*try {
-      // Add a new document in collection "users"
-      let queryRef = db
-        .collection('companys')
-        .doc(companyId)
-        .collection('workTrips')
-        .withConverter(workTripConverter)
-
-      querys.forEach((query) => {
-        queryRef = queryRef.where(query.field, query.condition, query.value)
-      })
-      let query = await queryRef.get()
-      const workTripList = []
-      query.forEach((doc) => {
-        workTripList.push(workTripConverter.fromData(doc.data()))
-      })
-      return workTripList
-    } catch (error) {
-      console.error('Error getting document: ', error)
-      return
-    }*/
 }
