@@ -17,10 +17,6 @@ google-services.json
 *.log
 
 
-#  
-google-services.json
-# END
-
 # Hide app.json & google-places.json that have API keys
-app-standalone.json
-google-services-standalone.json
+app.json
+google-services.json

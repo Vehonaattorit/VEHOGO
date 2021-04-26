@@ -17,6 +17,8 @@ import {create} from 'react-test-renderer'
 import {useDocumentData} from 'react-firebase-hooks/firestore'
 import {Alert} from 'react-native'
 
+import {firebaseConfig} from '../../secrets/secrets'
+
 jest.mock('react-native', () => {
   const RN = jest.requireActual('react-native')
 
@@ -33,6 +35,8 @@ jest.mock('react-native', () => {
 
 describe('Address', () => {
   it('Select Mon - Fri', async () => {
+    console.log('firebaseConfig', firebaseConfig)
+
     // Test user
     let user
     if (!firebase.apps.length) {
