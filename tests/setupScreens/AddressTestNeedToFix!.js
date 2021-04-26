@@ -1,17 +1,17 @@
 import React from 'react'
-import {Address} from '../views/Address'
+import {Address} from '../../views/Address'
 import {SafeAreaView} from 'react-native'
 
 import {render, act, waitFor, fireEvent} from '@testing-library/react-native'
 
-import firebase from '../firebase/fire'
+import firebase from '../../firebase/fire'
 
-import {getUser} from '../controllers/userController'
+import {getUser} from '../../controllers/userController'
 
-import {registerForPushNotificationsAsync} from '../controllers/LoginController'
+import {registerForPushNotificationsAsync} from '../../controllers/LoginController'
 
-import SetUpStackNavigator from '../navigators/SetUpNavigator'
-import {UserContext} from '../contexts'
+import SetUpStackNavigator from '../../navigators/SetUpNavigator'
+import {UserContext} from '../../contexts'
 
 import {create} from 'react-test-renderer'
 import {useDocumentData} from 'react-firebase-hooks/firestore'

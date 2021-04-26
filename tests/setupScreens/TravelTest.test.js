@@ -1,5 +1,5 @@
 import React from 'react'
-import {Travel} from '../views/Travel'
+import {Travel} from '../../views/Travel'
 
 import {render, waitFor, fireEvent} from '@testing-library/react-native'
 

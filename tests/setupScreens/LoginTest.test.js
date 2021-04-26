@@ -1,5 +1,5 @@
 import React from 'react'
-import {LogIn} from '../views/authNavigationStack/LogIn'
+import {LogIn} from '../../views/authNavigationStack/LogIn'
 
 import {render, waitFor, fireEvent} from '@testing-library/react-native'
 

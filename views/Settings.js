@@ -428,7 +428,7 @@ export const Settings = () => {
     const isValid = workDays.some((item) => item.isSelected === true)
 
     if (!isValid) {
-      Alert.alert('Wrong input!', 'Please select atleast one work day.', [
+      Alert.alert('Wrong input!', 'Please select at least one work day.', [
         {text: 'Okay'},
       ])
       setError('Please select at least one work day.')

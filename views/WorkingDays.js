@@ -11,16 +11,50 @@ import {UserContext} from '../contexts'
 import CustomButtonIcon from '../components/CustomIconButton'
 
 const workStates = [
-  {id: 1, weekDay: 'Mon', isSelected: false},
-  {id: 2, weekDay: 'Tue', isSelected: false},
-  {id: 3, weekDay: 'Wed', isSelected: false},
-  {id: 4, weekDay: 'Thu', isSelected: false},
-  {id: 5, weekDay: 'Fri', isSelected: false},
-  {id: 6, weekDay: 'Sat', isSelected: false},
-  {id: 7, weekDay: 'Sun', isSelected: false},
+  {id: 1, testID: 'mondayID', weekDay: 'Mon', isSelected: false},
+  {id: 2, testID: 'tuesdayID', weekDay: 'Tue', isSelected: false},
+  {
+    id: 3,
+    testID: 'wednesdayID',
+    weekDay: 'Tue',
+    weekDay: 'Wed',
+    isSelected: false,
+  },
+  {
+    id: 4,
+    testID: 'thursdayID',
+    weekDay: 'Tue',
+    weekDay: 'Thu',
+    isSelected: false,
+  },
+  {
+    id: 5,
+    testID: 'fridayID',
+    weekDay: 'Tue',
+    weekDay: 'Fri',
+    isSelected: false,
+  },
+  {
+    id: 6,
+    testID: 'saturdayID',
+    weekDay: 'Tue',
+    weekDay: 'Sat',
+    isSelected: false,
+  },
+  {
+    id: 7,
+    testID: 'sundayID',
+    weekDay: 'Tue',
+    weekDay: 'Sun',
+    isSelected: false,
+  },
 ]
 
-export const WorkingDays = ({navigation}) => {
+// export const WorkingDays = (props, {navigation}) => {
+
+export const WorkingDays = (props) => {
+  console.log('navigation-241', props.navigation)
+
   const {user} = useContext(UserContext)
 
   // const [workDays, setWorkDays] = useState(workStates)
@@ -33,6 +67,8 @@ export const WorkingDays = ({navigation}) => {
         })
       : workStates
   )
+
+  console.log('workDays', workDays[0])
 
   const [error, setError] = useState('')
   useEffect(() => {
@@ -72,6 +108,10 @@ export const WorkingDays = ({navigation}) => {
   }, [])
 
   const toggleHandler = (selectedItem, isSelected) => {
+    if (props.onPress) {
+      props.onPress(selectedItem, isSelected)
+    }
+
     const newArr = workDays.map((item) => {
       if (item.id == selectedItem.id) {
         return {
@@ -90,7 +130,7 @@ export const WorkingDays = ({navigation}) => {
     const isValid = workDays.some((item) => item.isSelected === true)
 
     if (!isValid) {
-      Alert.alert('Wrong input!', 'Please select atleast one work day.', [
+      Alert.alert('Wrong input!', 'Please select at least one work day.', [
         {text: 'Okay'},
       ])
       setError('Please select at least one work day.')
@@ -109,7 +149,7 @@ export const WorkingDays = ({navigation}) => {
 
     await updateUser(user)
 
-    navigation.navigate('WorkingHours')
+    if (props.onSubmit) props.onSubmit() // For CI testing purposes
   }
 
   useEffect(() => {
@@ -136,6 +176,7 @@ export const WorkingDays = ({navigation}) => {
                 <RoundButton
                   key={item.id}
                   item={item}
+                  testID={item.testID}
                   isSelected={item.isSelected}
                   toggleHandler={toggleHandler}
                 />
@@ -149,6 +190,7 @@ export const WorkingDays = ({navigation}) => {
                 <RoundButton
                   key={item.id}
                   item={item}
+                  testID={item.testID}
                   isSelected={item.isSelected}
                   toggleHandler={toggleHandler}
                 />
@@ -159,7 +201,11 @@ export const WorkingDays = ({navigation}) => {
       <View style={styles.submitBtn}>
         <CustomButtonIcon
           title="Submit"
-          onPress={submitHandler}
+          testID="submitID"
+          onPress={() => {
+            submitHandler()
+            props.navigation.navigate('WorkingHours')
+          }}
           iconTwo="keyboard-arrow-right"
         />
       </View>

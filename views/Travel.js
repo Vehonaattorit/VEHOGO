@@ -4,7 +4,6 @@ import {UserContext} from '../contexts'
 import {updateUser} from '../controllers/userController'
 import CustomButtonIcon from '../components/CustomIconButton'
 import {MaterialCommunityIcons} from '@expo/vector-icons'
-
 export const Travel = ({navigation}) => {
   const {user} = useContext(UserContext)
 
