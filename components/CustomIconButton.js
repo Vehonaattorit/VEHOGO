@@ -8,7 +8,7 @@ const CustomButtonIcon = ({onPress, disabled, title, iconOne, iconTwo}) => {
       onPress={onPress}
       style={{
         ...styles.button,
-        backgroundColor: disabled ? 'white' : '#E1F5FD',
+        backgroundColor: disabled ? '#26AAE2' : '#E1F5FD',
       }}
     >
       <View style={styles.iconTwoContainer}>
