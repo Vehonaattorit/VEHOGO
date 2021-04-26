@@ -22,8 +22,15 @@ import {
 } from 'native-base'
 import {Ionicons, FontAwesome5} from '@expo/vector-icons'
 import {color} from '../constants/colors'
+import {UserContext} from '../contexts'
+import {checkWhatDayItIs, timeFormat} from '../utils/utils'
 
-const MyRidesWorkDayEditDialog = (props) => {
+
+const MyRidesWorkDayEditDialog = ({props}) => {
+  const workTrip = props.selectedWorkTrip
+  const workingHours = props.selectedPreferedHours
+  const workTripType = props.workTripType
+  const {user} = useContext(UserContext)
   let TouchableCmp = TouchableOpacity
 
   if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -32,10 +39,33 @@ const MyRidesWorkDayEditDialog = (props) => {
   const workTripActive = true
   const workTripEmpty = false
   const homeTripActive = true
+
+  const [driverText, setDriverText] = useState()
+  const [arrivalTime, setArrivalTime] = useState()
+
+  useEffect(() => {
+    if (workTrip != undefined) {
+      if(workTrip.driverID == user.id)
+      setDriverText('You are the driver')
+      else
+      setDriverText(`Driver name: ${workTrip.driverName}`)
+    
+
+      if (workTrip.driverID != user.id && workTrip.scheduledDrive != undefined) {
+        for (let i = 0; i < workTrip.scheduledDrive.stops.length; i++) {
+          const element = workTrip.scheduledDrive.stops[i];
+          if (element.userID == user.id) {
+            setArrivalTime(timeFormat(element.estimatedArrivalTime.toDate()))
+          }
+        }
+      }
+    }
+  }, [])
+
   return (
     <View style={styles.workDayCard}>
       <View style={styles.workDayTitle}>
-        <Text>MAANANTAI</Text><Text>TO WORK</Text>
+        <Text>{checkWhatDayItIs(workingHours && workingHours.workDayNum)}</Text><Text>To {workTripType}</Text>
       </View>
       <View style={styles.workTripInfoContainer}>
         <View style={styles.workTripInfoTopRow}>
@@ -66,31 +96,33 @@ const MyRidesWorkDayEditDialog = (props) => {
             </View>
           </TouchableCmp>
         </View>
-        <View style={[styles.workTripInfoBottomRow, {backgroundColor: color.lightBlue, justifyContent: 'space-between', paddingHorizontal: 15}]}>
-          <View >
+        <View style={[styles.workTripInfoBottomRow, {backgroundColor: color.lightBlue,minHeight:180, justifyContent: 'space-between', paddingHorizontal: 15}]}>
+          {workTrip == undefined ? <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Text>No work trip setupped yet</Text></View> : <View >
             <Text style={{marginVertical: 10}}>
-              Driver name: Toni
-          </Text>
-            <Text style={{marginVertical: 10}}>
-              Picks you up at 07:35
-          </Text>
-            <Text style={{marginVertical: 10}}>
-              Arrives at work at 07:55
-          </Text>
-            <Text style={{marginVertical: 10}}>
-              Car is 2/3 full
-          </Text>
-          </View>
+              {driverText}
+            </Text>
 
-          <TouchableCmp onPress={() => {console.log('disable / enable')}}>
-            <View style={[styles.workTripButton, {width: 45, height: 45, backgroundColor: workTripEmpty ? color.platina : color.radicalRed}]}>
-              <FontAwesome5
-                name='calendar-times'
-                size={28}
-                color={color.primary}
-              />
-            </View>
-          </TouchableCmp>
+            {arrivalTime &&( <Text style={{marginVertical: 10}}> `Picks you up ${arrivalTime}`</Text>)}
+
+            <Text style={{marginVertical: 10}}>
+              Arrives to {workTripType} at {timeFormat(workTrip.scheduledDrive.end.toDate())}
+          </Text>
+          {workTrip.car && <Text style={{marginVertical: 10}}>
+              Car is {`${parseInt(workTrip.car.availableSeats)-workTrip.scheduledDrive.availableSeats}/${parseInt(workTrip.car.availableSeats)}`} full {workTrip.scheduledDrive.availableSeats == 0 ? '(car full)':''}
+          </Text>}
+          </View>}
+
+          {workTrip == undefined
+            ? <View />
+            : <TouchableCmp onPress={() => {console.log('disable / enable')}}>
+              <View style={[styles.workTripButton, {width: 45, height: 45, backgroundColor: workTripEmpty ? color.platina : color.radicalRed}]}>
+                <FontAwesome5
+                  name='calendar-times'
+                  size={28}
+                  color={color.primary}
+                />
+              </View>
+            </TouchableCmp>}
         </View>
         <View>
           <View style={styles.workTripInfoBottomRow}>
@@ -113,7 +145,7 @@ const MyRidesWorkDayEditDialog = (props) => {
         </View>
       </View>
       <View style={[styles.workTripInfoBottomRow, {}]}>
-        <TouchableCmp onPress={() => {console.log('Cancel')}}>
+        <TouchableCmp onPress={() => props.onCancel()}>
           <View style={[styles.workTripButton, {flex: 1, backgroundColor: color.radicalRed}]}>
             <Text >
               Cancel

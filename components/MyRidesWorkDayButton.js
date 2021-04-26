@@ -26,17 +26,18 @@ import {
 import {Ionicons, FontAwesome5} from '@expo/vector-icons'
 import {color} from '../constants/colors'
 import {getWorkTrip} from '../controllers/workTripController'
-import {checkWhatDayItIs} from '../utils/utils'
+import {checkWhatDayItIs, timeFormat} from '../utils/utils'
 import {format} from 'prettier'
 
 const MyRidesWorkDayButton = ({props}) => {
   const {user} = useContext(UserContext)
   let TouchableCmp = TouchableOpacity
-  const testProp = props
   if (Platform.OS === 'android' && Platform.Version >= 21) {
     TouchableCmp = TouchableNativeFeedback
   }
   const disabled = props.workingHour.disabled != undefined
+  const workingHour = props.workingHour
+  const onClick = props.onClick
   const [workTrip, setWorkTrip] = useState()
   const [homeTrip, setHomeTrip] = useState()
   useEffect(() => {
@@ -93,7 +94,7 @@ const MyRidesWorkDayButton = ({props}) => {
               </Text>
           </View>
         </View>
-          : <WorkTripCard key={`${props.workingHour.workDayNum}1`} props={{workTrip: workTrip}}></WorkTripCard>}
+          : <WorkTripCard key={`${props.workingHour.workDayNum}1`} props={{workTrip: workTrip, workTripType: 'work'}}></WorkTripCard>}
       </View>
       <View style={styles.workTripInfoBottomRow}>
         {disabled ? <View style={[styles.workTripButton, {flex: 1, backgroundColor: color.greyText}]}>
@@ -103,7 +104,7 @@ const MyRidesWorkDayButton = ({props}) => {
               </Text>
           </View>
         </View>
-          : <WorkTripCard key={`${props.workingHour.workDayNum}2`} props={{workTrip: homeTrip}}></WorkTripCard>}
+          : <WorkTripCard key={`${props.workingHour.workDayNum}2`} props={{workTrip: homeTrip, workTripType: 'home'}}></WorkTripCard>}
       </View>
       <View style={styles.workTripInfoBottomRow}>
         <TouchableCmp onPress={() => disabled ? addNewWorkTrip() : clearWorkTrip()}>
@@ -121,8 +122,9 @@ const MyRidesWorkDayButton = ({props}) => {
 
   function WorkTripCard({props}) {
     const workTrip = props.workTrip
+    const workTripType = props.workTripType
     return (
-      <TouchableCmp onPress={() => {console.log('edit workTrip')}}>
+      <TouchableCmp onPress={() => {onClick(workTrip, workingHour, workTripType)}}>
         <View style={[styles.workTripButton, {flex: 1, backgroundColor: workTrip == undefined ? '#FFD101' : 'white', alignItems: 'stretch', paddingTop: 8}]}>
           <View style={styles.workTripInfoBottomRow}>
             {workTrip == undefined ?
@@ -131,7 +133,7 @@ const MyRidesWorkDayButton = ({props}) => {
           </Text> :
               <>
                 <Text>
-                  {workTrip && (workTrip.goingTo == 'work' ? time_format(workTrip.scheduledDrive.end.toDate()) : time_format(workTrip.scheduledDrive.start.toDate()))}
+                  {workTrip && (workTrip.goingTo == 'work' ? timeFormat(workTrip.scheduledDrive.end.toDate()) : timeFormat(workTrip.scheduledDrive.start.toDate()))}
                 </Text>
                 <FontAwesome5
                   name='edit'
@@ -145,16 +147,6 @@ const MyRidesWorkDayButton = ({props}) => {
       </TouchableCmp>
     )
 
-    function time_format(d) {
-      let hours = format_two_digits(d.getHours());
-      let minutes = format_two_digits(d.getMinutes());
-      let seconds = format_two_digits(d.getSeconds());
-      return hours + ":" + minutes;
-    }
-
-    function format_two_digits(n) {
-      return n < 10 ? '0' + n : n;
-    }
   }
 
 }
