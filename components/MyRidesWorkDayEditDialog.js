@@ -23,13 +23,18 @@ import {
 import {Ionicons, FontAwesome5} from '@expo/vector-icons'
 import {color} from '../constants/colors'
 import {UserContext} from '../contexts'
+import firebase from 'firebase'
 import {checkWhatDayItIs, timeFormat} from '../utils/utils'
 import {TimeModal} from '../views/WorkingHours'
+import {updateUser} from '../controllers/userController'
 
+import {getWorkTrip, deleteWorkTrip} from '../controllers/workTripController'
+import {removePassengerFromRoute} from '../utils/passengerRemove'
+import {softUpdateUser, updateUser} from '../controllers/userController'
 
 const MyRidesWorkDayEditDialog = ({props}) => {
   const workTrip = props.selectedWorkTrip
-  const workingHours = props.selectedPreferedHours
+  const [workingHours, setWorkingHours] = useState(props.selectedPreferedHours)
   const workTripType = props.workTripType
   const [modalVisible, setModalVisible] = useState(false)
   const [selectedTime, setSelectedTime] = useState('startDate')
@@ -37,27 +42,32 @@ const MyRidesWorkDayEditDialog = ({props}) => {
   const {user} = useContext(UserContext)
   let TouchableCmp = TouchableOpacity
 
-  const [newEventState, setNewEventState] = useState({
-    startDate:
-      user.preferedWorkingHours[0].workDayStart === undefined
-        ? null
-        : user.preferedWorkingHours[0].workDayStart.toDate()
-        ? user.preferedWorkingHours[0].workDayStart.toDate()
-        : user.preferedWorkingHours[0].workDayStart,
-    endDate:
-      user.preferedWorkingHours[0].workDayEnd === undefined
-        ? null
-        : user.preferedWorkingHours[0].workDayEnd.toDate()
-        ? user.preferedWorkingHours[0].workDayEnd.toDate()
-        : user.preferedWorkingHours[0].workDayEnd,
-  })
-
   const updateValue = (newValue, fieldName) => {
+    console.log('updating value for user id',newValue)
+    
+    const userToUpdate = user
+    let workingHourUpdateIndex = 0
+    for (let i = 0; i < user.preferedWorkingHours.length; i++) {
+      if(user.preferedWorkingHours[i].workDayNum == workingHours.workDayNum){
+        workingHourUpdateIndex = i
+        break
+      }
+      
+    }
+    let workinghoursToUpdate = workingHours
+    if(workTripType =='work'){
+      console.log('updating workday start with index',workingHourUpdateIndex)
+      workinghoursToUpdate.workDayStart = firebase.firestore.Timestamp.fromDate(newValue)
+
+      user.preferedWorkingHours[workingHourUpdateIndex].workDayStart = firebase.firestore.Timestamp.fromDate(newValue)
+    }
+    else{
+      console.log('updating workday end with index',workingHourUpdateIndex)
+      workinghoursToUpdate.workDayEnd = firebase.firestore.Timestamp.fromDate(newValue)
+      user.preferedWorkingHours[workingHourUpdateIndex].workDayEnd = firebase.firestore.Timestamp.fromDate(newValue)
+    }
+    setWorkingHours(workinghoursToUpdate)
     setIsPickerShow(false)
-    setNewEventState({
-      ...newEventState,
-      [fieldName]: newValue,
-    })
   }
 
   const handleModal = (visibility) => {
@@ -93,6 +103,51 @@ const MyRidesWorkDayEditDialog = ({props}) => {
     }
   }, [])
 
+  const deleteWorkTrip = async () => {
+    if (workTrip != undefined) {
+      if (user.id == workTrip.driverID) {
+        await deleteWorkTrip(user.company.id, workTrip.id)
+      } else {
+        let workTripUpdate
+        // filter all stops that DON'T HAVE passenger ID
+        const stops = workTrip.scheduledDrive.stops.filter(
+          (item) => item.userID !== user.id
+        )
+
+        // new stops array without passenger stop
+        workTripUpdate = {
+          ...workTrip,
+          scheduledDrive: {
+            ...workTrip.scheduledDrive,
+            stops: stops,
+          },
+        }
+        workTripUpdate.scheduledDrive.availableSeats += 1
+
+        await removePassengerFromRoute(workTripUpdate, user.company.id, workTrip)
+      }
+    }
+
+
+    user.preferedWorkingHours.forEach(element => {
+
+    if (element.toWorkRefID != undefined && element.toWorkRefID != null) {
+      if (element.toWorkRefID == workTrip.id) {
+        element.toWorkRefID = null
+      }
+    }
+    if (element.toHomeRefID != undefined && element.toHomeRefID != null) {
+      if (element.toHomeRefID == workTrip.id) {
+        element.toHomeRefID = null
+      }
+    }
+    });
+    user.preferedWorkingHours
+    updateUser(user)
+    props.onCancel()
+  }
+
+
   return (
     <View style={styles.workDayCard}>
       <TimeModal
@@ -100,7 +155,7 @@ const MyRidesWorkDayEditDialog = ({props}) => {
         isPickerShow={isPickerShow}
         modalVisible={modalVisible}
         handleModal={handleModal}
-        value={newEventState[selectedTime]}
+        value={workTripType =='work' ?workingHours.workDayStart.toDate() :workingHours.workDayEnd.toDate()}
         onChange={(e, date) => updateValue(date, selectedTime)}
       />
       <View style={styles.workDayTitle}>
@@ -129,7 +184,7 @@ const MyRidesWorkDayEditDialog = ({props}) => {
             <View style={[styles.workTripButton, {alignItems: 'stretch', minWidth: 120}]}>
               <View style={[styles.workTripInfoBottomRow, {alignItems: 'center', borderRadius: 10}]}>
                 <Text >
-                  {timeFormat(workTripType =='work' )}
+                  {timeFormat(workTripType =='work' ?workingHours.workDayStart.toDate() :workingHours.workDayEnd.toDate())}
                   </Text>
                 <FontAwesome5
                   name='clock'
@@ -158,7 +213,10 @@ const MyRidesWorkDayEditDialog = ({props}) => {
 
           {workTrip == undefined
             ? <View />
-            : <TouchableCmp onPress={() => {console.log('disable / enable')}}>
+            : <TouchableCmp onPress={() => {
+            console.log('disable / enable')
+            deleteWorkTrip()
+            }}>
               <View style={[styles.workTripButton, {width: 45, height: 45, backgroundColor: workTripEmpty ? color.platina : color.radicalRed}]}>
                 <FontAwesome5
                   name='calendar-times'
@@ -196,7 +254,7 @@ const MyRidesWorkDayEditDialog = ({props}) => {
             </Text>
           </View>
         </TouchableCmp>
-        <TouchableCmp onPress={() => {console.log('Save')}}>
+        <TouchableCmp onPress={async () => {await updateUser(user); props.onCancel()}}>
           <View style={[styles.workTripButton, {flex: 3, backgroundColor: color.malachiteGreen}]}>
             <Text style={{color: workTripEmpty ? color.greyText : 'black'}}>
               Save
