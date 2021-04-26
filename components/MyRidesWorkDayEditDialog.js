@@ -89,10 +89,6 @@ const MyRidesWorkDayEditDialog = ({props}) => {
       }
     }
 
-    const newPreferedWorkingHours = user.preferedWorkingHours.filter(
-      (item) => item.toWorkRefID !== workTrip.id
-    )
-
 
     user.preferedWorkingHours.forEach(element => {
 
