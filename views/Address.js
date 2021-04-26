@@ -89,7 +89,13 @@ export const Address = ({navigation}) => {
         <FontAwesome name="home" size={300} color="#26AAE2" />
       </View>
       <View style={styles.textContainer}>
-        <Text style={{fontSize: 24, justifyContent: 'center'}}>
+        <Text
+          style={{
+            fontSize: 24,
+            justifyContent: 'center',
+            fontFamily: 'open-sans-regular',
+          }}
+        >
           Please enter your home address
         </Text>
       </View>

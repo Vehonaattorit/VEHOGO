@@ -150,17 +150,14 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     marginBottom: 10,
-    marginLeft: 10,
-    marginRight: 10,
+    marginHorizontal: 10,
     alignSelf: 'stretch',
   },
-
   inputContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#E1F5FD',
-    marginLeft: 30,
-    marginRight: 30,
+    marginHorizontal: 30,
     borderRadius: 5,
     padding: 10,
     shadowColor: 'rgba(0, 0, 0, 0.1)',
@@ -169,7 +166,6 @@ const styles = StyleSheet.create({
     shadowRadius: 15,
     shadowOffset: {width: 1, height: 13},
   },
-
   companyCodeBtnContainer: {
     borderRadius: 5,
     marginLeft: 5,
