@@ -16,6 +16,11 @@ web-build/
 google-services.json
 *.log
 
-app.json
 
+#  
 google-services.json
+# END
+
+# Hide app.json & google-places.json that have API keys
+app-standalone.json
+google-services-standalone.json
