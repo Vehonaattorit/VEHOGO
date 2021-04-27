@@ -6,12 +6,14 @@ import Constants from 'expo-constants'
 import * as Permissions from 'expo-permissions'
 import * as Notifications from 'expo-notifications'
 
+// Import for checking if using / testing web app
+import {Platform} from 'react-native'
 export async function login(email, password) {
   await firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
     .then((user) => {
-      registerForPushNotificationsAsync(user)
+      if (Platform.OS !== 'web') registerForPushNotificationsAsync(user)
     })
 }
 

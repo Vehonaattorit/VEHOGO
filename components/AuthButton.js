@@ -2,13 +2,14 @@ import React from 'react'
 import {TouchableOpacity, StyleSheet, Text, Platform} from 'react-native'
 import {color} from '../constants/colors'
 
-export const AuthButton = ({onPress, title, type, width}) => {
+export const AuthButton = ({onPress, testID, title, type, width}) => {
   const defaultButton = type == undefined || type == 'elevated'
   const textButton = type == 'text'
 
   return (
     <TouchableOpacity
       onPress={onPress}
+      testID={testID}
       style={{
         justifyContent: 'center',
         alignItems: 'center',

@@ -57,12 +57,14 @@ export const LogIn = ({navigation, scrollRef}) => {
       style={styles.container}
     >
       <Image
+        testID="vehologo"
         source={require('../../images/vehogo_logo_musta_RGB.png')}
         style={{width: 150, height: 170, marginBottom: 30}}
       />
       <View style={{width: Dimensions.get('window').width * 0.8}}>
         <Input
-          accessibilityLabel="Email"
+          testID="emailInput"
+          name="email"
           autoCapitalize="none"
           placeholder="Email"
           leftIcon={
@@ -73,6 +75,7 @@ export const LogIn = ({navigation, scrollRef}) => {
         />
 
         <Input
+          testID="passwordInput"
           placeholder="Password"
           errorStyle={{color: 'red'}}
           value={password}
@@ -86,9 +89,15 @@ export const LogIn = ({navigation, scrollRef}) => {
       </View>
       <View style={styles.btnContainer}>
         <View style={styles.logInBtn}>
-          <AuthButton style={styles.btns} title="Login" onPress={logIn} />
+          <AuthButton
+            testID="loginBtn"
+            style={styles.btns}
+            title="Login"
+            onPress={logIn}
+          />
         </View>
         <AuthButton
+          testID="registerBtn"
           style={styles.btns}
           title="or register"
           type="text"
