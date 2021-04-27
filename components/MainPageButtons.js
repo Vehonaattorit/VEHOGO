@@ -146,10 +146,17 @@ const MainPageButtons = ({
           color={color.darkBlue}
         />
       ),
-      onPress: () =>
-        navigation.navigate('DriverStartRide', {
-          workTrip: startingRide,
-        }),
+      onPress: () => {
+
+        if (startingRide != undefined) {
+          navigation.navigate('DriverStartRide', {
+            workTrip: startingRide,
+          })
+        } else {
+          console.log('Next ride is not defined')
+        }
+
+      },
     },
     {
       id: '4',
@@ -190,7 +197,7 @@ const MainPageButtons = ({
   }
 
   useEffect(() => {
-    console.log('trips in mainButtons',drivingTrips)
+    console.log('trips in mainButtons', drivingTrips)
     if (drivingTrips != undefined && drivingTrips.length > 0) {
       getNextRide()
     }

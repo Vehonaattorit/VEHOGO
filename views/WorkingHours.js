@@ -69,8 +69,8 @@ export const TimeModal = ({
             mode="time"
             is24Hour={true}
             onChange={(e, date) => {
-              setIsPickerShow(false)
               if (date) onChange(e, date)
+              setIsPickerShow(false)
             }}
             value={value || new Date()}
           />
