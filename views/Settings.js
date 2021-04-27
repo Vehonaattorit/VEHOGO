@@ -34,6 +34,9 @@ import {setupWorkTripDocs} from '../utils/utils'
 import {signOut} from '../controllers/LoginController'
 import {updateCompanyCity} from '../controllers/companyCitiesController'
 import {updateCompany} from '../controllers/companyController'
+
+
+
 //--------------------WORKING HOURS-----------------------
 
 const DateTimeInput = (props) => {
@@ -250,6 +253,8 @@ export const Settings = () => {
     user.city = data.city
     user.homeLocation = data.point
 
+    console.log('user.homeAddress', user.homeAddress)
+
     await updateUser(user)
   }
 
@@ -359,7 +364,7 @@ export const Settings = () => {
     const isValid = workDays.some((item) => item.isSelected === true)
 
     if (!isValid) {
-      Alert.alert('Wrong input!', 'Please select atleast one work day.', [
+      Alert.alert('Wrong input!', 'Please select at least one work day.', [
         {text: 'Okay'},
       ])
       setError('Please select at least one work day.')
@@ -772,7 +777,7 @@ export const Settings = () => {
               <TouchableOpacity
                 style={styles.poweredBtns}
                 onPress={() => {
-                  submitHandler
+                  submitHandler()
                   setIsWorkDaysVisible(false)
                 }}
               >
@@ -853,7 +858,7 @@ export const Settings = () => {
               <TouchableOpacity
                 style={styles.poweredBtns}
                 onPress={() => {
-                  timeSubmitHandler
+                  timeSubmitHandler()
                   setIsWorkHoursVisible(false)
                 }}
               >

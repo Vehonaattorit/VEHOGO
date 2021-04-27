@@ -54,7 +54,7 @@ import HeaderButton from '../components/CustomHeaderButton'
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 
-export const MainPage = ({navigation}) => {
+export const MainPage = (props) => {
   const db = firebase.firestore()
   console.log('Inside MainPage')
   const {user} = useContext(UserContext)
@@ -249,7 +249,8 @@ export const MainPage = ({navigation}) => {
   }, [user.travelPreference])
 
   useEffect(() => {
-    navigation.setOptions({
+    // if (props.navigation.setOptions) {
+    props.navigation.setOptions({
       headerRight: () => (
         <HeaderButtons HeaderButtonComponent={HeaderButton}>
           {user.travelPreference === 'passenger' && (
@@ -262,19 +263,21 @@ export const MainPage = ({navigation}) => {
           )}
           <Item
             title="Account Settings"
+            testID="accountSettingsID"
             iconComponent={MaterialCommunityIcons}
             iconName="account-cog"
-            onPress={() => navigation.navigate('Settings')}
+            onPress={() => props.navigation.navigate('Settings')}
           />
           <Item
             title="Account Settings"
             iconComponent={MaterialCommunityIcons}
             iconName="calendar"
-            onPress={() => navigation.navigate('MyRides')}
+            onPress={() => props.navigation.navigate('MyRides')}
           />
         </HeaderButtons>
       ),
     })
+    // }
   }, [])
 
   const displayPassengerList = () => {
@@ -284,8 +287,7 @@ export const MainPage = ({navigation}) => {
         {/* // DOES NOT WORK PROPERLY. activeRide is not functioning */}
         {activeRide && (
           <DriverIsOnHisWayBar
-            user={user}
-            navigation={navigation}
+            navigation={props.navigation}
             activeRide={activeRide}
           />
         )}
@@ -300,7 +302,7 @@ export const MainPage = ({navigation}) => {
             isLoading={isPassengerLoading}
             user={user}
             extraDay={extraDay}
-            navigation={navigation}
+            navigation={props.navigation}
             dataArray={passengerTrips}
           />
         </View>
@@ -316,13 +318,13 @@ export const MainPage = ({navigation}) => {
             <Container>
               <RideStartBar
                 user={user}
-                navigation={navigation}
+                navigation={props.navigation}
                 driverTrips={driverTrips}
               ></RideStartBar>
 
               <View style={styles.listView}>
                 <DriverTripList
-                  navigation={navigation}
+                  navigation={props.navigation}
                   driverTrips={driverTrips}
                 />
               </View>
@@ -401,16 +403,25 @@ export const MainPage = ({navigation}) => {
 
           <View>
             {user.travelPreference === 'passenger' ? (
-              <MainPageButtons
-                user={user}
-                travelPreference={user.travelPreference}
-                navigation={navigation}
-              />
+              <>
+                <MainPageButtons
+                  user={user}
+                  testIDs={[
+                    'calendarID',
+                    'requestsID',
+                    'startRideID',
+                    'carsID',
+                  ]}
+                  travelPreference={user.travelPreference}
+                  navigation={props.navigation}
+                />
+              </>
             ) : (
               <MainPageButtons
                 user={user}
+                testIDs={['calendarID', 'requestsID', 'startRideID', 'carsID']}
                 travelPreference={user.travelPreference}
-                navigation={navigation}
+                navigation={props.navigation}
                 drivingTrips={driverTrips}
               />
             )}

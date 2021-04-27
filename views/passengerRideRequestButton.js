@@ -183,7 +183,6 @@ const PassengerRideRequestButton = ({
     //setAlreadyRequested(true)
   }*/
 
-
   const cancelRide = async () => {
     if (!alreadyRequested) {
       let workTripUpdate
@@ -209,7 +208,11 @@ const PassengerRideRequestButton = ({
           text: 'Yes',
           style: 'destructive',
           onPress: async () => {
-            await removePassengerFromRoute(workTripUpdate, user.company.id, workTrip)
+            await removePassengerFromRoute(
+              workTripUpdate,
+              user.company.id,
+              workTrip
+            )
             navigation.popToTop()
           },
         },
@@ -245,16 +248,16 @@ const PassengerRideRequestButton = ({
 
 const styles = StyleSheet.create({
   button: {
+    marginBottom: 10,
     justifyContent: 'center',
     backgroundColor: '#26aae2',
     borderRadius: 15,
     width: '100%',
   },
   buttons: {
-    flex: 1,
+    backgroundColor: color.lightBlue,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: 20,
   },
   title: {
     fontSize: 18,

@@ -2,9 +2,10 @@ import React, {useState} from 'react'
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'
 import {color} from '../constants/colors'
 
-export const RoundButton = ({toggleHandler, item, isSelected}) => {
+export const RoundButton = ({toggleHandler, item, isSelected, testID}) => {
   return (
     <TouchableOpacity
+      testID={testID}
       onPress={() => toggleHandler(item, !isSelected)}
       style={{
         ...styles.roundButton,

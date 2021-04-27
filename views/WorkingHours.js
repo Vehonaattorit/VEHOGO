@@ -8,6 +8,7 @@ import {
   View,
   Alert,
 } from 'react-native'
+
 import DateTimePicker from '@react-native-community/datetimepicker'
 import {MaterialCommunityIcons} from '@expo/vector-icons'
 import {UserContext} from '../contexts'
@@ -26,12 +27,21 @@ const DateTimeInput = (props) => {
     props.onChange('', new Date())
   }, [])
 
+  const handleConfirm = (date) => {
+    console.warn('A date has been picked: ', date)
+    // hideDatePicker()
+  }
+
   return (
     <View style={Platform.OS === 'android' ? styles.dateTime : null}>
       {showTimePicker && (
         <DateTimePicker
+          testID="dateTimePickerID"
+          accessible={true}
+          accessibilityLabel="dateTimePickerLabel"
           display={Platform.OS === 'ios' ? 'spinner' : 'default'}
           mode="time"
+          onConfirm={handleConfirm}
           value={props.value || new Date()}
           onChange={(e, date) => {
             setShowTimePicker(Platform.OS === 'ios')
@@ -117,25 +127,27 @@ export const TimeModal = ({
   )
 }
 
-export const WorkingHours = ({navigation}) => {
+export const WorkingHours = (props) => {
   const {user} = useContext(UserContext)
 
   console.log('user', user.preferedWorkingHours)
 
   // If starting and ending time was found in db, set fetched values instead of default
   const [newEventState, setNewEventState] = useState({
-    startDate:
-      user.preferedWorkingHours[0].workDayStart === undefined
+    startDate: user.preferedWorkingHours
+      ? user.preferedWorkingHours[0].workDayStart === undefined
         ? null
         : user.preferedWorkingHours[0].workDayStart.toDate()
         ? user.preferedWorkingHours[0].workDayStart.toDate()
-        : user.preferedWorkingHours[0].workDayStart,
-    endDate:
-      user.preferedWorkingHours[0].workDayEnd === undefined
+        : user.preferedWorkingHours[0].workDayStart
+      : new Date(),
+    endDate: user.preferedWorkingHours
+      ? user.preferedWorkingHours[0].workDayEnd === undefined
         ? null
         : user.preferedWorkingHours[0].workDayEnd.toDate()
         ? user.preferedWorkingHours[0].workDayEnd.toDate()
-        : user.preferedWorkingHours[0].workDayEnd,
+        : user.preferedWorkingHours[0].workDayEnd
+      : new Date(),
   })
 
   const updateValue = (newValue, fieldName) => {
@@ -185,7 +197,7 @@ export const WorkingHours = ({navigation}) => {
 
     updateUser(user)
 
-    navigation.navigate('SetUpInit')
+    props.navigation.navigate('SetUpInit')
   }
 
   const handleModal = (visibility) => {
@@ -219,8 +231,8 @@ export const WorkingHours = ({navigation}) => {
       <Text style={styles.title}>
         Please enter the time your work starts and ends
       </Text>
-
       <CustomButtonIcon
+        testID="startTimeID"
         title={
           newEventState.startDate
             ? formatTime(newEventState.startDate)
@@ -234,6 +246,7 @@ export const WorkingHours = ({navigation}) => {
       />
 
       <CustomButtonIcon
+        testID="endTimeID"
         title={
           newEventState.endDate ? formatTime(newEventState.endDate) : 'End time'
         }

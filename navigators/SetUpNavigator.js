@@ -88,7 +88,13 @@ function SetUpStackNavigator() {
             title: 'Working Days',
           }}
         />
-        <Stack.Screen name="SetUpInit" component={SetUpInit} />
+        <Stack.Screen
+          options={{
+            title: '',
+          }}
+          name="SetUpInit"
+          component={SetUpInit}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   )

@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef, useContext} from 'react'
 import {UserContext} from '../contexts'
 import {StyleSheet, Dimensions, Image} from 'react-native'
-import {Content, Container, Text, View} from 'native-base'
+import {Content, Container, ScrollView, Button, Text, View} from 'native-base'
 import MapView, {Marker} from 'react-native-maps'
 import PassengerRideRequestButton from './passengerRideRequestButton'
 import PassengerAcceptRefuseButton from './passengerAcceptRefuseButton'
@@ -9,6 +9,15 @@ import decodePolyline from 'decode-google-map-polyline'
 import {checkWhatDayItIs, drivingTime} from '../utils/utils'
 import {getWorkTrip} from '../controllers/workTripController'
 import moment from 'moment'
+
+import {color} from '../constants/colors'
+
+// Icons
+import {
+  Ionicons,
+  FontAwesome5,
+  MaterialCommunityIcons,
+} from '@expo/vector-icons'
 
 export const DriverAcceptRefuse = ({navigation, route}) => {
   const {
@@ -117,122 +126,205 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
           {markers}
         </MapView>
       </Container>
+      <View style={styles.columnContainer}>
+        <View style={styles.rowContainer}>
+          <View style={styles.rowItemStartContainer}>
+            <View>
+              <Ionicons name="person" size={24} color={color.lightBlack} />
+            </View>
 
-      <Container style={styles.requestAcceptRefuseContent}>
-        <Content padder>
-          <View style={styles.info}>
-            <Text style={styles.text}>
-              {rideRequest == undefined
-                ? singleItem.driverName
-                : rideRequest.userName}
-            </Text>
-            <Text style={styles.text}>2 km</Text>
+            <View style={styles.textItemContainer}>
+              <Text style={styles.rowContainerText}>
+                {rideRequest == undefined
+                  ? singleItem.driverName
+                  : rideRequest.userName}
+              </Text>
+            </View>
           </View>
+          <View style={styles.rowItemEndContainer}>
+            <View>
+              <FontAwesome5 name="route" size={24} color={color.lightBlack} />
+            </View>
 
-          <View style={styles.info}>
-            <Text style={styles.text}>
-              {'Home: ' +
-                (rideRequest == undefined
+            <View style={styles.textItemContainer}>
+              <Text style={styles.rowContainerText}>2 km</Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.breakPoint}></View>
+        <View style={styles.rowContainer}>
+          <View style={styles.rowItemStartContainer}>
+            <Ionicons name="home" size={24} color={color.lightBlack} />
+
+            <View style={styles.textItemContainer}>
+              <Text style={styles.rowContainerText}>
+                {rideRequest == undefined
                   ? singleItem.goingTo === 'home'
                     ? stops[stops.length - 1].address
                     : stops[0].address
-                  : rideRequest.homeAddress)}
-            </Text>
-            <Text style={styles.text}>{drivingTime(singleItem)} min</Text>
+                  : rideRequest.homeAddress}
+              </Text>
+            </View>
           </View>
-          <View style={styles.info}>
-            <Text style={styles.text}>
-              {rideRequest == undefined
-                ? checkWhatDayItIs(singleItem.workDayNum)
-                : checkWhatDayItIs(rideRequest.workDayNum)}
-            </Text>
-            <Text style={styles.text}>
-              {singleItem.goingTo === 'home' ? 'Going ' : 'Going to'}
-              {rideRequest == undefined
-                ? singleItem.goingTo.charAt(0).toUpperCase() +
-                  singleItem.goingTo.slice(1)
-                : singleItem.goingTo.charAt(0).toUpperCase() +
-                  singleItem.goingTo.slice(1)}
-            </Text>
-          </View>
-          <View style={styles.info}>
-            <Text style={styles.text}>
-              {rideRequest == undefined
-                ? singleItem.goingTo === 'home'
-                  ? 'Leaves work at: ' +
-                    moment(singleItem.scheduledDrive.start.toDate()).format(
-                      'HH:mm'
-                    )
-                  : 'Leaves home at: ' +
-                    moment(singleItem.scheduledDrive.start.toDate()).format(
-                      'HH:mm'
-                    )
-                : 'Work times: ' +
-                  moment(rideRequest.start.toDate()).format('HH:mm') +
-                  ' - ' +
-                  moment(rideRequest.end.toDate()).format('HH:mm')}
-            </Text>
-          </View>
+          <View style={styles.rowItemEndContainer}>
+            <View>
+              <Ionicons name="time-sharp" size={24} color={color.lightBlack} />
+            </View>
 
-          {user.travelPreference == 'passenger' ? (
-            <PassengerRideRequestButton
-              navigation={navigation}
-              user={user}
-              isPassengerIncluded={isPassengerIncluded}
-              workTrip={singleItem}
-            />
-          ) : (
-            <PassengerAcceptRefuseButton
-              user={user}
-              workTrip={singleItem}
-              rideRequest={rideRequest}
-              navigation={navigation}
-            />
-          )}
-        </Content>
-      </Container>
+            <View style={styles.textItemContainer}>
+              <Text style={styles.rowContainerText}>
+                {drivingTime(singleItem)} min
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.breakPoint}></View>
+
+        <View style={styles.rowContainer}>
+          <View style={styles.rowItemStartContainer}>
+            <View>
+              <MaterialCommunityIcons
+                name="calendar"
+                size={24}
+                color={color.lightBlack}
+              />
+            </View>
+
+            <View style={styles.textItemContainer}>
+              <Text style={styles.rowContainerText}>
+                {rideRequest == undefined
+                  ? checkWhatDayItIs(singleItem.workDayNum)
+                  : checkWhatDayItIs(rideRequest.workDayNum)}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.rowItemEndContainer}>
+            <View>
+              <MaterialCommunityIcons
+                name="wallet-travel"
+                size={24}
+                color={color.lightBlack}
+              />
+            </View>
+
+            <View style={styles.textItemContainer}>
+              <Text style={styles.rowContainerText}>
+                {singleItem.goingTo === 'home' ? 'Going ' : 'Going to '}
+                {rideRequest == undefined
+                  ? singleItem.goingTo.charAt(0).toUpperCase() +
+                    singleItem.goingTo.slice(1)
+                  : singleItem.goingTo.charAt(0).toUpperCase() +
+                    singleItem.goingTo.slice(1)}
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View style={styles.breakPoint}></View>
+
+        <View style={styles.rowContainer}>
+          <View style={styles.rowItemStartContainer}>
+            <View>
+              <Ionicons name="car" size={24} color={color.lightBlack} />
+            </View>
+
+            <View style={styles.textItemContainer}>
+              <Text style={styles.rowContainerText}>
+                {rideRequest == undefined
+                  ? singleItem.goingTo === 'home'
+                    ? 'Leaves work at: ' +
+                      moment(singleItem.scheduledDrive.start.toDate()).format(
+                        'HH:mm'
+                      )
+                    : 'Leaves home at: ' +
+                      moment(singleItem.scheduledDrive.start.toDate()).format(
+                        'HH:mm'
+                      )
+                  : 'Work times: ' +
+                    moment(rideRequest.start.toDate()).format('HH:mm') +
+                    ' - ' +
+                    moment(rideRequest.end.toDate()).format('HH:mm')}
+              </Text>
+            </View>
+          </View>
+        </View>
+      </View>
+
+      {user.travelPreference == 'passenger' ? (
+        <PassengerRideRequestButton
+          navigation={navigation}
+          user={user}
+          isPassengerIncluded={isPassengerIncluded}
+          workTrip={singleItem}
+        />
+      ) : (
+        <PassengerAcceptRefuseButton
+          user={user}
+          workTrip={singleItem}
+          rideRequest={rideRequest}
+          navigation={navigation}
+        />
+      )}
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  text: {
-    fontFamily: 'open-sans-semi-bold',
-  },
   view: {
     flex: 1,
     display: 'flex',
     backgroundColor: '#26aae2',
   },
   requestMapContent: {
-    flex: 2.0,
+    flex: 6,
     backgroundColor: 'black',
-  },
-  requestAcceptRefuseContent: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  buttons: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 20,
-  },
-  button: {
-    backgroundColor: '#26aae2',
-    borderRadius: 15,
-  },
-  info: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    margin: 10,
-  },
-  btntxt: {
-    color: 'white',
   },
   mapStyle: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
+  },
+  breakPoint: {
+    height: 1,
+    backgroundColor: color.primaryLight,
+  },
+  button: {
+    width: '100%',
+    justifyContent: 'center',
+    backgroundColor: color.darkBlue,
+    borderRadius: 10,
+  },
+  btntxt: {
+    fontFamily: 'open-sans-regular',
+    color: 'white',
+  },
+
+  columnContainer: {
+    flex: 3,
+    backgroundColor: color.lightBlue,
+  },
+  rowContainer: {
+    flex: 1,
+    margin: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  rowItemStartContainer: {
+    flex: 1,
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  rowItemEndContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  textItemContainer: {
+    height: '100%',
+    justifyContent: 'center',
+    alignContent: 'center',
+    marginLeft: 10,
+  },
+  rowContainerText: {
+    fontSize: 18,
+    fontFamily: 'open-sans-regular',
   },
 })

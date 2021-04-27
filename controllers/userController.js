@@ -50,8 +50,6 @@ export async function getUser(user) {
       .withConverter(userConverter)
       .get()
 
-    console.log('getUser', doc.data())
-
     return doc.data()
   } catch (error) {
     console.error('Error writing document: ', error)
