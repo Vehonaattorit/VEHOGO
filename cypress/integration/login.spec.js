@@ -1,5 +1,5 @@
 describe('Login Page', () => {
-  beforeEach({retries: 7}, () => {
+  beforeEach(() => {
     // cy.visit('localhost:)
 
     cy.visit('http://localhost:19006')
