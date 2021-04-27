@@ -4,7 +4,7 @@ import {
   Dimensions,
   StyleSheet,
   Platform,
-  TouchableNativeFeedback
+  TouchableNativeFeedback,
 } from 'react-native'
 import {TouchableOpacity} from 'react-native-gesture-handler'
 import {
@@ -26,7 +26,6 @@ import {UserContext} from '../contexts'
 import firebase from 'firebase'
 import {checkWhatDayItIs, timeFormat} from '../utils/utils'
 import {TimeModal} from '../views/WorkingHours'
-import {updateUser} from '../controllers/userController'
 
 import {getWorkTrip, deleteWorkTrip} from '../controllers/workTripController'
 import {removePassengerFromRoute} from '../utils/passengerRemove'
@@ -43,28 +42,34 @@ const MyRidesWorkDayEditDialog = ({props}) => {
   let TouchableCmp = TouchableOpacity
 
   const updateValue = (newValue, fieldName) => {
-    console.log('updating value for user id',newValue)
-    
+    console.log('updating value for user id', newValue)
+
     const userToUpdate = user
     let workingHourUpdateIndex = 0
     for (let i = 0; i < user.preferedWorkingHours.length; i++) {
-      if(user.preferedWorkingHours[i].workDayNum == workingHours.workDayNum){
+      if (user.preferedWorkingHours[i].workDayNum == workingHours.workDayNum) {
         workingHourUpdateIndex = i
         break
       }
-      
     }
     let workinghoursToUpdate = workingHours
-    if(workTripType =='work'){
-      console.log('updating workday start with index',workingHourUpdateIndex)
-      workinghoursToUpdate.workDayStart = firebase.firestore.Timestamp.fromDate(newValue)
+    if (workTripType == 'work') {
+      console.log('updating workday start with index', workingHourUpdateIndex)
+      workinghoursToUpdate.workDayStart = firebase.firestore.Timestamp.fromDate(
+        newValue
+      )
 
-      user.preferedWorkingHours[workingHourUpdateIndex].workDayStart = firebase.firestore.Timestamp.fromDate(newValue)
-    }
-    else{
-      console.log('updating workday end with index',workingHourUpdateIndex)
-      workinghoursToUpdate.workDayEnd = firebase.firestore.Timestamp.fromDate(newValue)
-      user.preferedWorkingHours[workingHourUpdateIndex].workDayEnd = firebase.firestore.Timestamp.fromDate(newValue)
+      user.preferedWorkingHours[
+        workingHourUpdateIndex
+      ].workDayStart = firebase.firestore.Timestamp.fromDate(newValue)
+    } else {
+      console.log('updating workday end with index', workingHourUpdateIndex)
+      workinghoursToUpdate.workDayEnd = firebase.firestore.Timestamp.fromDate(
+        newValue
+      )
+      user.preferedWorkingHours[
+        workingHourUpdateIndex
+      ].workDayEnd = firebase.firestore.Timestamp.fromDate(newValue)
     }
     setWorkingHours(workinghoursToUpdate)
     setIsPickerShow(false)
@@ -86,15 +91,15 @@ const MyRidesWorkDayEditDialog = ({props}) => {
 
   useEffect(() => {
     if (workTrip != undefined) {
-      if(workTrip.driverID == user.id)
-      setDriverText('You are the driver')
-      else
-      setDriverText(`Driver name: ${workTrip.driverName}`)
+      if (workTrip.driverID == user.id) setDriverText('You are the driver')
+      else setDriverText(`Driver name: ${workTrip.driverName}`)
 
-
-      if (workTrip.driverID != user.id && workTrip.scheduledDrive != undefined) {
+      if (
+        workTrip.driverID != user.id &&
+        workTrip.scheduledDrive != undefined
+      ) {
         for (let i = 0; i < workTrip.scheduledDrive.stops.length; i++) {
-          const element = workTrip.scheduledDrive.stops[i];
+          const element = workTrip.scheduledDrive.stops[i]
           if (element.userID == user.id) {
             setArrivalTime(timeFormat(element.estimatedArrivalTime.toDate()))
           }
@@ -124,29 +129,30 @@ const MyRidesWorkDayEditDialog = ({props}) => {
         }
         workTripUpdate.scheduledDrive.availableSeats += 1
 
-        await removePassengerFromRoute(workTripUpdate, user.company.id, workTrip)
+        await removePassengerFromRoute(
+          workTripUpdate,
+          user.company.id,
+          workTrip
+        )
       }
     }
 
-
-    user.preferedWorkingHours.forEach(element => {
-
-    if (element.toWorkRefID != undefined && element.toWorkRefID != null) {
-      if (element.toWorkRefID == workTrip.id) {
-        element.toWorkRefID = null
+    user.preferedWorkingHours.forEach((element) => {
+      if (element.toWorkRefID != undefined && element.toWorkRefID != null) {
+        if (element.toWorkRefID == workTrip.id) {
+          element.toWorkRefID = null
+        }
       }
-    }
-    if (element.toHomeRefID != undefined && element.toHomeRefID != null) {
-      if (element.toHomeRefID == workTrip.id) {
-        element.toHomeRefID = null
+      if (element.toHomeRefID != undefined && element.toHomeRefID != null) {
+        if (element.toHomeRefID == workTrip.id) {
+          element.toHomeRefID = null
+        }
       }
-    }
-    });
+    })
     user.preferedWorkingHours
     updateUser(user)
     props.onCancel()
   }
-
 
   return (
     <View style={styles.workDayCard}>
@@ -155,92 +161,180 @@ const MyRidesWorkDayEditDialog = ({props}) => {
         isPickerShow={isPickerShow}
         modalVisible={modalVisible}
         handleModal={handleModal}
-        value={workTripType =='work' ?workingHours.workDayStart.toDate() :workingHours.workDayEnd.toDate()}
+        value={
+          workTripType == 'work'
+            ? workingHours.workDayStart.toDate()
+            : workingHours.workDayEnd.toDate()
+        }
         onChange={(e, date) => updateValue(date, selectedTime)}
       />
       <View style={styles.workDayTitle}>
-        <Text>{checkWhatDayItIs(workingHours && workingHours.workDayNum)}</Text><Text>To {workTripType}</Text>
+        <Text>{checkWhatDayItIs(workingHours && workingHours.workDayNum)}</Text>
+        <Text>To {workTripType}</Text>
       </View>
       <View style={styles.workTripInfoContainer}>
         <View style={styles.workTripInfoTopRow}>
-          <TouchableCmp onPress={() => {console.log('disable / enable')}}>
-            <View style={[styles.workTripButton, {alignItems: 'stretch', minWidth: 180}]}>
-              <View style={[styles.workTripInfoBottomRow, {alignItems: 'center', borderRadius: 10}]}>
-                <Text>
-                  Ratsukatu 4</Text>
-                <FontAwesome5
-                  name='edit'
-                  size={25}
-                  color={color.primary}
-                />
+          <TouchableCmp
+            onPress={() => {
+              console.log('disable / enable')
+            }}
+          >
+            <View
+              style={[
+                styles.workTripButton,
+                {alignItems: 'stretch', minWidth: 180},
+              ]}
+            >
+              <View
+                style={[
+                  styles.workTripInfoBottomRow,
+                  {alignItems: 'center', borderRadius: 10},
+                ]}
+              >
+                <Text>Ratsukatu 4</Text>
+                <FontAwesome5 name="edit" size={25} color={color.primary} />
               </View>
             </View>
           </TouchableCmp>
-          <TouchableCmp onPress={() => {
-          setModalVisible(true)
-          setSelectedTime('endDate')
-          setIsPickerShow(true)
-        }}>
-            <View style={[styles.workTripButton, {alignItems: 'stretch', minWidth: 120}]}>
-              <View style={[styles.workTripInfoBottomRow, {alignItems: 'center', borderRadius: 10}]}>
-                <Text >
-                  {timeFormat(workTripType =='work' ?workingHours.workDayStart.toDate() :workingHours.workDayEnd.toDate())}
-                  </Text>
-                <FontAwesome5
-                  name='clock'
-                  size={25}
-                  color={color.primary}
-                />
+          <TouchableCmp
+            onPress={() => {
+              setModalVisible(true)
+              setSelectedTime('endDate')
+              setIsPickerShow(true)
+            }}
+          >
+            <View
+              style={[
+                styles.workTripButton,
+                {alignItems: 'stretch', minWidth: 120},
+              ]}
+            >
+              <View
+                style={[
+                  styles.workTripInfoBottomRow,
+                  {alignItems: 'center', borderRadius: 10},
+                ]}
+              >
+                <Text>
+                  {timeFormat(
+                    workTripType == 'work'
+                      ? workingHours.workDayStart.toDate()
+                      : workingHours.workDayEnd.toDate()
+                  )}
+                </Text>
+                <FontAwesome5 name="clock" size={25} color={color.primary} />
               </View>
             </View>
           </TouchableCmp>
         </View>
-        <View style={[styles.workTripInfoBottomRow, {backgroundColor: color.lightBlue,minHeight:180, justifyContent: 'space-between', paddingHorizontal: 15}]}>
-          {workTrip == undefined ? <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Text>No work trip setupped yet</Text></View> : <View >
-            <Text style={{marginVertical: 10}}>
-              {driverText}
-            </Text>
+        <View
+          style={[
+            styles.workTripInfoBottomRow,
+            {
+              backgroundColor: color.lightBlue,
+              minHeight: 180,
+              justifyContent: 'space-between',
+              paddingHorizontal: 15,
+            },
+          ]}
+        >
+          {workTrip == undefined ? (
+            <View
+              style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
+            >
+              <Text>No work trip setupped yet</Text>
+            </View>
+          ) : (
+            <View>
+              <Text style={{marginVertical: 10}}>{driverText}</Text>
 
-            {arrivalTime &&( <Text style={{marginVertical: 10}}> `Picks you up ${arrivalTime}`</Text>)}
+              {arrivalTime && (
+                <Text style={{marginVertical: 10}}>
+                  {' '}
+                  `Picks you up ${arrivalTime}`
+                </Text>
+              )}
 
-            <Text style={{marginVertical: 10}}>
-              Arrives to {workTripType} at {timeFormat(workTrip.scheduledDrive.end.toDate())}
-          </Text>
-          {workTrip.car && <Text style={{marginVertical: 10}}>
-              Car is {`${parseInt(workTrip.car.availableSeats)-workTrip.scheduledDrive.availableSeats}/${parseInt(workTrip.car.availableSeats)}`} full {workTrip.scheduledDrive.availableSeats == 0 ? '(car full)':''}
-          </Text>}
-          </View>}
+              <Text style={{marginVertical: 10}}>
+                Arrives to {workTripType} at{' '}
+                {timeFormat(workTrip.scheduledDrive.end.toDate())}
+              </Text>
+              {workTrip.car && (
+                <Text style={{marginVertical: 10}}>
+                  Car is{' '}
+                  {`${
+                    parseInt(workTrip.car.availableSeats) -
+                    workTrip.scheduledDrive.availableSeats
+                  }/${parseInt(workTrip.car.availableSeats)}`}{' '}
+                  full{' '}
+                  {workTrip.scheduledDrive.availableSeats == 0
+                    ? '(car full)'
+                    : ''}
+                </Text>
+              )}
+            </View>
+          )}
 
-          {workTrip == undefined
-            ? <View />
-            : <TouchableCmp onPress={() => {
-            console.log('disable / enable')
-            deleteWorkTrip()
-            }}>
-              <View style={[styles.workTripButton, {width: 45, height: 45, backgroundColor: workTripEmpty ? color.platina : color.radicalRed}]}>
+          {workTrip == undefined ? (
+            <View />
+          ) : (
+            <TouchableCmp
+              onPress={() => {
+                console.log('disable / enable')
+                deleteWorkTrip()
+              }}
+            >
+              <View
+                style={[
+                  styles.workTripButton,
+                  {
+                    width: 45,
+                    height: 45,
+                    backgroundColor: workTripEmpty
+                      ? color.platina
+                      : color.radicalRed,
+                  },
+                ]}
+              >
                 <FontAwesome5
-                  name='calendar-times'
+                  name="calendar-times"
                   size={28}
                   color={color.primary}
                 />
               </View>
-            </TouchableCmp>}
+            </TouchableCmp>
+          )}
         </View>
         <View>
           <View style={styles.workTripInfoBottomRow}>
-            <TouchableCmp onPress={() => {console.log('Change workTrip')}}>
-              <View style={[styles.workTripButton, {flex: 3, backgroundColor: workTripEmpty ? color.malachiteGreen : color.middleBlue, maxWidth: 230}]}>
-                <View style={[styles.workTripInfoBottomRow, {alignItems: 'center', borderRadius: 10}]}>
+            <TouchableCmp
+              onPress={() => {
+                console.log('Change workTrip')
+              }}
+            >
+              <View
+                style={[
+                  styles.workTripButton,
+                  {
+                    flex: 3,
+                    backgroundColor: workTripEmpty
+                      ? color.malachiteGreen
+                      : color.middleBlue,
+                    maxWidth: 230,
+                  },
+                ]}
+              >
+                <View
+                  style={[
+                    styles.workTripInfoBottomRow,
+                    {alignItems: 'center', borderRadius: 10},
+                  ]}
+                >
                   <Text style={{marginRight: 20}}>
                     {workTripEmpty ? 'Add work trip' : 'Change Work trip'}
                   </Text>
-                  <FontAwesome5
-                    name='edit'
-                    size={20}
-                    color={color.primary}
-                  />
+                  <FontAwesome5 name="edit" size={20} color={color.primary} />
                 </View>
-
               </View>
             </TouchableCmp>
           </View>
@@ -248,14 +342,27 @@ const MyRidesWorkDayEditDialog = ({props}) => {
       </View>
       <View style={[styles.workTripInfoBottomRow, {}]}>
         <TouchableCmp onPress={() => props.onCancel()}>
-          <View style={[styles.workTripButton, {flex: 1, backgroundColor: color.radicalRed}]}>
-            <Text >
-              Cancel
-            </Text>
+          <View
+            style={[
+              styles.workTripButton,
+              {flex: 1, backgroundColor: color.radicalRed},
+            ]}
+          >
+            <Text>Cancel</Text>
           </View>
         </TouchableCmp>
-        <TouchableCmp onPress={async () => {await updateUser(user); props.onCancel()}}>
-          <View style={[styles.workTripButton, {flex: 3, backgroundColor: color.malachiteGreen}]}>
+        <TouchableCmp
+          onPress={async () => {
+            await updateUser(user)
+            props.onCancel()
+          }}
+        >
+          <View
+            style={[
+              styles.workTripButton,
+              {flex: 3, backgroundColor: color.malachiteGreen},
+            ]}
+          >
             <Text style={{color: workTripEmpty ? color.greyText : 'black'}}>
               Save
             </Text>
@@ -273,7 +380,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   workDayCard: {
     zIndex: 2,
@@ -307,13 +414,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: 40,
-    width: 65
+    width: 65,
   },
   workTripInfoContainer: {
     flex: 3,
     width: Dimensions.get('window').width * 0.85,
     height: 120,
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   workTripInfoTopRow: {
     backgroundColor: 'white',
@@ -321,7 +428,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   workTripInfoBottomRow: {
     borderRadius: 10,
@@ -334,6 +441,6 @@ const styles = StyleSheet.create({
     margin: 5,
     borderRadius: 10,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
 })

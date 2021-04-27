@@ -34,6 +34,7 @@ import {setupWorkTripDocs} from '../utils/utils'
 import {signOut} from '../controllers/LoginController'
 import {updateCompanyCity} from '../controllers/companyCitiesController'
 import {updateCompany} from '../controllers/companyController'
+import {Company} from '../models/company'
 //--------------------WORKING HOURS-----------------------
 
 const DateTimeInput = (props) => {
@@ -257,6 +258,7 @@ export const Settings = () => {
         address: address,
         postalCode: postalCode,
       }
+
       return data
     } catch (e) {
       console.error(e)
@@ -266,7 +268,14 @@ export const Settings = () => {
     if (companyAddress.length > 0 && companyName.length > 0) {
       const data = await getCompanyGeoLocation()
 
-      updateCompanyCity(data.city)
+      console.log('Company name', companyName)
+      console.log('Company code', companyCode)
+      console.log('Company address', companyAddress)
+
+      await updateCompanyCity(data.city)
+
+      user.com
+
       const companyId = await updateCompany(
         new Company({
           address: data.address,
@@ -274,11 +283,10 @@ export const Settings = () => {
           userIDs: [user.id],
           location: data.point,
           city: data.city,
-
           companyCode: companyCode,
           postalCode: data.postalCode,
-          domain: domain,
-          domainJoin: domainJoin,
+          // domain: domain,
+          // domainJoin: false,
         })
       )
 
@@ -358,6 +366,8 @@ export const Settings = () => {
     user.homeAddress = hAddress
     user.city = data.city
     user.homeLocation = data.point
+
+    console.log('user.homeAddress', user.homeAddress)
 
     await updateUser(user)
   }
@@ -926,7 +936,7 @@ export const Settings = () => {
               <TouchableOpacity
                 style={styles.poweredBtns}
                 onPress={() => {
-                  homeAddressSubmitHandler
+                  homeAddressSubmitHandler()
                   setIsAddressVisible(false)
                 }}
               >
@@ -1001,7 +1011,7 @@ export const Settings = () => {
               <TouchableOpacity
                 style={styles.poweredBtns}
                 onPress={() => {
-                  submitHandler
+                  submitHandler()
                   setIsWorkDaysVisible(false)
                 }}
               >
@@ -1082,7 +1092,7 @@ export const Settings = () => {
               <TouchableOpacity
                 style={styles.poweredBtns}
                 onPress={() => {
-                  timeSubmitHandler
+                  timeSubmitHandler()
                   setIsWorkHoursVisible(false)
                 }}
               >
