@@ -2,6 +2,16 @@ module.exports = function (api) {
   api.cache(true)
   return {
     presets: ['babel-preset-expo'],
+    env: {
+      production: {
+        plugins: [
+          [
+            'babel-plugin-jsx-remove-data-test-id',
+            {attributes: 'accessibilityLabel'},
+          ],
+        ],
+      },
+    },
     plugins: [
       [
         'module:react-native-dotenv',

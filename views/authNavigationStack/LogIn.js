@@ -62,6 +62,7 @@ export const LogIn = ({navigation, scrollRef}) => {
       />
       <View style={{width: Dimensions.get('window').width * 0.8}}>
         <Input
+          accessibilityLabel="Email"
           autoCapitalize="none"
           placeholder="Email"
           leftIcon={

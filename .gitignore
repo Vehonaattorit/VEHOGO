@@ -20,3 +20,4 @@ google-services.json
 # Hide app.json & google-places.json that have API keys
 app.json
 google-services.json
+node_modules

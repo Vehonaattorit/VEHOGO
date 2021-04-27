@@ -11,11 +11,12 @@ before_install:
 before_script:
   - npm install -g npm@latest
   - npm install
+  - npm install mocha
   - npm install jest-expo
   - npm install -g expo-cli
 script:
   - npm ci
-  - npm run test
+  - npm run test:e2e
 jobs:
   include:
     - stage: deploy
