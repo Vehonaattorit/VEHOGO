@@ -26,11 +26,8 @@ import {UserContext} from '../contexts'
 import firebase from 'firebase'
 import {checkWhatDayItIs, timeFormat} from '../utils/utils'
 import {TimeModal} from '../views/WorkingHours'
-import {updateUser} from '../controllers/userController'
-
-import {getWorkTrip, deleteWorkTrip} from '../controllers/workTripController'
 import {removePassengerFromRoute} from '../utils/passengerRemove'
-import {softUpdateUser, updateUser} from '../controllers/userController'
+import {updateUser} from '../controllers/userController'
 
 const MyRidesWorkDayEditDialog = ({props}) => {
   const workTrip = props.selectedWorkTrip
@@ -44,7 +41,7 @@ const MyRidesWorkDayEditDialog = ({props}) => {
 
   const updateValue = (newValue, fieldName) => {
     console.log('updating value for user id',newValue)
-    
+
     const userToUpdate = user
     let workingHourUpdateIndex = 0
     for (let i = 0; i < user.preferedWorkingHours.length; i++) {
@@ -52,7 +49,7 @@ const MyRidesWorkDayEditDialog = ({props}) => {
         workingHourUpdateIndex = i
         break
       }
-      
+
     }
     let workinghoursToUpdate = workingHours
     if(workTripType =='work'){
