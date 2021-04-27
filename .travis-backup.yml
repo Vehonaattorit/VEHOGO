@@ -13,11 +13,9 @@ before_script:
   - npm install
   - npm install jest-expo
   - npm install -g expo-cli
-  - npm run cypress:open --silent &
 script:
   - npm ci
   - npm run test
-  - npm run cypress:run
 jobs:
   include:
     - stage: deploy

@@ -7,5 +7,8 @@ describe('Login Page', () => {
 
   it('loads the login page', () => {
     expect(true).to.equal(true)
+
+    cy.get('img')
+    // cy.contains('perkule')
   })
 })

@@ -7,6 +7,7 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
     "testDebug": "mocha ui-test/main.js --timeout 180000",
     "test:e2e": "concurrently \"-n\" \"appium\" \"-c\" \"bgBlack.hidden,bgCyan.black\" \"appium\" \"npm run testDebug && sudo killall -9 node\"",
     "postinstall": "python fix.py"
