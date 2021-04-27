@@ -5,7 +5,7 @@ describe('Login Page', () => {
     cy.visit('http://localhost:19006')
   })
 
-  it('loads the login page', () => {
+  it('loads the login page', {retries: 6}, () => {
     expect(true).to.equal(true)
 
     cy.get('img')
