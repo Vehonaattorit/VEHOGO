@@ -6,13 +6,13 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "web:server": "http-server -p 19006 .",
+    "web:server": "http-server",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run -c video=false",
     "testDebug": "mocha ui-test/main.js --timeout 180000",
     "test:e2e": "concurrently \"-n\" \"npm run web\" \"npm run cypress:run \"",
     "postinstall": "python fix.py",
-    "test:parallel": "npm run web & npm run cypress:run"
+    "test:parallel": "npm run web:server & npm run web & npm run cypress:run"
   },
   "jest": {
     "preset": "jest-expo",
