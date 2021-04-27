@@ -2,7 +2,7 @@ describe('Login Page', () => {
   beforeEach(() => {
     // cy.visit('localhost:)
 
-    cy.visit('http://192.168.1.3:19006')
+    cy.visit('http://localhost:19006')
   })
 
   it('loads the login page', () => {
