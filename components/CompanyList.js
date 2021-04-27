@@ -16,9 +16,4 @@ export const CompanyList = ({navigation, companyData}) => {
   );
 };
 
-const styles = StyleSheet.create({
-
-
-
-})
 export default CompanyList;

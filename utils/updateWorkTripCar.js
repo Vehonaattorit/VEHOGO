@@ -12,6 +12,8 @@ export const updateUserCarToWorkTrips = async (user) => {
   }
   let car = await getCar(user.id, user.schoosedCarID)
   user.preferedWorkingHours.forEach(async hours => {
+    console.log('homeref', hours.toHomeRefID)
+    console.log('WorkRefID', hours.toWorkRefID)
     if (hours.toHomeRefID != undefined) {
       const workTrip = await getWorkTrip(user.company.id, hours.toHomeRefID)
       updateWorkTrip(user.company.id, new WorkTrip({id: hours.toHomeRefID, car: car, scheduledDrive: {availableSeats: (parseInt(car.availableSeats - (workTrip.scheduledDrive.stops.length - 2 > 0 ? workTrip.scheduledDrive.stops.length - 2 : 0)))}}))

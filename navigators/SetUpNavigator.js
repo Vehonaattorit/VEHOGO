@@ -12,6 +12,7 @@ import {color} from '../constants/colors'
 import {VerifyEmail} from '../views/VerifyEmail'
 import {IconButton} from 'react-native-paper'
 import {signOut} from '../controllers/LoginController'
+import CarSetup from '../views/CarSetup'
 const Stack = createStackNavigator()
 function SetUpStackNavigator() {
   return (
@@ -28,35 +29,14 @@ function SetUpStackNavigator() {
           headerTintColor: color.primary,
         }}
       >
-        <Stack.Screen
-          name="VerifyEmail"
-          component={VerifyEmail}
-          options={() => ({
-            title: 'Verify Email',
-            headerLeft: () => (
-              <IconButton
-                icon="logout"
-                size={28}
-                color={color.darkBlue}
-                onPress={() => {
-                  signOut()
-                }}
-              />
-            ),
-          })}
-        />
+
+
+
         <Stack.Screen
           name="Company"
           component={Company}
           options={{
             title: 'Create or join',
-          }}
-        />
-        <Stack.Screen
-          name="WorkingHours"
-          component={WorkingHours}
-          options={{
-            title: 'Working Hours',
           }}
         />
         <Stack.Screen
@@ -89,12 +69,27 @@ function SetUpStackNavigator() {
           }}
         />
         <Stack.Screen
+          name="WorkingHours"
+          component={WorkingHours}
+          options={{
+            title: 'Working Hours',
+          }}
+        />
+        <Stack.Screen
+          name="CarSetup"
+          component={CarSetup}
+          options={{
+            title: 'Your car',
+          }}
+        />
+        <Stack.Screen
           options={{
             title: '',
           }}
           name="SetUpInit"
           component={SetUpInit}
         />
+
       </Stack.Navigator>
     </NavigationContainer>
   )

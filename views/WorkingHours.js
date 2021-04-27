@@ -197,7 +197,14 @@ export const WorkingHours = (props) => {
 
     updateUser(user)
 
-    props.navigation.navigate('SetUpInit')
+    console.log('user in working hours', user)
+
+    if (user.travelPreference == 'driver') {
+      props.navigation.navigate('CarSetup')
+    } else {
+      props.navigation.navigate('SetUpInit')
+    }
+
   }
 
   const handleModal = (visibility) => {

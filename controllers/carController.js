@@ -17,7 +17,7 @@ export async function updateCar(userId, car) {
       .doc(userId)
       .collection('cars')
       .doc(car.id)
-    userRef.withConverter(carConverter).set(car, {merge: true})
+    await userRef.withConverter(carConverter).set(car, {merge: true})
     return car.id
   } catch (error) {
     console.error('Error writing document: ', error)
