@@ -16,8 +16,7 @@ before_script:
 
 script:
   - npm ci
-  - npm run web
-  - npm run cypress:run
+  - npm run test:parallel
 jobs:
   include:
     - stage: deploy
