@@ -28,6 +28,9 @@ export const CreateCompany = ({navigation, setShowCreate, domain}) => {
 
   useEffect(() => {
     setRandom(getRandomString(4))
+    navigation.setOptions({
+      title: 'Create Company',
+    })
   }, [])
 
   function getRandomString(length) {

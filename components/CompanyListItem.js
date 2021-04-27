@@ -14,7 +14,7 @@ import {updateCompany} from '../controllers/companyController'
 import {UserContext} from '../contexts'
 import {Company} from '../models/company'
 import {updateUser} from '../controllers/userController'
-
+import {color} from '../constants/colors'
 export const CompanyListItem = ({singleItem, navigation}) => {
   const {user} = useContext(UserContext)
 
@@ -34,22 +34,21 @@ export const CompanyListItem = ({singleItem, navigation}) => {
       }
 
       user.company = companyUserData
-      updateUser(user)
+      await updateUser(user)
     } else {
     }
     navigation.navigate('Travel')
   }
 
   return (
-    <Content>
       <Card style={styles.list}>
         <CardItem style={styles.item}>
           <Left>
-            <Icon active name="home-outline" />
-            <Text style={styles.title}>Company: {singleItem.displayName}</Text>
+            <Icon active name="pricetags-outline" />
+            <Text style={styles.title}>{singleItem.displayName}</Text>
           </Left>
           <Right>
-            <Button onPress={() => joinCompany()}>
+            <Button style={{backgroundColor: color.cyan, borderRadius: 5}} onPress={() => joinCompany()}>
               <Text style={styles.text}>Join</Text>
             </Button>
           </Right>
@@ -62,11 +61,11 @@ export const CompanyListItem = ({singleItem, navigation}) => {
         </CardItem>
         <CardItem style={styles.item}>
           <Left>
-            <Text style={styles.title}>City: {singleItem.city}</Text>
+            <Icon active name="business-outline" />
+            <Text style={styles.title}>{singleItem.city}</Text>
           </Left>
         </CardItem>
       </Card>
-    </Content>
   )
 }
 
@@ -85,16 +84,12 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     marginTop: 10,
-    backgroundColor: '#EAEAEA',
+    backgroundColor: '#E1F5FD',
     borderRadius: 20,
-    shadowColor: 'rgba(0, 0, 0, 0.1)',
-    shadowOpacity: 0.8,
-    elevation: 6,
-    shadowRadius: 15,
-    shadowOffset: {width: 1, height: 13},
   },
   item: {
-    backgroundColor: '#EAEAEA',
+    backgroundColor: color.lightBlue,
+    borderRadius: 10
   },
 })
 

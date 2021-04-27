@@ -12,15 +12,12 @@ export const JoinCompany = ({
   setShowBtns,
   companyData,
 }) => {
-  const [filteredCompanyData, setFilteredCompanyData] = useState([])
-  const [filter, setFilter] = useState('')
 
-  const getCompaniesWithFilter = async () => {
-    const filteredData = companyData.filter((company) =>
-      company.displayName.includes(filter)
-    )
-    setFilteredCompanyData(filteredData)
-  }
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'Join Company',
+    })
+  }, [])
 
   return (
     <View style={styles.container}>
@@ -33,28 +30,9 @@ export const JoinCompany = ({
         }}
         iconOne="keyboard-arrow-left"
       />
-      <Form style={styles.input}>
-        <Item>
-          <Input
-            placeholder="Search by name"
-            value={filter}
-            onChangeText={setFilter}
-          />
-          <Button onPress={getCompaniesWithFilter}>
-            <Icon active name="search-outline" />
-          </Button>
-        </Item>
-      </Form>
 
       <View style={styles.companyList}>
-        {filteredCompanyData.length != 0 ? (
-          <CompanyList
-            navigation={navigation}
-            companyData={filteredCompanyData}
-          />
-        ) : (
-          <CompanyList navigation={navigation} companyData={companyData} />
-        )}
+        <CompanyList navigation={navigation} companyData={companyData} />
       </View>
     </View>
   )

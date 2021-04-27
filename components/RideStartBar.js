@@ -214,7 +214,7 @@ export const RideStartBar = ({user, navigation, driverTrips}) => {
                 )}
               </>
             ) : (
-              <Text>No trips</Text>
+              <Text>No trips today</Text>
             )}
           </Right>
         </CardItem>

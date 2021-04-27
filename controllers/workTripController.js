@@ -171,7 +171,7 @@ export async function updateWorkTrip(companyId, workTrip) {
       .collection('workTrips')
       .doc(workTrip.id)
 
-    workDayRef.withConverter(workTripConverter).set(workTrip, {merge: true})
+    await workDayRef.withConverter(workTripConverter).set(workTrip, {merge: true})
     return workTrip.id
   } catch (error) {
     console.error('Error writing document: ', error)

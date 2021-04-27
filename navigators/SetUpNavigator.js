@@ -12,6 +12,7 @@ import {color} from '../constants/colors'
 import {VerifyEmail} from '../views/VerifyEmail'
 import {IconButton} from 'react-native-paper'
 import {signOut} from '../controllers/LoginController'
+import CarSetup from '../views/CarSetup'
 const Stack = createStackNavigator()
 function SetUpStackNavigator() {
   return (
@@ -54,13 +55,6 @@ function SetUpStackNavigator() {
           }}
         />
         <Stack.Screen
-          name="WorkingHours"
-          component={WorkingHours}
-          options={{
-            title: 'Working Hours',
-          }}
-        />
-        <Stack.Screen
           name="Travel"
           component={Travel}
           options={{
@@ -87,6 +81,20 @@ function SetUpStackNavigator() {
           component={WorkingDays}
           options={{
             title: 'Working Days',
+          }}
+        />
+        <Stack.Screen
+          name="WorkingHours"
+          component={WorkingHours}
+          options={{
+            title: 'Working Hours',
+          }}
+        />
+        <Stack.Screen
+          name="CarSetup"
+          component={CarSetup}
+          options={{
+            title: 'Your car',
           }}
         />
         <Stack.Screen

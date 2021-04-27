@@ -11,9 +11,10 @@ import {updateWorkTrip} from '../controllers/workTripController'
 import firebase from 'firebase'
 import CustomButtonIcon from '../components/CustomIconButton'
 import {userConverter} from '../models/user'
+import {updateUserCarToWorkTrips} from '../utils/updateWorkTripCar'
 import fire from '../firebase/fire'
 
-export const SetUpInit = ({route}) => {
+export const SetUpInit = ({route, navigation}) => {
   const {user} = useContext(UserContext)
 
   const [alreadySetUp, setAlreadySetUp] = useState(false)
@@ -114,8 +115,10 @@ export const SetUpInit = ({route}) => {
           preferedWorkHourindex
         ].toHomeRefID = workTripId
       }
-
+      userToUpdate.setupIsCompleted = true
       await updateUser(userToUpdate)
+      await updateUserCarToWorkTrips(user)
+
     })
   }
 
@@ -137,10 +140,14 @@ export const SetUpInit = ({route}) => {
             body: JSON.stringify({idToken: token.token}),
           }
         )
-        if (user.travelPreference === 'driver') await setupWorkTripDocs()
-        let updatedUser = await getUser(user.id)
-        updatedUser.setupIsCompleted = true
-        await updateUser(updatedUser)
+        if (user.travelPreference === 'driver') {
+          await setupWorkTripDocs()
+        } else {
+          let updatedUser = await getUser(user.id)
+          updatedUser.setupIsCompleted = true
+          await updateUser(updatedUser)
+        }
+
       }
     }
   }

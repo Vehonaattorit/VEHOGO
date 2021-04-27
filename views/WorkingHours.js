@@ -69,8 +69,8 @@ export const TimeModal = ({
             mode="time"
             is24Hour={true}
             onChange={(e, date) => {
-              setIsPickerShow(false)
               if (date) onChange(e, date)
+              setIsPickerShow(false)
             }}
             value={value || new Date()}
           />
@@ -197,7 +197,14 @@ export const WorkingHours = (props) => {
 
     updateUser(user)
 
-    props.navigation.navigate('SetUpInit')
+    console.log('user in working hours', user)
+
+    if (user.travelPreference == 'driver') {
+      props.navigation.navigate('CarSetup')
+    } else {
+      props.navigation.navigate('SetUpInit')
+    }
+
   }
 
   const handleModal = (visibility) => {

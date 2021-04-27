@@ -96,7 +96,6 @@ export const Company = ({navigation}) => {
             </Item>
             <View style={styles.btnContainer}>
               <CustomIconButton
-                style={{marginBottom: 5}}
                 onPress={() => {
                   getCompanies(true)
                 }}
@@ -157,7 +156,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#E1F5FD',
-    marginHorizontal: 30,
+    marginLeft: 30,
+    marginRight: 30,
     borderRadius: 5,
     padding: 10,
     shadowColor: 'rgba(0, 0, 0, 0.1)',

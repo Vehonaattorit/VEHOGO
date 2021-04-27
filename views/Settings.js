@@ -34,7 +34,9 @@ import {setupWorkTripDocs} from '../utils/utils'
 import {signOut} from '../controllers/LoginController'
 import {updateCompanyCity} from '../controllers/companyCitiesController'
 import {updateCompany} from '../controllers/companyController'
-import {Company} from '../models/company'
+
+
+
 //--------------------WORKING HOURS-----------------------
 
 const DateTimeInput = (props) => {
@@ -164,7 +166,6 @@ export const Settings = () => {
   const {user} = useContext(UserContext)
 
   // useState for modals
-  const [isComapnyVisible, setCompanyVisible] = useState(false)
   const [isTravelVisible, setIsTravelVisible] = useState(false)
   const [isUsernameVisible, setIsUsernameVisible] = useState(false)
   const [isAddressVisible, setIsAddressVisible] = useState(false)
@@ -173,9 +174,7 @@ export const Settings = () => {
   const [isDeleteVisible, setIsDeleteVisible] = useState(false)
 
   const toggleModal = (view) => {
-    view == 'Company'
-      ? setCompanyVisible(true)
-      : view === 'Travel'
+    view === 'Travel'
       ? setIsTravelVisible(!isTravelVisible)
       : view === 'Username'
       ? setIsUsernameVisible(!isUsernameVisible)
@@ -188,119 +187,6 @@ export const Settings = () => {
       : view === 'Delete'
       ? setIsDeleteVisible(!isDeleteVisible)
       : console.log('ERROR: views/Settings.js/toggleModel')
-  }
-
-  //-------------------COMPANY----------------------
-  const [companyAddress, setAddress] = useState('')
-  const [companyName, setName] = useState('')
-  const [companyCode, setCompanyCode] = useState('')
-  const [random, setRandom] = useState('')
-
-  useEffect(() => {
-    setRandom(getRandomString(4))
-  }, [])
-
-  function getRandomString(length) {
-    var randomChars =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-    var result = ''
-    for (var i = 0; i < length; i++) {
-      result += randomChars.charAt(
-        Math.floor(Math.random() * randomChars.length)
-      )
-    }
-    return result
-  }
-  const setCompanyName = (companyName) => {
-    setName(companyName)
-    setCompanyCode(companyName.replace(/\s+/g, '') + '-' + random)
-  }
-
-  const getCompanyGeoLocation = async () => {
-    try {
-      const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${companyAddress}&language=fi&key=${googleMapsApiKey}`,
-        {
-          method: 'GET',
-          //Request Type
-        }
-      )
-      const responseJson = await response.json()
-
-      const locationPoint = new firebase.firestore.GeoPoint(
-        responseJson.results[0].geometry.location.lat,
-        responseJson.results[0].geometry.location.lng
-      )
-
-      var city = ''
-      var route = ''
-      var streetNumber = ''
-      var postalCode = ''
-      responseJson.results[0].address_components.forEach((element) => {
-        if (element.types[0] === 'locality') {
-          city = element.long_name
-        }
-        if (element.types[0] === 'route') {
-          route = element.long_name
-        }
-        if (element.types[0] === 'street_number') {
-          streetNumber = element.long_name
-        }
-        if (element.types[0] === 'postal_code') {
-          postalCode = element.long_name
-        }
-      })
-
-      const address = route + ' ' + streetNumber
-      const data = {
-        point: locationPoint,
-        city: city,
-        address: address,
-        postalCode: postalCode,
-      }
-
-      return data
-    } catch (e) {
-      console.error(e)
-    }
-  }
-  const sendCompanyData = async () => {
-    if (companyAddress.length > 0 && companyName.length > 0) {
-      const data = await getCompanyGeoLocation()
-
-      console.log('Company name', companyName)
-      console.log('Company code', companyCode)
-      console.log('Company address', companyAddress)
-
-      await updateCompanyCity(data.city)
-
-      user.com
-
-      const companyId = await updateCompany(
-        new Company({
-          address: data.address,
-          displayName: companyName,
-          userIDs: [user.id],
-          location: data.point,
-          city: data.city,
-          companyCode: companyCode,
-          postalCode: data.postalCode,
-          // domain: domain,
-          // domainJoin: false,
-        })
-      )
-
-      const companyUserData = {
-        address: data.address,
-        name: companyName,
-        location: data.point,
-        id: companyId,
-      }
-
-      user.company = companyUserData
-      await updateUser(user)
-    } else {
-    }
   }
 
   //------------------TRAVEL---------------------
@@ -504,45 +390,6 @@ export const Settings = () => {
     return () => clearTimeout(timeout)
   }, [error])
 
-  const changeTravelPreference = (newTravPref) => {
-    Alert.alert(
-      'Change travel preference',
-      `Would you like to change your travel preference to ${newTravPref}?`,
-      [
-        {text: 'No', style: 'default'},
-        {
-          text: 'Yes',
-          style: 'destructive',
-          onPress: async () => {
-            user.travelPreference = newTravPref
-
-            console.log('new user trav pref', user.travelPreference)
-
-            setTravelPreference(newTravPref)
-
-            toggleModal('Travel')
-
-            if (user.travelPreference === 'driver') {
-              const response = await workTripMultiQuery(user.company.id, [
-                {
-                  field: 'driverID',
-                  condition: '==',
-                  value: user.id,
-                },
-              ])
-
-              if (typeof response !== 'undefined' && response.length === 0) {
-                // the workTrip is defined and has no elements
-                setupWorkTripDocs(user)
-              }
-            }
-            // if (newTravPref === 'driver' )
-            await updateUser(user)
-          },
-        },
-      ]
-    )
-  }
 
   //------------------WORKING HOURS---------------------
 
@@ -634,15 +481,6 @@ export const Settings = () => {
       <View style={styles.poweredContainer}>
         <View style={styles.btn}>
           <CustomSingleIconButton
-            iconOne="account-balance"
-            title="Modify Your Company"
-            onPress={() => {
-              toggleModal('Company')
-            }}
-          />
-        </View>
-        <View style={styles.btn}>
-          <CustomSingleIconButton
             iconOne="airline-seat-recline-extra"
             title="Modify Your Travel Preference"
             onPress={() => {
@@ -697,78 +535,6 @@ export const Settings = () => {
           />
         </View>
       </View>
-
-      {/* company */}
-      <Modal
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.')
-        }}
-        isVisible={isComapnyVisible}
-      >
-        <View style={styles.modalView}>
-          <View
-            style={{
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <Text style={styles.title}>Modify your Company information</Text>
-            <Item>
-              <CustomCompanyInput
-                placeholder="Enter your company name ..."
-                value={companyName}
-                onChangeText={(event) => setCompanyName(event)}
-                errorMessage={
-                  companyName.length < 1 &&
-                  'Company name must be at least 1 character long'
-                }
-              />
-            </Item>
-            <Item>
-              <CustomCompanyInput
-                placeholder="Enter your company join code ..."
-                value={companyCode}
-                onChangeText={setCompanyCode}
-                errorMessage={
-                  companyCode.length < 4 &&
-                  'Company code must be at least 4 character long'
-                }
-              />
-            </Item>
-            <Item>
-              <GooglePlacesInput setAddress={setAddress} />
-            </Item>
-
-            <View style={styles.btns}>
-              <TouchableOpacity
-                style={styles.poweredBtns}
-                onPress={() => {
-                  setCompanyVisible(false)
-                }}
-              >
-                <Text>CANCEL</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.poweredBtns}
-                onPress={() => {
-                  sendCompanyData()
-                  setCompanyVisible(false)
-                }}
-              >
-                <Text>SAVE</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
 
       {/* travel modal */}
 

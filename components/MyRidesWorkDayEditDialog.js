@@ -29,7 +29,7 @@ import {TimeModal} from '../views/WorkingHours'
 
 import {getWorkTrip, deleteWorkTrip} from '../controllers/workTripController'
 import {removePassengerFromRoute} from '../utils/passengerRemove'
-import {softUpdateUser, updateUser} from '../controllers/userController'
+import {updateUser} from '../controllers/userController'
 
 const MyRidesWorkDayEditDialog = ({props}) => {
   const workTrip = props.selectedWorkTrip
