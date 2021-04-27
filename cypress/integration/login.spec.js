@@ -42,7 +42,7 @@ describe('Login Page', () => {
   // display message with correct email & incorrect password
 
   it('display message with correct email & incorrect password', () => {
-    cy.get('@email').type('test@test.com')
+    cy.get('@email').type('test3@test.com')
     cy.get('@password').type('test123')
 
     cy.get('@login').click()
@@ -57,6 +57,8 @@ describe('Login Page', () => {
       cy.get('@login').click()
 
       cy.contains(/verify your email from link/i)
+
+      cy.get('[data-testid="logout"]').click()
     })
   })
 })

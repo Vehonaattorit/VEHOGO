@@ -35,6 +35,7 @@ function SetUpStackNavigator() {
             title: 'Verify Email',
             headerLeft: () => (
               <IconButton
+                testID="logout"
                 icon="logout"
                 size={28}
                 color={color.darkBlue}
