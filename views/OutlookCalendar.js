@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   StyleSheet,
   StatusBar,
+  Platform,
 } from 'react-native'
 
 import {Agenda, Calendar} from 'react-native-calendars'

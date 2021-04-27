@@ -29,6 +29,7 @@ describe('Expo test example', function () {
   })
   it('should display welcome text', async function () {
     await client.pause(2000)
+
     // const xpath =
     //   '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.widget.FrameLayout/android.view.ViewGroup/android.widget.TextView'
     // const field = await client.$(xpath)

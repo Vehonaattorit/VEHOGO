@@ -30,8 +30,6 @@ export default function App() {
   const [fontReady, setFontReady] = useState(false)
   const [userId, setUserId] = useState(null)
 
-  LogBox.ignoreLogs(['Setting a timer'])
-
   const loadFonts = async () => {
     await Font.loadAsync({
       'open-sans-regular': require('./assets/fonts/OpenSans-Regular.ttf'),

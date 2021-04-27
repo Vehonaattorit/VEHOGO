@@ -7,6 +7,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Image,
+  Platform,
 } from 'react-native'
 import {Container} from 'native-base'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps'

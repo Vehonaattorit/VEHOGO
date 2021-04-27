@@ -19,7 +19,7 @@ const auth = firebase.auth()
 
 import {color} from '../constants/colors'
 
-export default ChatRoom = ({navigation, route}) => {
+const ChatRoom = ({navigation, route}) => {
   const {user, chatRoom, chatRoomTitle} = route.params
 
   const [expoToken, setexpoToken] = useState(null)
@@ -170,6 +170,8 @@ export default ChatRoom = ({navigation, route}) => {
     />
   )
 }
+
+export default ChatRoom
 
 // Add corresponding styles
 const styles = StyleSheet.create({
