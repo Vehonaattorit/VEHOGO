@@ -7,6 +7,7 @@ import {
   Text,
   View,
   Alert,
+  Button,
 } from 'react-native'
 
 import DateTimePicker from '@react-native-community/datetimepicker'
@@ -225,51 +226,83 @@ export const WorkingHours = (props) => {
 
   return (
     <View style={styles.container}>
-      <TimeModal
-        setIsPickerShow={setIsPickerShow}
-        isPickerShow={isPickerShow}
-        modalVisible={modalVisible}
-        handleModal={handleModal}
-        value={newEventState[selectedTime]}
-        onChange={(e, date) => updateValue(date, selectedTime)}
-      />
-      <View style={styles.icon}>
-        <MaterialCommunityIcons name="clock" size={300} color={color.cyan} />
-      </View>
-      <Text style={styles.title}>
-        Please enter the time your work starts and ends
-      </Text>
-      <CustomButtonIcon
-        testID="startTimeID"
-        title={
-          newEventState.startDate
-            ? formatTime(newEventState.startDate)
-            : 'Start time'
-        }
-        onPress={() => {
-          setModalVisible(true)
-          setSelectedTime('startDate')
-          setIsPickerShow(true)
-        }}
-      />
+      {Platform.OS === 'web' ? (
+        <View>
+          <Text testID="">{formatTime(new Date(1970, 0, 1, 6, 30))}</Text>
+          <Text>{formatTime(new Date(1970, 0, 1, 17, 0))}</Text>
+          <Button
+            testID="workHoursStart"
+            title="Submit start time"
+            onPress={() =>
+              updateValue(new Date(1970, 0, 1, 6, 30), 'startDate')
+            }
+          />
+          <Button
+            testID="workHoursEnd"
+            title="Submit end time"
+            onPress={() => updateValue(new Date(1970, 0, 1, 17, 0), 'endDate')}
+          />
+          <Button
+            testID="workHoursSubmit"
+            title="Submit times"
+            onPress={submitHandler}
+          />
+        </View>
+      ) : (
+        <>
+          <TimeModal
+            setIsPickerShow={setIsPickerShow}
+            isPickerShow={isPickerShow}
+            modalVisible={modalVisible}
+            handleModal={handleModal}
+            value={newEventState[selectedTime]}
+            onChange={(e, date) => updateValue(date, selectedTime)}
+          />
+          <View style={styles.icon}>
+            <MaterialCommunityIcons
+              name="clock"
+              size={300}
+              color={color.cyan}
+            />
+          </View>
+          <Text style={styles.title}>
+            Please enter the time your work starts and ends
+          </Text>
+          <CustomButtonIcon
+            testID="startTimeID"
+            title={
+              newEventState.startDate
+                ? formatTime(newEventState.startDate)
+                : 'Start time'
+            }
+            onPress={() => {
+              setModalVisible(true)
+              setSelectedTime('startDate')
+              setIsPickerShow(true)
+            }}
+          />
 
-      <CustomButtonIcon
-        testID="endTimeID"
-        title={
-          newEventState.endDate ? formatTime(newEventState.endDate) : 'End time'
-        }
-        onPress={() => {
-          setModalVisible(true)
-          setSelectedTime('endDate')
-          setIsPickerShow(true)
-        }}
-      />
-      <View>
-        <Text style={styles.errorText}>{error}</Text>
-      </View>
-      <View style={styles.submitBtnContainer}>
-        <CustomButtonIcon title="Submit" onPress={submitHandler} />
-      </View>
+          <CustomButtonIcon
+            testID="endTimeID"
+            title={
+              newEventState.endDate
+                ? formatTime(newEventState.endDate)
+                : 'End time'
+            }
+            onPress={() => {
+              setModalVisible(true)
+              setSelectedTime('endDate')
+              setIsPickerShow(true)
+            }}
+          />
+          <View>
+            <Text style={styles.errorText}>{error}</Text>
+          </View>
+          <View style={styles.submitBtnContainer}>
+            <CustomButtonIcon title="Submit" onPress={submitHandler} />
+          </View>
+        </>
+      )}
     </View>
   )
 }

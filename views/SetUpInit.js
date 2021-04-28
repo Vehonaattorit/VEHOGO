@@ -118,7 +118,6 @@ export const SetUpInit = ({route, navigation}) => {
       userToUpdate.setupIsCompleted = true
       await updateUser(userToUpdate)
       await updateUserCarToWorkTrips(user)
-
     })
   }
 
@@ -130,10 +129,12 @@ export const SetUpInit = ({route, navigation}) => {
         let token = await fire.auth().currentUser.getIdTokenResult()
         console.log('token is', token.token)
         const response = await fetch(
-          `https://us-central1-veho-go.cloudfunctions.net/getBestRoutes`,
+          `https://cors-anywhere.herokuapp.com/https://us-central1-veho-go.cloudfunctions.net/getBestRoutes`,
           {
             method: 'POST',
             headers: {
+              // "Access-Control-Allow-Origin": *,
+              mode: 'cors', // no-cors, *cors, same-origin
               Accept: 'application/json',
               'Content-Type': 'application/json',
             },
@@ -147,7 +148,6 @@ export const SetUpInit = ({route, navigation}) => {
           updatedUser.setupIsCompleted = true
           await updateUser(updatedUser)
         }
-
       }
     }
   }
@@ -157,6 +157,7 @@ export const SetUpInit = ({route, navigation}) => {
       <CustomTitle title="You are done." />
       <View style={styles.btnContainer}>
         <CustomButtonIcon
+          testID="finishSetupBtn"
           disabled={alreadySetUp}
           style={styles.poweredBtnContainer}
           title="Finish setup"
