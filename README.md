@@ -20,6 +20,9 @@ We have used firebase authentication to know the user's identity to provide a cu
 
 We have also taken advantage of Firebase’s real-time database which is cloud-hosted. Data is stored as JSON and synchronized in real-time to every connected client. <a href="https://firebase.google.com/docs/database">More about database...</a>
 
+### Introduction to Google Map 
+
+
 
 
 ## Setup & Installation
