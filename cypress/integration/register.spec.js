@@ -103,6 +103,8 @@ describe('Register Page', () => {
     cy.get('@registerConfirmPassword').type('Test123456')
 
     cy.get('@registerNewUserBtn').click()
+
+    cy.wait(10000)
     cy.contains(/verify your email from link/i)
 
     cy.get('[data-testid="logout"]').click()

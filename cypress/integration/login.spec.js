@@ -51,6 +51,7 @@ describe('Login Page', () => {
       cy.get('@password').type(goodPassword)
       cy.get('@login').click()
 
+      cy.wait(10000)
       cy.contains(/verify your email from link/i)
 
       cy.get('[data-testid="logout"]').click()

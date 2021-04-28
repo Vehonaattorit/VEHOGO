@@ -19,17 +19,19 @@ describe('Passenger Setup', () => {
 
       cy.get('[role="button"][aria-label="Verify Email, back"]').click()
 
+      cy.wait(10000)
       cy.contains(/verify your email/i)
 
       cy.get('[data-testid="logout"]').click()
     })
   })
 
-  // join company with join code
-
   it('join company with join code', {retries: 7}, () => {
     cy.fixture('passengerSetup').then(({goodEmail, goodPassword}) => {
       cy.get('[data-testid="emailInput"]').type(goodEmail)
+
+      cy.wait(10000)
+
       cy.get('[data-testid="passwordInput"]').type(goodPassword)
       cy.get('[data-testid="loginBtn"]').click()
 
@@ -43,6 +45,7 @@ describe('Passenger Setup', () => {
 
       cy.get('[role="button"][aria-label="Verify Email, back"]').click()
 
+      cy.wait(10000)
       cy.contains(/verify your email/i)
 
       cy.get('[data-testid="logout"]').click()
@@ -57,6 +60,8 @@ describe('Passenger Setup', () => {
     () => {
       cy.fixture('passengerSetup').then(({goodEmail, goodPassword}) => {
         cy.get('[data-testid="emailInput"]').type(goodEmail)
+
+        cy.wait(10000)
         cy.get('[data-testid="passwordInput"]').type(goodPassword)
         cy.get('[data-testid="loginBtn"]').click()
       })
