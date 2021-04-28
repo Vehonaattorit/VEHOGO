@@ -14,11 +14,11 @@ Use your app to enter your work destination and also your work schedule for the 
 
 ### Introduction to Firebase
 
-Firebase is Google’s mobile application development platform that helps you build, improve, and grow your app. It provides developers with a variety of tools and services to help them develop quality apps, grows their user base, and earn profit. It is built on Google’s infrastructure. Firebase is categorized as a NoSQL database program, which stores data in JSON-like documents. <a href="https://medium.com/firebase-developers/what-is-firebase-the-complete-story-abridged-bcc730c5f2c0">Read more...</a>
+Firebase is Google’s mobile application development platform that helps you build, improve, and grow your app. It provides developers with a variety of tools and services to help them develop quality apps, grows their user base, and earn profit. It is built on Google’s infrastructure. Firebase is categorized as a NoSQL database program, which stores data in JSON-like documents. <a href="https://medium.com/firebase-developers/what-is-firebase-the-complete-story-abridged-bcc730c5f2c0">More about Firebase...</a>
 
-We have used firebase authentication to know the user's identity to provide a customized experience and secure the user's data. <a href="https://firebase.google.com/docs/auth">Read more...</a>
+We have used firebase authentication to know the user's identity to provide a customized experience and secure the user's data. <a href="https://firebase.google.com/docs/auth">More about authentication...</a>
 
-We have also taken advantage of Firebase’s real-time database which is cloud-hosted. Data is stored as JSON and synchronized in real-time to every connected client. <a href="https://firebase.google.com/docs/database">Read more...</a>
+We have also taken advantage of Firebase’s real-time database which is cloud-hosted. Data is stored as JSON and synchronized in real-time to every connected client. <a href="https://firebase.google.com/docs/database">More about database...</a>
 
 
 
