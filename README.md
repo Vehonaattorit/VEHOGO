@@ -20,13 +20,13 @@ Assuming that you have [Node 12 LTS](https://nodejs.org/en/download/) or greater
    <li>npm install -g expo-cli</li>
    <li>git clone git@github.com:Vehonaattorit/VEHOGO.git</li>
   <li>Test that app works: 
-    <ol><li>run it and open in your emulator(the interactive shell is needed to get the menu option (A) for launching the emulator)
-      <ol>
+    <ul><li>run it and open in your emulator(the interactive shell is needed to get the menu option (A) for launching the emulator)
+      <ul>
         <li>cd VEHOGO</li>
         <li>npm start</li>
-      </ol>
+      </ul>
       </li>
-    </ol>
+    </ul>
   </li>
 </ol>
 
