@@ -12,6 +12,11 @@ Use your app to enter your work destination and also your work schedule for the 
 
 
 ## Usage
+Assuming that you have Node 12 LTS or greater installed, you can use npm to install the Expo CLI command-line utility:
+
+<ol>
+  <li>If needed, install code editor (+ extensions), git, npm</li>
+</ol>
 
 Create new folder and file in 'secrets/secrets.js'.
 
