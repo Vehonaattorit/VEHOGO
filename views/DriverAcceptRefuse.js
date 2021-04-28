@@ -315,6 +315,7 @@ const styles = StyleSheet.create({
   rowItemEndContainer: {
     flex: 1,
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'flex-end',
   },
   textItemContainer: {

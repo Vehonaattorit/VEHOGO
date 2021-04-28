@@ -97,7 +97,7 @@ describe('Driver Setup', () => {
       cy.get('[data-testid="joinCompanyBtn"]').click()
 
       // Travel Pref
-      cy.get('[data-testid="getARideBtn"]').click()
+      cy.get('[data-testid="shareMyCarBtn"]').click()
 
       // Address
       cy.get('[data-testid="addressInput"]').clear()
