@@ -23,11 +23,12 @@ export const CreateCompany = ({navigation, setShowCreate, domain, setShowBtns}) 
   const [showCode, setShowCode] = useState(false)
   const [companyCode, setCompanyCode] = useState('')
   const [random, setRandom] = useState('')
+  const [error, setError] = useState('')
   //radio button value
   const [value, setValue] = useState('code')
 
   useEffect(() => {
-    setRandom(getRandomString(4))
+    setRandom(getRandomString(6))
     navigation.setOptions({
       title: 'Create Company',
     })
@@ -100,7 +101,7 @@ export const CreateCompany = ({navigation, setShowCreate, domain, setShowBtns}) 
     }
   }
   const sendCompanyData = async () => {
-    if (companyAddress.length > 0 && companyName.length > 0) {
+    if (companyAddress.length > 0 && companyName.length > 0 && companyCode.length > 6) {
       const data = await getCompanyGeoLocation()
 
       let domainJoin
@@ -137,7 +138,10 @@ export const CreateCompany = ({navigation, setShowCreate, domain, setShowBtns}) 
       await updateUser(user)
 
       setShowCode(true)
+
     } else {
+      setError('Some inputs are not valid, address must be chosen, code must be min 7 characters and company name min 1 character.')
+      console.log('no names or address')
     }
   }
 
@@ -155,10 +159,6 @@ export const CreateCompany = ({navigation, setShowCreate, domain, setShowBtns}) 
                 placeholder="Enter your company name ..."
                 value={companyName}
                 onChangeText={(event) => setCompanyName(event)}
-                errorMessage={
-                  companyName.length < 1 &&
-                  'Company name must be at least 1 character long'
-                }
               />
             </View>
           </Item>
@@ -169,13 +169,13 @@ export const CreateCompany = ({navigation, setShowCreate, domain, setShowBtns}) 
                 placeholder="Enter your company join code ..."
                 value={companyCode}
                 onChangeText={setCompanyCode}
-                errorMessage={
-                  companyCode.length < 4 &&
-                  'Company code must be at least 4 character long'
-                }
               />
             </View>
           </Item>
+          {error != '' &&
+            <Text style={{alignSelf: 'center', color: 'red', marginTop: 8}}>{error}</Text>
+          }
+
 
           <View style={styles.radioView}>
             <RadioButton.Group

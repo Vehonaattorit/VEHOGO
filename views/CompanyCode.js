@@ -1,5 +1,5 @@
 import React from 'react'
-import {StyleSheet} from 'react-native'
+import {StyleSheet, Alert} from 'react-native'
 import {Card, CardItem, Text} from 'native-base'
 import {View} from 'native-base'
 import Clipboard from 'expo-clipboard'
@@ -27,7 +27,13 @@ export const CompanyCode = ({navigation, companyCode, value}) => {
 
       <View style={styles.btns}>
         <CustomButtonIcon
-          onPress={Clipboard.setString(companyCode)}
+          onPress={() => {
+            Clipboard.setString(companyCode)
+            Alert.alert(
+              'Code copied',
+              'Now you can share code to other people'
+            )
+          }}
           iconOne="content-copy"
           title="Copy to clipboard"
         />

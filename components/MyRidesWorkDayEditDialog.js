@@ -27,19 +27,26 @@ import firebase from 'firebase'
 import {checkWhatDayItIs, timeFormat} from '../utils/utils'
 import {TimeModal} from '../views/WorkingHours'
 
-import {getWorkTrip, deleteWorkTrip} from '../controllers/workTripController'
+import {getWorkTrip, deleteWorkTrip, updateWorkTrip} from '../controllers/workTripController'
 import {removePassengerFromRoute} from '../utils/passengerRemove'
 import {updateUser} from '../controllers/userController'
+import {WorkTrip} from '../models/workTrip'
+import {ScheduledDrive} from '../models/scheduleDrive'
 
 const MyRidesWorkDayEditDialog = ({props}) => {
   const workTrip = props.selectedWorkTrip
+  console.log('edit dialog workTrip',workTrip)
   const [workingHours, setWorkingHours] = useState(props.selectedPreferedHours)
   const workTripType = props.workTripType
+  console.log('type',workTripType)
+  console.log('working Hours',workingHours)
   const [modalVisible, setModalVisible] = useState(false)
   const [selectedTime, setSelectedTime] = useState('startDate')
   const [isPickerShow, setIsPickerShow] = useState(false)
   const {user} = useContext(UserContext)
   let TouchableCmp = TouchableOpacity
+
+  console.log()
 
   const updateValue = (newValue, fieldName) => {
     console.log('updating value for user id', newValue)
@@ -108,6 +115,42 @@ const MyRidesWorkDayEditDialog = ({props}) => {
     }
   }, [])
 
+  const createNewWorkTrip = async () => {
+
+    let addressNow = ''
+    let start
+    let end
+
+    if (workTripType == 'work') {
+      addressNow = user.company.address
+      start = workingHours.workDayStart
+    } else {
+      addressNow = user.homeAddress
+      start = workingHours.workDayEnd
+    }
+    console.log('start', timeFormat(start.toDate()))
+    console.log('address now', addressNow)
+    console.log('user cars', user.cars)
+
+   /* await updateWorkTrip(user.company.id,
+      new WorkTrip({
+        driverName: user.userName,
+        driverID: user.id,
+        goingTo: workTripType,
+        isDriving: false,
+        route: data,
+        currentLocation: addressNow,
+        workDayNum: workingHours.workDayNum ,//might need modification
+        scheduledDrive: new ScheduledDrive({
+          start: new firebase.firestore.Timestamp.fromDate(start),
+          end: new firebase.firestore.Timestamp.fromDate(end), //end not defined yet
+          availableSeats: user.cars.availableSeats, //most likely not right
+          stops: goingTo == 'work' ? initialStops : initialStops.reverse(), //stops needs to be created
+          nextStop: 1,
+        }),
+      }))*/
+  }
+
   const deleteWorkTrip = async () => {
     if (workTrip != undefined) {
       if (user.id == workTrip.driverID) {
@@ -173,6 +216,7 @@ const MyRidesWorkDayEditDialog = ({props}) => {
         <Text>To {workTripType}</Text>
       </View>
       <View style={styles.workTripInfoContainer}>
+        {workTrip == undefined &&
         <View style={styles.workTripInfoTopRow}>
           <TouchableCmp
             onPress={() => {
@@ -191,7 +235,12 @@ const MyRidesWorkDayEditDialog = ({props}) => {
                   {alignItems: 'center', borderRadius: 10},
                 ]}
               >
-                <Text>Ratsukatu 4</Text>
+                {workTripType == 'home' ? (
+                  <Text>{user.homeAddress.substring(0, 15)}...</Text>
+                ):(
+                  <Text>{user.company.address.substring(0, 15)}...</Text>
+                )
+              }
                 <FontAwesome5 name="edit" size={25} color={color.primary} />
               </View>
             </View>
@@ -227,6 +276,7 @@ const MyRidesWorkDayEditDialog = ({props}) => {
             </View>
           </TouchableCmp>
         </View>
+        }
         <View
           style={[
             styles.workTripInfoBottomRow,
@@ -306,10 +356,16 @@ const MyRidesWorkDayEditDialog = ({props}) => {
           )}
         </View>
         <View>
+          {workTrip == undefined &&
           <View style={styles.workTripInfoBottomRow}>
             <TouchableCmp
               onPress={() => {
-                console.log('Change workTrip')
+                if (user.travelPreference == 'driver') {
+                  console.log('Create new workTrip')
+                  createNewWorkTrip()
+                } else {
+                  console.log('finding new trip')
+                }
               }}
             >
               <View
@@ -331,13 +387,14 @@ const MyRidesWorkDayEditDialog = ({props}) => {
                   ]}
                 >
                   <Text style={{marginRight: 20}}>
-                    {workTripEmpty ? 'Add work trip' : 'Change Work trip'}
+                    {user.travelPreference == 'driver' ? 'Add work trip' : 'Search trip'}
                   </Text>
                   <FontAwesome5 name="edit" size={20} color={color.primary} />
                 </View>
               </View>
             </TouchableCmp>
           </View>
+          }
         </View>
       </View>
       <View style={[styles.workTripInfoBottomRow, {}]}>
@@ -351,7 +408,14 @@ const MyRidesWorkDayEditDialog = ({props}) => {
             <Text>Cancel</Text>
           </View>
         </TouchableCmp>
-        <TouchableCmp
+
+      </View>
+    </View>
+  )
+}
+
+//save button commented
+/*        <TouchableCmp
           onPress={async () => {
             await updateUser(user)
             props.onCancel()
@@ -367,12 +431,7 @@ const MyRidesWorkDayEditDialog = ({props}) => {
               Save
             </Text>
           </View>
-        </TouchableCmp>
-      </View>
-    </View>
-  )
-}
-
+        </TouchableCmp> */
 export default MyRidesWorkDayEditDialog
 
 const styles = StyleSheet.create({
