@@ -52,7 +52,7 @@ export {firebaseConfig}
 
 
 ## Maintainers
-@Kurosh Husseini <br/>
-@Juhana Tamminen
-@Niklas Nilsson
-@Michael Lock
+@Kurosh Husseini<br/>
+@Juhana Tamminen<br/>
+@Niklas Nilsson<br/>
+@Michael Lock<br/>
