@@ -86,8 +86,9 @@ export const Address = ({navigation}) => {
       style={styles.container}
     >
       <View style={styles.icon}>
-        <FontAwesome name="home" size={300} color="#26AAE2" />
+        <FontAwesome name="home" size={280} color="#26AAE2" />
       </View>
+
       <View style={styles.textContainer}>
         <Text
           style={{
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   icon: {
-    flex: 1,
+    flex: 1.4,
   },
   textContainer: {
     flex: 0.2,
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
   googleInputContainer: {
     maxHeight: 300,
     width: '90%',
-    minHeight: 95,
+    minHeight: 150,
   },
   buttonContainer: {
     width: '100%',

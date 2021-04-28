@@ -1,6 +1,6 @@
 import React, {useState, useContext, useEffect} from 'react'
-import {StyleSheet, View} from 'react-native'
-import {Item} from 'native-base'
+import {StyleSheet, View, TextInput} from 'react-native'
+import {Item, Input, Card, CardItem} from 'native-base'
 import {googleMapsApiKey} from '../secrets/secrets'
 import {updateCompany} from '../controllers/companyController'
 import {Company} from '../models/company'
@@ -16,7 +16,7 @@ import {RadioButton, Text} from 'react-native-paper'
 
 import CustomSimpleInput from '../components/CustomSimpleInput'
 
-export const CreateCompany = ({navigation, setShowCreate, domain}) => {
+export const CreateCompany = ({navigation, setShowCreate, domain, setShowBtns}) => {
   const [companyAddress, setAddress] = useState('')
   const [companyName, setName] = useState('')
   const {user} = useContext(UserContext)
@@ -145,9 +145,13 @@ export const CreateCompany = ({navigation, setShowCreate, domain}) => {
     <View style={styles.container}>
       {!showCode ? (
         <>
-          <View style={styles.inputContainer}>
-            <Item>
-              <CustomSimpleInput
+          <Item>
+            <GooglePlacesInput setAddress={setAddress} />
+          </Item>
+          <Item>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
                 placeholder="Enter your company name ..."
                 value={companyName}
                 onChangeText={(event) => setCompanyName(event)}
@@ -156,9 +160,12 @@ export const CreateCompany = ({navigation, setShowCreate, domain}) => {
                   'Company name must be at least 1 character long'
                 }
               />
-            </Item>
-            <Item>
-              <CustomSimpleInput
+            </View>
+          </Item>
+          <Item>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
                 placeholder="Enter your company join code ..."
                 value={companyCode}
                 onChangeText={setCompanyCode}
@@ -167,14 +174,15 @@ export const CreateCompany = ({navigation, setShowCreate, domain}) => {
                   'Company code must be at least 4 character long'
                 }
               />
-            </Item>
-            <Item>
-              <GooglePlacesInput setAddress={setAddress} />
-            </Item>
+            </View>
+          </Item>
+
+          <View style={styles.radioView}>
             <RadioButton.Group
               onValueChange={(newValue) => setValue(newValue)}
               value={value}
             >
+              <Text style={{justifyContent: 'center', fontFamily: 'open-sans-regular'}}>Can new users join this company with email / domain? </Text>
               <View
                 style={{
                   flexDirection: 'row',
@@ -196,10 +204,12 @@ export const CreateCompany = ({navigation, setShowCreate, domain}) => {
                 }}
               >
                 <RadioButton value="both" />
-                <Text>Allow domain joining</Text>
+                <Text style={{fontFamily: 'open-sans-regular'}}>Allow domain joining</Text>
               </View>
             </RadioButton.Group>
           </View>
+
+
           <View style={styles.btnContainer}>
             <View style={styles.btns}>
               <CustomButtonIcon
@@ -215,6 +225,7 @@ export const CreateCompany = ({navigation, setShowCreate, domain}) => {
                 iconOne="keyboard-arrow-left"
                 onPress={() => {
                   setShowCreate(false)
+                  setShowBtns(true)
                 }}
                 title="Cancel"
               />
@@ -226,6 +237,7 @@ export const CreateCompany = ({navigation, setShowCreate, domain}) => {
           navigation={navigation}
           companyCode={companyCode}
           domain={domain}
+          value={value}
         ></CompanyCode>
       )}
     </View>
@@ -237,6 +249,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-around',
     backgroundColor: '#fff',
+    marginTop: 10
   },
   inputContainer: {
     flexDirection: 'column',
@@ -272,4 +285,40 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     margin: 5,
   },
+
+  inputContainer: {
+    paddingHorizontal: 11,
+    paddingVertical: 4.5,
+    alignItems: 'center',
+    backgroundColor: '#E1F5FD',
+    width: '100%',
+    borderRadius: 5,
+    marginTop: 5,
+    backgroundColor: '#E1F5FD',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+
+  input: {
+    backgroundColor: '#fff',
+    width: '100%',
+    padding: 15.5,
+    fontSize: 15.5,
+    borderRadius: 5,
+    height: 50
+  },
+
+  radioView: {
+    alignSelf: 'center',
+    marginTop: 10,
+    backgroundColor: '#E1F5FD',
+    padding: 10,
+    borderRadius: 10
+  }
 })
