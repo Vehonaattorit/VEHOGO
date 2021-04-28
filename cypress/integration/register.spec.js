@@ -1,3 +1,7 @@
+// import firebase from '../../firebase/fire'
+
+// import {getUser} from '../../controllers/userController'
+
 describe('Register Page', () => {
   beforeEach(() => {
     // cy.visit('localhost:)
@@ -96,6 +100,14 @@ describe('Register Page', () => {
   )
 
   it('register new user with correct field values', {retries: 7}, () => {
+    // Delete user with email name
+    // const userList = await getUserByEmail('test@register.com')
+
+    // for (const user of userList) {
+    //   deleteUser(user.id)
+    // }
+    // [END]
+
     cy.get('@registerEmail').type('test@register.com')
     cy.get('@registerNumber').type('123456789')
     cy.get('@registerFullname').type('Test Register')
@@ -108,5 +120,17 @@ describe('Register Page', () => {
     cy.contains(/verify your email from link/i)
 
     cy.get('[data-testid="logout"]').click()
+  })
+
+  it('Delete created test@register.com user from firebase', () => {
+    cy.exec('node ./cypress/deleteTestRegisterUser.js', {
+      // user.email comes from a fixture file but you can use a simple string as well
+      env: {email: "test@register.com'"},
+    }).then((result) => {
+      //Just for debugging
+      console.log('code-232', result.code)
+      console.log('stderr-232', result.stderr)
+      console.log('stdout-232', result.stdout)
+    })
   })
 })

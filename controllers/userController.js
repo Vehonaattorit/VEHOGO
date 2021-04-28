@@ -57,6 +57,30 @@ export async function getUser(user) {
   }
 }
 
+export async function getUserByEmail(email) {
+  try {
+    // Add a new document in collection "users"
+    let doc = await db
+      .collection('users')
+      .withConverter(userConverter)
+      .where('email', '==', email)
+      .get()
+
+    // return doc.data()
+
+    const userList = []
+    doc.forEach((doc) => {
+      console.log('docus', doc.data())
+      userList.push(doc.data())
+    })
+
+    return userList
+  } catch (error) {
+    console.error('Error writing document: ', error)
+    return
+  }
+}
+
 export async function deleteUser(userId) {
   try {
     db.collection('users')

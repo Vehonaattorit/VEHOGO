@@ -20,11 +20,11 @@ import {AuthButton} from '../../components/AuthButton'
 import {CustomTitle} from '../../components/CustomTitle'
 import {login, subscribeToAuth} from '../../controllers/LoginController'
 import {Icon} from 'native-base'
+import {deleteUser, getUserByEmail} from '../../controllers/userController'
 
 export const LogIn = ({navigation, scrollRef}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
   const [error, setError] = useState('')
 
   const logIn = async () => {
