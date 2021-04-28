@@ -16,7 +16,8 @@ Assuming that you have [Node 12 LTS](https://nodejs.org/en/download/) or greater
 
 <ol>
   <li>If needed, install code editor (+ extensions), git, npm</li>
-   <li>Install Expo app to your phone. [Ios] (https://apps.apple.com/us/app/expo-client/id982107779) or [Android] (https://play.google.com/store/apps/details?id=host.exp.exponent&hl=fi) [GitHub](http://github.com)</li>
+   <li>Install Expo app to your phone. [Ios](https://apps.apple.com/us/app/expo-client/id982107779) 
+     or [Android](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=fi)</li>
    <li>npm install -g expo-cli</li>
    <li>git clone git@github.com:Vehonaattorit/VEHOGO.git</li>
   <li>Test that app works: 
