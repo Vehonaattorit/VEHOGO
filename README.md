@@ -32,11 +32,6 @@ Assuming that you have [Node 12 LTS](https://nodejs.org/en/download/) or greater
 </ol>
 
 
-## Maintainers
-<p><a href="https://github.com/kurosh97"></a>Kurosh Husseini</p>
-<p><a href="https://github.com/JuhanaTa">Juhana Tamminen</a></p>
-<p><a href="https://github.com/Jalsson">Niklas Nilsson</a></p>
-<p><a href="https://github.com/thelockymichael">Michael Lock</a></p>
 
 
 Create new folder and file in 'secrets/secrets.js'.
@@ -54,3 +49,10 @@ const firebaseConfig = {
 let googleMapsApiKey = '(GOOGLE_API_KEY)'
 export {firebaseConfig}
 ```
+
+
+## Maintainers
+@Kurosh Husseini
+@Juhana Tamminen
+@Niklas Nilsson
+@Michael Lock
