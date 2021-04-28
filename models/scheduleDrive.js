@@ -21,7 +21,7 @@ export const scheduleDriveConverter = {
       scheduledDriveObject.end = scheduledDrive.end
     }
     if (scheduledDrive.availableSeats != undefined) {
-      scheduledDriveObject.availableSeats = scheduledDrive.availableSeats
+      scheduledDriveObject.availableSeats = scheduledDrive.availableSeats - 1
     }
     if (scheduledDrive.stops != undefined && scheduledDrive.stops.length > 0) {
       const stops = []
