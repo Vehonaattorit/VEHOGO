@@ -21,6 +21,7 @@ export const Travel = ({navigation}) => {
       <View style={styles.btnContainer}>
         <View style={styles.btn}>
           <CustomButtonIcon
+            testID="shareMyCarBtn"
             iconOne="directions-car"
             iconTwo="keyboard-arrow-right"
             title="Share My Car"
@@ -33,6 +34,7 @@ export const Travel = ({navigation}) => {
 
         <View style={styles.btn}>
           <CustomButtonIcon
+            testID="getARideBtn"
             iconOne="airline-seat-recline-extra"
             iconTwo="keyboard-arrow-right"
             title="Get A Ride"

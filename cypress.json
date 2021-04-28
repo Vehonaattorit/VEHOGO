@@ -1,7 +1,12 @@
 {
+  "testFiles": [
+    "login.spec.js",
+    "register.spec.js",
+    "verifyUserWithEmail.spec.js",
+    "passengerSetup.spec.js"
+  ],
   "retries": {
     "runMode": 4,
-
     "openMode": 4
   }
 }

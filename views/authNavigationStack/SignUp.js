@@ -91,6 +91,7 @@ export const SignUp = () => {
         />
         <View style={{width: Dimensions.get('window').width * 0.8}}>
           <Input
+            testID="registerEmail"
             autoCapitalize="none"
             leftIcon={
               <Icon name="mail-outline" size={24} color={color.primary} />
@@ -101,6 +102,7 @@ export const SignUp = () => {
           />
 
           <Input
+            testID="registerNumber"
             placeholder="Enter your phone number"
             errorStyle={{color: 'red'}}
             leftIcon={
@@ -112,6 +114,7 @@ export const SignUp = () => {
           />
 
           <Input
+            testID="registerFullname"
             placeholder="Enter your full name"
             errorStyle={{color: 'red'}}
             leftIcon={
@@ -121,6 +124,7 @@ export const SignUp = () => {
             onChangeText={setName}
           />
           <Input
+            testID="registerPassword"
             placeholder="Password"
             errorStyle={{color: 'red'}}
             leftIcon={
@@ -136,6 +140,7 @@ export const SignUp = () => {
             onChangeText={setPassword}
           />
           <Input
+            testID="registerConfirmPassword"
             placeholder="Confirm Password"
             errorStyle={{color: 'red'}}
             leftIcon={
@@ -155,6 +160,7 @@ export const SignUp = () => {
         <View style={styles.btnContainer}>
           <View style={styles.signUpBtn}>
             <AuthButton
+              testID="registerNewUserBtn"
               style={styles.btns}
               title="Register"
               width={300}

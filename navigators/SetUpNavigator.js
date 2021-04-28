@@ -61,7 +61,6 @@ function SetUpStackNavigator() {
             title: 'Travel',
           }}
         />
-
         <Stack.Screen
           name="Address"
           component={Address}

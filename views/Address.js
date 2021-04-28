@@ -6,6 +6,7 @@ import {
   Platform,
   View,
   KeyboardAvoidingView,
+  Input,
 } from 'react-native'
 
 import {FontAwesome} from '@expo/vector-icons'
@@ -110,6 +111,7 @@ export const Address = ({navigation}) => {
       <View style={styles.buttonContainer}>
         {showSubmit && (
           <CustomButtonIcon
+            testID="addressSubmit"
             style={styles.btn}
             title="Submit"
             onPress={submitHandler}

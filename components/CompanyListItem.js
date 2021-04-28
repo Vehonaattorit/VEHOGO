@@ -41,31 +41,35 @@ export const CompanyListItem = ({singleItem, navigation}) => {
   }
 
   return (
-      <Card style={styles.list}>
-        <CardItem style={styles.item}>
-          <Left>
-            <Icon active name="pricetags-outline" />
-            <Text style={styles.title}>{singleItem.displayName}</Text>
-          </Left>
-          <Right>
-            <Button style={{backgroundColor: color.cyan, borderRadius: 5}} onPress={() => joinCompany()}>
-              <Text style={styles.text}>Join</Text>
-            </Button>
-          </Right>
-        </CardItem>
-        <CardItem style={styles.item}>
-          <Left>
-            <Icon active name="location-outline" />
-            <Text style={styles.title}>{singleItem.address}</Text>
-          </Left>
-        </CardItem>
-        <CardItem style={styles.item}>
-          <Left>
-            <Icon active name="business-outline" />
-            <Text style={styles.title}>{singleItem.city}</Text>
-          </Left>
-        </CardItem>
-      </Card>
+    <Card style={styles.list}>
+      <CardItem style={styles.item}>
+        <Left>
+          <Icon active name="pricetags-outline" />
+          <Text style={styles.title}>{singleItem.displayName}</Text>
+        </Left>
+        <Right>
+          <Button
+            testID="joinCompanyBtn"
+            style={{backgroundColor: color.cyan, borderRadius: 5}}
+            onPress={() => joinCompany()}
+          >
+            <Text style={styles.text}>Join</Text>
+          </Button>
+        </Right>
+      </CardItem>
+      <CardItem style={styles.item}>
+        <Left>
+          <Icon active name="location-outline" />
+          <Text style={styles.title}>{singleItem.address}</Text>
+        </Left>
+      </CardItem>
+      <CardItem style={styles.item}>
+        <Left>
+          <Icon active name="business-outline" />
+          <Text style={styles.title}>{singleItem.city}</Text>
+        </Left>
+      </CardItem>
+    </Card>
   )
 }
 
@@ -89,7 +93,7 @@ const styles = StyleSheet.create({
   },
   item: {
     backgroundColor: color.lightBlue,
-    borderRadius: 10
+    borderRadius: 10,
   },
 })
 

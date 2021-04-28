@@ -68,6 +68,7 @@ export const Company = ({navigation}) => {
             )}
             <Item style={styles.inputContainer}>
               <Input
+                testID="companyCodeInput"
                 backgroundColor="white"
                 placeholder="Company Invitation Code"
                 value={companyCode}
@@ -80,6 +81,7 @@ export const Company = ({navigation}) => {
               />
               <View style={styles.companyCodeBtnContainer}>
                 <Button
+                  testID="companyCodeAcceptBtn"
                   onPress={() => {
                     getCompanies(false)
                   }}

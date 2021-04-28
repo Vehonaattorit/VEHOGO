@@ -1,7 +1,5 @@
-describe('Login Page', () => {
+describe('Verify User with Email', () => {
   beforeEach(() => {
-    // cy.visit('localhost:)
-
     cy.visit('http://localhost:19006')
     cy.get('[data-testid="vehologo"]').as('vehologo')
     cy.get('[data-testid="emailInput"]').as('email')
@@ -34,24 +32,15 @@ describe('Login Page', () => {
     cy.contains(/password is invalid/i)
   })
 
-  // display message with correct email & incorrect password
-
-  it('display message with correct email & incorrect password', () => {
-    cy.get('@email').type('test3@test.com')
-    cy.get('@password').type('test123')
-
-    cy.get('@login').click()
-
-    cy.contains(/password is invalid/i)
-  })
-
   it('logs in successfully', () => {
-    cy.fixture('goodCredentials').then(({goodEmail, goodPassword}) => {
+    cy.fixture('verifyEmailCredentials').then(({goodEmail, goodPassword}) => {
       cy.get('@email').type(goodEmail)
       cy.get('@password').type(goodPassword)
       cy.get('@login').click()
 
-      cy.contains(/verify your email from link/i)
+      cy.get('[role="button"][aria-label="Verify Email, back"]').click()
+
+      cy.contains(/verify your email/i)
 
       cy.get('[data-testid="logout"]').click()
     })

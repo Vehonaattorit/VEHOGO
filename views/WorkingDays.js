@@ -127,6 +127,8 @@ export const WorkingDays = (props) => {
   const submitHandler = async () => {
     const isValid = workDays.some((item) => item.isSelected === true)
 
+    console.log('isValid', isValid)
+
     if (!isValid) {
       Alert.alert('Wrong input!', 'Please select at least one work day.', [
         {text: 'Okay'},
@@ -148,6 +150,8 @@ export const WorkingDays = (props) => {
     await updateUser(user)
 
     if (props.onSubmit) props.onSubmit() // For CI testing purposes
+
+    props.navigation.navigate('WorkingHours')
   }
 
   useEffect(() => {
@@ -199,10 +203,9 @@ export const WorkingDays = (props) => {
       <View style={styles.submitBtn}>
         <CustomButtonIcon
           title="Submit"
-          testID="submitID"
+          testID="workingDaysSubmitID"
           onPress={() => {
             submitHandler()
-            props.navigation.navigate('WorkingHours')
           }}
           iconTwo="keyboard-arrow-right"
         />

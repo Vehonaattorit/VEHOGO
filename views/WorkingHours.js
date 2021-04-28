@@ -18,6 +18,8 @@ import {color} from '../constants/colors'
 
 import {formatTime} from '../utils/utils'
 
+// import {DateTimePickerModal} from 'react-native-modal-datetime-picker'
+
 import firebase from 'firebase'
 
 const DateTimeInput = (props) => {
@@ -204,7 +206,6 @@ export const WorkingHours = (props) => {
     } else {
       props.navigation.navigate('SetUpInit')
     }
-
   }
 
   const handleModal = (visibility) => {
