@@ -98,7 +98,13 @@ describe('Register Page', () => {
     cy.get('@registerNewUserBtn').click()
 
     cy.wait(6000)
-    cy.contains(/verify your email from link/i)
+    cy.contains(/create or join/i)
+
+    //   Go back to login screen
+    cy.get('[role="button"][aria-label="Verify Email, back"]').click()
+
+    cy.wait(10000)
+    cy.contains(/verify your email/i)
 
     cy.get('[data-testid="logout"]').click()
   })

@@ -11,6 +11,36 @@ describe('Passenger Setup', () => {
     cy.get('[data-testid="registerBtn"]')
   })
 
+  // Register new test.vehoshareride@passenger.com
+  it(
+    ' Register new test.vehoshareride.passenger@gmail.com',
+    {retries: 7},
+    () => {
+      cy.get('[data-testid="registerEmail"]').type(
+        'test.vehoshareride.passenger@gmail.com'
+      )
+      cy.get('[data-testid="registerNumber"]').type('123456789')
+      cy.get('[data-testid="registerFullname"]').type('Test Passenger')
+
+      cy.get('[data-testid="registerPassword"]').type('Test123456')
+
+      cy.get('[data-testid="registerConfirmPassword"]').type('Test123456')
+
+      cy.get('[data-testid="registerNewUserBtn"]').click()
+
+      cy.wait(6000)
+      cy.contains(/create or join/i)
+
+      //  Go back to login screen
+      cy.get('[role="button"][aria-label="Verify Email, back"]').click()
+
+      cy.wait(6000)
+      cy.contains(/verify your email/i)
+
+      cy.get('[data-testid="logout"]').click()
+    }
+  )
+
   it('login with passenger user', {retries: 7}, () => {
     cy.fixture('passengerSetup').then(({goodEmail, goodPassword}) => {
       cy.get('[data-testid="emailInput"]').type(goodEmail)
@@ -19,7 +49,7 @@ describe('Passenger Setup', () => {
 
       cy.get('[role="button"][aria-label="Verify Email, back"]').click()
 
-      cy.wait(10000)
+      cy.wait(6000)
       cy.contains(/verify your email/i)
 
       cy.get('[data-testid="logout"]').click()
@@ -30,7 +60,7 @@ describe('Passenger Setup', () => {
     cy.fixture('passengerSetup').then(({goodEmail, goodPassword}) => {
       cy.get('[data-testid="emailInput"]').type(goodEmail)
 
-      cy.wait(10000)
+      cy.wait(6000)
 
       cy.get('[data-testid="passwordInput"]').type(goodPassword)
       cy.get('[data-testid="loginBtn"]').click()
@@ -45,7 +75,7 @@ describe('Passenger Setup', () => {
 
       cy.get('[role="button"][aria-label="Verify Email, back"]').click()
 
-      cy.wait(10000)
+      cy.wait(6000)
       cy.contains(/verify your email/i)
 
       cy.get('[data-testid="logout"]').click()
@@ -61,7 +91,7 @@ describe('Passenger Setup', () => {
       cy.fixture('passengerSetup').then(({goodEmail, goodPassword}) => {
         cy.get('[data-testid="emailInput"]').type(goodEmail)
 
-        cy.wait(10000)
+        cy.wait(6000)
         cy.get('[data-testid="passwordInput"]').type(goodPassword)
         cy.get('[data-testid="loginBtn"]').click()
       })
@@ -97,4 +127,17 @@ describe('Passenger Setup', () => {
       cy.contains(/available rides/i)
     }
   )
+
+  it('Delete user from firebase', () => {
+    cy.exec('node ./cypress/deleteTestPassengerUser.js', {
+      // user.email comes from a fixture file but you can use a simple string as well
+      env: {email: 'test.vehoshareride.passenger@gmail.com'},
+    }).then((result) => {
+      console.log('stdout-232', result.stdout)
+
+      // delete user document under 'users' collection in Firestore
+      const opts = {recursive: true}
+      cy.callFirestore('delete', `users/${result.stdout}`, opts)
+    })
+  })
 })

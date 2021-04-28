@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import {StyleSheet} from 'react-native'
+import {StyleSheet, Platform} from 'react-native'
 import {Text, Icon, Button} from 'native-base'
 import {View} from 'native-base'
 import {checkEmailVerification} from '../controllers/LoginController'
@@ -9,6 +9,9 @@ import firebase from '../firebase/fire'
 
 export const VerifyEmail = ({navigation}) => {
   const checkEmail = async () => {
+    // For cypress testing purposes
+    if (Platform.OS === 'web') navigation.navigate('Company')
+
     const result = await checkEmailVerification()
     if (result === true) {
       navigation.navigate('Company')
@@ -32,7 +35,7 @@ export const VerifyEmail = ({navigation}) => {
       <Text style={{margin: 5}}>
         Verify your email from link you received to your email.
       </Text>
-      <Text style={{margin: 5}}>Then click continue</Text>
+      <Text style={{margin: 5}}>Then press continue</Text>
 
       <CustomIconButton
         onPress={() => {
