@@ -26,4 +26,4 @@ node_modules
 # Hide serviceAccount.json cypress-firebase
 serviceAccount.json
 cypress/config.json
-cypress/support/commands.js
+cypress.json

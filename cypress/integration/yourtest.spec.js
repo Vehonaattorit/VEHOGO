@@ -1,6 +1,6 @@
 describe('Some Test', () => {
   it('Adds document to test_hello_world collection of Firestore', () => {
-    cy.exec('node ./cypress/cleanupFirebase.js', {
+    cy.exec('node ./cypress/deleteTestRegisterUser.js', {
       // user.email comes from a fixture file but you can use a simple string as well
       env: {email: "test@register.com'"},
     }).then((result) => {
