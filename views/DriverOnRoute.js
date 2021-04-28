@@ -252,9 +252,9 @@ export const DriverOnRoute = ({navigation, route}) => {
       )
 
       //always show end route if distance under 100m
-      if (distanceToEnd >= 0.3) {
+      if (distanceToEnd >= 0.1) {
         //show NextStopBar if distance less than 100m
-        if (distance <= 0.3) {
+        if (distance <= 0.1) {
           //if next stop is last show StopBar
           setShowNextStopBar(true)
         }

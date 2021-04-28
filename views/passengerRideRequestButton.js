@@ -11,6 +11,8 @@ import {color} from '../constants/colors'
 // Env keys
 import {apiKey} from '@env'
 import {removePassengerFromRoute} from '../utils/passengerRemove'
+import {updateUser} from '../controllers/userController'
+import {PreferedWorkingHours} from '../models/preferedWorkingHours'
 
 const PassengerRideRequestButton = ({
   user,
@@ -20,7 +22,8 @@ const PassengerRideRequestButton = ({
 }) => {
   const [expoToken, setExpoToken] = useState(null)
   const [alreadyRequested, setAlreadyRequested] = useState(false)
-
+  console.log('user in request', user);
+  console.log('prefered', user.preferedWorkingHours)
   useEffect(() => {
     const getExpoToken = async () => {
       console.log('workTrip.driverID', workTrip.driverID)
@@ -58,19 +61,49 @@ const PassengerRideRequestButton = ({
 
   const requestRide = async () => {
     if (!isPassengerIncluded && !alreadyRequested) {
-      await updateRideRequest(
-        user.company.id,
-        new RideRequest({
-          homeLocation: user.homeLocation,
-          homeAddress: user.homeAddress,
-          senderID: user.id,
-          city: user.city,
-          userName: user.userName,
-          workTripRefID: workTrip.id,
-          driverID: workTrip.driverID,
-          workDayNum: workTrip.workDayNum,
-        })
-      )
+
+      try {
+        await updateRideRequest(
+          user.company.id,
+          new RideRequest({
+            homeLocation: user.homeLocation,
+            homeAddress: user.homeAddress,
+            senderID: user.id,
+            city: user.city,
+            userName: user.userName,
+            workTripRefID: workTrip.id,
+            driverID: workTrip.driverID,
+            workDayNum: workTrip.workDayNum,
+          })
+        )
+
+        const hours = new Date().getHours()
+
+        //search if preferedwrokinghours already contain requested workday
+        let found = false
+        user.preferedWorkingHours.forEach(element => {
+          if (element.workDayNum == workTrip.workDayNum) {
+            found = true
+          }
+        });
+        console.log('found or not', found)
+        //update preferedworkinghours if same worktrip.workdayNum not found
+        if (!found) {
+          user.preferedWorkingHours.push({
+            workDayEnd: new Date(1970, 0, 1, hours, 0),
+            workDayNum: workTrip.workDayNum,
+            workDayStart: new Date(1970, 0, 1, hours + 1, 0),
+          })
+
+          console.log('updated user', user)
+          await updateUser(user)
+        }
+
+      } catch (e) {
+        console.log('ride request update failed', e)
+      }
+
+
 
       console.log('2444, expoToken', expoToken)
       console.log('2333, apiKey', apiKey)

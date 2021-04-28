@@ -1,24 +1,39 @@
 import React from 'react'
-import {StyleSheet} from 'react-native'
-import {Card, Text} from 'native-base'
+import {StyleSheet, Alert} from 'react-native'
+import {Card, CardItem, Text} from 'native-base'
 import {View} from 'native-base'
 import Clipboard from 'expo-clipboard'
 import CustomButtonIcon from '../components/CustomIconButton'
 import {color} from '../constants/colors'
 
-export const CompanyCode = ({navigation, companyCode}) => {
+export const CompanyCode = ({navigation, companyCode, value}) => {
+  console.log(value)
   return (
     <View style={styles.view}>
-      <Card style={styles.textContainer}>
-        <Text style={styles.title}>{companyCode}</Text>
-        <Text style={{paddingBottom: 40, textAlign: 'auto',fontFamily: 'open-sans-regular'}}>
-          Please copy this code by pressing the "Copy to clipboard button" your
-          team members will be needing it to join your company.
+
+      <View style={styles.codeInfo}>
+        <Text style={{alignSelf: 'center', fontFamily: 'open-sans-regular', fontSize: 30}}>{companyCode}</Text>
+        <Text style={{paddingBottom: 10, textAlign: 'auto', fontFamily: 'open-sans-regular', marginTop: 10}}>
+          This is your company joining code. Copy this code by pressing the "Copy to clipboard" button and share
+          it to people who you want to have access to your company routes.
         </Text>
-      </Card>
+        {value == 'both' &&
+        <Text style={{paddingBottom: 10, textAlign: 'auto', fontFamily: 'open-sans-regular', marginTop: 10}}>
+          You accepted domain joining. Users with similar email domain can now find your company and join it.
+        </Text>
+        }
+
+      </View>
+
       <View style={styles.btns}>
         <CustomButtonIcon
-          onPress={Clipboard.setString(companyCode)}
+          onPress={() => {
+            Clipboard.setString(companyCode)
+            Alert.alert(
+              'Code copied',
+              'Now you can share code to other people'
+            )
+          }}
           iconOne="content-copy"
           title="Copy to clipboard"
         />
@@ -66,4 +81,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: '100%',
   },
+  codeInfo: {
+    margin: 10,
+    backgroundColor: '#E1F5FD',
+    padding: 10,
+    borderRadius: 10
+  }
 })

@@ -21,6 +21,7 @@ const CarSetup = ({navigation, route}) => {
   const [registration, setRegistration] = useState('')
   const [seats, setSeats] = useState('')
   const {user} = useContext(UserContext)
+  const [error, setError] = useState('')
 
 
   console.log('user', user)
@@ -39,9 +40,11 @@ const CarSetup = ({navigation, route}) => {
 
   const uploadCar = async () => {
     if (!validateForm()) {
+      setError('All inputs must be min 1 character.')
+      console.log('validate fail')
       return
     }
-
+    console.log('uploading car')
     //fetch cars if there is already one
     const cars = await getCars(user.id)
     console.log(cars)
@@ -87,52 +90,50 @@ const CarSetup = ({navigation, route}) => {
         <View
           style={{
             ...styles.formItem,
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
           }}
         >
           <View style={styles.iconContainer}>
             <Icon active name="car-outline" />
           </View>
-          <TextInput
-            placeholder="Vehicle description"
-            maxLength={30}
-            autoCorrect={false}
-            value={description}
-            onChangeText={setDescription}
-            style={styles.textInput}
-          />
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder="Vehicle description"
+              maxLength={30}
+              autoCorrect={false}
+              value={description}
+              onChangeText={setDescription}
+              style={styles.input}
+            />
+          </View>
         </View>
 
-        <View style={styles.breakPoint}></View>
 
         <View
           style={{
             ...styles.formItem,
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
+            marginTop: 5
           }}
         >
           <View style={styles.iconContainer}>
             <Icon active name="document-text-outline" />
           </View>
-          <TextInput
-            autoCapitalize="characters"
-            placeholder="Registration number"
-            value={registration}
-            onChangeText={setRegistration}
-            style={styles.textInput}
-          />
+          <View style={styles.inputContainer}>
+            <TextInput
+              autoCapitalize="characters"
+              placeholder="Registration number"
+              value={registration}
+              onChangeText={setRegistration}
+              style={styles.input}
+            />
+          </View>
         </View>
-        <View style={styles.breakPoint}></View>
+
 
         <View
           style={{
             ...styles.formItem,
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
-            borderBottomLeftRadius: 10,
-            borderBottomRightRadius: 10,
+
+            marginTop: 5
           }}
         >
           <View style={styles.iconContainer}>
@@ -142,15 +143,20 @@ const CarSetup = ({navigation, route}) => {
               color={color.lightBlack}
             />
           </View>
-          <TextInput
-            keyboardType="numeric"
-            maxLength={2}
-            placeholder="Available seats"
-            value={seats}
-            onChangeText={seatsInputHandler}
-            style={styles.textInput}
-          />
+          <View style={styles.inputContainer}>
+            <TextInput
+              keyboardType="numeric"
+              maxLength={2}
+              placeholder="Available seats"
+              value={seats}
+              onChangeText={seatsInputHandler}
+              style={styles.input}
+            />
+          </View>
         </View>
+        {error != '' &&
+          <Text style={{alignSelf: 'center', color: 'red', marginTop: 5}}>{error}</Text>
+        }
         <View style={styles.btn}>
           <CustomButtonIcon
             iconTwo="keyboard-arrow-right"
@@ -179,11 +185,10 @@ const styles = StyleSheet.create({
   },
   formItem: {
     backgroundColor: color.lightBlue,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    borderRadius: 10
   },
   iconContainer: {
     padding: 10,
@@ -202,6 +207,22 @@ const styles = StyleSheet.create({
   breakPoint: {
     height: 1,
     backgroundColor: color.grey,
+  },
+  inputContainer: {
+    flexDirection: 'column',
+    flex: 1.5,
+    width: '100%',
+    paddingHorizontal: 10,
+    justifyContent: 'center',
+  },
+  input: {
+    backgroundColor: '#fff',
+    width: '100%',
+    padding: 15.5,
+    fontSize: 15.5,
+    borderRadius: 5,
+    height: 50,
+    fontFamily: 'open-sans-regular'
   },
 })
 
