@@ -17,13 +17,13 @@ Assuming that you have [Node 12 LTS](https://nodejs.org/en/download/) or greater
 <ol>
   <li>If needed, install code editor (+ extensions), git, npm</li>
    <li>Install Expo app to your phone. [Ios](https://apps.apple.com/us/app/expo-client/id982107779) or [Android](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=fi)</li>
-   <li>npm install -g expo-cli</li>
-   <li>git clone git@github.com:Vehonaattorit/VEHOGO.git</li>
+   <li>`npm install -g expo-cli`</li>
+   <li>`git clone git@github.com:Vehonaattorit/VEHOGO.git`</li>
   <li>Test that app works: 
     <ul><li>run it and open it in your emulator(the interactive shell is needed to get the menu option (A) for launching the emulator)
       <ul>
-        <li>cd VEHOGO</li>
-        <li>npm start</li>
+        <li>`cd VEHOGO`</li>
+        <li>`npm start`</li>
       </ul>
       </li>
     </ul>
