@@ -16,6 +16,11 @@ Assuming that you have Node 12 LTS or greater installed, you can use npm to inst
 
 <ol>
   <li>If needed, install code editor (+ extensions), git, npm</li>
+   <li>Install Expo app to your phone. iOS or Android</li>
+   <li>npm install -g expo-cli
+</li>
+   <li>```git clone git@github.com:Vehonaattorit/VEHOGO.git
+```</li>
 </ol>
 
 Create new folder and file in 'secrets/secrets.js'.
