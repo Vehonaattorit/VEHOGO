@@ -122,7 +122,7 @@ describe('Register Page', () => {
     cy.get('[data-testid="logout"]').click()
   })
 
-  it('Delete created test@register.com user from firebase', () => {
+  it('Delete test@register.com user from firebase', () => {
     cy.exec('node ./cypress/deleteTestRegisterUser.js', {
       // user.email comes from a fixture file but you can use a simple string as well
       env: {email: "test@register.com'"},

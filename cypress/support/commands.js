@@ -30,15 +30,6 @@ import 'firebase/database'
 import 'firebase/firestore'
 import {attachCustomCommands} from 'cypress-firebase'
 
-// const apiKey = Cypress.env('apiKey')
-// const authDomain = Cypress.env('authDomain')
-// const databaseURL = Cypress.env('databaseURL')
-// const projectId = Cypress.env('projectId')
-// const storageBucket = Cypress.env('storageBucket')
-// const messagingSenderId = Cypress.env('messagingSenderId')
-// const appId = Cypress.env('appId')
-// const measurementId = Cypress.env('measurementId')
-
 import {
   apiKey,
   authDomain,
