@@ -103,7 +103,7 @@ const PassengerListItem = ({navigation, user, singleItem}) => {
               </View>
               <View style={styles.passengerTextContainer}>
                 <Text style={styles.availableSeatsText}>
-                  {scheduledDrive.availableSeats}/4
+                  {scheduledDrive.availableSeats}
                 </Text>
               </View>
             </View>
