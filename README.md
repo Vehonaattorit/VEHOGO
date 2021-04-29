@@ -4,7 +4,7 @@
     - [Introduction](#introduction)
     - [API's](#API's)
     - [Introduction to Firebase](#introductionToFirebase)
-    - [Introduction to Google API](#introductionToGoogle API)
+    - [Introduction to Google API](#introductionToGoogleAPI)
     - [Setup & Installation](#Setup&Installation)
     - [Testing](#Testing)
     
