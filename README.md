@@ -39,49 +39,40 @@ We have also used Google Places Autocomplete API to give our application the typ
 
 Assuming that you have [Node 12 LTS](https://nodejs.org/en/download/) or greater installed, you can use npm to install the Expo CLI command-line utility:
 
-<ol>
-  <li>If needed, install code editor (+ extensions), git, npm</li>
-  <li>Install Expo app to your phone. <a href="https://apps.apple.com/us/app/expo-client/id982107779">iOS</a>
-     or <a href="https://play.google.com/store/apps/details?id=host.exp.exponent&hl=fi">Android</a></li>
-   <li>Install expo CLI: npm install -g expo-cli</li>
-   <li>Clone the project: git clone git@github.com:Vehonaattorit/VEHOGO.git</li>
 
-  <li>Create new folder 'secrets'.
-    <ul>
-    <li>Inside secrets folder create a new file secrets.js and copy/paste the following code snippet in it</li>
-     </br>
-      <ul>
-        <li>
-        ```
-        const firebaseConfig = {
-              apiKey: '(FIREBASE_CONFIG)',
-              authDomain: '(FIREBASE_CONFIG)',
-              projectId: '(FIREBASE_CONFIG)',
-              storageBucket: '(FIREBASE_CONFIG)',
-              messagingsenderID: '(FIREBASE_CONFIG)',
-              appId: '(FIREBASE_CONFIG)',
-              measurementId: '(FIREBASE_CONFIG)',
-            }
-            let googleMapsApiKey = '(GOOGLE_API_KEY)'
-            export {firebaseConfig}
-            ```
-          </li>
-       </ul>
-      </li>
-    </ul>
-  </li>
-</br>
-  <li>Test that app works:
-    <ul>
-    <li>run it and open it in your emulator(the interactive shell is needed to get the menu option (A) for launching the emulator)</li>
-      <ul>
-        <li>cd VEHOGO</li>
-        <li>npm start</li>
-      </ul>
-      </li>
-    </ul>
-  </li>
-</ol>
+  1. If needed, install code editor (+ extensions), git, npm</li>
+  2. Install Expo app to your phone. <a href="https://apps.apple.com/us/app/expo-client/id982107779">iOS</a>
+     or <a href="https://play.google.com/store/apps/details?id=host.exp.exponent&hl=fi">Android</a></li>
+  3. Install expo CLI: npm install -g expo-cli</li>
+  4. Clone the project: git clone git@github.com:Vehonaattorit/VEHOGO.git</li>
+
+  Create new folder 'secrets'.
+   
+  Inside secrets folder create a new file secrets.js and copy/paste the following code snippet in it</li>
+
+  ```
+  const firebaseConfig = {
+    apiKey: '(FIREBASE_CONFIG)',
+    authDomain: '(FIREBASE_CONFIG)',
+    projectId: '(FIREBASE_CONFIG)',
+    storageBucket: '(FIREBASE_CONFIG)',
+    messagingsenderID: '(FIREBASE_CONFIG)',
+    appId: '(FIREBASE_CONFIG)',
+    measurementId: '(FIREBASE_CONFIG)',
+  }
+  let googleMapsApiKey = '(GOOGLE_API_KEY)'
+  export {firebaseConfig}
+ 
+  ```
+  
+
+Test that app works:
+
+run it and open it in your emulator(the interactive shell is needed to get the menu option (A) for launching the emulator)</li>
+      
+        > cd VEHOGO
+        > npm start
+      
 
 ## Maintainers
 
