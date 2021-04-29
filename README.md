@@ -49,6 +49,7 @@ Assuming that you have [Node 12 LTS](https://nodejs.org/en/download/) or greater
   <li>Create new folder 'secrets'.
     <ul>
     <li>Inside secrets folder create a new file secrets.js and copy/paste the following code snippet in it</li>
+     </br>
       <ul>
         <li>```
             const firebaseConfig = {
@@ -68,7 +69,7 @@ Assuming that you have [Node 12 LTS](https://nodejs.org/en/download/) or greater
       </li>
     </ul>
   </li>
-
+</br>
   <li>Test that app works:
     <ul>
     <li>run it and open it in your emulator(the interactive shell is needed to get the menu option (A) for launching the emulator)</li>
