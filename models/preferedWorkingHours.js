@@ -3,6 +3,8 @@ import {ScheduledDrive, scheduleDriveConverter} from './scheduleDrive'
 export class PreferedWorkingHours {
   constructor({
     workDayNum,
+    recomendedToHomeTripRefId,
+    recomendedToWorkTripRefId,
     toWorkRefID,
     toHomeRefID,
     workDayStart,
@@ -11,6 +13,8 @@ export class PreferedWorkingHours {
     this.workDayNum = workDayNum
     this.workDayStart = workDayStart
     this.toWorkRefID = toWorkRefID
+    this.recomendedToHomeTripRefId = recomendedToHomeTripRefId
+    this.recomendedToWorkTripRefId = recomendedToWorkTripRefId
     this.toHomeRefID = toHomeRefID
     this.workDayEnd = workDayEnd
   }
@@ -42,6 +46,8 @@ export const preferedWorkingHoursConverter = {
     return new PreferedWorkingHours({
       workDayNum: data.workDayNum,
       toWorkRefID: data.toWorkRefID,
+      recomendedToHomeTripRefId: data.recomendedToHomeTripRefId,
+      recomendedToWorkTripRefId: data.recomendedToWorkTripRefId,
       toHomeRefID: data.toHomeRefID,
       workDayStart: data.workDayStart,
       workDayEnd: data.workDayEnd,
@@ -53,6 +59,8 @@ export const preferedWorkingHoursConverter = {
       workDayNum: data.workDayNum,
       toWorkRefID: data.toWorkRefID,
       toHomeRefID: data.toHomeRefID,
+      recomendedToHomeTripRefId: data.recomendedToHomeTripRefId,
+      recomendedToWorkTripRefId: data.recomendedToWorkTripRefId,
       workDayStart: data.workDayStart,
       workDayEnd: data.workDayEnd,
     })

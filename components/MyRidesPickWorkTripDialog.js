@@ -14,13 +14,12 @@ import {Ionicons, FontAwesome5} from '@expo/vector-icons'
 import {color} from '../constants/colors'
 import {UserContext} from '../contexts'
 import firebase from 'firebase'
-import fire from '../firebase/fire'
 import {checkWhatDayItIs, timeFormat} from '../utils/utils'
 import {TimeModal} from '../views/WorkingHours'
 import {googleMapsApiKey} from '../secrets/secrets'
 import {getWorkTrip, deleteWorkTrip, updateWorkTrip} from '../controllers/workTripController'
 import {removePassengerFromRoute} from '../utils/passengerRemove'
-import {getUser, updateUser} from '../controllers/userController'
+import {updateUser} from '../controllers/userController'
 import {WorkTrip} from '../models/workTrip'
 import {ScheduledDrive} from '../models/scheduleDrive'
 import {getCar} from '../controllers/carController'
@@ -37,8 +36,9 @@ const MyRidesWorkDayEditDialog = ({props}) => {
   const [selectedTime, setSelectedTime] = useState('startDate')
   const [isPickerShow, setIsPickerShow] = useState(false)
   const {user} = useContext(UserContext)
-  const db = firebase.firestore()
   let TouchableCmp = TouchableOpacity
+
+  console.log()
 
   const updateValue = (newValue, fieldName) => {
     console.log('updating value for user id', newValue)
@@ -131,14 +131,14 @@ const MyRidesWorkDayEditDialog = ({props}) => {
       startLocation = user.company.location
       endLocation = user.homeLocation
     }
-    console.log('display name',user.name)
+
     console.log('start location', startLocation)
 
     if (workTripType == 'work') {
       initialStops.push(
         new Stop({
           address: user.homeAddress,
-          stopName: 'Home',
+          stopName: workTripType,
           userID: user.id,
           location: user.homeLocation,
         })
@@ -146,7 +146,7 @@ const MyRidesWorkDayEditDialog = ({props}) => {
       initialStops.push(
         new Stop({
           address: user.company.address,
-          stopName: user.company.name,
+          stopName: workTripType,
           userID: user.id,
           location: user.company.location,
         })
@@ -156,7 +156,7 @@ const MyRidesWorkDayEditDialog = ({props}) => {
       initialStops.push(
         new Stop({
           address: user.company.address,
-          stopName: user.company.name,
+          stopName: workTripType,
           userID: user.id,
           location: user.company.location,
         })
@@ -164,7 +164,7 @@ const MyRidesWorkDayEditDialog = ({props}) => {
       initialStops.push(
         new Stop({
           address: user.homeAddress,
-          stopName: 'Home',
+          stopName: workTripType,
           userID: user.id,
           location: user.homeLocation,
         })
@@ -222,9 +222,10 @@ const MyRidesWorkDayEditDialog = ({props}) => {
 
       let userToUpdate = user
 
-      user.preferedWorkingHours.forEach(element => {
+      user.preferedWorkHourindex.forEach(element => {
         if (element.workDayNum == workingHours.workDayNum) {
 
+          element.toWorkRefID = workTripID
           if (workTripType == 'work') {
             element.toWorkRefID = workTripId
           } else {
@@ -232,37 +233,12 @@ const MyRidesWorkDayEditDialog = ({props}) => {
           }
         }
       })
-
-      await updateUser(userToUpdate)
-      props.navigation.popToTop()
   }
 
-  const removeWorkTrip = async () => {
+  const deleteWorkTrip = async () => {
     if (workTrip != undefined) {
       if (user.id == workTrip.driverID) {
-        let token = await fire.auth().currentUser.getIdTokenResult()
-        workTrip.scheduledDrive.stops.forEach(async stop => {
-          const response = await fetch(
-            `https://us-central1-veho-go.cloudfunctions.net/deleteWorkTripFromUser`,
-            {
-              method: 'POST',
-              headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                userId: stop.userID,
-                idToken: token.token,
-                workTrip: workTrip,
-              }),
-            }
-          )
-        })
-
-
-
         await deleteWorkTrip(user.company.id, workTrip.id)
-
       } else {
         let workTripUpdate
         // filter all stops that DON'T HAVE passenger ID
@@ -288,26 +264,21 @@ const MyRidesWorkDayEditDialog = ({props}) => {
       }
     }
 
-    //remove refId from the user that deleted workTrip
-
     user.preferedWorkingHours.forEach((element) => {
       if (element.toWorkRefID != undefined && element.toWorkRefID != null) {
         if (element.toWorkRefID == workTrip.id) {
-          delete element.toWorkRefID
+          element.toWorkRefID = null
         }
       }
       if (element.toHomeRefID != undefined && element.toHomeRefID != null) {
         if (element.toHomeRefID == workTrip.id) {
-          delete element.toHomeRefID
+          element.toHomeRefID = null
         }
       }
     })
-
-    console.log('preferedWorking', user.preferedWorkingHours)
     user.preferedWorkingHours
     updateUser(user)
-    //props.onCancel()
-    props.navigation.popToTop()
+    props.onCancel()
   }
 
   return (
@@ -444,7 +415,7 @@ const MyRidesWorkDayEditDialog = ({props}) => {
             <TouchableCmp
               onPress={() => {
                 console.log('disable / enable')
-                removeWorkTrip()
+                deleteWorkTrip()
               }}
             >
               <View
@@ -478,8 +449,8 @@ const MyRidesWorkDayEditDialog = ({props}) => {
                   createNewWorkTrip()
                 } else {
                   // This here for storage
-                  // DONT DELETE UNLESS YOU ARE NIKLAS
-
+                  // DONT DELETE UNLESS YOU ARE NIKLAS 
+                  
                   /*let token = await fire.auth().currentUser.getIdTokenResult()
                   const response = await fetch(
                     `https://us-central1-veho-go.cloudfunctions.net/getBestRoute`,

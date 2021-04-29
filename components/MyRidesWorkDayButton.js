@@ -28,6 +28,7 @@ import {color} from '../constants/colors'
 import {getWorkTrip, deleteWorkTrip} from '../controllers/workTripController'
 import {checkWhatDayItIs, timeFormat} from '../utils/utils'
 import {format} from 'prettier'
+import fire from '../firebase/fire'
 import {removePassengerFromRoute} from '../utils/passengerRemove'
 
 const MyRidesWorkDayButton = ({props}) => {
@@ -57,18 +58,24 @@ const MyRidesWorkDayButton = ({props}) => {
   }
 
   const addNewWorkTrip = async () => {
+    const hours = new Date().getHours()
+    console.log('prop num',props.workingHour.workDayNum)
     if (user.preferedWorkingHours.length > 0) {
+      let found = false;
       for (let i = 0; i < user.preferedWorkingHours.length; i++) {
         const workingHour = user.preferedWorkingHours[i];
         if (props.workingHour.workDayNum < workingHour.workDayNum) {
           user.preferedWorkingHours.splice(i, 0, {workDayNum: props.workingHour.workDayNum, workDayEnd: workingHour.workDayEnd, workDayStart: workingHour.workDayStart})
+          found = true
           break
         }
       }
-      const exampleWorkingHour = user.preferedWorkingHours[0];
-      user.preferedWorkingHours.push({workDayNum: props.workingHour.workDayNum, workDayEnd: exampleWorkingHour.workDayEnd, workDayStart: exampleWorkingHour.workDayStart})
+      if(!found){
+        const exampleWorkingHour = user.preferedWorkingHours[0];
+        user.preferedWorkingHours.push({workDayNum: props.workingHour.workDayNum, workDayEnd: exampleWorkingHour.workDayEnd, workDayStart: exampleWorkingHour.workDayStart})
+      }
     } else {
-      user.preferedWorkingHours = [{workDayNum: props.workingHour.workDayNum}]
+      user.preferedWorkingHours = [{workDayNum: props.workingHour.workDayNum, workDayEnd: new Date(1970, 0, 1, hours + 1, 0), workDayStart: new Date(1970, 0, 1, hours, 0)}]
     }
 
     updateUser(user)
@@ -80,6 +87,26 @@ const MyRidesWorkDayButton = ({props}) => {
 
         if (workTrip != undefined) {
           if (user.id == workTrip.driverID) {
+            console.log('deleting work trip')
+            let token = await fire.auth().currentUser.getIdTokenResult()
+            workTrip.scheduledDrive.stops.forEach(async stop => {
+              const response = await fetch(
+                `https://us-central1-veho-go.cloudfunctions.net/deleteWorkTripFromUser`,
+                {
+                  method: 'POST',
+                  headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    userId: stop.userID,
+                    idToken: token.token,
+                    workTrip: workTrip,
+                  }),
+                }
+              )
+            })
+
             await deleteWorkTrip(user.company.id, workTrip.id)
           } else {
 
@@ -100,8 +127,30 @@ const MyRidesWorkDayButton = ({props}) => {
             await removePassengerFromRoute(workTripUpdate, user.company.id, workTrip)
           }
         }
+        console.log('homeTrip',homeTrip)
+        console.log('home driver id', homeTrip.driverID)
+        console.log('user id', user.id)
         if (homeTrip != undefined) {
           if (user.id == homeTrip.driverID) {
+            console.log('deleting home trip')
+            let token = await fire.auth().currentUser.getIdTokenResult()
+            workTrip.scheduledDrive.stops.forEach(async stop => {
+              const response = await fetch(
+                `https://us-central1-veho-go.cloudfunctions.net/deleteWorkTripFromUser`,
+                {
+                  method: 'POST',
+                  headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    userId: stop.userID,
+                    idToken: token.token,
+                    workTrip: workTrip,
+                  }),
+                }
+              )
+            })
             await deleteWorkTrip(user.company.id, homeTrip.id)
           } else {
 
