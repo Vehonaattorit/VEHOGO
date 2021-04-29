@@ -52,7 +52,7 @@ Assuming that you have [Node 12 LTS](https://nodejs.org/en/download/) or greater
      </br>
       <ul>
         <li>
-        ```
+       <code>
         const firebaseConfig = {
               apiKey: '(FIREBASE_CONFIG)',
               authDomain: '(FIREBASE_CONFIG)',
@@ -64,7 +64,7 @@ Assuming that you have [Node 12 LTS](https://nodejs.org/en/download/) or greater
             }
             let googleMapsApiKey = '(GOOGLE_API_KEY)'
             export {firebaseConfig}
-            ```
+          </code>
           </li>
        </ul>
       </li>
