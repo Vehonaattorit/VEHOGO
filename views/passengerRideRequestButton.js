@@ -80,24 +80,53 @@ const PassengerRideRequestButton = ({
         const hours = new Date().getHours()
 
         //search if preferedwrokinghours already contain requested workday
-        let found = false
+        let alreadyActive = false
         user.preferedWorkingHours.forEach(element => {
           if (element.workDayNum == workTrip.workDayNum) {
-            found = true
+            alreadyActive = true
           }
         });
-        console.log('found or not', found)
-        //update preferedworkinghours if same worktrip.workdayNum not found
-        if (!found) {
-          user.preferedWorkingHours.push({
-            workDayEnd: new Date(1970, 0, 1, hours, 0),
-            workDayNum: workTrip.workDayNum,
-            workDayStart: new Date(1970, 0, 1, hours + 1, 0),
-          })
+        console.log('alreadyActive or not', alreadyActive)
+        //update preferedworkinghours if same worktrip.workdayNum not active
 
-          console.log('updated user', user)
-          await updateUser(user)
+
+        if (user.preferedWorkingHours.length > 0) {
+
+          if (alreadyActive == false) {
+
+            let found = false;
+            for (let i = 0; i < user.preferedWorkingHours.length; i++) {
+              const workingHour = user.preferedWorkingHours[i];
+              if (workTrip.workDayNum < workingHour.workDayNum) {
+                user.preferedWorkingHours.splice(i, 0, {
+                  workDayEnd: new Date(1970, 0, 1, hours + 1, 0),
+                  workDayNum: workTrip.workDayNum,
+                  workDayStart: new Date(1970, 0, 1, hours, 0),
+                })
+                found = true
+                break
+              }
+            }
+            if (!found) {
+              user.preferedWorkingHours.push({
+                workDayEnd: new Date(1970, 0, 1, hours + 1, 0),
+                workDayNum: workTrip.workDayNum,
+                workDayStart: new Date(1970, 0, 1, hours, 0),
+              })
+
+
+            }
+          }
+        } else {
+          user.preferedWorkingHours = [{
+            workDayEnd: new Date(1970, 0, 1, hours + 1, 0),
+            workDayNum: workTrip.workDayNum,
+            workDayStart: new Date(1970, 0, 1, hours, 0),
+          }]
         }
+
+        console.log('updated user', user)
+        await updateUser(user)
 
       } catch (e) {
         console.log('ride request update failed', e)

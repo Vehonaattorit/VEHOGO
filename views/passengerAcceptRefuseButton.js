@@ -74,7 +74,7 @@ const PassengerAcceptRefuseButton = (props) => {
     console.log(`Accepting passenger : ${rideRequest.senderID}`)
 
     let workTripToUpdate = workTrip
-    workTripToUpdate.scheduledDrive.availableSeats -= 1
+
     if (workTripToUpdate.scheduledDrive.stops.length > 2) {
       var tempStops = workTripToUpdate.scheduledDrive.stops
       var waypoints = tempStops.slice(1, tempStops.length - 1)
