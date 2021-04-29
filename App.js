@@ -20,6 +20,12 @@ import {LogBox} from 'react-native'
 import * as Permissions from 'expo-permissions'
 import * as Notifications from 'expo-notifications'
 
+import * as Linking from 'expo-linking'
+
+const prefix = Linking.makeUrl('/')
+
+console.log('prefix', prefix)
+
 // Web build crashes if LogBox is used
 if (Platform.OS !== 'web') {
   LogBox.ignoreLogs(['Setting a timer'])
@@ -34,6 +40,36 @@ Notifications.setNotificationHandler({
 export default function App() {
   const [fontReady, setFontReady] = useState(false)
   const [userId, setUserId] = useState(null)
+
+  const [data, setData] = useState(null)
+
+  // Linking
+  const linking = {
+    prefixes: [prefix],
+    config: {
+      screens: {
+        MainPage: 'mainpage',
+        OutlookCalendar: 'calendar',
+      },
+    },
+  }
+
+  console.log('linking', linking)
+
+  const handleDeepLink = (event) => {
+    let data = Linking.parse(event.url)
+
+    console.log('handleDeepLink, data', data)
+    setData(data)
+  }
+
+  useEffect(() => {
+    Linking.addEventListener('url', handleDeepLink)
+
+    return () => {
+      Linking.removeEventListener('url')
+    }
+  }, [])
 
   const loadFonts = async () => {
     await Font.loadAsync({
@@ -65,12 +101,12 @@ export default function App() {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <Navigation userId={userId} />
+      <Navigation linking={linking} userId={userId} />
     </SafeAreaView>
   )
 }
 
-function Navigation({userId}) {
+function Navigation({userId, linking}) {
   if (userId == null) {
     return <AuthStackNavigator />
   } else {
@@ -98,7 +134,7 @@ function Navigation({userId}) {
       } else {
         return (
           <UserContext.Provider value={{user}}>
-            <MainStackNavigator />
+            <MainStackNavigator linking={linking} />
           </UserContext.Provider>
         )
       }

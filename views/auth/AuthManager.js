@@ -34,16 +34,27 @@ export class AuthManager {
       azureAdAppProps.scope
     )}&prompt=login&redirect_uri=${encodeURIComponent(
       // 'vehogo://com.vehonaattorit.shareride' 23.04.2021 10.55
-      azureAdAppProps.redirectUri // 23.04.2021 10.55
+      // azureAdAppProps.redirectUri // 29.04.2021 21.56
 
-      // AuthSession.makeRedirectUri({
-      //   scheme: 'com.vehonaattorit.shareride',
-      // }) 23.04.2021 11.17
+      AuthSession.makeRedirectUri({
+        scheme: 'vehogoride',
+        path: 'calendar',
+      })
     )}`
+
+    console.log(
+      '29.04.2021 makeRedirectUri',
+      AuthSession.makeRedirectUri({
+        scheme: 'vehogoride',
+        path: 'calendar',
+      })
+    )
 
     const baseRedirectUrl = Linking.makeUrl(
       'com.vehonaattorit.shareride://auth'
     )
+
+    // exp:192.168.1.3:19000
 
     console.log('666-baseRedirectUrl-232', baseRedirectUrl)
 
@@ -52,7 +63,12 @@ export class AuthManager {
       '362-appended-standAlone.redirectUri',
       encodeURIComponent(
         // 'vehogo://com.vehonaattorit.shareride' 23.04.2021 10.55
-        azureAdAppProps.redirectUri // 23.04.2021 10.55
+        // azureAdAppProps.redirectUri // 23.04.2021 10.55
+
+        AuthSession.makeRedirectUri({
+          scheme: 'vehogoride',
+          path: 'calendar',
+        })
 
         // AuthSession.makeRedirectUri({
         //   scheme: 'com.vehonaattorit.shareride',
@@ -68,7 +84,12 @@ export class AuthManager {
     const authUrls = {
       authUrl: authUrl,
       // returnUrl: baseRedirectUrl,
-      returnUrl: azureAdAppProps.redirectUri || AuthSession.makeRedirectUri(), // 23.04.2021 10.55
+      /**29.04. klo 21.54 */
+      // returnUrl: azureAdAppProps.redirectUri || AuthSession.makeRedirectUri(), // 23.04.2021 10.55
+      returnUrl: AuthSession.makeRedirectUri({
+        scheme: 'vehogoride',
+        path: 'calendar',
+      }),
     }
 
     let authResponse = await AuthSession.startAsync(authUrls)

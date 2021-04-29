@@ -26,11 +26,11 @@ import CarEditForm from '../views/CarEditForm'
 
 const Stack = createStackNavigator()
 const Drawer = createStackNavigator()
-function MainStackNavigator() {
+const MainStackNavigator = ({linking}) => {
   const {user} = useContext(UserContext)
 
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <Stack.Navigator
         screenOptions={{
           headerStyle: {
