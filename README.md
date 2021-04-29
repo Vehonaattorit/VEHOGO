@@ -4,10 +4,10 @@
     - [Introduction](#introduction)
     - [API's](#aPI)
     - [Introduction to Firebase](#firebase)
-    - [Introduction to Google API](#googleAPI)
+    - [Introduction to Google API](#google-API)
     - [Setup & Installation](#installation)
     - [Testing](#testing)
-    
+    - [Maintainers](#maintainers)
  
 
 ## Introduction
@@ -22,7 +22,7 @@ Use your app to enter your work destination and also your work schedule for the 
 
 ## API's
 
-### Introduction to Firebase
+### Firebase
 
 Firebase is Google’s mobile application development platform that helps you build, improve, and grow your app. It provides developers with a variety of tools and services to help them develop quality apps, grows their user base, and earn profit. It is built on Google’s infrastructure. Firebase is categorized as a NoSQL database program, which stores data in JSON-like documents. <a href="https://medium.com/firebase-developers/what-is-firebase-the-complete-story-abridged-bcc730c5f2c0">More about Firebase...</a>
 
@@ -30,7 +30,7 @@ We have used firebase authentication to know the user’s identity, provide a cu
 
 We have also taken advantage of Firebase’s real-time database which is cloud-hosted. Data is stored as JSON and synchronized in real-time to every connected client. <a href="https://firebase.google.com/docs/database">More about database...</a>
 
-### Introduction to Google API
+### Google API
 
 Google Map’s API is a robust tool that can be used to create a custom map, a searchable map, check-in functions, display live data synching with location, plan routes, or create a mashup just to name a few. <a href="https://medium.com/@helennnsays/why-when-and-how-to-use-the-google-map-api-f5dfa35986dc">More about Google Map API...</a>
 
@@ -45,7 +45,7 @@ What we have used Google Map API for:
 We have also used Google Places Autocomplete API to give our application the type-ahead-search behavior. The autocomplete service can match on full words and substrings, resolving place names, addresses, and codes. Applications can therefore send queries as the user types, to provide on-the-fly place predictions. <a href="https://developers.google.com/maps/documentation/places/web-service/autocomplete">Read more...
 </a>
 
-## Setup & Installation
+## Installation
 
 Assuming that you have [Node 12 LTS](https://nodejs.org/en/download/) or greater installed, you can use npm to install the Expo CLI command-line utility:
 
