@@ -75,8 +75,6 @@ describe('Driver Setup', () => {
       cy.contains(/verify your email/i)
 
       cy.get('[data-testid="logout"]').click()
-
-      // [END]
     })
   })
 
