@@ -2,11 +2,11 @@
 
 - [Navigation](#markdown-navigation)
     - [Introduction](#introduction)
-    - [API's](#aPI's)
-    - [Introduction to Firebase](#introductionToFirebase)
-    - [Introduction to Google API](#introductionToGoogleAPI)
-    - [Setup & Installation](#Setup&Installation)
-    - [Testing](#Testing)
+    - [API's](#aPI)
+    - [Introduction to Firebase](#introduction to Firebase)
+    - [Introduction to Google API](#introduction to GoogleAPI)
+    - [Setup & Installation](#setup & Installation)
+    - [Testing](#testing)
     
  
 
