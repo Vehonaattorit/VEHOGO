@@ -1,5 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react'
-import {View, SafeAreaView, Text} from 'react-native'
+import {View, SafeAreaView, Platform, Text} from 'react-native'
 import MainStackNavigator from './navigators/MainNavigator'
 import AuthStackNavigator from './navigators/AuthenticationNavigator'
 import SetUpStackNavigator from './navigators/SetUpNavigator'
@@ -19,6 +19,11 @@ import {LogBox} from 'react-native'
 
 import * as Permissions from 'expo-permissions'
 import * as Notifications from 'expo-notifications'
+
+// Web build crashes if LogBox is used
+if (Platform.OS !== 'web') {
+  LogBox.ignoreLogs(['Setting a timer'])
+}
 
 Notifications.setNotificationHandler({
   handleNotification: async () => {

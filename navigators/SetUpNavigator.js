@@ -52,18 +52,7 @@ function SetUpStackNavigator() {
           component={Company}
           options={{
             title: 'Create or join',
-            headerLeft: () => (
-              <IconButton
-                icon="logout"
-                size={28}
-                color={color.darkBlue}
-                onPress={() => {
-                  signOut()
-                }}
-              />
-            ),
           }}
-
         />
         <Stack.Screen
           name="Travel"
@@ -76,7 +65,7 @@ function SetUpStackNavigator() {
           name="Address"
           component={Address}
           options={{
-            title: 'address',
+            title: 'Home address',
           }}
         />
         <Stack.Screen

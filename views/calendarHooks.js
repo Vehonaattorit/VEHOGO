@@ -73,6 +73,10 @@ const calendarHooks = () => {
     dispatch({type: 'SIGN_OUT', token: null})
   }
 
+  // exp:192.168.1.3:19000
+
+  // vehogo://
+
   const bootstrapAsync = async () => {
     const response = await AuthManager.checkTokenExpiration()
 

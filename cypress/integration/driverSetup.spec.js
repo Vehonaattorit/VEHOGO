@@ -80,7 +80,7 @@ describe('Driver Setup', () => {
   })
 
   it(
-    'continue with rest of setup: travel preference, home address, working days, working hours, ',
+    'continue with rest of setup: travel preference, home address, working days, working hours and add car',
     {retries: 7},
     () => {
       cy.fixture('driverSetup').then(({goodEmail, goodPassword}) => {
@@ -115,11 +115,21 @@ describe('Driver Setup', () => {
       cy.get('[data-testid="workHoursEnd"]').click()
       cy.get('[data-testid="workHoursSubmit"]').click()
 
+      // Create new car
+
+      cy.contains(/add car/i)
+
+      cy.get('[data-testid="vehicleDescInput"]').type('Musta bemari')
+      cy.get('[data-testid="registrationNumInput"]').type('KIR-180')
+      cy.get('[data-testid="availableSeatsInput"]').type('4')
+
+      cy.get('[data-testid="carSetupContinueBtn"]').click()
+
       cy.contains(/you are done/i)
 
       cy.get('[data-testid="finishSetupBtn"]').click()
 
-      cy.contains(/available rides/i)
+      cy.contains(/start time/i)
     }
   )
 

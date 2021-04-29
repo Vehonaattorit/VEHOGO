@@ -44,7 +44,7 @@ export const SetUpInit = ({route, navigation}) => {
         index % 2 === 0 ? item.workDayEnd.toDate() : item.workDayStart.toDate()
 
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.location.latitude},${user.company.location.longitude}&key=${googleMapsApiKey}`,
+        `https://cryptic-depths-30021.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.location.latitude},${user.company.location.longitude}&key=${googleMapsApiKey}`,
         {
           method: 'GET',
           //Request Type
@@ -54,6 +54,9 @@ export const SetUpInit = ({route, navigation}) => {
       const responseJson = await response.json()
 
       const data = responseJson
+
+      console.log('RESKUS-666', data)
+
       let totalTime = 0
       data.routes[0].legs.map((leg) => {
         totalTime += leg.duration.value
@@ -129,7 +132,7 @@ export const SetUpInit = ({route, navigation}) => {
         let token = await fire.auth().currentUser.getIdTokenResult()
         console.log('token is', token.token)
         const response = await fetch(
-          `https://cors-anywhere.herokuapp.com/https://us-central1-veho-go.cloudfunctions.net/getBestRoutes`,
+          `https://cryptic-depths-30021.herokuapp.com/https://us-central1-veho-go.cloudfunctions.net/getBestRoutes`,
           {
             method: 'POST',
             headers: {

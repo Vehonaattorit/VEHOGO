@@ -2,7 +2,6 @@
   "testFiles": [
     "login.spec.js",
     "register.spec.js",
-    "verifyUserWithEmail.spec.js",
     "passengerSetup.spec.js",
     "driverSetup.spec.js"
   ],

@@ -20,6 +20,12 @@ import calendarHooks from './calendarHooks'
 import {color} from '../constants/colors'
 import {GraphManager} from './graph/GraphManager'
 
+// import AzureAuth from 'react-native-azure-auth'
+
+// const azureAuth = new AzureAuth({
+//   clientId: 'YOUR_CLIENT_ID',
+// })
+
 /**
  *
  * Currently dispalys events from a 7 day period.

@@ -1,11 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react'
 import {StyleSheet, TextInput} from 'react-native'
-import {
-  Button,
-  Text,
-  View,
-  Icon,
-} from 'native-base'
+import {Button, Text, View, Icon} from 'native-base'
 import {getCars, updateCar} from '../controllers/carController'
 import {Car} from '../models/car'
 import {UserContext} from '../contexts'
@@ -14,15 +9,12 @@ import {MaterialCommunityIcons} from '@expo/vector-icons'
 import {updateUser} from '../controllers/userController'
 import CustomButtonIcon from '../components/CustomIconButton'
 
-
 const CarSetup = ({navigation, route}) => {
-
   const [description, setDescription] = useState('')
   const [registration, setRegistration] = useState('')
   const [seats, setSeats] = useState('')
   const {user} = useContext(UserContext)
   const [error, setError] = useState('')
-
 
   console.log('user', user)
 
@@ -66,7 +58,6 @@ const CarSetup = ({navigation, route}) => {
     user.schoosedCarID = car.id
     await updateUser(user)
     navigation.navigate('SetUpInit')
-
   }
 
   const seatsInputHandler = (inputText) => {
@@ -85,8 +76,6 @@ const CarSetup = ({navigation, route}) => {
         <MaterialCommunityIcons name="car-sports" size={250} color="#26AAE2" />
       </View>
       <View style={styles.form}>
-
-
         <View
           style={{
             ...styles.formItem,
@@ -97,6 +86,7 @@ const CarSetup = ({navigation, route}) => {
           </View>
           <View style={styles.inputContainer}>
             <TextInput
+              testID="vehicleDescInput"
               placeholder="Vehicle description"
               maxLength={30}
               autoCorrect={false}
@@ -107,11 +97,10 @@ const CarSetup = ({navigation, route}) => {
           </View>
         </View>
 
-
         <View
           style={{
             ...styles.formItem,
-            marginTop: 5
+            marginTop: 5,
           }}
         >
           <View style={styles.iconContainer}>
@@ -119,6 +108,7 @@ const CarSetup = ({navigation, route}) => {
           </View>
           <View style={styles.inputContainer}>
             <TextInput
+              testID="registrationNumInput"
               autoCapitalize="characters"
               placeholder="Registration number"
               value={registration}
@@ -128,12 +118,11 @@ const CarSetup = ({navigation, route}) => {
           </View>
         </View>
 
-
         <View
           style={{
             ...styles.formItem,
 
-            marginTop: 5
+            marginTop: 5,
           }}
         >
           <View style={styles.iconContainer}>
@@ -147,6 +136,7 @@ const CarSetup = ({navigation, route}) => {
             <TextInput
               keyboardType="numeric"
               maxLength={2}
+              testID="availableSeatsInput"
               placeholder="Available seats"
               value={seats}
               onChangeText={seatsInputHandler}
@@ -154,11 +144,14 @@ const CarSetup = ({navigation, route}) => {
             />
           </View>
         </View>
-        {error != '' &&
-          <Text style={{alignSelf: 'center', color: 'red', marginTop: 5}}>{error}</Text>
-        }
+        {error != '' && (
+          <Text style={{alignSelf: 'center', color: 'red', marginTop: 5}}>
+            {error}
+          </Text>
+        )}
         <View style={styles.btn}>
           <CustomButtonIcon
+            testID="carSetupContinueBtn"
             iconTwo="keyboard-arrow-right"
             title="Continue"
             onPress={uploadCar}
@@ -172,7 +165,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
     height: '100%',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   button: {
     marginTop: 20,
@@ -188,7 +181,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    borderRadius: 10
+    borderRadius: 10,
   },
   iconContainer: {
     padding: 10,
@@ -222,7 +215,7 @@ const styles = StyleSheet.create({
     fontSize: 15.5,
     borderRadius: 5,
     height: 50,
-    fontFamily: 'open-sans-regular'
+    fontFamily: 'open-sans-regular',
   },
 })
 

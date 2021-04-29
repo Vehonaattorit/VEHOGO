@@ -11,7 +11,7 @@ export class Stop {
 // Firestore data converter
 export const stopConverter = {
   toFirestore: function (stop) {
-    stopObject = {}
+    let stopObject = {}
     stopObject.location = stop.location
     stopObject.address = stop.address
     stopObject.stopName = stop.stopName
@@ -19,6 +19,9 @@ export const stopConverter = {
     if (stop.estimatedArrivalTime != undefined) {
       stopObject.estimatedArrivalTime = stop.estimatedArrivalTime
     }
+
+    console.log('stopObject-666', stopObject)
+
     return stopObject
   },
   fromFirestore: function (snapshot, options) {

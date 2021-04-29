@@ -2,6 +2,9 @@ import AsyncStorage from '@react-native-community/async-storage'
 import {Platform} from 'react-native'
 import moment from 'moment-timezone'
 import * as AuthSession from 'expo-auth-session'
+
+import * as Linking from 'expo-linking'
+
 import * as WebBrowser from 'expo-web-browser'
 
 import {azureAdAppProps} from '../../secrets/secrets'
@@ -9,6 +12,19 @@ import {azureAdAppProps} from '../../secrets/secrets'
 import * as Localization from 'expo-localization'
 
 WebBrowser.maybeCompleteAuthSession()
+
+// export const azureAdAppProps = {
+//   redirectUri:
+//     Platform.OS === 'android'
+//       ? AuthSession.makeRedirectUri({
+//           scheme: 'vehogo',
+//         })
+//       : `host.exp.exponent://expo.io/@user-name/slug`,
+//   clientId: clientId,
+//   tenantId: tenantId,
+//   prompt: prompt,
+//   scope: scope,
+// }
 
 export class AuthManager {
   static signInAsync = async () => {
@@ -25,9 +41,22 @@ export class AuthManager {
       // }) 23.04.2021 11.17
     )}`
 
+    const baseRedirectUrl = Linking.makeUrl(
+      'com.vehonaattorit.shareride://auth'
+    )
+
+    console.log('666-baseRedirectUrl-232', baseRedirectUrl)
+
+    console.log('362-standAlone.redirectUri', azureAddProps.redirectUri)
+
+    console.log(
+      '242-AuthSession.makeRedirectUri()',
+      AuthSession.makeRedirectUri()
+    )
+
     const authUrls = {
       authUrl: authUrl,
-      // returnUrl: 'com.vehonaattorit.shareride://oauthredirect',
+      // returnUrl: baseRedirectUrl,
       returnUrl: azureAdAppProps.redirectUri || AuthSession.makeRedirectUri(), // 23.04.2021 10.55
     }
 

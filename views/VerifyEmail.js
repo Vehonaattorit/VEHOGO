@@ -11,6 +11,8 @@ export const VerifyEmail = ({navigation}) => {
   const checkEmail = async () => {
     // For cypress testing purposes
     if (Platform.OS === 'web') navigation.navigate('Company')
+    else if ((Platform.OS === 'android' || Platform.OS === 'web') && __DEV__)
+      navigation.navigate('Company')
 
     const result = await checkEmailVerification()
     if (result === true) {
