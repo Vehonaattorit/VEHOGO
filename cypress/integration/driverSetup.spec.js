@@ -130,6 +130,8 @@ describe('Driver Setup', () => {
 
       cy.get('[data-testid="finishSetupBtn"]').click()
 
+      cy.wait(10000)
+
       cy.contains(/start time/i)
     }
   )

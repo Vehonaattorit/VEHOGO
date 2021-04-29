@@ -34,7 +34,7 @@ export const azureAdAppProps = {
   redirectUri:
     Platform.OS === 'android'
       ? AuthSession.makeRedirectUri({
-          scheme: 'vehogo',
+          scheme: 'vehogoride',
         })
       : `host.exp.exponent://expo.io/@user-name/slug`,
   clientId: clientId,

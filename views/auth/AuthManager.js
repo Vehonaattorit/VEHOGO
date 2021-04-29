@@ -17,7 +17,7 @@ WebBrowser.maybeCompleteAuthSession()
 //   redirectUri:
 //     Platform.OS === 'android'
 //       ? AuthSession.makeRedirectUri({
-//           scheme: 'vehogo',
+//           scheme: 'vehogoride',
 //         })
 //       : `host.exp.exponent://expo.io/@user-name/slug`,
 //   clientId: clientId,
@@ -47,7 +47,18 @@ export class AuthManager {
 
     console.log('666-baseRedirectUrl-232', baseRedirectUrl)
 
-    console.log('362-standAlone.redirectUri', azureAddProps.redirectUri)
+    console.log('362-standAlone.redirectUri', azureAdAppProps.redirectUri)
+    console.log(
+      '362-appended-standAlone.redirectUri',
+      encodeURIComponent(
+        // 'vehogo://com.vehonaattorit.shareride' 23.04.2021 10.55
+        azureAdAppProps.redirectUri // 23.04.2021 10.55
+
+        // AuthSession.makeRedirectUri({
+        //   scheme: 'com.vehonaattorit.shareride',
+        // }) 23.04.2021 11.17
+      )
+    )
 
     console.log(
       '242-AuthSession.makeRedirectUri()',
