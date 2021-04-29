@@ -3,9 +3,9 @@
 - [Navigation](#markdown-navigation)
     - [Introduction](#introduction)
     - [API's](#aPI)
-    - [Introduction to Firebase](#introductiontoFirebase)
-    - [Introduction to Google API](#introductiontoGoogleAPI)
-    - [Setup & Installation](#setup&Installation)
+    - [Introduction to Firebase](#firebase)
+    - [Introduction to Google API](#googleAPI)
+    - [Setup & Installation](#installation)
     - [Testing](#testing)
     
  
