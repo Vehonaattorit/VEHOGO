@@ -39,32 +39,30 @@ We have also used Google Places Autocomplete API to give our application the typ
 
 Assuming that you have [Node 12 LTS](https://nodejs.org/en/download/) or greater installed, you can use npm to install the Expo CLI command-line utility:
 
+1. If needed, install code editor (+ extensions), git, npm</li>
+2. Install Expo app to your phone. <a href="https://apps.apple.com/us/app/expo-client/id982107779">iOS</a>
+   or <a href="https://play.google.com/store/apps/details?id=host.exp.exponent&hl=fi">Android</a></li>
+3. Install expo CLI: npm install -g expo-cli</li>
+4. Clone the project: git clone git@github.com:Vehonaattorit/VEHOGO.git</li>
 
-  1. If needed, install code editor (+ extensions), git, npm</li>
-  2. Install Expo app to your phone. <a href="https://apps.apple.com/us/app/expo-client/id982107779">iOS</a>
-     or <a href="https://play.google.com/store/apps/details?id=host.exp.exponent&hl=fi">Android</a></li>
-  3. Install expo CLI: npm install -g expo-cli</li>
-  4. Clone the project: git clone git@github.com:Vehonaattorit/VEHOGO.git</li>
+Create new folder 'secrets'.
 
-  Create new folder 'secrets'.
+Inside secrets folder create a new file secrets.js and copy/paste the following code snippet in it</li>
 
-  Inside secrets folder create a new file secrets.js and copy/paste the following code snippet in it</li>
+```
+const firebaseConfig = {
+  apiKey: '(FIREBASE_CONFIG)',
+  authDomain: '(FIREBASE_CONFIG)',
+  projectId: '(FIREBASE_CONFIG)',
+  storageBucket: '(FIREBASE_CONFIG)',
+  messagingsenderID: '(FIREBASE_CONFIG)',
+  appId: '(FIREBASE_CONFIG)',
+  measurementId: '(FIREBASE_CONFIG)',
+}
+let googleMapsApiKey = '(GOOGLE_API_KEY)'
+export {firebaseConfig}
 
-  ```
-  const firebaseConfig = {
-    apiKey: '(FIREBASE_CONFIG)',
-    authDomain: '(FIREBASE_CONFIG)',
-    projectId: '(FIREBASE_CONFIG)',
-    storageBucket: '(FIREBASE_CONFIG)',
-    messagingsenderID: '(FIREBASE_CONFIG)',
-    appId: '(FIREBASE_CONFIG)',
-    measurementId: '(FIREBASE_CONFIG)',
-  }
-  let googleMapsApiKey = '(GOOGLE_API_KEY)'
-  export {firebaseConfig}
-
-  ```
-
+```
 
 Test that app works:
 
@@ -72,6 +70,16 @@ run it and open it in your emulator(the interactive shell is needed to get the m
 
         > cd VEHOGO
         > npm start
+
+## Testing
+
+As your codebase expands, small errors and edge cases you don’t expect can cascade into larger failures. Bugs lead to bad user experience and ultimately, business losses. One way to prevent fragile programming is to test your code before releasing it into the wild.
+
+Testing helps you uncover these mistakes and verifies that your code is working. Perhaps even more importantly, testing ensures that your code continues to work in the future as you add new features, refactor the existing ones, or upgrade major dependencies of your project. <a href="https://reactnative.dev/docs/testing-overview">Read more...</a>
+
+### Introduction to Cypress
+
+In this project, we have used Cypress as our testing platform. With Cypress, you can Run End to End tests. It checks whether a web application works as expected or not. <a href="https://www.browserstack.com/dg/cypress-testing?utm_source=google&utm_medium=cpc&utm_campaign=Search-NB-CypressTesting-TestKeywords-EMEA-Automate-CL&utm_adgroup=Cypress-End-to-End-Testing&utm_keyword=%2Bcypress%20%2Bend%20%2Bto%20%2Bend%20%2Btesting&utm_matchtype=b&gclid=Cj0KCQjwsqmEBhDiARIsANV8H3bT1GEoovqozRxwtsGSaWFry6alc8JLfeA5a_BY0od8Gvvl_J4uTLcaAvikEALw_wcB">Read more...<a>
 
 
 ## Maintainers
