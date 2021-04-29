@@ -1,26 +1,15 @@
 import React, {useEffect, useState, useContext} from 'react'
 import {View, StyleSheet, ScrollView, TouchableOpacity, Platform, TouchableNativeFeedback, Dimensions} from 'react-native'
-import {
-  Body,
-  Header,
-  Left,
-  Text,
-  Card,
-  Icon,
-  Button,
-  Container,
-  Title,
-  Right,
-  CardItem,
-} from 'native-base'
-import {Ionicons, FontAwesome5} from '@expo/vector-icons'
-import CustomButtonIcon from '../components/CustomIconButton'
+
 import {color} from '../constants/colors'
 
 import {UserContext} from '../contexts'
 import {checkWhatDayItIs} from '../utils/utils'
 import MyRidesWorkDayButton from '../components/MyRidesWorkDayButton'
 import MyRidesWorkDayEditDialog from '../components/MyRidesWorkDayEditDialog'
+import MyRidesPickWorkTripDialog from '../components/MyRidesPickWorkTripDialog'
+
+
 export const MyRides = ({navigation}) => {
 
   const {user} = useContext(UserContext)
@@ -31,6 +20,7 @@ export const MyRides = ({navigation}) => {
   }
   const [myRideElements, setMyRideElements] = useState([])
   const [showOwerlay, setShowOwerlay] = useState(false)
+  const [showWorkTripPicker, setShowWorkTripPicker] = useState(false)
   const [selectedWorkTrip, setSelectedWorkingHour] = useState()
   const [selectedPreferedHours, setSelectedPreferedHours] = useState()
   const [workTripType, setWorkTripType] = useState()
@@ -74,7 +64,8 @@ export const MyRides = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      {showOwerlay == true ? <MyRidesWorkDayEditDialog props={{workTripType: workTripType, selectedPreferedHours: selectedPreferedHours, selectedWorkTrip: selectedWorkTrip, onCancel: () => setShowOwerlay(false)}}></MyRidesWorkDayEditDialog> : <View />}
+      {showOwerlay == true ? <MyRidesWorkDayEditDialog props={{workTripType: workTripType, selectedPreferedHours: selectedPreferedHours, selectedWorkTrip: selectedWorkTrip, navigation: navigation, onCancel: () => setShowOwerlay(false)}}></MyRidesWorkDayEditDialog> : <View />}
+      {showWorkTripPicker == true ? <MyRidesPickWorkTripDialog props={{workTripType: workTripType, selectedPreferedHours: selectedPreferedHours, selectedWorkTrip: selectedWorkTrip, navigation: navigation, onCancel: () => setShowOwerlay(false)}}></MyRidesPickWorkTripDialog> : <View />}
       <View style={{height: 380, flexDirection: 'column'}}>
         <ScrollView
           horizontal={true}

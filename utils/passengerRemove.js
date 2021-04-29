@@ -44,7 +44,7 @@ export const removePassengerFromRoute = async(workTripUpdate, companyId, workTri
   workTripUpdate.route = route
 
   await updateWorkTrip(companyId, workTripUpdate)
-  //setAlreadyRequested(true)
+
 }
 
 export const getTripRoute = async (waypoints, workTrip) => {
