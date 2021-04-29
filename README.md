@@ -21,7 +21,7 @@ Your app also provides info about the driver-partner with whom you will ride, in
 
 Use your app to enter your work destination and also your work schedule for the week. If you have a preferred route, it's helpful to talk through the directions together. When you arrive at your destination and exit the vehicle, your trip ends.
 
-## API
+## API's
 
 ### Firebase
 
