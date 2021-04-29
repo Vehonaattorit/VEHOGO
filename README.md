@@ -16,14 +16,24 @@ Use your app to enter your work destination and also your work schedule for the 
 
 Firebase is Google’s mobile application development platform that helps you build, improve, and grow your app. It provides developers with a variety of tools and services to help them develop quality apps, grows their user base, and earn profit. It is built on Google’s infrastructure. Firebase is categorized as a NoSQL database program, which stores data in JSON-like documents. <a href="https://medium.com/firebase-developers/what-is-firebase-the-complete-story-abridged-bcc730c5f2c0">More about Firebase...</a>
 
-We have used firebase authentication to know the user's identity to provide a customized experience and secure the user's data. <a href="https://firebase.google.com/docs/auth">More about authentication...</a>
+We have used firebase authentication to know the user’s identity, provide a customized experience, and keep the user’s data secure. <a href="https://firebase.google.com/docs/auth">More about authentication...</a>
 
 We have also taken advantage of Firebase’s real-time database which is cloud-hosted. Data is stored as JSON and synchronized in real-time to every connected client. <a href="https://firebase.google.com/docs/database">More about database...</a>
 
-### Introduction to Google Map 
+### Introduction to Google API
 
+Google Map’s API is a robust tool that can be used to create a custom map, a searchable map, check-in functions, display live data synching with location, plan routes, or create a mashup just to name a few. <a href="https://medium.com/@helennnsays/why-when-and-how-to-use-the-google-map-api-f5dfa35986dc">More about Google Map API...</a>
 
+What we have used Google Map API for:
 
+<ol>
+<li>Get the passengers and drivers location</li>
+<li>Show the route between driver and passenger</li>
+<li>Showing nearest road to destination</li>
+</ol>
+
+We have also used Google Places Autocomplete API to give our application the type-ahead-search behavior. The autocomplete service can match on full words and substrings, resolving place names, addresses, and codes. Applications can therefore send queries as the user types, to provide on-the-fly place predictions. <a href="https://developers.google.com/maps/documentation/places/web-service/autocomplete">Read more...
+</a>
 
 ## Setup & Installation
 
@@ -35,8 +45,33 @@ Assuming that you have [Node 12 LTS](https://nodejs.org/en/download/) or greater
      or <a href="https://play.google.com/store/apps/details?id=host.exp.exponent&hl=fi">Android</a></li>
    <li>Install expo CLI: npm install -g expo-cli</li>
    <li>Clone the project: git clone git@github.com:Vehonaattorit/VEHOGO.git</li>
+
+  <li>Create new folder 'secrets'.
+    <ul>
+    <li>Inside secrets folder create a new file secrets.js and copy/paste the following code snippet in it</li>
+      <ul>
+        <li>```
+            const firebaseConfig = {
+              apiKey: '(FIREBASE_CONFIG)',
+              authDomain: '(FIREBASE_CONFIG)',
+              projectId: '(FIREBASE_CONFIG)',
+              storageBucket: '(FIREBASE_CONFIG)',
+              messagingsenderID: '(FIREBASE_CONFIG)',
+              appId: '(FIREBASE_CONFIG)',
+              measurementId: '(FIREBASE_CONFIG)',
+            }
+            let googleMapsApiKey = '(GOOGLE_API_KEY)'
+            export {firebaseConfig}
+            ```
+          </li>
+       </ul>
+      </li>
+    </ul>
+  </li>
+
   <li>Test that app works:
-    <ul><li>run it and open it in your emulator(the interactive shell is needed to get the menu option (A) for launching the emulator)
+    <ul>
+    <li>run it and open it in your emulator(the interactive shell is needed to get the menu option (A) for launching the emulator)</li>
       <ul>
         <li>cd VEHOGO</li>
         <li>npm start</li>
@@ -45,22 +80,6 @@ Assuming that you have [Node 12 LTS](https://nodejs.org/en/download/) or greater
     </ul>
   </li>
 </ol>
-
-Create new folder and file in 'secrets/secrets.js'.
-
-```
-const firebaseConfig = {
-  apiKey: '(FIREBASE_CONFIG)',
-  authDomain: '(FIREBASE_CONFIG)',
-  projectId: '(FIREBASE_CONFIG)',
-  storageBucket: '(FIREBASE_CONFIG)',
-  messagingsenderID: '(FIREBASE_CONFIG)',
-  appId: '(FIREBASE_CONFIG)',
-  measurementId: '(FIREBASE_CONFIG)',
-}
-let googleMapsApiKey = '(GOOGLE_API_KEY)'
-export {firebaseConfig}
-```
 
 ## Maintainers
 
