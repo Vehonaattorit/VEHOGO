@@ -44,6 +44,8 @@ describe('Passenger Setup', () => {
   it('login with passenger user', {retries: 7}, () => {
     cy.fixture('passengerSetup').then(({goodEmail, goodPassword}) => {
       cy.get('[data-testid="emailInput"]').type(goodEmail)
+
+      cy.wait(6000)
       cy.get('[data-testid="passwordInput"]').type(goodPassword)
       cy.get('[data-testid="loginBtn"]').click()
 
@@ -61,7 +63,6 @@ describe('Passenger Setup', () => {
       cy.get('[data-testid="emailInput"]').type(goodEmail)
 
       cy.wait(6000)
-
       cy.get('[data-testid="passwordInput"]').type(goodPassword)
       cy.get('[data-testid="loginBtn"]').click()
 
@@ -85,7 +86,7 @@ describe('Passenger Setup', () => {
   })
 
   it(
-    'continue with rest of setup: travel preference, home address, working days, working hours, ',
+    'continue with rest of setup: travel preference, home address, working days and working hours',
     {retries: 7},
     () => {
       cy.fixture('passengerSetup').then(({goodEmail, goodPassword}) => {

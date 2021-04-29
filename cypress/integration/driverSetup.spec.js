@@ -39,6 +39,8 @@ describe('Driver Setup', () => {
   it('login with driver user', {retries: 7}, () => {
     cy.fixture('driverSetup').then(({goodEmail, goodPassword}) => {
       cy.get('[data-testid="emailInput"]').type(goodEmail)
+
+      cy.wait(6000)
       cy.get('[data-testid="passwordInput"]').type(goodPassword)
       cy.get('[data-testid="loginBtn"]').click()
 
@@ -56,7 +58,6 @@ describe('Driver Setup', () => {
       cy.get('[data-testid="emailInput"]').type(goodEmail)
 
       cy.wait(6000)
-
       cy.get('[data-testid="passwordInput"]').type(goodPassword)
       cy.get('[data-testid="loginBtn"]').click()
 
