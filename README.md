@@ -1,6 +1,6 @@
 # VEHOGO
 
-- [Navigation](#markdown-navigation)
+- [Content](#markdown-navigation)
     - [Introduction](#introduction)
     - [API's](#API's)
     - [Introduction to Firebase](#firebase)
