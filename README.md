@@ -5,7 +5,7 @@
     - [API's](#aPI)
     - [Introduction to Firebase](#firebase)
     - [Introduction to Google API](#google-API)
-    - [Setup & Installation](#installation)
+    - [Installation](#installation)
     - [Testing](#testing)
     - [Maintainers](#maintainers)
  
