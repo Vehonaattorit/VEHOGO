@@ -2,7 +2,7 @@
 
 - [Navigation](#markdown-navigation)
     - [Introduction](#introduction)
-    - [API's](#API's)
+    - [API's](#aPI's)
     - [Introduction to Firebase](#introductionToFirebase)
     - [Introduction to Google API](#introductionToGoogleAPI)
     - [Setup & Installation](#Setup&Installation)
