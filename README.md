@@ -42,7 +42,7 @@ Assuming that you have [Node 12 LTS](https://nodejs.org/en/download/) or greater
 1. If needed, install code editor (+ extensions), git, npm</li>
 2. Install Expo app to your phone. <a href="https://apps.apple.com/us/app/expo-client/id982107779">iOS</a>
    or <a href="https://play.google.com/store/apps/details?id=host.exp.exponent&hl=fi">Android</a></li>
-3. Install expo CLI: npm install -g expo-cli</li>
+3. Install expo CLI: <code>npm install -g expo-cli</code></li>
 4. Clone the project: git clone git@github.com:Vehonaattorit/VEHOGO.git</li>
 
 Create new folder 'secrets'.
