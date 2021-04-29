@@ -6,7 +6,7 @@ VEHO-GO is an application made manly for the use of Veho company. It is a techno
 
 You can use your rider app to request a ride. When a nearby driver-partner accepts your request, your app displays an estimated time of arrival for the driver-partner heading to your pickup location. Your app notifies you when the driver-partner is about to arrive.
 
-Your app also provides info about the driver-partner with whom you will ride, including first name, vehicle type, and license plate number. This info helps the two of you connect at your pickup location.
+Your app also provides info about the driver-partner with whom you will ride, including full name, vehicle type, and license plate number. This info helps the two of you connect at your pickup location.
 
 Use your app to enter your work destination and also your work schedule for the week. If you have a preferred route, it's helpful to talk through the directions together. When you arrive at your destination and exit the vehicle, your trip ends.
 
