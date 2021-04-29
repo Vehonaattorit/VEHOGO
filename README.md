@@ -51,8 +51,9 @@ Assuming that you have [Node 12 LTS](https://nodejs.org/en/download/) or greater
     <li>Inside secrets folder create a new file secrets.js and copy/paste the following code snippet in it</li>
      </br>
       <ul>
-        <li>```
-            const firebaseConfig = {
+        <li>
+        ```
+        const firebaseConfig = {
               apiKey: '(FIREBASE_CONFIG)',
               authDomain: '(FIREBASE_CONFIG)',
               projectId: '(FIREBASE_CONFIG)',
