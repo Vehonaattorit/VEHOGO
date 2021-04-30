@@ -38,9 +38,11 @@ export const VerifyEmail = ({navigation}) => {
   return (
     <View style={styles.view}>
       <FontAwesome name="check-circle-o" size={300} color="#26AAE2" />
-      <Text style={{margin: 5}}>Verify your email address.</Text>
-      <Text style={{margin: 5}}>Email was sent to {user.emailAddress}</Text>
-      <Text style={{margin: 5}}>Then press continue</Text>
+      <Text style={{textAlign: 'center', margin: 5}}>
+        Verify your email address. Email was sent to:
+      </Text>
+      <Text style={{textAlign: 'center', margin: 5}}>{user.email}</Text>
+      <Text style={{textAlign: 'center', margin: 5}}>Then press continue</Text>
 
       <CustomIconButton
         onPress={() => {
@@ -56,6 +58,7 @@ export const VerifyEmail = ({navigation}) => {
 const styles = StyleSheet.create({
   view: {
     flex: 1,
+
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
