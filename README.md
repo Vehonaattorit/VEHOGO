@@ -58,7 +58,8 @@ In this project, we have used Cypress as our testing platform. With Cypress, you
 Struction for using Cypress in our application:
 1. In the root folder make a new file 'serviceAccount.json'
 2. Copy/paste the following code snipped in the serviceAccount.json
-3. ```{
+
+```{
 {
   "type": "service_account",
   "project_id": "veho-go",
