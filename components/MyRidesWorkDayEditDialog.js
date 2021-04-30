@@ -310,6 +310,28 @@ const MyRidesWorkDayEditDialog = ({props}) => {
     props.navigation.popToTop()
   }
 
+  const getBestRoutes = async() => {
+    /*let token = await fire.auth().currentUser.getIdTokenResult()
+    const response = await fetch(
+      `https://us-central1-veho-go.cloudfunctions.net/getBestRoute`,
+      {
+        method: 'POST',
+        headers: {
+          // "Access-Control-Allow-Origin": *,
+          mode: 'cors', // no-cors, *cors, same-origin
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          workDay: 5,//workdayHere
+          idToken: token.token}),
+          timeOffset: 15, // time offset with minutes
+      }
+    )*/
+
+    console.log('best routes')
+  }
+
   return (
     <View style={styles.workDayCard}>
       <TimeModal
@@ -496,8 +518,8 @@ const MyRidesWorkDayEditDialog = ({props}) => {
                         idToken: token.token}),
                         timeOffset: 15, // time offset with minutes
                     }
-                  ) */
-                  console.log('finding new trip')
+                  )*/
+                  getBestRoutes()
                 }
               }}
             >

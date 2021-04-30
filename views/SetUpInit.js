@@ -44,7 +44,7 @@ export const SetUpInit = ({route, navigation}) => {
         index % 2 === 0 ? item.workDayEnd.toDate() : item.workDayStart.toDate()
 
       const response = await fetch(
-        `https://cryptic-depths-30021.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.location.latitude},${user.company.location.longitude}&key=${googleMapsApiKey}`,
+        `https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.location.latitude},${user.company.location.longitude}&key=${googleMapsApiKey}`,
         {
           method: 'GET',
           //Request Type

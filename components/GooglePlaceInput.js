@@ -42,6 +42,7 @@ const GooglePlacesInput = ({setAddress, defaultValue}) => {
             key: googleMapsApiKey,
             language: 'en',
             types: 'address',
+            components: 'country:fin'
           }}
           styles={{
             textInputContainer: {
