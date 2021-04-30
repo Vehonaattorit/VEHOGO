@@ -57,7 +57,8 @@ In this project, we have used Cypress as our testing platform. With Cypress, you
   
 Struction for using Cypress in our application:
 1. In the root folder make a new file 'serviceAccount.json'
-2. Copy/paste the following code snipped in the serviceAccount.json
+2. <a href="https://sites.google.com/site/scriptsexamples/new-connectors-to-google-services/firebase/tutorials/authenticate-with-a-service-account">Authenticate with a Service Account</a>
+3. Copy/paste the following code snipped in the serviceAccount.json
 
 ```{
 {
