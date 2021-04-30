@@ -54,6 +54,25 @@ Testing helps you uncover these mistakes and verifies that your code is working.
 ### Cypress
 
 In this project, we have used Cypress as our testing platform. With Cypress, you can Run End to End tests. It checks whether a web application works as expected or not. <a href="https://www.browserstack.com/dg/cypress-testing?utm_source=google&utm_medium=cpc&utm_campaign=Search-NB-CypressTesting-TestKeywords-EMEA-Automate-CL&utm_adgroup=Cypress-End-to-End-Testing&utm_keyword=%2Bcypress%20%2Bend%20%2Bto%20%2Bend%20%2Btesting&utm_matchtype=b&gclid=Cj0KCQjwsqmEBhDiARIsANV8H3bT1GEoovqozRxwtsGSaWFry6alc8JLfeA5a_BY0od8Gvvl_J4uTLcaAvikEALw_wcB">Read more...<a>
+  
+Struction for using Cypress in our application:
+1. In the root folder make a new file 'serviceAccount.json'
+2. Copy/paste the following code snipped in the serviceAccount.json
+3. ```{
+{
+  "type": "service_account",
+  "project_id": "veho-go",
+  "private_key_id": {"Private Key Id"},
+  "private_key": {"Private Key"},
+  "client_email": {"Client Email"},
+  "client_id": {"Client Id"},
+  "auth_uri": {"Auth URI"},
+  "token_uri": {"Token URI"},
+  "auth_provider_x509_cert_url": {"Auth Provider x509 Cert URL"},
+  "client_x509_cert_url": {"Client x509 Cert URL"}
+}
+
+```
 
 ## Installation
 
