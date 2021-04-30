@@ -24,8 +24,6 @@ import * as Linking from 'expo-linking'
 
 const prefix = Linking.makeUrl('/')
 
-console.log('prefix', prefix)
-
 // Web build crashes if LogBox is used
 if (Platform.OS !== 'web') {
   LogBox.ignoreLogs(['Setting a timer'])
@@ -54,12 +52,9 @@ export default function App() {
     },
   }
 
-  console.log('linking', linking)
-
   const handleDeepLink = (event) => {
     let data = Linking.parse(event.url)
 
-    console.log('handleDeepLink, data', data)
     setData(data)
   }
 

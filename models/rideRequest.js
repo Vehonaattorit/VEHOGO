@@ -11,6 +11,7 @@ export class RideRequest {
     workTripRefID,
     driverID,
     workDayNum,
+    createdAt,
   }) {
     this.id = id
     this.homeLocation = homeLocation
@@ -21,6 +22,7 @@ export class RideRequest {
     this.workTripRefID = workTripRefID
     this.driverID = driverID
     this.workDayNum = workDayNum
+    this.createdAt = createdAt
   }
 }
 
@@ -56,6 +58,10 @@ export const rideRequestConverter = {
       rideRequestObject.workDayNum = rideRequest.workDayNum
     }
 
+    if (rideRequest.createdAt != undefined) {
+      rideRequestObject.createdAt = rideRequest.createdAt
+    }
+
     return rideRequestObject
   },
   fromFirestore: function (snapshot, options) {
@@ -70,6 +76,7 @@ export const rideRequestConverter = {
       workTripRefID: data.workTripRefID,
       driverID: data.driverID,
       workDayNum: data.workDayNum,
+      createdAt: data.createdAt,
     })
   },
   fromData: function (data) {
@@ -84,6 +91,7 @@ export const rideRequestConverter = {
       workTripRefID: data.workTripRefID,
       driverID: data.driverID,
       workDayNum: data.workDayNum,
+      createdAt: data.createdAt,
     })
   },
 }

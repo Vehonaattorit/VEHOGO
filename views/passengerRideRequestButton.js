@@ -14,6 +14,8 @@ import {removePassengerFromRoute} from '../utils/passengerRemove'
 import {updateUser} from '../controllers/userController'
 import {PreferedWorkingHours} from '../models/preferedWorkingHours'
 
+import firebase from 'firebase'
+
 const PassengerRideRequestButton = ({
   user,
   navigation,
@@ -22,15 +24,11 @@ const PassengerRideRequestButton = ({
 }) => {
   const [expoToken, setExpoToken] = useState(null)
   const [alreadyRequested, setAlreadyRequested] = useState(false)
-  console.log('user in request', user);
-  console.log('prefered', user.preferedWorkingHours)
   useEffect(() => {
     const getExpoToken = async () => {
-      console.log('workTrip.driverID', workTrip.driverID)
-
-      const userDriver = await getUser(workTrip.driverID)
-
-      setExpoToken(userDriver.expoToken)
+      // console.log('workTrip.driverID', workTrip.driverID)
+      // const userDriver = await getUser(workTrip.driverID)
+      // setExpoToken(userDriver.expoToken)
     }
 
     const getRequests = async () => {
@@ -61,6 +59,7 @@ const PassengerRideRequestButton = ({
 
   const requestRide = async () => {
     if (!isPassengerIncluded && !alreadyRequested) {
+      console.log('I CREATED new RIDE REQUESTS !!!')
 
       try {
         await updateRideRequest(
@@ -74,6 +73,7 @@ const PassengerRideRequestButton = ({
             workTripRefID: workTrip.id,
             driverID: workTrip.driverID,
             workDayNum: workTrip.workDayNum,
+            createdAt: new firebase.firestore.Timestamp.fromDate(new Date()),
           })
         )
 
@@ -81,22 +81,19 @@ const PassengerRideRequestButton = ({
 
         //search if preferedwrokinghours already contain requested workday
         let alreadyActive = false
-        user.preferedWorkingHours.forEach(element => {
+        user.preferedWorkingHours.forEach((element) => {
           if (element.workDayNum == workTrip.workDayNum) {
             alreadyActive = true
           }
-        });
+        })
         console.log('alreadyActive or not', alreadyActive)
         //update preferedworkinghours if same worktrip.workdayNum not active
 
-
         if (user.preferedWorkingHours.length > 0) {
-
           if (alreadyActive == false) {
-
-            let found = false;
+            let found = false
             for (let i = 0; i < user.preferedWorkingHours.length; i++) {
-              const workingHour = user.preferedWorkingHours[i];
+              const workingHour = user.preferedWorkingHours[i]
               if (workTrip.workDayNum < workingHour.workDayNum) {
                 user.preferedWorkingHours.splice(i, 0, {
                   workDayEnd: new Date(1970, 0, 1, hours + 1, 0),
@@ -113,26 +110,22 @@ const PassengerRideRequestButton = ({
                 workDayNum: workTrip.workDayNum,
                 workDayStart: new Date(1970, 0, 1, hours, 0),
               })
-
-
             }
           }
         } else {
-          user.preferedWorkingHours = [{
-            workDayEnd: new Date(1970, 0, 1, hours + 1, 0),
-            workDayNum: workTrip.workDayNum,
-            workDayStart: new Date(1970, 0, 1, hours, 0),
-          }]
+          user.preferedWorkingHours = [
+            {
+              workDayEnd: new Date(1970, 0, 1, hours + 1, 0),
+              workDayNum: workTrip.workDayNum,
+              workDayStart: new Date(1970, 0, 1, hours, 0),
+            },
+          ]
         }
 
-        console.log('updated user', user)
         await updateUser(user)
-
       } catch (e) {
         console.log('ride request update failed', e)
       }
-
-
 
       console.log('2444, expoToken', expoToken)
       console.log('2333, apiKey', apiKey)

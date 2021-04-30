@@ -1,14 +1,13 @@
 import React, {useEffect, useContext, useState} from 'react'
 import {FlatList, ActivityIndicator, StyleSheet} from 'react-native'
 import {View} from 'native-base'
-import PendingRequestsListItem from './PendingRequestsListItem'
+// import PendingRequestsListItem from './PendingRequestsListItem'
 import DriverTripListItem from './DriverTripListItem'
 import {workTripQuery} from '../controllers/workTripController'
 import {UserContext} from '../contexts'
 import {color} from '../constants/colors'
 
 const DriverTripList = ({driverTrips, navigation}) => {
-
   return (
     <View>
       <FlatList

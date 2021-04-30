@@ -54,7 +54,7 @@ export async function deleteRideRequest(companyId, rideRequestId) {
       .doc(rideRequestId)
       .delete()
 
-    return
+    return true
   } catch (error) {
     console.error('Error getting document: ', error)
     return
@@ -95,17 +95,36 @@ export async function rideRequestQuery(companyId, field, condition, value) {
       .get()
 
     const workTripList = []
-    if (true) {
-      ref.forEach((doc) => {
-        workTripList.push(rideRequestConverter.fromData(doc.data()))
-      })
-    }
+    ref.forEach((doc) => {
+      workTripList.push(rideRequestConverter.fromData(doc.data()))
+    })
+
     return workTripList
   } catch (error) {
     console.error('Error getting document: ', error)
     return
   }
 }
+
+// export async function rideRequestQuery(companyId, field, condition, value) {
+//   try {
+//     // Add a new document in collection "users"
+//     let queryRef = db
+//       .collection('companys')
+//       .doc(companyId)
+//       .collection('requests')
+//       .withConverter(rideRequestConverter)
+//     // .where(field, condition, value)
+//     // .get()
+
+//     queryRef.where(field, condition, value)
+
+//     return queryRef
+//   } catch (error) {
+//     console.error('Error getting document: ', error)
+//     return
+//   }
+// }
 
 export async function rideRequestMultiQuery(companyId, querys) {
   try {
