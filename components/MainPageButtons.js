@@ -6,6 +6,7 @@ import {Ionicons, FontAwesome5, MaterialIcons} from '@expo/vector-icons'
 import MainPageButton from './MainPageButton'
 import {color} from '../constants/colors'
 import {workTripMultiQuery} from '../controllers/workTripController'
+import {Platform} from 'react-native'
 
 const MainPageButtons = ({
   user,
@@ -198,6 +199,11 @@ const MainPageButtons = ({
   const renderGridItem = (itemData) => {
     const {item} = itemData
 
+    // Calendar does not work on iOS devices
+    if (Platform.OS === 'ios' && item.title === 'Calendar') {
+      return
+    }
+
     return (
       <>
         <MainPageButton
@@ -243,16 +249,6 @@ const MainPageButtons = ({
           numColumns={2}
         />
       )}
-      {/* <FlatList
-      contentContainerStyle={{
-        paddingBottom: 80,
-        backgroundColor: 'white',
-      }}
-      keyExtractor={(item, index) => item.id}
-      data={mainPageButtons}
-      renderItem={renderGridItem}
-      numColumns={2}
-    /> */}
     </>
   )
 }
