@@ -125,7 +125,7 @@ run it and open it in your emulator(the interactive shell is needed to get the m
 ## Change Log
 
 <details>
-<summary>Spring 1:</summary>
+<summary>Sprint 1:</summary>
 <br>
   <ol>
 
@@ -163,7 +163,7 @@ run it and open it in your emulator(the interactive shell is needed to get the m
 </ol>
 </details>
 <details>
-<summary>Spring 2:</summary>
+<summary>Sprint 2:</summary>
 <br>
   <ol>
   <li>Outlook Calendar:
@@ -202,7 +202,7 @@ run it and open it in your emulator(the interactive shell is needed to get the m
 </details>
 
 <details>
-<summary>Spring 3:</summary>
+<summary>Sprint 3:</summary>
 <br>
   <ol>
 
@@ -279,7 +279,7 @@ run it and open it in your emulator(the interactive shell is needed to get the m
 </details>
 
 <details>
-<summary>Spring 4:</summary>
+<summary>Sprint 4:</summary>
 <br>
   <ol>
 <li>Styling of main page</li>
@@ -314,7 +314,7 @@ run it and open it in your emulator(the interactive shell is needed to get the m
 </details>
 
 <details>
-<summary>Spring 5:</summary>
+<summary>Sprint 5:</summary>
 <br>
   <ol>
 <li>Live chatting implementation: 
@@ -344,7 +344,7 @@ run it and open it in your emulator(the interactive shell is needed to get the m
 </details>
 
 <details>
-<summary>Spring 6:</summary>
+<summary>Sprint 6:</summary>
 <br>
   <ol>
 
@@ -397,7 +397,7 @@ run it and open it in your emulator(the interactive shell is needed to get the m
 </details>
 
 <details>
-<summary>Spring 7:</summary>
+<summary>Sprint 7:</summary>
 <br>
   <ol>
 
@@ -412,42 +412,9 @@ run it and open it in your emulator(the interactive shell is needed to get the m
 </details>
 
 <details>
-<summary>Spring 8:</summary>
-<br>
-  <ol>
-
-<li>Goal in this sprint. Setting up development environment and working first version where user can navigate through different views. 
- Firebase authentication implemented and firestore used for storing some data.</li>
-  <br>
-<li>Driver pages:
-  <ul>
-    <li>Get ride requests from firebase</li>
-    <li>Visuals for showing ride requests and accepting them</li>
-    <li>Ride offer stored in firebase</li>
-  </ul>
-  </li>
-  <br>
- <li>SET UP views</li>
-  <br>
-<li>Authentication / Firebase setup</li>
-  <br>
-<li>ESLint setup</li>
-  <br>
-<li>Passenger reservation pages</li>
-  <br>
-<li></li>Driver related pages
-  <br>
-<li>Continuous Integration</li>
-  <br>
-<li></li>Map route/Navigation with location updates</li>
-  <br>
-Chat:
-<li><ul><li>Implemented with Firebase Firestore</li></ul></li>
-</ol>
-</details>
 
 <details>
-<summary>Spring 8:</summary>
+<summary>Sprint 8:</summary>
 <br>
   <ol>
     <li>Update worktrip route when passenger cancels his/hers stop.</li>
