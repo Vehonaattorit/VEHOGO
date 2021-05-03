@@ -344,37 +344,70 @@ run it and open it in your emulator(the interactive shell is needed to get the m
 </details>
 
 <details>
+<summary>Spring 6:</summary>
+<br>
+  <ol>
+
+<li>Redesign the SETUP views React Native</li>
+  <br>
+<li>Outlook Calendar:
+  <ul>
+    <li>Schedule rides to events</li>
+    <li>Login to Microsoft Outlook</li>
+    <li>Create a new event with logged in user</li>
+  </ul>
+  </li>
+  <br>
+ <li>BUG FIXES & IMPROVEMENTS IN APP FEATURES</li>
+  <br>
+<li>BUGS & expo build</li>
+  <br>
+<li>domain verification:
+  <ul>
+    <li>Parse users email when user is creating a new company and add this to companys default domain</li>
+    <li>Prompt user to add different domain policy. for example one where different domains are allowed to join and are only notified</li>
+    <li>seconds domain policy where only allowed domains are able to join a company</li>
+  </ul>
+  </li>
+  <br>
+<li>Start Ride Driver list updates in real time</li>
+  <br>
+<li>ActiveRide bar passenger displayed to user</li>
+  <br>
+<li>When driver stops ride -> passenger exits Route screen</li>
+  <br>
+<li></li>Map route/Navigation with location updates</li>
+  <br>
+<li>Week days displayed in Passenger List for User</li>
+<br>
+<li>better query for rides</li>
+<br>
+<li>Solve why Google Maps does not work in built APK</li>
+<br>
+<li>'Your driver is on its way' Active ride passenger bar functionaility</li>
+<br>
+<li>Start Ride Main Button does not lead anywhere</li>
+<br>
+<li>Bug fixing</li>
+<li>Client testing day</li>
+<li>add the time estimate for each stop in work trips</li>
+<li>Convert the workdays to start from sunday and end in saturday</li>
+<li>Chat System feature polishing</li>
+</ol>
+</details>
+
+<details>
 <summary>Spring 7:</summary>
 <br>
   <ol>
 
-<li>Goal in this sprint. Setting up development environment and working first version where user can navigate through different views. 
- Firebase authentication implemented and firestore used for storing some data.</li>
+<li>Firebase rules</li>
   <br>
-<li>Driver pages:
-  <ul>
-    <li>Get ride requests from firebase</li>
-    <li>Visuals for showing ride requests and accepting them</li>
-    <li>Ride offer stored in firebase</li>
-  </ul>
-  </li>
+<li>Settings view</li>
   <br>
- <li>SET UP views</li>
+ <li>Outlook Calendar sign up in StandAlone</li>
   <br>
-<li>Authentication / Firebase setup</li>
-  <br>
-<li>ESLint setup</li>
-  <br>
-<li>Passenger reservation pages</li>
-  <br>
-<li></li>Driver related pages
-  <br>
-<li>Continuous Integration</li>
-  <br>
-<li></li>Map route/Navigation with location updates</li>
-  <br>
-Chat:
-<li><ul><li>Implemented with Firebase Firestore</li></ul></li>
+<li>Setup & Settings screen(s)</li>
 </ol>
 </details>
 
@@ -414,37 +447,38 @@ Chat:
 </details>
 
 <details>
-<summary>Spring 9:</summary>
+<summary>Spring 8:</summary>
 <br>
   <ol>
-
-<li>Goal in this sprint. Setting up development environment and working first version where user can navigate through different views. 
- Firebase authentication implemented and firestore used for storing some data.</li>
-  <br>
-<li>Driver pages:
+    <li>Update worktrip route when passenger cancels his/hers stop.</li>
+<li>Fixes & Small features
   <ul>
-    <li>Get ride requests from firebase</li>
-    <li>Visuals for showing ride requests and accepting them</li>
-    <li>Ride offer stored in firebase</li>
+    <li>Fix setup screen working hours</li>
+    <li>Working Day gets its default values setup by user from firebase</li>
+    <li>Send push notification to passengers, when driver starts ride</li>
+      <li>What weekday is passenger requesting</li>
+      <li>'Your driver is on its way' ride bar should provider driver's name for passenger user</li>
+      <li>Pressing on passenger request notification takes driver to PassegnerRequest view.</li>
   </ul>
   </li>
   <br>
- <li>SET UP views</li>
+<li>Driver worktip flow
+  <ul>
+    <li>Create as many worktrip documents for user as user has worktrips. for example user goes to work 2 days of week. 4 worktrip documents will be created</li>
+    <li>When user adds work times. Add these values to scheduledDrive object inside the workTrip document.</li>
+    <li>When user adds home location. Add this as first location in Stop object array. This is inside the scheduled drive.</li>
+  </ul>
+  </li>
   <br>
-<li>Authentication / Firebase setup</li>
+<li>Better Register and login validation</li>
   <br>
-<li>ESLint setup</li>
+<li>implemented Active Rides List on passenger's side. Display drivers that have started driving</li>
   <br>
-<li>Passenger reservation pages</li>
+<li>added state to SetupInit so user can't spam the button and create more workTrips</li>
   <br>
-<li></li>Driver related pages
+<li>Creating more tests for Travis CI</li>
   <br>
-<li>Continuous Integration</li>
-  <br>
-<li></li>Map route/Navigation with location updates</li>
-  <br>
-Chat:
-<li><ul><li>Implemented with Firebase Firestore</li></ul></li>
+<li>Setup & Settings Modals</li>
 </ol>
 </details>
 
