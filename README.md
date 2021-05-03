@@ -411,7 +411,6 @@ run it and open it in your emulator(the interactive shell is needed to get the m
 </ol>
 </details>
 
-<details>
 
 <details>
 <summary>Sprint 8:</summary>
