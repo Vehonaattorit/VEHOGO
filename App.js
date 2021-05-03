@@ -12,7 +12,6 @@ import {useDocumentData} from 'react-firebase-hooks/firestore'
 
 import {LogBox} from 'react-native'
 
-import * as Permissions from 'expo-permissions'
 import * as Notifications from 'expo-notifications'
 
 import * as Linking from 'expo-linking'
