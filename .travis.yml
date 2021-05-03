@@ -11,14 +11,14 @@ before_script:
   - npm install jest-expo
   - npm install -g expo-cli
 script:
-  - sudo npm ci
+  - npm ci
   - npm run test:parallel
 jobs:
   include:
     - stage: deploy
       node_js: lts/*
       script:
-        - sudo npm ci
+        - npm ci
         - npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
         - npx expo publish --non-interactive
 env:
