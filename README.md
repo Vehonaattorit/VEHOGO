@@ -8,6 +8,7 @@
     - [Testing](#testing)
     - [Introduction to Cypress](#cypress)
     - [User testing](#user-testing)
+    - [Change Log](#Change-Log)
     - [Maintainers](#maintainers)
  
 
