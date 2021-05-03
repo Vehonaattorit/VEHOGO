@@ -417,6 +417,7 @@ run it and open it in your emulator(the interactive shell is needed to get the m
 <br>
   <ol>
     <li>Update worktrip route when passenger cancels his/hers stop.</li>
+    <br>
 <li>Fixes & Small features
   <ul>
     <li>Fix setup screen working hours</li>
