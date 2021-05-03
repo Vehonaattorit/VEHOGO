@@ -154,11 +154,14 @@ run it and open it in your emulator(the interactive shell is needed to get the m
   <br>
 <li>Map route/Navigation with location updates</li>
   <br>
-Chat:
-<li><ul><li>Implemented with Firebase Firestore</li></ul></li>
+<li>Chat:
+<ul>
+  <li>Implemented with Firebase Firestore
+  </li>
+  </ul>
+</li>
 </ol>
 </details>
----------------------------------------------------------------------------------------------------------------------------------------------------------
 <details>
 <summary>Spring 2:</summary>
 <br>
