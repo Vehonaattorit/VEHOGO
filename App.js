@@ -9,11 +9,6 @@ import {getUser, userStream} from './controllers/userController'
 import {signOut, subscribeToAuth} from './controllers/LoginController'
 import * as Font from 'expo-font'
 import {useDocumentData} from 'react-firebase-hooks/firestore'
-import {useCardAnimation} from '@react-navigation/stack'
-import {User, userConverter} from './models/user'
-import {addChat, getChat} from './controllers/chatRoomController'
-
-import {GOOGLE_API_KEY} from '@env'
 
 import {LogBox} from 'react-native'
 
