@@ -271,7 +271,6 @@ Chat:
     <li>Add a pending ride request inside the worktrip datamodel</li>
     <li>Firebase Stamp in WorkingHours workDayStart & workDayEnd</li>
   </ul>
-<li>
 </ol>
 </details>
 
