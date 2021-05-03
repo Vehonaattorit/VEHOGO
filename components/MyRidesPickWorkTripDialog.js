@@ -449,8 +449,8 @@ const MyRidesWorkDayEditDialog = ({props}) => {
                   createNewWorkTrip()
                 } else {
                   // This here for storage
-                  // DONT DELETE UNLESS YOU ARE NIKLAS 
-                  
+                  // DONT DELETE UNLESS YOU ARE NIKLAS
+
                   /*let token = await fire.auth().currentUser.getIdTokenResult()
                   const response = await fetch(
                     `https://us-central1-veho-go.cloudfunctions.net/getBestRoute`,

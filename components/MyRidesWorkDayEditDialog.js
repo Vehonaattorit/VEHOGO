@@ -304,32 +304,27 @@ const MyRidesWorkDayEditDialog = ({props}) => {
     })
 
     console.log('preferedWorking', user.preferedWorkingHours)
-    user.preferedWorkingHours
     updateUser(user)
     //props.onCancel()
     props.navigation.popToTop()
   }
 
   const getBestRoutes = async() => {
-    /*let token = await fire.auth().currentUser.getIdTokenResult()
-    const response = await fetch(
-      `https://us-central1-veho-go.cloudfunctions.net/getBestRoute`,
-      {
-        method: 'POST',
-        headers: {
-          // "Access-Control-Allow-Origin": *,
-          mode: 'cors', // no-cors, *cors, same-origin
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          workDay: 5,//workdayHere
-          idToken: token.token}),
-          timeOffset: 15, // time offset with minutes
-      }
-    )*/
 
-    console.log('best routes')
+    let startTime
+    if (workTripType === 'home') {
+      startTime = workingHours.workDayEnd
+    } else {
+      startTime = workingHours.workDayStart
+    }
+
+    console.log('startTime',timeFormat(startTime.toDate()))
+    props.navigation.navigate('SuggestedRides', {
+      workDayNum: workingHours.workDayNum,
+      workTripType: workTripType,
+      startTime: startTime
+    })
+    //props.navigation.navigate('SuggestedRides')
   }
 
   return (
@@ -353,11 +348,6 @@ const MyRidesWorkDayEditDialog = ({props}) => {
       <View style={styles.workTripInfoContainer}>
         {workTrip == undefined &&
         <View style={styles.workTripInfoTopRow}>
-          <TouchableCmp
-            onPress={() => {
-              console.log('disable / enable')
-            }}
-          >
             <View
               style={[
                 styles.workTripButton,
@@ -371,15 +361,13 @@ const MyRidesWorkDayEditDialog = ({props}) => {
                 ]}
               >
                 {workTripType == 'home' ? (
-                  <Text>{user.homeAddress.substring(0, 15)}...</Text>
+                  <Text>{user.homeAddress.substring(0, 18)}...</Text>
                 ):(
-                  <Text>{user.company.address.substring(0, 15)}...</Text>
+                  <Text>{user.company.address.substring(0, 18)}...</Text>
                 )
               }
-                <FontAwesome5 name="edit" size={25} color={color.primary} />
               </View>
             </View>
-          </TouchableCmp>
           <TouchableCmp
             onPress={() => {
               setModalVisible(true)
@@ -399,6 +387,12 @@ const MyRidesWorkDayEditDialog = ({props}) => {
                   {alignItems: 'center', borderRadius: 10},
                 ]}
               >
+                {workTripType == 'home' ? (
+                  <Text>Work ends: </Text>
+                ):(
+                  <Text>Work starts: </Text>
+                )}
+
                 <Text>
                   {timeFormat(
                     workTripType == 'work'
@@ -406,7 +400,6 @@ const MyRidesWorkDayEditDialog = ({props}) => {
                       : workingHours.workDayEnd.toDate()
                   )}
                 </Text>
-                <FontAwesome5 name="clock" size={25} color={color.primary} />
               </View>
             </View>
           </TouchableCmp>

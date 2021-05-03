@@ -336,6 +336,7 @@ export const MainPage = (props) => {
   }
 
   const drawerContent = () => {
+    //This is only used in Dev mode
     return (
       <View style={styles.animatedBox}>
         <Text style={styles.startTime}>Start time </Text>
@@ -388,6 +389,7 @@ export const MainPage = (props) => {
   return (
     <>
       <View style={styles.view}>
+        {/*Menu Drawer visible only in dev mode*/}
         <MenuDrawer
           open={open}
           drawerContent={drawerContent()}

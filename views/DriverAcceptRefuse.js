@@ -158,17 +158,7 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
                 </View>
               </View>
               <View style={styles.rowItemEndContainer}>
-                <View>
-                  <FontAwesome5
-                    name="route"
-                    size={24}
-                    color={color.lightBlack}
-                  />
-                </View>
 
-                <View style={styles.textItemContainer}>
-                  <Text style={styles.rowContainerText}>2 km</Text>
-                </View>
               </View>
             </View>
             <View style={styles.breakPoint}></View>

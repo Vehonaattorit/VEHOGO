@@ -134,7 +134,7 @@ const MyRidesWorkDayButton = ({props}) => {
           if (user.id == homeTrip.driverID) {
             console.log('deleting home trip')
             let token = await fire.auth().currentUser.getIdTokenResult()
-            workTrip.scheduledDrive.stops.forEach(async stop => {
+            homeTrip.scheduledDrive.stops.forEach(async stop => {
               const response = await fetch(
                 `https://us-central1-veho-go.cloudfunctions.net/deleteWorkTripFromUser`,
                 {
