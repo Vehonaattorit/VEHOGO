@@ -1,6 +1,11 @@
 import React, {useState, useEffect, useContext} from 'react'
-import {StyleSheet, TextInput} from 'react-native'
-import {Button, Text, View, Icon} from 'native-base'
+import {
+  StyleSheet,
+  TextInput,
+  Platform,
+  KeyboardAvoidingView,
+} from 'react-native'
+import {Text, View, Icon} from 'native-base'
 import {getCars, updateCar} from '../controllers/carController'
 import {Car} from '../models/car'
 import {UserContext} from '../contexts'
@@ -9,7 +14,7 @@ import {MaterialCommunityIcons} from '@expo/vector-icons'
 import {updateUser} from '../controllers/userController'
 import CustomButtonIcon from '../components/CustomIconButton'
 
-const CarSetup = ({navigation, route}) => {
+const CarSetup = ({navigation}) => {
   const [description, setDescription] = useState('')
   const [registration, setRegistration] = useState('')
   const [seats, setSeats] = useState('')
@@ -71,7 +76,10 @@ const CarSetup = ({navigation, route}) => {
   }, [])
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
       <View style={{alignSelf: 'center'}}>
         <MaterialCommunityIcons name="car-sports" size={250} color="#26AAE2" />
       </View>
@@ -149,16 +157,14 @@ const CarSetup = ({navigation, route}) => {
             {error}
           </Text>
         )}
-        <View style={styles.btn}>
-          <CustomButtonIcon
-            testID="carSetupContinueBtn"
-            iconTwo="keyboard-arrow-right"
-            title="Continue"
-            onPress={uploadCar}
-          />
-        </View>
       </View>
-    </View>
+      <CustomButtonIcon
+        testID="carSetupContinueBtn"
+        iconTwo="keyboard-arrow-right"
+        title="Continue"
+        onPress={uploadCar}
+      />
+    </KeyboardAvoidingView>
   )
 }
 const styles = StyleSheet.create({
@@ -168,13 +174,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   button: {
-    marginTop: 20,
-    width: '100%',
+    alignSelf: 'stretch',
     justifyContent: 'center',
     borderRadius: 15,
   },
   form: {
-    margin: 10,
+    margin: 20,
   },
   formItem: {
     backgroundColor: color.lightBlue,
@@ -184,8 +189,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   iconContainer: {
-    padding: 10,
-    margin: 10,
+    padding: 5,
+    marginVertical: 10,
+    marginHorizontal: 5,
   },
   textInput: {
     color: color.lightBlack,
@@ -203,16 +209,15 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flexDirection: 'column',
-    flex: 1.5,
-    width: '100%',
-    paddingHorizontal: 10,
+    flex: 1.8,
+    paddingHorizontal: 5,
     justifyContent: 'center',
   },
   input: {
     backgroundColor: '#fff',
     width: '100%',
-    padding: 15.5,
-    fontSize: 15.5,
+    padding: 15,
+    fontSize: 15,
     borderRadius: 5,
     height: 50,
     fontFamily: 'open-sans-regular',

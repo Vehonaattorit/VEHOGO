@@ -1,15 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react'
 import {StyleSheet, TextInput} from 'react-native'
-import {
-  Button,
-  Text,
-  Item,
-  Input,
-  View,
-  Icon,
-  CardItem,
-  Card,
-} from 'native-base'
+import {Button, Text, View, Icon} from 'native-base'
 import {updateCar} from '../controllers/carController'
 import {Car} from '../models/car'
 import {UserContext} from '../contexts'
@@ -20,7 +11,6 @@ import {updateUserCarToWorkTrips} from '../utils/updateWorkTripCar'
 
 const CarEditForm = ({navigation, route}) => {
   const editCar = route.params !== undefined ? route.params.editCar : undefined
-
 
   const [description, setDescription] = useState(
     editCar !== undefined ? editCar.vehicleDescription : ''
@@ -91,8 +81,6 @@ const CarEditForm = ({navigation, route}) => {
   return (
     <View style={styles.container}>
       <View style={styles.form}>
-
-
         <View
           style={{
             ...styles.formItem,
@@ -112,9 +100,7 @@ const CarEditForm = ({navigation, route}) => {
             style={styles.textInput}
           />
         </View>
-
         <View style={styles.breakPoint}></View>
-
         <View
           style={{
             ...styles.formItem,
@@ -134,7 +120,6 @@ const CarEditForm = ({navigation, route}) => {
           />
         </View>
         <View style={styles.breakPoint}></View>
-
         <View
           style={{
             ...styles.formItem,
@@ -185,7 +170,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 20,
-    width: '100%',
+    alignSelf: 'stretch',
     justifyContent: 'center',
     borderRadius: 15,
   },

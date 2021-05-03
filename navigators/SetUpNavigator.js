@@ -51,7 +51,7 @@ function SetUpStackNavigator() {
           name="Company"
           component={Company}
           options={{
-            title: 'Create or join',
+            title: 'Create Or Join',
           }}
         />
         <Stack.Screen
@@ -65,7 +65,7 @@ function SetUpStackNavigator() {
           name="Address"
           component={Address}
           options={{
-            title: 'Home address',
+            title: 'Home Address',
           }}
         />
         <Stack.Screen
@@ -93,7 +93,7 @@ function SetUpStackNavigator() {
           name="CarSetup"
           component={CarSetup}
           options={{
-            title: 'Your car',
+            title: 'Your Car',
           }}
         />
         <Stack.Screen
