@@ -15,7 +15,7 @@
 
 VEHO-GO is an application made manly for the use of Veho company. It is a technology platform. Our smartphone app connects driver-partners and riders. We have used React-Native to create this application which is an open-source mobile application framework created by Facebook.
 
-You can use your rider app to request a ride. When a nearby driver-partner accepts your request, your app displays an estimated time of arrival for the driver-partner heading to your pickup location. Your app notifies you when the driver-partner is about to arrive.
+You can use your rider app to request a ride. When your workmate accepts your request, your app displays an estimated time of arrival for the driver-partner heading to your pickup location. Your app notifies you when the driver-partner is about to arrive.
 
 Your app also provides info about the driver-partner with whom you will ride, including full name, vehicle type, and license plate number. This info helps the two of you connect at your pickup location.
 
@@ -113,7 +113,7 @@ export {firebaseConfig}
 
 Test that app works:
 
-run it and open it in your emulator(the interactive shell is needed to get the menu option (A) for launching the emulator)</li>
+run it and open it in your emulator(the interactive shell is needed to get the menu option (A) for launching the emulator)
 
         > cd VEHOGO
         > npm start
