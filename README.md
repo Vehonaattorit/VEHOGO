@@ -262,7 +262,6 @@ Chat:
     <li>Driver can either accept or refuse the passenger</li>
     <li>Add the new users stop to worktrip data under company</li>
   </ul>
-<li>
     <br>
   <li>Drive listing
   <ul>
