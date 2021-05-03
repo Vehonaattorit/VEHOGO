@@ -174,11 +174,7 @@ Chat:
   <br>
 <li>TravisCI</li>
   <br>
-    <li>
-      <ul>Chat Screen 
-      <li>Implement Chat Screen</li>
-      </ul>
-    </li>
+    <li>Chat Screen</li>
   <br>
 <li>Passenger Screen</li>
   <br>
