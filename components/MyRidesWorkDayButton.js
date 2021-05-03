@@ -127,9 +127,9 @@ const MyRidesWorkDayButton = ({props}) => {
             await removePassengerFromRoute(workTripUpdate, user.company.id, workTrip)
           }
         }
-        console.log('homeTrip',homeTrip)
+        /*console.log('homeTrip',homeTrip)
         console.log('home driver id', homeTrip.driverID)
-        console.log('user id', user.id)
+        console.log('user id', user.id)*/
         if (homeTrip != undefined) {
           if (user.id == homeTrip.driverID) {
             console.log('deleting home trip')

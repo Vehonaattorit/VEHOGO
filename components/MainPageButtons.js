@@ -7,6 +7,7 @@ import MainPageButton from './MainPageButton'
 import {color} from '../constants/colors'
 import {workTripMultiQuery} from '../controllers/workTripController'
 import {Platform} from 'react-native'
+import {Alert} from 'react-native'
 
 const MainPageButtons = ({
   user,
@@ -159,12 +160,13 @@ const MainPageButtons = ({
         />
       ),
       onPress: () => {
-        if (startingRide != undefined) {
+        console.log(startingRide)
+        if (startingRide != undefined && startingRide.length > 0) {
           navigation.navigate('DriverStartRide', {
             workTrip: startingRide,
           })
         } else {
-          console.log('Next ride is not defined')
+          Alert.alert('No rides', 'Currently there are no rides to start.')
         }
       },
     },

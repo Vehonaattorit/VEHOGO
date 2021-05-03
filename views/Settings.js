@@ -34,6 +34,8 @@ import {setupWorkTripDocs} from '../utils/utils'
 import {signOut} from '../controllers/LoginController'
 import {updateCompanyCity} from '../controllers/companyCitiesController'
 import {updateCompany} from '../controllers/companyController'
+import {getCars, updateCar} from '../controllers/carController'
+import {Car} from '../models/car'
 
 
 
@@ -177,27 +179,38 @@ export const Settings = () => {
     view === 'Travel'
       ? setIsTravelVisible(!isTravelVisible)
       : view === 'Username'
-      ? setIsUsernameVisible(!isUsernameVisible)
-      : view === 'Address'
-      ? setIsAddressVisible(!isAddressVisible)
-      : view === 'Working Days'
-      ? setIsWorkDaysVisible(!isWorkDaysVisible)
-      : view === 'Working Hours'
-      ? setIsWorkHoursVisible(!isWorkingHoursVisible)
-      : view === 'Delete'
-      ? setIsDeleteVisible(!isDeleteVisible)
-      : console.log('ERROR: views/Settings.js/toggleModel')
+        ? setIsUsernameVisible(!isUsernameVisible)
+        : view === 'Address'
+          ? setIsAddressVisible(!isAddressVisible)
+          : view === 'Working Days'
+            ? setIsWorkDaysVisible(!isWorkDaysVisible)
+            : view === 'Working Hours'
+              ? setIsWorkHoursVisible(!isWorkingHoursVisible)
+              : view === 'Delete'
+                ? setIsDeleteVisible(!isDeleteVisible)
+                : console.log('ERROR: views/Settings.js/toggleModel')
   }
 
   //------------------TRAVEL---------------------
   const [buttonPressed, setButtonPressed] = useState(false)
   const setTravelPreference = async (preference) => {
-    user.travelPreference = preference
-    await updateUser(user)
+
+    if (user.preferedWorkingHours.length > 0) {
+      Alert.alert('Remove trips', 'You must disable your working days in my rides before changing to either driver or passenger.')
+    } else {
+      console.log(user.preferedWorkingHours)
+      user.travelPreference = preference
+      await updateUser(user)
+    }
   }
 
   //-----------------USERNAME------------------
-  const usernameSubmitHandler = () => {
+
+  const changeCarDriverName = async (id, car) => {
+    console.log('modified car', car)
+    await updateCar(id, car)
+  }
+  const usernameSubmitHandler = async () => {
     if (!formState.formIsValid && formState.inputValues.userName === '') {
       Alert.alert(
         'Wrong input!',
@@ -207,9 +220,36 @@ export const Settings = () => {
       return
     }
 
+    let cars
+    try {
+      cars = await getCars(user.id)
+    } catch (e) {
+      console.log('no cars', e)
+    }
+
+
     const {userName} = formState.inputValues
+
+    if (cars != undefined && cars.length != 0) {
+
+      cars.forEach(async element => {
+        element.driverName = userName
+
+        //new car object with old id, only name changes
+        const car = new Car({
+          id: element.id,
+          driverName: userName,
+          vehicleDescription: element.description,
+          registerNumber: element.registerNumber,
+          availableSeats: element.availableSeats,
+        })
+        await changeCarDriverName(user.id, car)
+
+      });
+    }
     user.userName = userName
     updateUser(user)
+    Alert.alert('Name changed', 'Next rides you make/request uses now your updated name')
   }
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -256,6 +296,7 @@ export const Settings = () => {
     console.log('user.homeAddress', user.homeAddress)
 
     await updateUser(user)
+    Alert.alert('Address changed', 'Your new address is now used in new rides/requests')
   }
 
   const getHAddressGeoLocation = async () => {
@@ -292,7 +333,7 @@ export const Settings = () => {
   }
 
   // ----------------WORKING DAYS-------------------------
-  const workStates = [
+  /*const workStates = [
     {id: 1, weekDay: 'Mon', isSelected: false},
     {id: 2, weekDay: 'Tue', isSelected: false},
     {id: 3, weekDay: 'Wed', isSelected: false},
@@ -305,10 +346,10 @@ export const Settings = () => {
   const [workDays, setWorkDays] = useState(
     user.preferedWorkingHours !== undefined
       ? workStates.map((item) => {
-          return item.id == user.preferedWorkingHours[item.id - 1]
-            ? {...item, isSelected: true}
-            : item
-        })
+        return item.id == user.preferedWorkingHours[item.id - 1]
+          ? {...item, isSelected: true}
+          : item
+      })
       : workStates
   )
 
@@ -389,12 +430,12 @@ export const Settings = () => {
 
     return () => clearTimeout(timeout)
   }, [error])
-
+  */
 
   //------------------WORKING HOURS---------------------
 
   // If starting and ending time was found in db, set fetched values instead of default
-  const [newEventState, setNewEventState] = useState({
+  /*const [newEventState, setNewEventState] = useState({
     startDate:
       user.preferedWorkingHours[0].workDayStart === undefined
         ? null
@@ -467,13 +508,18 @@ export const Settings = () => {
     }, 5000)
 
     return () => clearTimeout(timeout)
-  }, [timeError])
+  }, [timeError])*/
 
   // ------------------DELETE USER------------------
 
   const deleteUserHandler = () => {
+
+    if (user.preferedWorkingHours.length > 0) {
+      Alert.alert('Remove trips', 'You must disable your working days in my rides before removing account.')
+    } else {
     deleteUser(user.id)
     signOut()
+    }
   }
 
   return (
@@ -506,6 +552,7 @@ export const Settings = () => {
             }}
           />
         </View>
+        {/*
         <View style={styles.btn}>
           <CustomSingleIconButton
             iconOne="work"
@@ -515,6 +562,8 @@ export const Settings = () => {
             }}
           />
         </View>
+        */}
+        {/*
         <View style={styles.btn}>
           <CustomSingleIconButton
             iconOne="access-time"
@@ -524,6 +573,7 @@ export const Settings = () => {
             }}
           />
         </View>
+        */}
         <View style={styles.btn}>
           <CustomSingleIconButton
             style={styles.deleteBtn}
@@ -713,7 +763,7 @@ export const Settings = () => {
         </View>
       </Modal>
 
-      {/* Modify Your Working Days */}
+      {/* Modify Your Working Days
 
       <Modal
         style={{
@@ -787,8 +837,8 @@ export const Settings = () => {
           </View>
         </View>
       </Modal>
-
-      {/* Modify Your Working Hours */}
+      */}
+      {/* Modify Your Working Hours
       <TimeModal
         setIsPickerShow={setIsPickerShow}
         isPickerShow={isPickerShow}
@@ -868,7 +918,7 @@ export const Settings = () => {
           </View>
         </View>
       </Modal>
-
+                */}
       {/* Delete your account */}
 
       <Modal

@@ -32,20 +32,24 @@ export const RideStartBar = ({user, navigation, driverTrips}) => {
 
   function inTime(start, end) {
     var now = new Date()
-
+    //some problems with times. If destination is close to start, end date smaller than start
     var time = now.getHours() * 60 + now.getMinutes()
-
+    console.log('current',time)
+    console.log('start',start)
+    console.log('end',end)
     return time >= start && time < end
   }
 
   const checkButtonVisible = (startDate, endDate) => {
     var start =
-      startDate.toDate().getHours() * 60 + startDate.toDate().getMinutes() - 10
-    var end = endDate.toDate().getHours() * 60 + endDate.toDate().getMinutes()
+      startDate.toDate().getHours() * 60 + startDate.toDate().getMinutes() - 30
+    var end = endDate.toDate().getHours() * 60 + endDate.toDate().getMinutes() + 10
 
     if (inTime(start, end) == true) {
+      console.log('setting true')
       setShowStart(true)
     } else {
+      console.log('setting false')
       setShowStart(false)
     }
   }
@@ -191,7 +195,7 @@ export const RideStartBar = ({user, navigation, driverTrips}) => {
           <Right>
             {driverTrips.length > 0 ? (
               <>
-                {!showStart ? (
+                {showStart ? (
                   <Button
                     style={styles.button}
                     onPress={() =>
