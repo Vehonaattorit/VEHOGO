@@ -126,33 +126,36 @@ run it and open it in your emulator(the interactive shell is needed to get the m
 <details>
 <summary>Spring 1:</summary>
 <br>
-Goal in this sprint. Setting up development environment and working first version where user can navigate through different views. 
- Firebase authentication implemented and firestore used for storing some data.
+  <ol>
+
+<li>Goal in this sprint. Setting up development environment and working first version where user can navigate through different views. 
+ Firebase authentication implemented and firestore used for storing some data.</li>
   <br>
-Driver pages:
+<li>Driver pages:
   <ul>
     <li>Get ride requests from firebase</li>
     <li>Visuals for showing ride requests and accepting them</li>
     <li>Ride offer stored in firebase</li>
   </ul>
-  
+  </li>
   <br>
-  SET UP views
+ <li>SET UP views</li>
   <br>
-Authentication / Firebase setup
+<li>Authentication / Firebase setup</li>
   <br>
-ESLint setup
+<li>ESLint setup</li>
   <br>
-Passenger reservation pages
+<li>Passenger reservation pages</li>
   <br>
-Driver related pages
+<li></li>Driver related pages
   <br>
-Continuous Integration
+<li>Continuous Integration</li>
   <br>
-Map route/Navigation with location updates
+<li></li>Map route/Navigation with location updates</li>
   <br>
 Chat:
-<ul><li>Implemented with Firebase Firestore</li></ul>
+<li><ul><li>Implemented with Firebase Firestore</li></ul></li>
+</ol>
 </details>
 
 ## Maintainers
