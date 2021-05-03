@@ -1,16 +1,15 @@
 # VEHOGO
 
 - [Content](#markdown-navigation)
-    - [Introduction](#introduction)
-    - [Introduction to Firebase](#firebase)
-    - [Introduction to Google API](#google-API)
-    - [Installation](#installation)
-    - [Testing](#testing)
-    - [Introduction to Cypress](#cypress)
-    - [User testing](#user-testing)
-    - [Change Log](#Change-Log)
-    - [Maintainers](#maintainers)
-
+  - [Introduction](#introduction)
+  - [Introduction to Firebase](#firebase)
+  - [Introduction to Google API](#google-API)
+  - [Installation](#installation)
+  - [Testing](#testing)
+  - [Introduction to Cypress](#cypress)
+  - [User testing](#user-testing)
+  - [Change Log](#Change-Log)
+  - [Maintainers](#maintainers)
 
 ## Introduction
 
@@ -58,6 +57,7 @@ Testing helps you uncover these mistakes and verifies that your code is working.
 In this project, we have used Cypress as our testing platform. With Cypress, you can Run End to End tests. It checks whether a web application works as expected or not. <a href="https://www.browserstack.com/dg/cypress-testing?utm_source=google&utm_medium=cpc&utm_campaign=Search-NB-CypressTesting-TestKeywords-EMEA-Automate-CL&utm_adgroup=Cypress-End-to-End-Testing&utm_keyword=%2Bcypress%20%2Bend%20%2Bto%20%2Bend%20%2Btesting&utm_matchtype=b&gclid=Cj0KCQjwsqmEBhDiARIsANV8H3bT1GEoovqozRxwtsGSaWFry6alc8JLfeA5a_BY0od8Gvvl_J4uTLcaAvikEALw_wcB">Read more...<a>
 
 Struction for using Cypress in our application:
+
 1. In the root folder make a new file 'serviceAccount.json'
 2. Authenticate with a Service Account <a href="https://sites.google.com/site/scriptsexamples/new-connectors-to-google-services/firebase/tutorials/authenticate-with-a-service-account">Link...</a>
 3. Copy/paste the following code snipped in the serviceAccount.json
@@ -81,7 +81,6 @@ Struction for using Cypress in our application:
 ### User testing
 
 For user testing, our goal was to lean more towards validation and evaluation. That is, finding out if users understand and enjoy our app, and whether the features meet their needs. For this, we leveraged early versions of our app, prototypes, and mockups. Veho provided us the user from inside of their company. The user didn't know anything about our app and used it the first time.
-
 
 ## Installation
 
@@ -118,9 +117,6 @@ run it and open it in your emulator(the interactive shell is needed to get the m
 
         > cd VEHOGO
         > npm start
-
-
-
 
 ## Change Log
 
@@ -410,7 +406,6 @@ run it and open it in your emulator(the interactive shell is needed to get the m
 <li>Setup & Settings screen(s)</li>
 </ol>
 </details>
-
 
 <details>
 <summary>Sprint 8:</summary>
