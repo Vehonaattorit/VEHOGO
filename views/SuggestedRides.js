@@ -1,8 +1,9 @@
 import React, {useEffect, useState, useContext} from 'react'
-import {View, Text, FlatList} from 'react-native'
+import {View, Text, FlatList, StyleSheet} from 'react-native'
 import {SuggestedTripsListItem} from '../components/SuggestedTripsListItem'
 import {workTripMultiQuery} from '../controllers/workTripController'
 import {UserContext} from '../contexts'
+import {color} from '../constants/colors'
 
 
 export const SuggestedRides = ({navigation, route}) => {
@@ -59,9 +60,23 @@ export const SuggestedRides = ({navigation, route}) => {
           )}
         />
         ):(
-          <Text>No rides</Text>
+          <View style={styles.noRides}>
+            <Text style={{fontSize: 16, fontFamily: 'open-sans-regular', alignSelf: 'center',}} >No rides found. Try different time.</Text>
+          </View>
+
         )
       }
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  noRides: {
+    backgroundColor: color.lightBlue,
+    padding: 10,
+    width: '95%',
+    alignSelf: 'center',
+    borderRadius: 6,
+    marginTop: 10
+  }
+})
