@@ -453,6 +453,7 @@ run it and open it in your emulator(the interactive shell is needed to get the m
 <br>
   <ol>
     <li>Update worktrip route when passenger cancels his/hers stop.</li>
+    <br>
 <li>Cypress e2e testing
   <ul>
     <li>passengerSetup</li>
