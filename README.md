@@ -376,7 +376,7 @@ run it and open it in your emulator(the interactive shell is needed to get the m
   <br>
 <li>When driver stops ride -> passenger exits Route screen</li>
   <br>
-<li></li>Map route/Navigation with location updates</li>
+<li>Map route/Navigation with location updates</li>
   <br>
 <li>Week days displayed in Passenger List for User</li>
 <br>
