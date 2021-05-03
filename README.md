@@ -7,6 +7,7 @@
     - [Installation](#installation)
     - [Testing](#testing)
     - [Introduction to Cypress](#cypress)
+    - [User testing](#user-testing)
     - [Maintainers](#maintainers)
  
 
@@ -75,6 +76,11 @@ Struction for using Cypress in our application:
 }
 
 ```
+
+### User testing
+
+For user testing, our goal was to lean more towards validation and evaluation. That is, finding out if users understand and enjoy our app, and whether the features meet their needs. For this, we leveraged early versions of our app, prototypes, and mockups. Veho provided us the user from inside of their company. The user didn't know anything about our app and used it the first time. 
+
 
 ## Installation
 
