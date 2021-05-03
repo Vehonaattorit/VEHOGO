@@ -448,6 +448,47 @@ run it and open it in your emulator(the interactive shell is needed to get the m
 </ol>
 </details>
 
+<details>
+<summary>Sprint 9:</summary>
+<br>
+  <ol>
+    <li>Update worktrip route when passenger cancels his/hers stop.</li>
+<li>Cypress e2e testing
+  <ul>
+    <li>passengerSetup</li>
+    <li>driverSetup</li>
+  </ul>
+  </li>
+  <br>
+<li>Outlook Calendar login, response & redirection
+  </li>
+  <br>
+<li>Passenger view, show rides that have  same day as prefered working days.</li>
+  <br>
+<li>Passenger page show only available seats (e.g not 1/4)</li>
+  <br>
+<li>In driver mainpage, pressing start ride causes crash.</li>
+  <br>
+<li>Readme file</li>
+  <br>
+<li>Passenger Pending Ride Requests MainButton, list pending requests & remove button</li>
+</ol>
+</details>
+
+<details>
+<summary>Sprint 10:</summary>
+<br>
+  <ol>
+<li>GET Outlook Calendar WORKING AGAIN !, share to ride Event
+  </li>
+  <br>
+<li>Slides for presentation
+  </li>
+  <br>
+<li>App Icon & Splash Screen</li>
+</ol>
+</details>
+
 ## Maintainers
 
 @Kurosh Husseini <a href="https://github.com/kurosh97">Github Link...</a><br/>
