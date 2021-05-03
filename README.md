@@ -264,13 +264,14 @@ Chat:
   </ul>
     <br>
   <li>Drive listing
-  <ul>
-    <li>Show only if user is a passenger</li>
-    <li>User can choose to filter the to work trips and to home trips based on users toHome and toWork times</li>
-    <li>User can then request a ride by clicking the card and seeing the overview of the ride (layout the route, place icons/markers appropriately)</li>
-    <li>Add a pending ride request inside the worktrip datamodel</li>
-    <li>Firebase Stamp in WorkingHours workDayStart & workDayEnd</li>
-  </ul>
+      <ul>
+        <li>Show only if user is a passenger</li>
+        <li>User can choose to filter the to work trips and to home trips based on users toHome and toWork times</li>
+        <li>User can then request a ride by clicking the card and seeing the overview of the ride (layout the route, place icons/markers appropriately)</li>
+        <li>Add a pending ride request inside the worktrip datamodel</li>
+        <li>Firebase Stamp in WorkingHours workDayStart & workDayEnd</li>
+      </ul>
+    </li>
 </ol>
 </details>
 
@@ -278,68 +279,64 @@ Chat:
 <summary>Spring 4:</summary>
 <br>
   <ol>
-<li>Goal in this sprint. Setting up development environment and working first version where user can navigate through different views. 
- Firebase authentication implemented and firestore used for storing some data.</li>
+<li>Styling of main page</li>
   <br>
-<li>Driver pages:
-  <ul>
-    <li>Get ride requests from firebase</li>
-    <li>Visuals for showing ride requests and accepting them</li>
-    <li>Ride offer stored in firebase</li>
-  </ul>
-  </li>
+<li>
+  Create Route between stop locations and show it in map.
+ </li>
+      <br>
+  <li>Starting the drive and go through all the stops
+      <ul>
+        <li>check if the current time matches with any of the drivers worktrips</li>
+        <li>show user a button which he can use to start the drive.</li>
+        <li>Show preview screen of all the stops and time ETA</li>
+        <li>Show navígation screen and update users location live to the firebase</li>
+        <li>Show map Screen and all of the stop locations</li>
+      </ul>
+    </li>
   <br>
- <li>SET UP views</li>
+<li>map Icons update</li>
   <br>
-<li>Authentication / Firebase setup</li>
+<li>ride request accept  polylines</li>
   <br>
-<li>ESLint setup</li>
+<li>Driver location updated and displayed in driving map view and passenger view</li>
   <br>
-<li>Passenger reservation pages</li>
+<li>Passenger can inspect the route before requesting ride</li>
   <br>
-<li></li>Driver related pages
+<li>Design and color updates to all the views</li>
   <br>
-<li>Continuous Integration</li>
+<li>Redesign MainPage Driver & Passenger etc.</li>
   <br>
-<li></li>Map route/Navigation with location updates</li>
-  <br>
-Chat:
-<li><ul><li>Implemented with Firebase Firestore</li></ul></li>
 </ol>
 </details>
 
 <details>
-<summary>Spring 6:</summary>
+<summary>Spring 5:</summary>
 <br>
   <ol>
-
-<li>Goal in this sprint. Setting up development environment and working first version where user can navigate through different views. 
- Firebase authentication implemented and firestore used for storing some data.</li>
-  <br>
-<li>Driver pages:
+<li>Live chatting implementation: 
   <ul>
-    <li>Get ride requests from firebase</li>
-    <li>Visuals for showing ride requests and accepting them</li>
-    <li>Ride offer stored in firebase</li>
+    <li>You can send messages to other person.</li>
+    <li>Notifications when new message is received</li>
+    <li>Quick message templates for driver to send quick response or message to passenger. (For example: "5 mins and there.", "Where I can pick you up?")</li>
   </ul>
   </li>
   <br>
- <li>SET UP views</li>
+ <li>Navigation back to mainpage and data updating when needed</li>
   <br>
-<li>Authentication / Firebase setup</li>
+<li>Notify Driver to create/add car before starting ride or accepting passengers.</li>
   <br>
-<li>ESLint setup</li>
+<li>add phone number and full name to the user data model and ask it in register.</li>
   <br>
-<li>Passenger reservation pages</li>
+<li>email verification. User is required to verify email before joining to company</li>
   <br>
-<li></li>Driver related pages
+<li>Work trip progress. Logic for picking up passengers</li>
   <br>
-<li>Continuous Integration</li>
+<li>Show driving destinations in a better way and change destination when carousel scrolled</li>
   <br>
-<li></li>Map route/Navigation with location updates</li>
+<li>car implementation to the worktrip data model</li>
   <br>
-Chat:
-<li><ul><li>Implemented with Firebase Firestore</li></ul></li>
+<li>login screen remake</li>
 </ol>
 </details>
 
