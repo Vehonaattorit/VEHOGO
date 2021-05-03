@@ -24,6 +24,8 @@ import {HeaderButtons, Item} from 'react-navigation-header-buttons'
 import HeaderButton from '../components/CustomHeaderButton'
 import CarEditForm from '../views/CarEditForm'
 
+import PassengerPendingRequestsList from '../views/PassengerPendingRequestsList'
+
 const Stack = createStackNavigator()
 const Drawer = createStackNavigator()
 const MainStackNavigator = ({linking}) => {
@@ -146,6 +148,13 @@ const MainStackNavigator = ({linking}) => {
           options={({navigation}) => ({
             title: 'Drivers',
           })}
+        />
+        <Stack.Screen
+          name="PassengerPendingRequestsList"
+          component={PassengerPendingRequestsList}
+          options={{
+            title: 'Pending Requests',
+          }}
         />
         <Stack.Screen name="CarEditForm" component={CarEditForm} />
         <Stack.Screen

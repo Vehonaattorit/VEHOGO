@@ -13,6 +13,7 @@ import CustomButtonIcon from '../components/CustomIconButton'
 import {userConverter} from '../models/user'
 import {updateUserCarToWorkTrips} from '../utils/updateWorkTripCar'
 import fire from '../firebase/fire'
+import {Platform} from 'react-native'
 
 export const SetUpInit = ({route, navigation}) => {
   const {user} = useContext(UserContext)
@@ -43,13 +44,24 @@ export const SetUpInit = ({route, navigation}) => {
       let start =
         index % 2 === 0 ? item.workDayEnd.toDate() : item.workDayStart.toDate()
 
-      const response = await fetch(
-        `https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.location.latitude},${user.company.location.longitude}&key=${googleMapsApiKey}`,
-        {
-          method: 'GET',
-          //Request Type
-        }
-      )
+      let response
+      if (Platform.OS === 'web') {
+        response = await fetch(
+          `https://cryptic-depths-30021.herokuapp.com/https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.location.latitude},${user.company.location.longitude}&key=${googleMapsApiKey}`,
+          {
+            method: 'GET',
+            //Request Type
+          }
+        )
+      } else {
+        response = await fetch(
+          `https://maps.googleapis.com/maps/api/directions/json?origin=${user.homeLocation.latitude},${user.homeLocation.longitude}&destination=${user.company.location.latitude},${user.company.location.longitude}&key=${googleMapsApiKey}`,
+          {
+            method: 'GET',
+            //Request Type
+          }
+        )
+      }
 
       const responseJson = await response.json()
 
@@ -131,19 +143,36 @@ export const SetUpInit = ({route, navigation}) => {
       if (!user.setupIsCompleted) {
         let token = await fire.auth().currentUser.getIdTokenResult()
         console.log('token is', token.token)
-        const response = await fetch(
-          `https://cryptic-depths-30021.herokuapp.com/https://us-central1-veho-go.cloudfunctions.net/getBestRoutes`,
-          {
-            method: 'POST',
-            headers: {
-              // "Access-Control-Allow-Origin": *,
-              mode: 'cors', // no-cors, *cors, same-origin
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({idToken: token.token}),
-          }
-        )
+
+        if (Platform.OS === 'web') {
+          const response = await fetch(
+            `https://cryptic-depths-30021.herokuapp.com/https://us-central1-veho-go.cloudfunctions.net/getBestRoutes`,
+            {
+              method: 'POST',
+              headers: {
+                // "Access-Control-Allow-Origin": *,
+                mode: 'cors', // no-cors, *cors, same-origin
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({idToken: token.token}),
+            }
+          )
+        } else {
+          const response = await fetch(
+            `https://us-central1-veho-go.cloudfunctions.net/getBestRoutes`,
+            {
+              method: 'POST',
+              headers: {
+                // "Access-Control-Allow-Origin": *,
+                mode: 'cors', // no-cors, *cors, same-origin
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({idToken: token.token}),
+            }
+          )
+        }
         if (user.travelPreference === 'driver') {
           await setupWorkTripDocs()
         } else {

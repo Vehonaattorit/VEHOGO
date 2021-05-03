@@ -18,6 +18,7 @@ import {
   FontAwesome5,
   MaterialCommunityIcons,
 } from '@expo/vector-icons'
+import PassengerViewRequestContainer from '../components/PassengerViewRequestContainer'
 
 export const DriverAcceptRefuse = ({navigation, route}) => {
   const {
@@ -25,7 +26,9 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
     isPassengerIncluded,
     arrivalTime,
     rideRequest,
+    viewPendingRequest,
   } = route.params
+
   const {user} = useContext(UserContext)
 
   const [mapRef, setMapRef] = useState(null)
@@ -39,6 +42,7 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
           longitude: stop.location.longitude,
         }}
         title={stop.address}
+        description={('Passenger: ', stop.stopName)}
       >
         <Image
           source={
@@ -103,168 +107,191 @@ export const DriverAcceptRefuse = ({navigation, route}) => {
   }, [])
 
   return (
-    <View style={styles.view}>
-      <Container style={styles.requestMapContent}>
-        <MapView
-          ref={(ref) => {
-            setMapRef(ref)
-          }}
-          style={styles.mapStyle}
-          provider={MapView.PROVIDER_GOOGLE}
-          initialRegion={{
-            latitude: singleItem.scheduledDrive.stops[0].location.latitude,
-            longitude: singleItem.scheduledDrive.stops[0].location.longitude,
-            latitudeDelta: 1,
-            longitudeDelta: 1,
-          }}
-        >
-          <MapView.Polyline
-            coordinates={routeCoordinates}
-            strokeColor="#26AAE2"
-            strokeWidth={4}
-          />
-          {markers}
-        </MapView>
-      </Container>
-      <View style={styles.columnContainer}>
-        <View style={styles.rowContainer}>
-          <View style={styles.rowItemStartContainer}>
-            <View>
-              <Ionicons name="person" size={24} color={color.lightBlack} />
-            </View>
-
-            <View style={styles.textItemContainer}>
-              <Text style={styles.rowContainerText}>
-                {rideRequest == undefined
-                  ? singleItem.driverName
-                  : rideRequest.userName}
-              </Text>
-            </View>
-          </View>
-          <View style={styles.rowItemEndContainer}>
-            <View>
-              <FontAwesome5 name="route" size={24} color={color.lightBlack} />
-            </View>
-
-            <View style={styles.textItemContainer}>
-              <Text style={styles.rowContainerText}>2 km</Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.breakPoint}></View>
-        <View style={styles.rowContainer}>
-          <View style={styles.rowItemStartContainer}>
-            <Ionicons name="home" size={24} color={color.lightBlack} />
-
-            <View style={styles.textItemContainer}>
-              <Text style={styles.rowContainerText}>
-                {rideRequest == undefined
-                  ? singleItem.goingTo === 'home'
-                    ? stops[stops.length - 1].address
-                    : stops[0].address
-                  : rideRequest.homeAddress}
-              </Text>
-            </View>
-          </View>
-          <View style={styles.rowItemEndContainer}>
-            <View>
-              <Ionicons name="time-sharp" size={24} color={color.lightBlack} />
-            </View>
-
-            <View style={styles.textItemContainer}>
-              <Text style={styles.rowContainerText}>
-                {drivingTime(singleItem)} min
-              </Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.breakPoint}></View>
-
-        <View style={styles.rowContainer}>
-          <View style={styles.rowItemStartContainer}>
-            <View>
-              <MaterialCommunityIcons
-                name="calendar"
-                size={24}
-                color={color.lightBlack}
-              />
-            </View>
-
-            <View style={styles.textItemContainer}>
-              <Text style={styles.rowContainerText}>
-                {rideRequest == undefined
-                  ? checkWhatDayItIs(singleItem.workDayNum)
-                  : checkWhatDayItIs(rideRequest.workDayNum)}
-              </Text>
-            </View>
-          </View>
-          <View style={styles.rowItemEndContainer}>
-            <View>
-              <MaterialCommunityIcons
-                name="wallet-travel"
-                size={24}
-                color={color.lightBlack}
-              />
-            </View>
-
-            <View style={styles.textItemContainer}>
-              <Text style={styles.rowContainerText}>
-                {singleItem.goingTo === 'home' ? 'Going ' : 'Going to '}
-                {rideRequest == undefined
-                  ? singleItem.goingTo.charAt(0).toUpperCase() +
-                    singleItem.goingTo.slice(1)
-                  : singleItem.goingTo.charAt(0).toUpperCase() +
-                    singleItem.goingTo.slice(1)}
-              </Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.breakPoint}></View>
-
-        <View style={styles.rowContainer}>
-          <View style={styles.rowItemStartContainer}>
-            <View>
-              <Ionicons name="car" size={24} color={color.lightBlack} />
-            </View>
-
-            <View style={styles.textItemContainer}>
-              <Text style={styles.rowContainerText}>
-                {rideRequest == undefined
-                  ? singleItem.goingTo === 'home'
-                    ? 'Leaves work at: ' +
-                      moment(singleItem.scheduledDrive.start.toDate()).format(
-                        'HH:mm'
-                      )
-                    : 'Leaves home at: ' +
-                      moment(singleItem.scheduledDrive.start.toDate()).format(
-                        'HH:mm'
-                      )
-                  : 'Work times: ' +
-                    moment(rideRequest.start.toDate()).format('HH:mm') +
-                    ' - ' +
-                    moment(rideRequest.end.toDate()).format('HH:mm')}
-              </Text>
-            </View>
-          </View>
-        </View>
-      </View>
-
-      {user.travelPreference == 'passenger' ? (
-        <PassengerRideRequestButton
-          navigation={navigation}
+    <>
+      {viewPendingRequest ? (
+        <PassengerViewRequestContainer
           user={user}
-          isPassengerIncluded={isPassengerIncluded}
-          workTrip={singleItem}
+          markers={markers}
+          navigation={navigation}
+          rideRequest={rideRequest}
+          routeCoordinates={routeCoordinates}
+          singleItem={singleItem}
         />
       ) : (
-        <PassengerAcceptRefuseButton
-          user={user}
-          workTrip={singleItem}
-          rideRequest={rideRequest}
-          navigation={navigation}
-        />
+        <View style={styles.view}>
+          <Container style={styles.requestMapContent}>
+            <MapView
+              ref={(ref) => {
+                setMapRef(ref)
+              }}
+              style={styles.mapStyle}
+              provider={MapView.PROVIDER_GOOGLE}
+              initialRegion={{
+                latitude: singleItem.scheduledDrive.stops[0].location.latitude,
+                longitude:
+                  singleItem.scheduledDrive.stops[0].location.longitude,
+                latitudeDelta: 1,
+                longitudeDelta: 1,
+              }}
+            >
+              <MapView.Polyline
+                coordinates={routeCoordinates}
+                strokeColor="#26AAE2"
+                strokeWidth={4}
+              />
+              {markers}
+            </MapView>
+          </Container>
+          <View style={styles.columnContainer}>
+            <View style={styles.rowContainer}>
+              <View style={styles.rowItemStartContainer}>
+                <View>
+                  <Ionicons name="person" size={24} color={color.lightBlack} />
+                </View>
+
+                <View style={styles.textItemContainer}>
+                  <Text style={styles.rowContainerText}>
+                    {rideRequest == undefined
+                      ? singleItem.driverName
+                      : rideRequest.userName}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.rowItemEndContainer}>
+                <View>
+                  <FontAwesome5
+                    name="route"
+                    size={24}
+                    color={color.lightBlack}
+                  />
+                </View>
+
+                <View style={styles.textItemContainer}>
+                  <Text style={styles.rowContainerText}>2 km</Text>
+                </View>
+              </View>
+            </View>
+            <View style={styles.breakPoint}></View>
+            <View style={styles.rowContainer}>
+              <View style={styles.rowItemStartContainer}>
+                <Ionicons name="home" size={24} color={color.lightBlack} />
+
+                <View style={styles.textItemContainer}>
+                  <Text style={styles.rowContainerText}>
+                    {rideRequest == undefined
+                      ? singleItem.goingTo === 'home'
+                        ? stops[stops.length - 1].address
+                        : stops[0].address
+                      : rideRequest.homeAddress}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.rowItemEndContainer}>
+                <View>
+                  <Ionicons
+                    name="time-sharp"
+                    size={24}
+                    color={color.lightBlack}
+                  />
+                </View>
+
+                <View style={styles.textItemContainer}>
+                  <Text style={styles.rowContainerText}>
+                    {drivingTime(singleItem)} min
+                  </Text>
+                </View>
+              </View>
+            </View>
+            <View style={styles.breakPoint}></View>
+
+            <View style={styles.rowContainer}>
+              <View style={styles.rowItemStartContainer}>
+                <View>
+                  <MaterialCommunityIcons
+                    name="calendar"
+                    size={24}
+                    color={color.lightBlack}
+                  />
+                </View>
+
+                <View style={styles.textItemContainer}>
+                  <Text style={styles.rowContainerText}>
+                    {rideRequest == undefined
+                      ? checkWhatDayItIs(singleItem.workDayNum)
+                      : checkWhatDayItIs(rideRequest.workDayNum)}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.rowItemEndContainer}>
+                <View>
+                  <MaterialCommunityIcons
+                    name="wallet-travel"
+                    size={24}
+                    color={color.lightBlack}
+                  />
+                </View>
+
+                <View style={styles.textItemContainer}>
+                  <Text style={styles.rowContainerText}>
+                    {singleItem.goingTo === 'home' ? 'Going ' : 'Going to '}
+                    {rideRequest == undefined
+                      ? singleItem.goingTo.charAt(0).toUpperCase() +
+                        singleItem.goingTo.slice(1)
+                      : singleItem.goingTo.charAt(0).toUpperCase() +
+                        singleItem.goingTo.slice(1)}
+                  </Text>
+                </View>
+              </View>
+            </View>
+            <View style={styles.breakPoint}></View>
+
+            <View style={styles.rowContainer}>
+              <View style={styles.rowItemStartContainer}>
+                <View>
+                  <Ionicons name="car" size={24} color={color.lightBlack} />
+                </View>
+
+                <View style={styles.textItemContainer}>
+                  <Text style={styles.rowContainerText}>
+                    {rideRequest == undefined
+                      ? singleItem.goingTo === 'home'
+                        ? 'Leaves work at: ' +
+                          moment(
+                            singleItem.scheduledDrive.start.toDate()
+                          ).format('HH:mm')
+                        : 'Leaves home at: ' +
+                          moment(
+                            singleItem.scheduledDrive.start.toDate()
+                          ).format('HH:mm')
+                      : 'Work times: ' +
+                        moment(rideRequest.start.toDate()).format('HH:mm') +
+                        ' - ' +
+                        moment(rideRequest.end.toDate()).format('HH:mm')}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {user.travelPreference == 'passenger' ? (
+            <PassengerRideRequestButton
+              viewPendingRequest={viewPendingRequest}
+              navigation={navigation}
+              user={user}
+              isPassengerIncluded={isPassengerIncluded}
+              workTrip={singleItem}
+            />
+          ) : (
+            <PassengerAcceptRefuseButton
+              user={user}
+              workTrip={singleItem}
+              rideRequest={rideRequest}
+              navigation={navigation}
+            />
+          )}
+        </View>
       )}
-    </View>
+    </>
   )
 }
 

@@ -1,11 +1,12 @@
 import React, {useEffect, useContext, useState} from 'react'
 import {Dimensions, View, Text, ActivityIndicator, FlatList} from 'react-native'
 
-import {Ionicons, FontAwesome5} from '@expo/vector-icons'
+import {Ionicons, FontAwesome5, MaterialIcons} from '@expo/vector-icons'
 
 import MainPageButton from './MainPageButton'
 import {color} from '../constants/colors'
 import {workTripMultiQuery} from '../controllers/workTripController'
+import {Platform} from 'react-native'
 import {Alert} from 'react-native'
 
 const MainPageButtons = ({
@@ -106,11 +107,21 @@ const MainPageButtons = ({
     }
   }
 
-  const mainPageButtons = [
+  const passengerButtons = [
     {
       id: '1',
-      testID: testIDs[0],
-      travelPreference: ['passenger', 'driver'],
+      title: 'Pending',
+      icon: (
+        <MaterialIcons
+          name="pending-actions"
+          size={Dimensions.get('window').width * 0.12}
+          color={color.darkBlue}
+        />
+      ),
+      onPress: () => navigation.navigate('PassengerPendingRequestsList'),
+    },
+    {
+      id: '2',
       title: 'Calendar',
       icon: (
         <Ionicons
@@ -121,9 +132,11 @@ const MainPageButtons = ({
       ),
       onPress: () => navigation.navigate('OutlookCalendar'),
     },
+  ]
+
+  const driverButtons = [
     {
-      id: '2',
-      testID: testIDs[1],
+      id: '1',
       travelPreference: ['driver'],
       title: 'Requests',
       icon: (
@@ -136,8 +149,7 @@ const MainPageButtons = ({
       onPress: () => navigation.navigate('DriverRideRequestList'),
     },
     {
-      id: '3',
-      testID: testIDs[2],
+      id: '2',
       travelPreference: ['driver'],
       title: 'Start Ride',
       icon: (
@@ -156,12 +168,10 @@ const MainPageButtons = ({
         } else {
           Alert.alert('No rides', 'Currently there are no rides to start.')
         }
-
       },
     },
     {
-      id: '4',
-      testID: testIDs[3],
+      id: '3',
       travelPreference: ['driver'],
       title: 'Cars',
       icon: (
@@ -173,28 +183,40 @@ const MainPageButtons = ({
       ),
       onPress: () => navigation.navigate('DriverCarList'),
     },
+    {
+      id: '4',
+      travelPreference: ['passenger', 'driver'],
+      title: 'Calendar',
+      icon: (
+        <Ionicons
+          name="calendar"
+          size={Dimensions.get('window').width * 0.12}
+          color={color.darkBlue}
+        />
+      ),
+      onPress: () => navigation.navigate('OutlookCalendar'),
+    },
   ]
-  const renderGridItem = (itemData) => {
-    // If driverTrips have loaded
 
+  const renderGridItem = (itemData) => {
     const {item} = itemData
 
-    const travelPref = itemData.item.travelPreference.some((trav) =>
-      trav.includes(travelPreference)
-    )
+    // Calendar does not work on iOS devices
+    if (Platform.OS === 'ios' && item.title === 'Calendar') {
+      return
+    }
 
-    if (travelPref)
-      return (
-        <>
-          <MainPageButton
-            testID={item.testID}
-            title={item.title}
-            onPress={item.onPress}
-          >
-            {itemData.item.icon}
-          </MainPageButton>
-        </>
-      )
+    return (
+      <>
+        <MainPageButton
+          testID={item.testID}
+          title={item.title}
+          onPress={item.onPress}
+        >
+          {itemData.item.icon}
+        </MainPageButton>
+      </>
+    )
   }
 
   useEffect(() => {
@@ -205,16 +227,31 @@ const MainPageButtons = ({
   }, [drivingTrips])
 
   return (
-    <FlatList
-      contentContainerStyle={{
-        paddingBottom: 80,
-        backgroundColor: 'white',
-      }}
-      keyExtractor={(item, index) => item.id}
-      data={mainPageButtons}
-      renderItem={renderGridItem}
-      numColumns={2}
-    />
+    <>
+      {user.travelPreference === 'passenger' ? (
+        <FlatList
+          contentContainerStyle={{
+            paddingBottom: 80,
+            backgroundColor: 'white',
+          }}
+          keyExtractor={(item, index) => item.id}
+          data={passengerButtons}
+          renderItem={renderGridItem}
+          numColumns={2}
+        />
+      ) : (
+        <FlatList
+          contentContainerStyle={{
+            paddingBottom: 80,
+            backgroundColor: 'white',
+          }}
+          keyExtractor={(item, index) => item.id}
+          data={driverButtons}
+          renderItem={renderGridItem}
+          numColumns={2}
+        />
+      )}
+    </>
   )
 }
 

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useContext} from 'react'
 import {StyleSheet, Platform} from 'react-native'
 import {Text, Icon, Button} from 'native-base'
 import {View} from 'native-base'
@@ -7,7 +7,11 @@ import CustomIconButton from '../components/CustomIconButton'
 import {FontAwesome} from '@expo/vector-icons'
 import firebase from '../firebase/fire'
 
+import {UserContext} from '../contexts'
+
 export const VerifyEmail = ({navigation}) => {
+  const {user} = useContext(UserContext)
+
   const checkEmail = async () => {
     // For cypress testing purposes
     if (Platform.OS === 'web') navigation.navigate('Company')
@@ -34,10 +38,11 @@ export const VerifyEmail = ({navigation}) => {
   return (
     <View style={styles.view}>
       <FontAwesome name="check-circle-o" size={300} color="#26AAE2" />
-      <Text style={{margin: 5}}>
-        Verify your email from link you received to your email.
+      <Text style={{textAlign: 'center', margin: 5}}>
+        Verify your email address. Email was sent to:
       </Text>
-      <Text style={{margin: 5}}>Then press continue</Text>
+      <Text style={{textAlign: 'center', margin: 5}}>{user.email}</Text>
+      <Text style={{textAlign: 'center', margin: 5}}>Then press continue</Text>
 
       <CustomIconButton
         onPress={() => {
@@ -53,6 +58,7 @@ export const VerifyEmail = ({navigation}) => {
 const styles = StyleSheet.create({
   view: {
     flex: 1,
+
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
