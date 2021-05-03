@@ -11,7 +11,6 @@ describe('Passenger Setup', () => {
     cy.get('[data-testid="registerBtn"]')
   })
 
-  // Register new test.vehoshareride@passenger.com
   it(
     ' Register new test.vehoshareride.passenger@gmail.com',
     {retries: 7},
