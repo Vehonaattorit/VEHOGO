@@ -67,8 +67,6 @@ export const SetUpInit = ({route, navigation}) => {
 
       const data = responseJson
 
-      console.log('RESKUS-666', data)
-
       let totalTime = 0
       data.routes[0].legs.map((leg) => {
         totalTime += leg.duration.value

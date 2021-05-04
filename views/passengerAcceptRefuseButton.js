@@ -23,18 +23,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 const PassengerAcceptRefuseButton = (props) => {
   const {user, workTrip, rideRequest, navigation} = props
 
-  const [passengerUser, setPassengerUser] = useState(null)
-
   const {updateTodayDriverRides, setDriverTripList} = useWorkTripHooks(user)
-
-  useEffect(() => {
-    getSenderUser()
-  }, [])
-
-  const getSenderUser = async () => {
-    const passengerUser = await getUser(rideRequest.senderID)
-    setPassengerUser(passengerUser)
-  }
 
   const getTripRoute = async (waypoints) => {
     try {
@@ -70,6 +59,9 @@ const PassengerAcceptRefuseButton = (props) => {
 
   const acceptPassenger = async () => {
     let route
+
+    // Get passenger data
+    const passengerUser = await getUser(rideRequest.senderID)
 
     console.log(`Accepting passenger : ${rideRequest.senderID}`)
 
@@ -209,25 +201,7 @@ const PassengerAcceptRefuseButton = (props) => {
     await updateWorkTrip(user.company.id, workTripToUpdate)
     await deleteRideRequest(user.company.id, rideRequest.id)
 
-    console.log('passengerUser.expoToken', passengerUser.expoToken)
-
-    await fetch('https://fcm.googleapis.com/fcm/send', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `key=${apiKey}`,
-      },
-      body: JSON.stringify({
-        to: passengerUser.expoToken,
-        priority: 'normal',
-        data: {
-          experienceId: '@yourExpoUsername/yourProjectSlug',
-          title: "\uD83D\uDCE7 You've got mail",
-          message: 'Hello world! \uD83C\uDF10',
-        },
-      }),
-    })
-    /**    await fetch('https://exp.host/--/api/v2/push/send', {
+    await fetch('https://exp.host/--/api/v2/push/send', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -235,16 +209,19 @@ const PassengerAcceptRefuseButton = (props) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        to: passengerUser.ownerPushToken,
+        to: passengerUser.expoToken,
         title: 'Request was accepted.',
         body: `Request was accepted by ${user.userName}`,
       }),
-    }) */
+    })
+
     navigation.popToTop()
   }
 
   const refusePassenger = async () => {
     deleteRideRequest(user.company.id, rideRequest.id)
+
+    const passengerUser = await getUser(rideRequest.senderID)
 
     fetch('https://exp.host/--/api/v2/push/send', {
       method: 'POST',

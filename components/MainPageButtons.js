@@ -202,7 +202,11 @@ const MainPageButtons = ({
     const {item} = itemData
 
     // Calendar does not work on iOS devices
-    if (Platform.OS === 'ios' && item.title === 'Calendar') {
+    // if (Platform.OS === 'ios' && item.title === 'Calendar') {
+    //   return
+    // }
+
+    if (!__DEV__ && item.title === 'Calendar') {
       return
     }
 

@@ -145,8 +145,6 @@ export const MainPage = (props) => {
     // isLoading,
   } = useWorkTripHooks(user)
 
-
-
   useEffect(() => {
     const fetchWorkTrips = async () => {
       const workTripsListener = await db
@@ -253,7 +251,7 @@ export const MainPage = (props) => {
     props.navigation.setOptions({
       headerRight: () => (
         <HeaderButtons HeaderButtonComponent={HeaderButton}>
-          {user.travelPreference === 'passenger' && (
+          {user.travelPreference === 'passenger' && __DEV__ && (
             <Item
               title="Filter"
               iconComponent={Ionicons}

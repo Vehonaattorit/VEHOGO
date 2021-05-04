@@ -1,7 +1,15 @@
 import AsyncStorage from '@react-native-community/async-storage'
 import {Platform} from 'react-native'
 import moment from 'moment-timezone'
-import * as AuthSession from 'expo-auth-session'
+import {
+  startAsync,
+  exchangeCodeAsync,
+  makeRedirectUri,
+  TokenResponse,
+  useAuthRequest,
+} from 'expo-auth-session'
+
+import {AppOwnership, Constants} from 'expo-constants'
 
 import * as Linking from 'expo-linking'
 
@@ -36,15 +44,16 @@ export class AuthManager {
       // 'vehogo://com.vehonaattorit.shareride' 23.04.2021 10.55
       // azureAdAppProps.redirectUri // 29.04.2021 21.56
 
-      AuthSession.makeRedirectUri({
+      makeRedirectUri({
         scheme: 'vehogoride',
         path: 'calendar',
+        native: 'vehogoride://',
       })
     )}`
 
     console.log(
       '29.04.2021 makeRedirectUri',
-      AuthSession.makeRedirectUri({
+      makeRedirectUri({
         scheme: 'vehogoride',
         path: 'calendar',
       })
@@ -65,34 +74,41 @@ export class AuthManager {
         // 'vehogo://com.vehonaattorit.shareride' 23.04.2021 10.55
         // azureAdAppProps.redirectUri // 23.04.2021 10.55
 
-        AuthSession.makeRedirectUri({
-          scheme: 'vehogoride',
-          path: 'calendar',
+        makeRedirectUri({
+          // scheme: 'vehogoride',
+          // path: 'calendar',
+          native: 'vehogoride://',
         })
 
-        // AuthSession.makeRedirectUri({
+        // makeRedirectUri({
         //   scheme: 'com.vehonaattorit.shareride',
         // }) 23.04.2021 11.17
       )
     )
 
+    console.log('242-makeRedirectUri()', makeRedirectUri())
+
     console.log(
-      '242-AuthSession.makeRedirectUri()',
-      AuthSession.makeRedirectUri()
+      'REAL OG 2314',
+      Constants.appOwnerShip == AppOwnership.Standalone
+        ? 'vehogoride://calendar'
+        : makeRedirectUri({native: 'vehogoride://calendar'})
     )
 
     const authUrls = {
       authUrl: authUrl,
       // returnUrl: baseRedirectUrl,
       /**29.04. klo 21.54 */
-      // returnUrl: azureAdAppProps.redirectUri || AuthSession.makeRedirectUri(), // 23.04.2021 10.55
-      returnUrl: AuthSession.makeRedirectUri({
-        scheme: 'vehogoride',
-        path: 'calendar',
+      // returnUrl: azureAdAppProps.redirectUri || makeRedirectUri(), // 23.04.2021 10.55
+      returnUrl: makeRedirectUri({
+        native: 'vehogoride://',
+        // scheme: 'vehogoride',
+        // path: 'calendar',
+        // isTripleSlashed: false, !!! DOES NOT DO ANYTHING !!!
       }),
     }
 
-    let authResponse = await AuthSession.startAsync(authUrls)
+    let authResponse = await startAsync(authUrls)
       .then((authResponse) => {
         console.log('authResponse-2314', authResponse)
         //Conditional if the user proceeds with the authentication process

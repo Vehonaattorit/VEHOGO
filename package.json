@@ -1,6 +1,6 @@
 {
   "main": "node_modules/expo/AppEntry.js",
-  "name": "VEHOGORIDE",
+  "name": "vehogoride",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -38,7 +38,7 @@
     "expo-app-loading": "^1.0.1",
     "expo-auth-session": "^3.2.1",
     "expo-clipboard": "~1.0.1",
-    "expo-linking": "^2.0.1",
+    "expo-linking": "^2.0.0",
     "expo-localization": "~9.1.0",
     "expo-location": "~10.0.0",
     "expo-notifications": "~0.8.2",
