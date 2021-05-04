@@ -16,11 +16,11 @@ export const updateUserCarToWorkTrips = async (user) => {
     console.log('WorkRefID', hours.toWorkRefID)
     if (hours.toHomeRefID != undefined) {
       const workTrip = await getWorkTrip(user.company.id, hours.toHomeRefID)
-      updateWorkTrip(user.company.id, new WorkTrip({id: hours.toHomeRefID, car: car, scheduledDrive: {availableSeats: (parseInt(car.availableSeats - (workTrip.scheduledDrive.stops.length - 2 > 0 ? workTrip.scheduledDrive.stops.length - 2 : 0)))}}))
+      updateWorkTrip(user.company.id, new WorkTrip({id: hours.toHomeRefID, car: car, scheduledDrive: {availableSeats: (parseInt(car.availableSeats - (workTrip.scheduledDrive.stops.length - 2 > 0 ? workTrip.scheduledDrive.stops.length - 1 : 0)))}}))
     }
     if (hours.toWorkRefID != undefined) {
       const workTrip = await getWorkTrip(user.company.id, hours.toWorkRefID)
-      updateWorkTrip(user.company.id, new WorkTrip({id: hours.toWorkRefID, car: car, scheduledDrive: {availableSeats: parseInt(car.availableSeats - (workTrip.scheduledDrive.stops.length - 2 > 0 ? workTrip.scheduledDrive.stops.length - 2 : 0))}}))
+      updateWorkTrip(user.company.id, new WorkTrip({id: hours.toWorkRefID, car: car, scheduledDrive: {availableSeats: parseInt(car.availableSeats - (workTrip.scheduledDrive.stops.length - 2 > 0 ? workTrip.scheduledDrive.stops.length - 1 : 0))}}))
     }
   });
   return
