@@ -9,18 +9,12 @@ import {
   Text,
 } from 'native-base'
 import React, {useState, useEffect} from 'react'
-import {FlatList} from 'react-native'
 import {StyleSheet} from 'react-native'
-import {CompanyListItem} from '../components/CompanyListItem'
 import moment from 'moment'
 import {
-  useDriverTripListHook,
-  workTripMultiQuery,
   workTripMultiQueryStream,
-  workTripOrderByQuery,
 } from '../controllers/workTripController'
 import {color} from '../constants/colors'
-import {getUser} from '../controllers/userController'
 
 export const RideStartBar = ({user, navigation, driverTrips}) => {
   const [showStart, setShowStart] = useState(false)
@@ -59,7 +53,7 @@ export const RideStartBar = ({user, navigation, driverTrips}) => {
       const now = new Date()
 
       const currentWeekDay = now.getDay() == 0 ? 7 : now.getDay()
-
+      console.log('currentWeekday', currentWeekDay)
       const currentHours = now.getHours()
       const minutes = now.getMinutes()
 
@@ -174,8 +168,8 @@ export const RideStartBar = ({user, navigation, driverTrips}) => {
         console.log('stream failed', e)
       }
     }
-
     if (driverTrips != undefined && driverTrips.length > 0) {
+      console.log('inside get next ride if')
       console.log('driver Trips', driverTrips)
       getNextRide()
     }
@@ -195,7 +189,7 @@ export const RideStartBar = ({user, navigation, driverTrips}) => {
           <Right>
             {driverTrips.length > 0 ? (
               <>
-                {showStart ? (
+                {true ? (
                   <Button
                     style={styles.button}
                     onPress={() =>

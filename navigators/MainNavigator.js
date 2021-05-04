@@ -25,6 +25,7 @@ import HeaderButton from '../components/CustomHeaderButton'
 import CarEditForm from '../views/CarEditForm'
 
 import PassengerPendingRequestsList from '../views/PassengerPendingRequestsList'
+import {SuggestedRides} from '../views/SuggestedRides'
 
 const Stack = createStackNavigator()
 const Drawer = createStackNavigator()
@@ -163,6 +164,13 @@ const MainStackNavigator = ({linking}) => {
           }}
           name="RequestRide"
           component={DriverAcceptRefuse}
+        />
+        <Stack.Screen
+          options={{
+            title: 'SuggestedRides',
+          }}
+          name="SuggestedRides"
+          component={SuggestedRides}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -17,12 +17,13 @@ export const Company = ({navigation}) => {
   const [companyData, setCompanyData] = useState([])
   const [error, setError] = useState(false)
   const [domain, setDomain] = useState('')
-
+  console.log('inside company')
   useEffect(() => {
     getDomain()
   }, [])
 
   const getDomain = () => {
+    console.log('getting domain')
     const userEmail = firebase.auth().currentUser.email
     const domainString = userEmail.split('@').pop()
     setDomain(domainString)

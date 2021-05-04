@@ -20,13 +20,18 @@ export const VerifyEmail = ({navigation}) => {
         Platform.OS === 'ios' ||
         Platform.OS === 'web') &&
       __DEV__
-    )
+    ) {
       navigation.navigate('Company')
+      console.log('to company from web check')
+    }
 
+    console.log('checking email')
     const result = await checkEmailVerification()
     if (result === true) {
       navigation.navigate('Company')
+      console.log('navigation after result')
     }
+    console.log('should have navigated')
   }
 
   const checkEmailWithButton = async () => {
@@ -34,10 +39,12 @@ export const VerifyEmail = ({navigation}) => {
     await user.reload()
     user = firebase.auth().currentUser
     await checkEmail()
+    console.log('checked email')
   }
 
   useEffect(() => {
     checkEmail()
+    console.log('email check done, should now view only verify email')
   }, [])
 
   return (

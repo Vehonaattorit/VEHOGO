@@ -1,10 +1,6 @@
-import React, {useEffect, useState} from 'react'
-import {StyleSheet, View, Text} from 'react-native'
-import {Input, Item, Icon, Content, Form} from 'native-base'
-import {Button} from 'react-native-paper'
-import {CustomButton} from '../components/CustomButton'
+import React, {useEffect} from 'react'
+import {StyleSheet, View} from 'react-native'
 import {CompanyList} from '../components/CompanyList'
-import {companyQuery} from '../controllers/companyController'
 import CustomButtonIcon from '../components/CustomIconButton'
 export const JoinCompany = ({
   navigation,

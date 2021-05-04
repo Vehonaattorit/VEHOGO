@@ -256,18 +256,34 @@ const PassengerRideRequestButton = ({
         },
       }
       // add available seat
-      workTripUpdate.scheduledDrive.availableSeats += 1
+      workTripUpdate.scheduledDrive.availableSeats += 2
       Alert.alert('Cancel ride', `Are you sure you want to cancel this ride?`, [
         {text: 'No', style: 'default'},
         {
           text: 'Yes',
           style: 'destructive',
           onPress: async () => {
+
+            user.preferedWorkingHours.forEach((element) => {
+              console.log('looping')
+              if (element.toWorkRefID != undefined && element.toWorkRefID != null) {
+                if (element.toWorkRefID == workTrip.id) {
+                  delete element.toWorkRefID
+                }
+              }
+              if (element.toHomeRefID != undefined && element.toHomeRefID != null) {
+                if (element.toHomeRefID == workTrip.id) {
+                  delete element.toHomeRefID
+                }
+              }
+            })
+
             await removePassengerFromRoute(
               workTripUpdate,
               user.company.id,
               workTrip
             )
+            await updateUser(user)
             navigation.popToTop()
           },
         },
