@@ -11,17 +11,7 @@ import {
 } from 'react-native'
 import {UserContext} from '../contexts'
 import {
-  Body,
-  Header,
-  Left,
   Text,
-  Card,
-  Icon,
-  Button,
-  Container,
-  Title,
-  Right,
-  CardItem,
 } from 'native-base'
 import {Ionicons, FontAwesome5} from '@expo/vector-icons'
 import {color} from '../constants/colors'
@@ -146,7 +136,7 @@ const MyRidesWorkDayButton = ({props}) => {
                   body: JSON.stringify({
                     userId: stop.userID,
                     idToken: token.token,
-                    workTrip: workTrip,
+                    workTrip: homeTrip,
                   }),
                 }
               )
