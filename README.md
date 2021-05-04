@@ -82,6 +82,34 @@ Struction for using Cypress in our application:
 
 For user testing, our goal was to lean more towards validation and evaluation. That is, finding out if users understand and enjoy our app, and whether the features meet their needs. For this, we leveraged early versions of our app, prototypes, and mockups. Veho provided us the user from inside of their company. The user didn't know anything about our app and used it the first time.
 
+
+### Travis CI integration
+
+To start testing with Travis CI you need to
+  
+Create Environment variables
+    <p align="center">
+      <img src="images/travis_ci_environment_variables.png" alt="make project" width="650">
+    </p>
+<a href="https://www.browserling.com/tools/random-hex">Generate Random hex codes for Travis encryption.  </a>    Generate a 32 digit code and one 64 for Travis CI
+
+  
+Download and add serviceAccount.json (<a href="https://sites.google.com/site/scriptsexamples/new-connectors-to-google-services/firebase/tutorials/authenticate-with-a-service-account#TOC-Generate-a-new-private-key">tutorial can be found here! </a> <b>Make sure to add serviceAccount.json to .gitignore!         </b>)
+  
+  
+Encrypt serviceAccount.json and .env with: 
+```
+travis encrypt-file serviceAccount.json  --key 6f551e4882cbbda9b574f6f2c1358731b956ca5fcbde4c7b380255f3d4f3c6c7 --iv 11799b87a80967621a98deec50dfa860
+```
+```
+travis encrypt-file .env --key 60b235c7c96e0c88a8fed4f2d92ead3e154482821e6754160281428cf2f722c8 --iv a4da9ce54b59590322eb2e18197b6972
+```
+<b>Replace 6f551e4882cbbda9b574f6f2c1358731b956ca5fcbde4c7b380255f3d4f3c6c7 and 11799b87a80967621a98deec50dfa860 with your own 64 digit HEX code. 
+</b>
+<b>Replace 6f551e4882cbbda9b574f6f2c1358731b956ca5fcbde4c7b380255f3d4f3c6c7 and a4da9ce54b59590322eb2e18197b6972 with your own 32 digit HEX code. 
+</b>
+  
+
 ## Installation
 
 Assuming that you have [Node 12 LTS](https://nodejs.org/en/download/) or greater installed, you can use npm to install the Expo CLI command-line utility:
