@@ -27,7 +27,7 @@ describe('Passenger Setup', () => {
 
       cy.get('[data-testid="registerNewUserBtn"]').click()
 
-      cy.wait(6000)
+      cy.wait(10000)
       cy.contains(/create or join/i)
 
       //  Go back to login screen
@@ -65,7 +65,9 @@ describe('Passenger Setup', () => {
       cy.get('[data-testid="passwordInput"]').type(goodPassword)
       cy.get('[data-testid="loginBtn"]').click()
 
+      cy.wait(10000)
       cy.get('[data-testid="companyCodeInput"]').type('OEZtJo')
+
       cy.get('[data-testid="companyCodeAcceptBtn"]').click()
 
       cy.get('[data-testid="joinCompanyBtn"]').click()
@@ -96,7 +98,9 @@ describe('Passenger Setup', () => {
         cy.get('[data-testid="loginBtn"]').click()
       })
 
+      cy.wait(10000)
       cy.get('[data-testid="companyCodeInput"]').type('OEZtJo')
+
       cy.get('[data-testid="companyCodeAcceptBtn"]').click()
 
       cy.get('[data-testid="joinCompanyBtn"]').click()

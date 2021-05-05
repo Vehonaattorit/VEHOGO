@@ -21,19 +21,6 @@ import * as Localization from 'expo-localization'
 
 WebBrowser.maybeCompleteAuthSession()
 
-// export const azureAdAppProps = {
-//   redirectUri:
-//     Platform.OS === 'android'
-//       ? AuthSession.makeRedirectUri({
-//           scheme: 'vehogoride',
-//         })
-//       : `host.exp.exponent://expo.io/@user-name/slug`,
-//   clientId: clientId,
-//   tenantId: tenantId,
-//   prompt: prompt,
-//   scope: scope,
-// }
-
 export class AuthManager {
   static signInAsync = async () => {
     const authUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${
@@ -41,70 +28,17 @@ export class AuthManager {
     }&response_type=code&scope=${encodeURIComponent(
       azureAdAppProps.scope
     )}&prompt=login&redirect_uri=${encodeURIComponent(
-      // 'vehogo://com.vehonaattorit.shareride' 23.04.2021 10.55
-      // azureAdAppProps.redirectUri // 29.04.2021 21.56
-
       makeRedirectUri({
         scheme: 'vehogoride',
         path: 'calendar',
-        native: 'vehogoride://',
       })
     )}`
 
-    console.log(
-      '29.04.2021 makeRedirectUri',
-      makeRedirectUri({
-        scheme: 'vehogoride',
-        path: 'calendar',
-      })
-    )
-
-    const baseRedirectUrl = Linking.makeUrl(
-      'com.vehonaattorit.shareride://auth'
-    )
-
-    // exp:192.168.1.3:19000
-
-    console.log('666-baseRedirectUrl-232', baseRedirectUrl)
-
-    console.log('362-standAlone.redirectUri', azureAdAppProps.redirectUri)
-    console.log(
-      '362-appended-standAlone.redirectUri',
-      encodeURIComponent(
-        // 'vehogo://com.vehonaattorit.shareride' 23.04.2021 10.55
-        // azureAdAppProps.redirectUri // 23.04.2021 10.55
-
-        makeRedirectUri({
-          // scheme: 'vehogoride',
-          // path: 'calendar',
-          native: 'vehogoride://',
-        })
-
-        // makeRedirectUri({
-        //   scheme: 'com.vehonaattorit.shareride',
-        // }) 23.04.2021 11.17
-      )
-    )
-
-    console.log('242-makeRedirectUri()', makeRedirectUri())
-
-    console.log(
-      'REAL OG 2314',
-      Constants.appOwnerShip == AppOwnership.Standalone
-        ? 'vehogoride://calendar'
-        : makeRedirectUri({native: 'vehogoride://calendar'})
-    )
-
     const authUrls = {
       authUrl: authUrl,
-      // returnUrl: baseRedirectUrl,
-      /**29.04. klo 21.54 */
-      // returnUrl: azureAdAppProps.redirectUri || makeRedirectUri(), // 23.04.2021 10.55
       returnUrl: makeRedirectUri({
-        native: 'vehogoride://',
-        // scheme: 'vehogoride',
-        // path: 'calendar',
-        // isTripleSlashed: false, !!! DOES NOT DO ANYTHING !!!
+        scheme: 'vehogoride',
+        path: 'calendar',
       }),
     }
 
